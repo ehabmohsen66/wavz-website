@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --midnight: #082D4A;
+  --overjoy: #FFB814;
+  --wavz-blue: #1173BD;
+  --wavz-light-blue: #97CFFA;
+}
+
+html, body { background: #ffffff; }
+* { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+[dir="rtl"] * {
+  font-family: 'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif;
+}
+
+.font-mono, [class*="font-mono"] {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+}
+
+::selection { background: #FFB814; color: #082D4A; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO DIAGRAM ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes ledBlink {
+  0%, 90% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.led-blink { animation: ledBlink 1.4s ease-in-out infinite; }
+
+@keyframes rackBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.rack-bob { animation: rackBob 4s ease-in-out infinite; }
+
+@keyframes cloudFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.cloud-float { animation: cloudFloat 5s ease-in-out infinite; }
+
+@keyframes orchPulse {
+  0% { opacity: 0.6; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.orch-pulse-1 {
+  transform-origin: 240px 200px;
+  animation: orchPulse 3s ease-out infinite;
+}
+.orch-pulse-2 {
+  transform-origin: 240px 200px;
+  animation: orchPulse 3s ease-out infinite 1.5s;
+}
+
+@keyframes orchRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.orch-rotate { animation: orchRotate 20s linear infinite; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 50s linear infinite;
+  width: max-content;
+}
+[dir="rtl"] .animate-marquee {
+  animation: marquee 50s linear infinite reverse;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE-WIDE DYNAMIC ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Hero text staggered entrance */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-slide-up { animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Typewriter cursor blink */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.cursor-blink { animation: cursorBlink 0.9s step-start infinite; }
+
+/* Quote carousel fade */
+@keyframes quoteFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.quote-fade { animation: quoteFade 0.4s ease-out both; }
+
+/* Metric progress bar fill */
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: var(--target-w, 80%); }
+}
+.progress-fill {
+  animation: progressFill 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Mobile menu slide down */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide-down { animation: slideDown 0.22s ease-out both; }
+
+/* Scroll-indicator bounce */
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50%       { transform: translateY(6px); opacity: 1; }
+}
+.scroll-bounce { animation: scrollBounce 1.6s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
