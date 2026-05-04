@@ -7,16 +7,16 @@ export const Comparison = () => {
   const [revealRef, visible] = useReveal();
 
   return (
-    <section ref={revealRef} className="relative bg-slate-50 py-24 lg:py-32">
+    <section ref={revealRef} className="relative bg-white py-24 lg:py-32 border-t border-slate-100">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="mb-12">
-          <div className="inline-block px-3 py-1 rounded-md bg-[#FFF4D6] text-[#8B6914] text-[11.5px] font-bold tracking-[0.18em] mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#1173BD]/20 bg-[#EEF6FF] text-[#1173BD] text-[11.5px] font-bold tracking-[0.16em] mb-4">
             {t.comparison.eyebrow}
           </div>
           <h2 className="text-4xl lg:text-6xl font-bold text-[#082D4A] tracking-[-0.03em] leading-[0.98]">
             {t.comparison.title}
           </h2>
-          <p className="mt-4 text-[15px] text-slate-600">{t.comparison.subtitle}</p>
+          <p className="mt-4 text-[15px] text-slate-500">{t.comparison.subtitle}</p>
         </div>
 
         {/* Table with right-edge shadow for mobile scroll affordance */}
@@ -31,16 +31,16 @@ export const Comparison = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-[13.5px]" dir="ltr">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
+                <tr className="bg-[#082D4A]">
                   {t.comparison.headers.map((h, i) => (
                     <th
                       key={i}
                       className={`text-start p-4 lg:p-5 font-bold ${
                         i === 0
-                          ? 'min-w-[260px] text-[#082D4A]'
+                          ? 'min-w-[260px] text-white/60 text-[12.5px] tracking-wide'
                           : i === 1
-                          ? 'min-w-[110px] text-[#1173BD] bg-[#FFFBF0]'
-                          : 'min-w-[100px] text-[#082D4A]/70'
+                          ? 'min-w-[110px] text-[#FFB814] bg-[#1173BD]'
+                          : 'min-w-[100px] text-white/40'
                       }`}
                     >
                       {h}
@@ -57,23 +57,23 @@ export const Comparison = () => {
                 {t.comparison.rows.map((row, i) => (
                   <tr
                     key={i}
-                    className={`border-b border-slate-100 hover:bg-white/80 transition-colors ${
+                    className={`border-b border-slate-100 hover:bg-slate-50/50 transition-colors ${
                       visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
                     }`}
-                    style={{ transition: `all 0.5s ${i * 50 + 200}ms` }}
+                    style={{ transition: `opacity 0.5s ${i * 50 + 200}ms, transform 0.5s ${i * 50 + 200}ms` }}
                   >
-                    <td className="p-4 lg:p-5 text-[#082D4A] font-medium">{row}</td>
+                    <td className="p-4 lg:p-5 text-[#082D4A] font-medium text-[13.5px]">{row}</td>
                     {t.comparison.capabilities[i].map((cap, j) => (
                       <td
                         key={j}
-                        className={`p-4 lg:p-5 ${j === 0 ? 'bg-[#FFFBF0]' : ''}`}
+                        className={`p-4 lg:p-5 ${j === 0 ? 'bg-[#EEF6FF]/60' : ''}`}
                       >
                         {cap ? (
                           <div
                             className={`w-6 h-6 rounded-full flex items-center justify-center ${
                               j === 0
-                                ? 'bg-[#FFB814] text-[#082D4A]'
-                                : 'bg-slate-100 text-slate-500'
+                                ? 'bg-[#1173BD] text-white'
+                                : 'bg-slate-100 text-slate-400'
                             }`}
                           >
                             <Check className="w-3.5 h-3.5" strokeWidth={3} />
