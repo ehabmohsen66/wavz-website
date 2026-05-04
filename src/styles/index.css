@@ -13,7 +13,7 @@
 }
 
 html, body { background: #ffffff; }
-* { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+* { font-family: 'Outfit', system-ui, -apple-system, sans-serif; }
 
 [dir="rtl"] * {
   font-family: 'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif;
@@ -108,13 +108,17 @@ html, body { background: #ffffff; }
 }
 .quote-fade { animation: quoteFade 0.4s ease-out both; }
 
-/* Metric progress bar fill */
+/* Metric progress bar fill — scaleX instead of width (GPU-only, no layout) */
 @keyframes progressFill {
-  from { width: 0%; }
-  to   { width: var(--target-w, 80%); }
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 .progress-fill {
+  transform-origin: left;
   animation: progressFill 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+[dir="rtl"] .progress-fill {
+  transform-origin: right;
 }
 
 /* Mobile menu slide down / up */

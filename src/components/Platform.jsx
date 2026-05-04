@@ -8,7 +8,7 @@ export const Platform = () => {
   const [revealRef, visible] = useReveal();
 
   return (
-    <section id="product" ref={revealRef} className="relative bg-slate-50 py-24 lg:py-32">
+    <section id="product" ref={revealRef} className="relative bg-white py-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="mb-12">
           <div className="inline-block px-3 py-1 rounded-md bg-[#FFF4D6] text-[#8B6914] text-[11.5px] font-bold tracking-[0.18em] mb-4">
@@ -27,10 +27,23 @@ export const Platform = () => {
             <a
               key={i}
               href="#"
-              className={`group relative flex items-center gap-6 bg-white border border-slate-200 rounded-2xl p-7 lg:p-8 hover:border-[#1173BD] hover:shadow-lg hover:shadow-[#1173BD]/8 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer overflow-hidden ${
+              className={`group relative flex items-center gap-6 bg-white border border-slate-200 rounded-2xl p-7 lg:p-8 cursor-pointer overflow-hidden ${
                 visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
               }`}
-              style={{ transitionDelay: `${i * 80}ms`, transition: 'all 0.55s cubic-bezier(0.16,1,0.3,1)' }}
+              style={{
+                transitionDelay: `${i * 80}ms`,
+                transition: 'opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1), border-color 150ms ease, box-shadow 200ms ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = '#1173BD';
+                e.currentTarget.style.boxShadow = '0 8px 25px -4px rgba(17,115,189,0.12)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = '';
+                e.currentTarget.style.boxShadow = '';
+                e.currentTarget.style.transform = visible ? 'translateY(0)' : 'translateY(16px)';
+              }}
             >
               {/* Large background number */}
               <div

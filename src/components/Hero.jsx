@@ -6,7 +6,7 @@ export const Hero = () => {
   const { t, dir } = useLang();
 
   return (
-    <section className="relative bg-[#082D4A] pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+    <section className="relative bg-[#082D4A] min-h-[100dvh] pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
 
       {/* Background: radial glow from left */}
       <div
