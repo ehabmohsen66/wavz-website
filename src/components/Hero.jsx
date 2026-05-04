@@ -76,7 +76,10 @@ export const Hero = () => {
           >
             <a
               href="#contact"
-              className="group inline-flex items-center gap-2 bg-[#FFB814] text-[#082D4A] px-6 py-3.5 rounded-md text-[14px] font-bold hover:bg-[#F5A800] transition-all duration-200 shadow-md shadow-[#FFB814]/40 hover:shadow-lg hover:shadow-[#FFB814]/50 cursor-pointer"
+              className="press-scale group inline-flex items-center gap-2 bg-[#FFB814] text-[#082D4A] px-6 py-3.5 rounded-md text-[14px] font-bold shadow-md shadow-[#FFB814]/40 cursor-pointer"
+              style={{ transition: 'transform 120ms cubic-bezier(0.23,1,0.32,1), background-color 150ms ease, box-shadow 150ms ease' }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor='#F5A800'; e.currentTarget.style.boxShadow='0 8px 25px rgb(255 184 20 / 0.5)'; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor='#FFB814'; e.currentTarget.style.boxShadow='0 4px 15px rgb(255 184 20 / 0.4)'; }}
             >
               {t.hero.cta1}
               <ArrowRight
@@ -89,7 +92,10 @@ export const Hero = () => {
             </a>
             <a
               href="#"
-              className="inline-flex items-center gap-2 bg-white border border-slate-300 text-[#082D4A] px-6 py-3.5 rounded-md text-[14px] font-medium hover:border-[#1173BD] hover:text-[#1173BD] transition-all duration-200 cursor-pointer"
+              className="press-scale inline-flex items-center gap-2 bg-white border border-slate-300 text-[#082D4A] px-6 py-3.5 rounded-md text-[14px] font-medium cursor-pointer"
+              style={{ transition: 'transform 120ms cubic-bezier(0.23,1,0.32,1), border-color 150ms ease, color 150ms ease' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor='#1173BD'; e.currentTarget.style.color='#1173BD'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor=''; e.currentTarget.style.color=''; }}
             >
               {t.hero.cta2}
             </a>

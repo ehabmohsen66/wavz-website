@@ -49,13 +49,13 @@ export const Offering = () => {
             return (
               <div
                 key={i}
-                className={`relative rounded-2xl p-7 transition-all duration-300 cursor-default
+                className={`relative rounded-2xl p-7 cursor-default
                   ${isFeatured
-                    ? 'bg-gradient-to-br from-[#082D4A] to-[#0a3a5e] text-white border border-[#082D4A] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#082D4A]/30'
-                    : 'bg-slate-50 border border-slate-200 hover:border-[#1173BD]/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1173BD]/10'
+                    ? 'bg-gradient-to-br from-[#082D4A] to-[#0a3a5e] text-white border border-[#082D4A] hover-lift'
+                    : 'bg-slate-50 border border-slate-200 hover-lift'
                   }
                   ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
-                style={{ transitionDelay: `${i * 110}ms`, transition: 'all 0.6s cubic-bezier(0.16,1,0.3,1)' }}
+                style={{ transitionDelay: `${i * 110}ms`, transition: 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1), box-shadow 200ms ease, border-color 150ms ease' }}
               >
                 {/* Icon */}
                 <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${

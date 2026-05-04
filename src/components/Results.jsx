@@ -60,7 +60,7 @@ export const Results = () => {
             <div
               key={i}
               className={`${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-              style={{ transition: `all 0.6s ${i * 80 + 200}ms` }}
+              style={{ transition: `opacity 0.6s ${i * 80 + 200}ms cubic-bezier(0.16,1,0.3,1), transform 0.6s ${i * 80 + 200}ms cubic-bezier(0.16,1,0.3,1)` }}
             >
               <div className="text-4xl lg:text-6xl font-bold text-[#1173BD] tracking-[-0.03em] leading-none">
                 {visible ? <Counter value={s.value} suffix={s.suffix} /> : `0${s.suffix}`}
@@ -79,18 +79,26 @@ export const Results = () => {
           </div>
 
           <div className="px-14 pt-10 pb-8">
-            {/* Quote text with fade */}
+            {/* Quote text with fade + slide */}
             <blockquote
-              className="relative text-[17px] lg:text-[19px] leading-[1.6] text-[#082D4A] font-light text-center transition-opacity duration-200"
-              style={{ opacity: fading ? 0 : 1 }}
+              className="relative text-[17px] lg:text-[19px] leading-[1.6] text-[#082D4A] font-light text-center"
+              style={{
+                opacity: fading ? 0 : 1,
+                transform: fading ? 'translateY(6px)' : 'translateY(0)',
+                transition: 'opacity 200ms ease-out, transform 200ms ease-out',
+              }}
             >
               {t.results.quotes[qIdx].text}
             </blockquote>
 
             {/* Author */}
             <div
-              className="mt-7 flex items-center justify-center gap-3 transition-opacity duration-200"
-              style={{ opacity: fading ? 0 : 1 }}
+              className="mt-7 flex items-center justify-center gap-3"
+              style={{
+                opacity: fading ? 0 : 1,
+                transform: fading ? 'translateY(6px)' : 'translateY(0)',
+                transition: 'opacity 200ms ease-out, transform 200ms ease-out',
+              }}
             >
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#1173BD] to-[#082D4A] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                 {t.results.quotes[qIdx].author.split(' ').slice(-2).map((n) => n[0]).join('')}

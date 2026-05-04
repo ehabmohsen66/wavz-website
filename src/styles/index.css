@@ -117,12 +117,17 @@ html, body { background: #ffffff; }
   animation: progressFill 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Mobile menu slide down */
+/* Mobile menu slide down / up */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.slide-down { animation: slideDown 0.22s ease-out both; }
+@keyframes slideUp {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+.slide-down { animation: slideDown 0.22s cubic-bezier(0.23, 1, 0.32, 1) both; }
+.slide-up   { animation: slideUp   0.18s cubic-bezier(0.23, 1, 0.32, 1) both; }
 
 /* Scroll-indicator bounce */
 @keyframes scrollBounce {
@@ -130,6 +135,25 @@ html, body { background: #ffffff; }
   50%       { transform: translateY(6px); opacity: 1; }
 }
 .scroll-bounce { animation: scrollBounce 1.6s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════════════════════════════
+   BUTTON PRESS FEEDBACK (Emil: buttons must feel responsive)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Apply to any pressable element */
+.press-scale {
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.press-scale:active {
+  transform: scale(0.97);
+}
+
+/* Gate hover-lift on cards to pointer devices only */
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+}
 
 /* ═══════════════════════════════════════════════════════════════
    ACCESSIBILITY

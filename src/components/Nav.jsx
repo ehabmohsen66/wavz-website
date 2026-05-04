@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Globe, Menu, X } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useScrolled } from '../hooks/index.js';
@@ -8,14 +8,21 @@ export const Nav = () => {
   const { lang, setLang, t } = useLang();
   const scrolled = useScrolled(30);
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
+
+  const closeMenu = () => {
+    setClosing(true);
+    setTimeout(() => { setOpen(false); setClosing(false); }, 170);
+  };
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 ${
         scrolled
           ? 'bg-white/95 backdrop-blur-xl border-b border-slate-200/60 shadow-sm'
           : 'bg-white/85 backdrop-blur-md'
       }`}
+      style={{ transition: 'background-color 300ms ease, backdrop-filter 300ms ease, border-color 300ms ease, box-shadow 300ms ease' }}
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
         <a href="#">
@@ -53,34 +60,39 @@ export const Nav = () => {
             <span>{lang === 'en' ? 'عربي' : 'EN'}</span>
           </button>
 
-          {/* CTA — yellow for visibility */}
+          {/* CTA — yellow with press-scale feedback */}
           <a
             href="#contact"
-            className="hidden sm:inline-flex items-center gap-1.5 text-[13.5px] bg-[#FFB814] text-[#082D4A] px-5 py-2.5 rounded-md hover:bg-[#F5A800] transition-colors font-bold shadow-sm shadow-[#FFB814]/30 cursor-pointer"
+            className="press-scale hidden sm:inline-flex items-center gap-1.5 text-[13.5px] bg-[#FFB814] text-[#082D4A] px-5 py-2.5 rounded-md font-bold shadow-sm shadow-[#FFB814]/30 cursor-pointer"
+            style={{ transition: 'transform 120ms cubic-bezier(0.23,1,0.32,1), background-color 150ms ease' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F5A800'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#FFB814'}
           >
             {t.nav.cta}
           </a>
 
-          {/* Mobile toggle */}
+          {/* Mobile toggle — press feedback */}
           <button
-            onClick={() => setOpen(!open)}
-            className="lg:hidden text-[#082D4A] p-1 cursor-pointer"
+            onClick={() => open ? closeMenu() : setOpen(true)}
+            className="press-scale lg:hidden text-[#082D4A] p-1 cursor-pointer"
           >
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu — animated slide-down */}
-      {open && (
-        <div className="lg:hidden bg-white border-t border-slate-100 px-6 py-6 space-y-1 slide-down shadow-lg">
+      {/* Mobile menu — animated slide-down + slide-up on close */}
+      {(open || closing) && (
+        <div className={`lg:hidden bg-white border-t border-slate-100 px-6 py-6 space-y-1 shadow-lg ${
+          closing ? 'slide-up' : 'slide-down'
+        }`}>
           {Object.entries(t.nav)
             .filter(([k]) => k !== 'cta')
             .map(([k, v]) => (
               <a
                 key={k}
                 href={`#${k}`}
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
                 className="block text-[15px] text-[#082D4A] py-2.5 px-3 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 {v}
@@ -95,8 +107,8 @@ export const Nav = () => {
             </button>
             <a
               href="#contact"
-              onClick={() => setOpen(false)}
-              className="bg-[#FFB814] text-[#082D4A] text-[13px] font-bold px-4 py-2 rounded-md"
+              onClick={closeMenu}
+              className="press-scale bg-[#FFB814] text-[#082D4A] text-[13px] font-bold px-4 py-2 rounded-md"
             >
               {t.nav.cta}
             </a>
