@@ -299,7 +299,7 @@ export const translations = {
       filterAnnouncements: 'Partnerships',
       filterInsights: 'Insights',
       filterEvents: 'Events',
-      backToNews: '\u2190 Back to News',
+      backToNews: 'Back to News',
       readArticle: 'Read Article',
       seeMore: 'View All News',
       categories: {
@@ -1015,7 +1015,7 @@ For more information about WAVZ for Digital Transformation and our services, con
       filterAnnouncements: 'شراكات',
       filterInsights: 'رؤى',
       filterEvents: 'فعاليات',
-      backToNews: '→ العودة إلى الأخبار',
+      backToNews: 'العودة إلى الأخبار',
       readArticle: 'اقرأ المقال',
       seeMore: 'عرض جميع الأخبار',
       categories: {
