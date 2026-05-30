@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, Suspense } from 'react';
 import * as THREE from 'three';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLang } from '../i18n/LangContext.jsx';
 
 /* ─────────────────────────────────────────────────────────────
@@ -247,6 +248,161 @@ export const DigitalTransformation = () => {
   const dir  = ar ? 'rtl' : 'ltr';
   const font = ar ? FONT_AR : FONT;
 
+  const [activeServiceIdx, setActiveServiceIdx] = useState(0);
+
+  const serviceDetails = {
+    CON: {
+      stats: ar ? [
+        { val: '٩٥٪', label: 'ملاءمة الأعمال' },
+        { val: '١٢+ سنة', label: 'خبرة استشارية' },
+        { val: 'مثالي', label: 'تحسين التكلفة' }
+      ] : [
+        { val: '95%', label: 'Biz Alignment' },
+        { val: '12+ Years', label: 'Expert Consulting' },
+        { val: 'Optimal', label: 'Cost Optimisation' }
+      ],
+      pipeline: ar
+        ? ['الاستكشاف', 'تصميم الاستراتيجية', 'نموذج التكلفة', 'مخطط التنفيذ']
+        : ['Discovery', 'Strategy Design', 'Cost Model', 'Execution Blueprint'],
+      bullets: ar
+        ? [
+            'الملاءمة الاستراتيجية لبنية تكنولوجيا المعلومات مع أهداف الشركة.',
+            'تحسين التكاليف الشامل ودمج الموارد والأنظمة المتنوعة.',
+            'استكشاف التكنولوجيا لأحدث المنتجات والحلول الرقمية.'
+          ]
+        : [
+            'Strategic alignment of IT architectures with corporate objectives.',
+            'Comprehensive cost optimization & resource consolidation.',
+            'Technology scouting for cutting-edge digital products.'
+          ]
+    },
+    GAP: {
+      stats: ar ? [
+        { val: '١٠٠٪', label: 'تدقيق المتطلبات' },
+        { val: '٥٠+ RFP', label: 'طلبات العروض' },
+        { val: '<٣٠ يوم', label: 'زمن التسليم' }
+      ] : [
+        { val: '100%', label: 'Requirements Audit' },
+        { val: '50+ RFPs', label: 'Structured RFPs' },
+        { val: '<30 Days', label: 'Delivery Latency' }
+      ],
+      pipeline: ar
+        ? ['تدقيق العمليات', 'رصد الفجوات', 'كتابة المواصفات', 'اختيار الموردين']
+        : ['Process Audit', 'Gap Detection', 'RFP Writing', 'Vendor Selection'],
+      bullets: ar
+        ? [
+            'رسم الفجوات الشامل بين الحالة الرقمية الحالية والمستهدفة للمؤسسة.',
+            'توثيق دقيق للغاية لطلبات العروض يغطي قواعد العمل وتكنولوجيا المعلومات.',
+            'استشارات استراتيجية حول اختيار المنتجات وتدقيق وتقييم الموردين.'
+          ]
+        : [
+            'End-to-end gaps mapping between current and desired digital state.',
+            'Highly detailed RFP documentation covering IT and business rules.',
+            'Strategic advisory on product selection and vendor audits.'
+          ]
+    },
+    PMO: {
+      stats: ar ? [
+        { val: '٩٨٪', label: 'الالتزام بالجدول' },
+        { val: '١٥+', label: 'خبير PMI معتمد' },
+        { val: 'صفر', label: 'مخاطر تشغيلية' }
+      ] : [
+        { val: '98%', label: 'On-Time Schedule' },
+        { val: '15+', label: 'PMI Experts' },
+        { val: 'Zero', label: 'Risk Incidents' }
+      ],
+      pipeline: ar
+        ? ['تحديد النطاق', 'تخطيط دورات العمل', 'حوكمة PMI', 'اعتماد المخرجات']
+        : ['Scope Setup', 'Sprint Planning', 'PMI Governance', 'Deliverable Signoff'],
+      bullets: ar
+        ? [
+            'حوكمة وإدارة للمشاريع معتمدة من PMI وتخطيط دقيق للمراحل.',
+            'أطر عمل مرنة وتقليدية مخصصة تماماً لتسليم مشاريع تكنولوجيا المعلومات.',
+            'سير عمل شامل للحد من المخاطر وتحسين كفاءة استغلال الموارد.'
+          ]
+        : [
+            'PMI-certified project governance, planning, and execution control.',
+            'Tailored agile and waterfall delivery frameworks.',
+            'Comprehensive risk mitigation and resource optimization workflows.'
+          ]
+    },
+    TST: {
+      stats: ar ? [
+        { val: '١٠,٠٠٠+', label: 'حالة اختبار' },
+        { val: '٩٩.٩٨٪', label: 'خالٍ من العيوب' },
+        { val: 'متكامل', label: 'توافق الأنظمة' }
+      ] : [
+        { val: '10,000+', label: 'Test Cases Run' },
+        { val: '99.98%', label: 'Defect-Free' },
+        { val: 'Multi-Core', label: 'System Compatibility' }
+      ],
+      pipeline: ar
+        ? ['سيناريوهات الاختبار', 'التشغيل الوظيفي', 'اختبار التراجع', 'خلو العيوب']
+        : ['Test Scenarios', 'Functional Run', 'Regression Suite', 'Defect Clearance'],
+      bullets: ar
+        ? [
+            'اختبارات وظيفية وغير وظيفية للأنظمة المصرفية والـ CRM والتطبيقات.',
+            'برمجة سيناريوهات اختبار مؤتمتة لتقليل زمن معالجة وإخلاء العيوب.',
+            'اختبار تراجع صارم وبيئات تجريبية (Sandbox) آمنة للتحقق.'
+          ]
+        : [
+            'Functional & non-functional testing across banking cores & CRMs.',
+            'Automated test scripting to reduce clearance latencies.',
+            'Rigorous regression testing and secure sandbox environments.'
+          ]
+    },
+    INF: {
+      stats: ar ? [
+        { val: '٩٩.٩٩٪', label: 'استمرارية العمليات' },
+        { val: '٢٤/٧', label: 'مراقبة نشطة' },
+        { val: '<١٥ دقيقة', label: 'زمن الاستجابة' }
+      ] : [
+        { val: '99.99%', label: 'Ops Continuity' },
+        { val: '24/7', label: 'Active Monitoring' },
+        { val: '<15m', label: 'Incident Response' }
+      ],
+      pipeline: ar
+        ? ['تحديد الحجم', 'مراقبة العمليات', 'معالجة الأعطال', 'التوسع المرن']
+        : ['Infra Sizing', 'Ops Monitoring', 'Incident Rescue', 'Elastic Scale'],
+      bullets: ar
+        ? [
+            'إدارة تشغيلية مستمرة للبنية التحتية ودعم فني على مدار الساعة 24/7.',
+            'إدارة وقائية للمشكلات تستهدف كفاءة تشغيل خالية من الأعطال والمخاطر.',
+            'مراقبة استباقية للأداء وسد الثغرات الأمنية بشكل فوري وفعّال.'
+          ]
+        : [
+            '24/7 continuous operational management & continuous support.',
+            'Incident management SLA targeting zero-downtime operations.',
+            'Proactive performance monitoring & security threat patching.'
+          ]
+    },
+    RFP: {
+      stats: ar ? [
+        { val: '١٠٠٪', label: 'العائد على الاستثمار' },
+        { val: '٦٠+', label: 'عملية تسليم مدققة' },
+        { val: 'موحد', label: 'إطار عمل التسليم' }
+      ] : [
+        { val: '100%', label: 'Return on Investment' },
+        { val: '60+', label: 'Audited Deliveries' },
+        { val: 'Unified', label: 'Delivery Framework' }
+      ],
+      pipeline: ar
+        ? ['مخطط التشغيل', 'تدقيق المراحل', 'التحقق من الجودة', 'التسليم النهائي']
+        : ['Run Blueprint', 'Milestone Audit', 'QA Validation', 'Final Handover'],
+      bullets: ar
+        ? [
+            'إشراف كامل على تنفيذ المشروع من البداية وحتى الإغلاق والتسليم النهائي.',
+            'التحقق الدقيق من المراحل ومطابقة جودة المخرجات للمواصفات المطلوبة.',
+            'إدارة التغيير وتسليم شامل مع تدريب المستخدمين لضمان نجاح التبني.'
+          ]
+        : [
+            'Full project implementation oversight from kickoff to close.',
+            'Milestone verification & strict deliverables quality validation.',
+            'Change management and comprehensive user training handovers.'
+          ]
+    }
+  };
+
   /* ── Service cards ── */
   const services = ar ? [
     {
@@ -358,6 +514,21 @@ export const DigitalTransformation = () => {
         .dt-cta-ghost:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; }
         .dt-row:hover { background: rgba(255,255,255,0.025) !important; }
         .dt-stat-gold::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:${T.gold}; }
+        
+        .dt-menu-item { transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.04); }
+        .dt-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,184,20,0.15) !important; }
+        .dt-menu-item.active { background: rgba(255,184,20,0.06) !important; border-color: ${T.gold} !important; box-shadow: 0 0 15px rgba(255,184,20,0.08); }
+        .dt-menu-item.active .dt-menu-icon { color: ${T.gold} !important; }
+        
+        .dt-terminal-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .dt-terminal-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: all 0.6s ease; }
+        .dt-terminal-btn:hover::before { left: 100%; }
+        .dt-terminal-btn:hover { box-shadow: 0 0 20px rgba(255,184,20,0.25); }
+        
+        .dt-pulse-dot { animation: dt-pulse 2.5s ease-in-out infinite; }
+        
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* ── HERO ── */}
@@ -550,44 +721,333 @@ export const DigitalTransformation = () => {
           </div>
         </div>
 
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(320px,100%),1fr))',
-          gap: 1, background: T.border, border: `1px solid ${T.border}`, borderRadius: 8, overflow: 'hidden',
-        }}>
-          {services.map((s, i) => (
-            <div key={i} className="dt-svc" style={{
-              background: T.navy2, padding: '32px 28px',
-              position: 'relative', border: '1px solid transparent',
-              transition: 'all 0.2s ease', cursor: 'default',
-            }}>
-              <div className="dt-num" style={{
-                position: 'absolute', top: 16,
-                right: ar ? 'auto' : 20, left: ar ? 20 : 'auto',
-                fontSize: 'clamp(40px, 8vw, 64px)', fontWeight: 900, letterSpacing: '-0.04em',
-                color: 'rgba(255,255,255,0.03)', fontFamily: font, lineHeight: 1, userSelect: 'none',
-                transition: 'color 0.2s',
-              }}>
-                {String(i + 1).padStart(2, '0')}
-              </div>
-              <div className="dt-icon" style={{ color: T.muted, marginBottom: 20, transition: 'color 0.2s' }}>
-                {icons[s.code]}
-              </div>
-              <div className="dt-code" style={{
-                display: 'inline-block', fontSize: 10, fontWeight: 700,
-                letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: T.gold, marginBottom: 10, fontFamily: font,
-                opacity: 0.75, transition: 'opacity 0.2s',
-              }}>
-                {s.code}
-              </div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em', color: T.white, margin: '0 0 12px', lineHeight: 1.3, fontFamily: font }}>
-                {s.title}
-              </h3>
-              <p style={{ fontSize: 13.5, lineHeight: 1.75, color: T.muted, margin: 0, fontFamily: font, fontWeight: 400 }}>
-                {s.body}
-              </p>
-            </div>
-          ))}
+        {/* Interactive Digital Transformation Services Command Center Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
+          
+          {/* Left Column: Vertical Services Menu / Horizontal Tabs on Mobile */}
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none" style={{ alignSelf: 'flex-start' }}>
+            {services.map((s, i) => {
+              const isActive = activeServiceIdx === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveServiceIdx(i)}
+                  className={`dt-menu-item group ${isActive ? 'active' : ''} lg:w-full`}
+                  style={{
+                    background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
+                    border: `1px solid ${isActive ? T.gold : T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 20px',
+                    textAlign: ar ? 'right' : 'left',
+                    minWidth: 220,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 12,
+                    flexShrink: 0,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+                    {/* Icon */}
+                    <div className="dt-menu-icon" style={{
+                      color: isActive ? T.gold : T.muted,
+                      transition: 'color 0.25s ease',
+                      flexShrink: 0,
+                    }}>
+                      {icons[s.code]}
+                    </div>
+                    {/* Title & Status */}
+                    <div style={{ overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <h3 style={{
+                          fontSize: 13.5, fontWeight: 700,
+                          color: T.white, margin: 0,
+                          fontFamily: font,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
+                          {s.title}
+                        </h3>
+                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#4AF626', flexShrink: 0 }} className="dt-pulse-dot" />
+                      </div>
+                      <span style={{ fontSize: 10.5, color: T.muted, fontFamily: font, display: 'block', marginTop: 1 }}>
+                        {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Operational stat chip */}
+                  <div style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: isActive ? T.gold : T.muted,
+                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.3)' : T.border}`,
+                    borderRadius: 4,
+                    padding: '3px 6px',
+                    background: isActive ? 'rgba(255,184,20,0.04)' : 'rgba(255,255,255,0.01)',
+                    fontFamily: font,
+                    letterSpacing: '-0.02em',
+                    flexShrink: 0,
+                  }}>
+                    {serviceDetails[s.code].stats[0].val}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right Column: Dynamic Terminal Dashboard */}
+          <div style={{ position: 'relative' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeServiceIdx}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.22 }}
+                style={{
+                  background: 'rgba(8,45,74,0.45)',
+                  backdropFilter: 'blur(16px)',
+                  border: `1px solid rgba(255,184,20,0.15)`,
+                  borderRadius: 12,
+                  padding: '32px 28px',
+                  minHeight: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 28,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Dashboard Grid Line Background Accent */}
+                <div style={{
+                  position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
+                  backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
+                  backgroundSize: '20px 20px',
+                  pointerEvents: 'none',
+                }} />
+
+                <div>
+                  {/* Dashboard Live Status Indicator */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{
+                        background: 'rgba(255,184,20,0.12)',
+                        border: `1px solid ${T.gold}`,
+                        color: T.gold,
+                        fontSize: 10,
+                        fontWeight: 800,
+                        padding: '3px 8px',
+                        borderRadius: 4,
+                        letterSpacing: '0.08em',
+                        fontFamily: font,
+                      }}>
+                        {services[activeServiceIdx].code}
+                      </div>
+                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626' }} className="dt-pulse-dot" />
+                        {ar ? 'نظام التحول الرقمي حي ومباشر' : 'LIVE TRANSFORMATION NODE ACTIVE'}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 10.5, color: T.muted, fontFamily: 'monospace' }}>
+                      NODE_ID: {services[activeServiceIdx].code}_DIG_SYS_0{activeServiceIdx + 1}Y
+                    </div>
+                  </div>
+
+                  <h2 style={{
+                    fontSize: 'clamp(20px, 2.5vw, 24px)',
+                    fontWeight: 800,
+                    letterSpacing: '-0.025em',
+                    color: T.white,
+                    margin: '0 0 14px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].title}
+                  </h2>
+
+                  <p style={{
+                    fontSize: 14,
+                    lineHeight: 1.8,
+                    color: T.muted,
+                    margin: '0 0 24px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].body}
+                  </p>
+
+                  {/* ── Diagnostic Statistics Grid ── */}
+                  <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
+                    {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
+                      <div
+                        key={sIdx}
+                        style={{
+                          background: 'rgba(6,30,49,0.5)',
+                          border: `1px solid ${T.border}`,
+                          borderRadius: 8,
+                          padding: '14px 10px',
+                          textAlign: 'center',
+                          position: 'relative',
+                        }}
+                      >
+                        <div style={{
+                          fontSize: 'clamp(16px, 3vw, 20px)',
+                          fontWeight: 900,
+                          color: T.gold,
+                          marginBottom: 4,
+                          fontFamily: font,
+                          letterSpacing: '-0.03em',
+                        }}>
+                          {st.val}
+                        </div>
+                        <div style={{
+                          fontSize: 10,
+                          fontWeight: 500,
+                          color: T.muted,
+                          fontFamily: font,
+                          lineHeight: 1.2,
+                        }}>
+                          {st.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ── Process Flow Map ── */}
+                  <div style={{
+                    background: 'rgba(6,30,49,0.3)',
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 14px',
+                    marginBottom: 28,
+                  }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+                      {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
+                      {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
+                        <React.Fragment key={idx}>
+                          {/* Step Node */}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
+                            <div style={{
+                              width: 28, height: 28,
+                              borderRadius: '50%',
+                              border: `1.5px solid ${T.gold}`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 10,
+                              fontWeight: 'bold',
+                              color: T.gold,
+                              background: T.navy,
+                              boxShadow: '0 0 10px rgba(255,184,20,0.15)',
+                              marginBottom: 6,
+                            }}>
+                              {idx + 1}
+                            </div>
+                            <div style={{ fontSize: 10.5, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
+                              {step}
+                            </div>
+                          </div>
+                          
+                          {/* Connector Line */}
+                          {idx < 3 && (
+                            <div
+                              className="hidden sm:block"
+                              style={{
+                                flex: 1,
+                                height: 1.5,
+                                background: ar 
+                                  ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)` 
+                                  : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
+                                opacity: 0.3,
+                                position: 'relative',
+                                minWidth: 15,
+                              }}
+                            >
+                              <div
+                                className="dt-pulse-dot"
+                                style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: ar ? 'auto' : '0%',
+                                  right: ar ? '0%' : 'auto',
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: '50%',
+                                  background: T.gold,
+                                  transform: 'translateY(-50%)',
+                                  boxShadow: '0 0 6px #FFB814',
+                                }}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ── Operational Specs ── */}
+                  <div>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
+                      {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
+                        <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
+                          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: T.gold, flexShrink: 0, marginTop: 4 }}>
+                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontSize: 12.5, color: T.muted, fontFamily: font, lineHeight: 1.45 }}>
+                            {bullet}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secure Consultation Button */}
+                <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, marginTop: 6 }}>
+                  <button
+                    onClick={() => {
+                      window.location.hash = '#/contact';
+                    }}
+                    className="dt-terminal-btn"
+                    style={{
+                      width: '100%',
+                      background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
+                      color: T.navy,
+                      border: 'none',
+                      borderRadius: 6,
+                      padding: '12px 24px',
+                      fontSize: 13,
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      fontFamily: font,
+                    }}
+                  >
+                    <span>
+                      {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
         </div>
       </section>
 
