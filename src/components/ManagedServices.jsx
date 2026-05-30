@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, Suspense } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo, Suspense } from 'react';
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
@@ -250,6 +250,51 @@ const icons = {
   ),
 };
 
+/* ── Larger node icons for the system dynamics map ── */
+const nodeIcons = {
+  CCC: (
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+      <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+      <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+      <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  ),
+  SOC: (
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  AMS: (
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  NOC: (
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  DCO: (
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <rect x="2" y="2" width="20" height="8" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+      <rect x="2" y="14" width="20" height="8" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M6 6h.01M6 18h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  CLD: (
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  ),
+  CON: (
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  ),
+};
+
 /* ─── HeartFavorite component ─── */
 export function HeartFavorite() {
   const [isLiked, setIsLiked] = useState(false);
@@ -259,10 +304,10 @@ export function HeartFavorite() {
       {/* Floating text above the heart */}
       <motion.div
         initial={{ opacity: 0, y: 4, scale: 0.9 }}
-        animate={{ 
-          opacity: isLiked ? 1 : 0, 
+        animate={{
+          opacity: isLiked ? 1 : 0,
           y: isLiked ? -24 : 4,
-          scale: isLiked ? 1 : 0.9 
+          scale: isLiked ? 1 : 0.9
         }}
         transition={{ duration: 0.25, ease: "easeOut" }}
         style={{
@@ -304,6 +349,674 @@ export function HeartFavorite() {
   );
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   SYSTEM DYNAMICS — Interactive Neural Network Map
+   SVG-based orbital node visualization with animated 
+   particle flows and auto-cycling detail panels
+═══════════════════════════════════════════════════════════ */
+
+const AUTO_CYCLE_INTERVAL = 6000; // ms per service in auto mode
+
+const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, ar, font }) => {
+  const svgRef = useRef(null);
+  const [hoveredIdx, setHoveredIdx] = useState(null);
+  const [dimensions, setDimensions] = useState({ w: 600, h: 520 });
+  const containerRef = useRef(null);
+
+  // Responsive dimensions
+  useEffect(() => {
+    const measure = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const w = Math.min(rect.width, 720);
+        const h = Math.max(400, Math.min(w * 0.85, 560));
+        setDimensions({ w, h });
+      }
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
+  const { w, h } = dimensions;
+  const cx = w / 2;
+  const cy = h / 2;
+  const radius = Math.min(w, h) * 0.36;
+  const nodeRadius = Math.min(w, h) * 0.055;
+
+  // Calculate node positions in a circle
+  const nodePositions = useMemo(() => {
+    return services.map((_, i) => {
+      const angle = (i / services.length) * Math.PI * 2 - Math.PI / 2;
+      return {
+        x: cx + radius * Math.cos(angle),
+        y: cy + radius * Math.sin(angle),
+      };
+    });
+  }, [services.length, cx, cy, radius]);
+
+  // Generate connection lines (each node to center + adjacent nodes)
+  const connections = useMemo(() => {
+    const conns = [];
+    // Each node to center hub
+    nodePositions.forEach((pos, i) => {
+      conns.push({ from: { x: cx, y: cy }, to: pos, type: 'hub', idx: i });
+    });
+    // Adjacent nodes connected
+    nodePositions.forEach((pos, i) => {
+      const next = nodePositions[(i + 1) % nodePositions.length];
+      conns.push({ from: pos, to: next, type: 'ring', idx: i });
+    });
+    return conns;
+  }, [nodePositions, cx, cy]);
+
+  return (
+    <div ref={containerRef} style={{ width: '100%', position: 'relative' }}>
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${w} ${h}`}
+        width="100%"
+        height="auto"
+        style={{ display: 'block', overflow: 'visible' }}
+      >
+        <defs>
+          {/* Glow filter for active node */}
+          <filter id="sd-glow-gold" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feFlood floodColor={T.gold} floodOpacity="0.35" result="color" />
+            <feComposite in="color" in2="blur" operator="in" result="shadow" />
+            <feMerge>
+              <feMergeNode in="shadow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="sd-glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feFlood floodColor={T.blueL} floodOpacity="0.2" result="color" />
+            <feComposite in="color" in2="blur" operator="in" result="shadow" />
+            <feMerge>
+              <feMergeNode in="shadow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          {/* Animated gradient for particle flow */}
+          <linearGradient id="sd-flow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={T.gold} stopOpacity="0" />
+            <stop offset="50%" stopColor={T.gold} stopOpacity="0.9" />
+            <stop offset="100%" stopColor={T.gold} stopOpacity="0" />
+          </linearGradient>
+
+          {/* Radial gradient for center hub */}
+          <radialGradient id="sd-hub-grad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={T.gold} stopOpacity="0.15" />
+            <stop offset="60%" stopColor={T.navy} stopOpacity="0.8" />
+            <stop offset="100%" stopColor={T.navy} stopOpacity="1" />
+          </radialGradient>
+        </defs>
+
+        {/* ── Orbital ring guides ── */}
+        <circle cx={cx} cy={cy} r={radius} fill="none" stroke={T.border} strokeWidth="1" strokeDasharray="4 6" opacity="0.5" />
+        <circle cx={cx} cy={cy} r={radius * 0.55} fill="none" stroke={T.border} strokeWidth="0.5" strokeDasharray="2 8" opacity="0.3" />
+
+        {/* ── Connection lines (ring) ── */}
+        {connections.filter(c => c.type === 'ring').map((conn, i) => (
+          <line
+            key={`ring-${i}`}
+            x1={conn.from.x} y1={conn.from.y}
+            x2={conn.to.x} y2={conn.to.y}
+            stroke={T.dim}
+            strokeWidth="0.8"
+            opacity="0.4"
+          />
+        ))}
+
+        {/* ── Connection lines (hub to nodes) with animated particles ── */}
+        {connections.filter(c => c.type === 'hub').map((conn, i) => {
+          const isActive = i === activeIdx;
+          const isHovered = i === hoveredIdx;
+          return (
+            <g key={`hub-${i}`}>
+              {/* Static connection line */}
+              <line
+                x1={conn.from.x} y1={conn.from.y}
+                x2={conn.to.x} y2={conn.to.y}
+                stroke={isActive ? T.gold : isHovered ? T.blueL : T.dim}
+                strokeWidth={isActive ? 1.5 : 0.8}
+                opacity={isActive ? 0.7 : isHovered ? 0.5 : 0.25}
+                style={{ transition: 'all 0.4s ease' }}
+              />
+              {/* Animated particle along the line */}
+              <circle r="2.5" fill={isActive ? T.gold : T.blueL} opacity={isActive ? 0.9 : 0.3}>
+                <animateMotion
+                  dur={isActive ? '2s' : '4s'}
+                  repeatCount="indefinite"
+                  path={`M${conn.from.x},${conn.from.y} L${conn.to.x},${conn.to.y}`}
+                />
+              </circle>
+              {/* Reverse particle for active nodes */}
+              {isActive && (
+                <circle r="2" fill={T.gold} opacity="0.5">
+                  <animateMotion
+                    dur="3s"
+                    repeatCount="indefinite"
+                    path={`M${conn.to.x},${conn.to.y} L${conn.from.x},${conn.from.y}`}
+                  />
+                </circle>
+              )}
+            </g>
+          );
+        })}
+
+        {/* ── Center Hub ── */}
+        <g style={{ cursor: 'default' }}>
+          <circle cx={cx} cy={cy} r={nodeRadius * 1.5} fill="url(#sd-hub-grad)" stroke={T.gold} strokeWidth="1.5" opacity="0.9" />
+          {/* Inner rotating ring */}
+          <circle cx={cx} cy={cy} r={nodeRadius * 1.15} fill="none" stroke={T.gold} strokeWidth="0.5" strokeDasharray="3 5" opacity="0.4">
+            <animateTransform attributeName="transform" type="rotate" from={`0 ${cx} ${cy}`} to={`360 ${cx} ${cy}`} dur="20s" repeatCount="indefinite" />
+          </circle>
+          {/* Hub label */}
+          <text x={cx} y={cy - 6} textAnchor="middle" fill={T.gold} fontSize="8" fontWeight="800" letterSpacing="0.12em" fontFamily={FONT} style={{ textTransform: 'uppercase' }}>
+            {ar ? 'مركز' : 'WAVZ'}
+          </text>
+          <text x={cx} y={cy + 5} textAnchor="middle" fill={T.white} fontSize="7" fontWeight="600" letterSpacing="0.08em" fontFamily={FONT}>
+            {ar ? 'العمليات' : 'OPS CORE'}
+          </text>
+          {/* Pulsing ring */}
+          <circle cx={cx} cy={cy} r={nodeRadius * 1.5} fill="none" stroke={T.gold} strokeWidth="1" opacity="0.15">
+            <animate attributeName="r" values={`${nodeRadius * 1.5};${nodeRadius * 2};${nodeRadius * 1.5}`} dur="3s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.15;0;0.15" dur="3s" repeatCount="indefinite" />
+          </circle>
+        </g>
+
+        {/* ── Service Nodes ── */}
+        {nodePositions.map((pos, i) => {
+          const isActive = i === activeIdx;
+          const isHovered = i === hoveredIdx;
+          const s = services[i];
+          return (
+            <g
+              key={i}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setActiveIdx(i)}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveIdx(i); }}
+              aria-label={s.title}
+            >
+              {/* Outer glow ring for active */}
+              {isActive && (
+                <circle cx={pos.x} cy={pos.y} r={nodeRadius + 8} fill="none" stroke={T.gold} strokeWidth="1" opacity="0.2">
+                  <animate attributeName="r" values={`${nodeRadius + 8};${nodeRadius + 14};${nodeRadius + 8}`} dur="2.5s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.2;0.05;0.2" dur="2.5s" repeatCount="indefinite" />
+                </circle>
+              )}
+
+              {/* Progress ring (auto-cycle indicator) */}
+              {isActive && (
+                <circle
+                  cx={pos.x} cy={pos.y}
+                  r={nodeRadius + 4}
+                  fill="none"
+                  stroke={T.gold}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeDasharray={`${2 * Math.PI * (nodeRadius + 4)}`}
+                  strokeDashoffset={`${2 * Math.PI * (nodeRadius + 4)}`}
+                  opacity="0.6"
+                  style={{
+                    transformOrigin: `${pos.x}px ${pos.y}px`,
+                    transform: 'rotate(-90deg)',
+                    animation: `sd-progress-ring ${AUTO_CYCLE_INTERVAL}ms linear forwards`,
+                  }}
+                />
+              )}
+
+              {/* Node background */}
+              <circle
+                cx={pos.x} cy={pos.y}
+                r={nodeRadius}
+                fill={T.navy}
+                stroke={isActive ? T.gold : isHovered ? T.blueL : T.dim}
+                strokeWidth={isActive ? 2 : 1.2}
+                filter={isActive ? 'url(#sd-glow-gold)' : isHovered ? 'url(#sd-glow-blue)' : 'none'}
+                style={{ transition: 'stroke 0.3s ease, stroke-width 0.3s ease' }}
+              />
+
+              {/* Inner gradient fill */}
+              <circle
+                cx={pos.x} cy={pos.y}
+                r={nodeRadius - 1}
+                fill={isActive ? 'rgba(255,184,20,0.08)' : isHovered ? 'rgba(75,163,227,0.05)' : 'transparent'}
+                style={{ transition: 'fill 0.3s ease' }}
+              />
+
+              {/* Status dot */}
+              <circle
+                cx={pos.x + nodeRadius * 0.6}
+                cy={pos.y - nodeRadius * 0.6}
+                r="3"
+                fill="#4AF626"
+                opacity={isActive ? 1 : 0.5}
+              >
+                <animate attributeName="opacity" values={isActive ? '1;0.5;1' : '0.5;0.3;0.5'} dur="2.5s" repeatCount="indefinite" />
+              </circle>
+
+              {/* Node code label */}
+              <text
+                x={pos.x} y={pos.y + 1}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill={isActive ? T.gold : isHovered ? T.blueL : T.muted}
+                fontSize={Math.max(9, nodeRadius * 0.38)}
+                fontWeight="800"
+                letterSpacing="0.08em"
+                fontFamily={FONT}
+                style={{ transition: 'fill 0.3s ease', pointerEvents: 'none' }}
+              >
+                {s.code}
+              </text>
+
+              {/* External label */}
+              {(() => {
+                const angle = (i / services.length) * Math.PI * 2 - Math.PI / 2;
+                const labelDist = nodeRadius + 18;
+                const lx = pos.x + labelDist * Math.cos(angle);
+                const ly = pos.y + labelDist * Math.sin(angle);
+                const anchor = Math.abs(Math.cos(angle)) < 0.3 ? 'middle' : Math.cos(angle) > 0 ? 'start' : 'end';
+                return (
+                  <text
+                    x={lx} y={ly}
+                    textAnchor={anchor}
+                    dominantBaseline="central"
+                    fill={isActive ? T.white : T.muted}
+                    fontSize={Math.max(8, nodeRadius * 0.3)}
+                    fontWeight={isActive ? 700 : 500}
+                    fontFamily={font}
+                    opacity={isActive ? 1 : 0.7}
+                    style={{ transition: 'all 0.3s ease', pointerEvents: 'none' }}
+                  >
+                    {s.title.length > 20 ? s.title.substring(0, 18) + '…' : s.title}
+                  </text>
+                );
+              })()}
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+};
+
+
+/* ═══════════════════════════════════════════════════════════
+   DETAIL PANEL — Animated dashboard for the active service
+═══════════════════════════════════════════════════════════ */
+const DetailPanel = ({ service, details, ar, font }) => {
+  return (
+    <motion.div
+      key={service.code}
+      initial={{ opacity: 0, y: 20, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -20, scale: 0.98 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      style={{
+        background: 'rgba(8,45,74,0.5)',
+        backdropFilter: 'blur(16px)',
+        border: `1px solid rgba(255,184,20,0.15)`,
+        borderRadius: 14,
+        padding: 'clamp(24px, 4vw, 36px)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Grid dot pattern background */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
+        backgroundSize: '18px 18px',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Header row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12, position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            background: 'rgba(255,184,20,0.12)',
+            border: `1px solid ${T.gold}`,
+            color: T.gold,
+            fontSize: 10,
+            fontWeight: 800,
+            padding: '4px 10px',
+            borderRadius: 4,
+            letterSpacing: '0.1em',
+            fontFamily: font,
+          }}>
+            {service.code}
+          </div>
+          <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626', display: 'inline-block', animation: 'ms-pulse 2.5s ease-in-out infinite' }} />
+            {ar ? 'تدفق بيانات حي' : 'LIVE DATA STREAM'}
+          </span>
+        </div>
+        <div style={{ fontSize: 10, color: T.dim, fontFamily: 'monospace' }}>
+          SYS/{service.code}/ACTIVE
+        </div>
+      </div>
+
+      {/* Title */}
+      <h3 style={{
+        fontSize: 'clamp(20px, 2.8vw, 28px)',
+        fontWeight: 800,
+        letterSpacing: '-0.025em',
+        color: T.white,
+        margin: '0 0 12px 0',
+        fontFamily: font,
+        position: 'relative', zIndex: 1,
+      }}>
+        {service.title}
+      </h3>
+
+      {/* Description */}
+      <p style={{
+        fontSize: 14,
+        lineHeight: 1.8,
+        color: T.muted,
+        margin: '0 0 28px 0',
+        fontFamily: font,
+        position: 'relative', zIndex: 1,
+      }}>
+        {service.body}
+      </p>
+
+      {/* ── Telemetry Stats ── */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 10,
+        marginBottom: 28,
+        position: 'relative', zIndex: 1,
+      }}>
+        {details.stats.map((st, sIdx) => (
+          <motion.div
+            key={sIdx}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: sIdx * 0.08, duration: 0.3 }}
+            style={{
+              background: 'rgba(6,30,49,0.6)',
+              border: `1px solid ${T.border}`,
+              borderRadius: 10,
+              padding: 'clamp(12px, 2vw, 18px) clamp(8px, 1.5vw, 14px)',
+              textAlign: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Top accent line */}
+            <div style={{
+              position: 'absolute', top: 0, left: '20%', right: '20%', height: 2,
+              background: `linear-gradient(90deg, transparent, ${T.gold}, transparent)`,
+              opacity: 0.4,
+            }} />
+            <div style={{
+              fontSize: 'clamp(18px, 3vw, 24px)',
+              fontWeight: 900,
+              color: T.gold,
+              marginBottom: 4,
+              fontFamily: font,
+              letterSpacing: '-0.03em',
+            }}>
+              {st.val}
+            </div>
+            <div style={{
+              fontSize: 10.5,
+              fontWeight: 500,
+              color: T.muted,
+              fontFamily: font,
+              lineHeight: 1.3,
+            }}>
+              {st.label}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ── Process Flow Map ── */}
+      <div style={{
+        background: 'rgba(6,30,49,0.35)',
+        border: `1px solid ${T.border}`,
+        borderRadius: 10,
+        padding: 'clamp(14px, 2vw, 20px)',
+        marginBottom: 28,
+        position: 'relative', zIndex: 1,
+      }}>
+        <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 16, fontFamily: font }}>
+          {ar ? 'مخطط تدفق العمليات' : 'PROCESS FLOW MAP'}
+        </div>
+        <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4, position: 'relative', flexWrap: 'wrap' }}>
+          {details.pipeline.map((step, idx) => (
+            <React.Fragment key={idx}>
+              {/* Step Node */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.1 + idx * 0.08 }}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 64 }}
+              >
+                <div style={{
+                  width: 30, height: 30,
+                  borderRadius: '50%',
+                  border: `1.5px solid ${T.gold}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 10.5,
+                  fontWeight: 'bold',
+                  color: T.gold,
+                  background: T.navy,
+                  boxShadow: '0 0 12px rgba(255,184,20,0.15)',
+                  marginBottom: 6,
+                }}>
+                  {idx + 1}
+                </div>
+                <div style={{ fontSize: 10, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
+                  {step}
+                </div>
+              </motion.div>
+              {/* Connector */}
+              {idx < details.pipeline.length - 1 && (
+                <div
+                  className="hidden sm:block"
+                  style={{
+                    flex: 1,
+                    height: 1.5,
+                    background: ar
+                      ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)`
+                      : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
+                    opacity: 0.3,
+                    position: 'relative',
+                    minWidth: 12,
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    width: 5, height: 5,
+                    borderRadius: '50%',
+                    background: T.gold,
+                    transform: 'translateY(-50%)',
+                    boxShadow: '0 0 6px #FFB814',
+                    animation: `sd-particle-move 2s linear infinite`,
+                    left: ar ? 'auto' : 0,
+                    right: ar ? 0 : 'auto',
+                  }} />
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Operational Specifications ── */}
+      <div style={{ position: 'relative', zIndex: 1, marginBottom: 24 }}>
+        <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+          {ar ? 'المواصفات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {details.bullets.map((bullet, bIdx) => (
+            <motion.div
+              key={bIdx}
+              initial={{ opacity: 0, x: ar ? 15 : -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.15 + bIdx * 0.08 }}
+              style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" width="14" height="14" style={{ color: T.gold, flexShrink: 0, marginTop: 3 }}>
+                <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{ fontSize: 13, color: T.muted, fontFamily: font, lineHeight: 1.5 }}>
+                {bullet}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── CTA Button ── */}
+      <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, position: 'relative', zIndex: 1 }}>
+        <button
+          onClick={() => { window.location.hash = '#/contact'; }}
+          className="ms-terminal-btn"
+          style={{
+            width: '100%',
+            background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
+            color: T.navy,
+            border: 'none',
+            borderRadius: 8,
+            padding: '14px 24px',
+            fontSize: 13,
+            fontWeight: 800,
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 8,
+            fontFamily: font,
+          }}
+        >
+          <span>
+            {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+
+/* ═══════════════════════════════════════════════════
+   MOBILE NODE SELECTOR — Horizontal scrollable nodes
+═══════════════════════════════════════════════════ */
+const MobileNodeSelector = ({ services, activeIdx, setActiveIdx, font }) => {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      const activeEl = scrollRef.current.children[activeIdx];
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }
+  }, [activeIdx]);
+
+  return (
+    <div
+      ref={scrollRef}
+      className="scrollbar-none"
+      style={{
+        display: 'flex',
+        gap: 10,
+        overflowX: 'auto',
+        paddingBottom: 8,
+        scrollSnapType: 'x mandatory',
+      }}
+    >
+      {services.map((s, i) => {
+        const isActive = i === activeIdx;
+        return (
+          <button
+            key={i}
+            onClick={() => setActiveIdx(i)}
+            style={{
+              flexShrink: 0,
+              scrollSnapAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 6,
+              padding: '14px 18px',
+              borderRadius: 10,
+              border: `1.5px solid ${isActive ? T.gold : T.border}`,
+              background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
+              cursor: 'pointer',
+              transition: 'all 0.25s ease',
+              minWidth: 90,
+            }}
+          >
+            {/* Node circle */}
+            <div style={{
+              width: 40, height: 40,
+              borderRadius: '50%',
+              border: `1.5px solid ${isActive ? T.gold : T.dim}`,
+              background: isActive ? 'rgba(255,184,20,0.08)' : 'transparent',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: isActive ? T.gold : T.muted,
+              transition: 'all 0.25s ease',
+              position: 'relative',
+            }}>
+              {/* Status dot */}
+              <div style={{
+                position: 'absolute', top: -1, right: -1,
+                width: 6, height: 6,
+                borderRadius: '50%',
+                background: '#4AF626',
+                opacity: isActive ? 1 : 0.4,
+              }} />
+              <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.06em', fontFamily: FONT }}>
+                {s.code}
+              </span>
+            </div>
+            {/* Title */}
+            <span style={{
+              fontSize: 10,
+              fontWeight: isActive ? 700 : 500,
+              color: isActive ? T.white : T.muted,
+              fontFamily: font,
+              textAlign: 'center',
+              lineHeight: 1.2,
+              maxWidth: 80,
+            }}>
+              {s.title.length > 16 ? s.title.substring(0, 14) + '…' : s.title}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+
 /* ═══════════════════════════════════════════════════
    MAIN COMPONENT
 ═══════════════════════════════════════════════════ */
@@ -314,21 +1027,23 @@ export const ManagedServices = () => {
   const font = ar ? "'Tajawal', sans-serif" : FONT;
 
   const [activeServiceIdx, setActiveServiceIdx] = useState(0);
+  const [autoCycle, setAutoCycle] = useState(true);
+  const autoCycleRef = useRef(null);
 
   const serviceDetails = {
     CCC: {
-      stats: ar 
+      stats: ar
         ? [{ val: '99.99%', label: 'اتفاقية مستوى الخدمة' }, { val: '240+', label: 'الأزمات النشطة سنوياً' }, { val: 'فوري', label: 'سرعة الاستجابة' }]
         : [{ val: '99.99%', label: 'Uptime SLA' }, { val: '240+', label: 'Annual Crises' }, { val: 'Immediate', label: 'Response Rate' }],
       pipeline: ar
         ? ['كشف الثغرات', 'تحليل المخاطر', 'غرفة العمليات', 'الحل النهائي']
         : ['Anomaly Detect', 'Risk Analysis', 'Crisis Room', 'Resolution'],
       bullets: ar
-        ? ['مراقبة وتحليل التهديدات الفورية على مدار الساعة.', 'بروتوكولات استجابة سريعة ومعتمدة لإدارة الحوادث.', 'عوكمة شاملة واتصالات منسقة خلال الأزمات.']
+        ? ['مراقبة وتحليل التهديدات الفورية على مدار الساعة.', 'بروتوكولات استجابة سريعة ومعتمدة لإدارة الحوادث.', 'حوكمة شاملة واتصالات منسقة خلال الأزمات.']
         : ['24/7 real-time anomaly detection and deep threat parsing.', 'Proven emergency response protocols for instant mitigation.', 'Full crisis governance and unified stakeholder coordination.']
     },
     SOC: {
-      stats: ar 
+      stats: ar
         ? [{ val: '99.95%', label: 'اتفاقية مستوى الخدمة' }, { val: '1.2 مليون+', label: 'تفاعل عملاء سنوي' }, { val: 'شامل القنوات', label: 'قنوات الاتصال' }]
         : [{ val: '99.95%', label: 'Service SLA' }, { val: '1.2M+', label: 'Annual Interactions' }, { val: 'Omni-channel', label: 'Interaction Model' }],
       pipeline: ar
@@ -339,7 +1054,7 @@ export const ManagedServices = () => {
         : ['Omni-channel contact center management (voice, email, chat).', 'Deep integration with leading enterprise CRM core platforms.', 'Operational cost reduction powered by intelligent routing.']
     },
     AMS: {
-      stats: ar 
+      stats: ar
         ? [{ val: '99.90%', label: 'اتفاقية مستوى الخدمة' }, { val: '80+', label: 'تطبيقات قيد التشغيل' }, { val: 'مستمر', label: 'دورة الإصدار' }]
         : [{ val: '99.90%', label: 'Application SLA' }, { val: '80+', label: 'Production Apps' }, { val: 'Continuous', label: 'Release Cycle' }],
       pipeline: ar
@@ -350,7 +1065,7 @@ export const ManagedServices = () => {
         : ['End-to-end support for application lifecycle & refactoring.', 'Strict release governance to ensure high system availability.', 'Legacy modernizations to scalable container environments.']
     },
     NOC: {
-      stats: ar 
+      stats: ar
         ? [{ val: '99.999%', label: 'اتفاقية مستوى الخدمة' }, { val: '4.5 Tbps', label: 'نطاق تدفق البيانات' }, { val: 'عالمي', label: 'نطاق التغطية' }]
         : [{ val: '99.999%', label: 'Network SLA' }, { val: '4.5 Tbps', label: 'Peak Traffic' }, { val: 'Global / GNOC', label: 'Coverage Grid' }],
       pipeline: ar
@@ -361,7 +1076,7 @@ export const ManagedServices = () => {
         : ['24/7/365 active monitoring for complex scale networks.', 'GNOC standard operations for national-scale infrastructure.', 'Automated routing & telemetry to preempt traffic choke points.']
     },
     DCO: {
-      stats: ar 
+      stats: ar
         ? [{ val: '99.999%', label: 'توافر الأجهزة' }, { val: '5,000+', label: 'خوادم نشطة' }, { val: '88%', label: 'كفاءة الطاقة المدارة' }]
         : [{ val: '99.999%', label: 'Hardware SLA' }, { val: '5,000+', label: 'Active Servers' }, { val: '88%', label: 'Power Efficiency' }],
       pipeline: ar
@@ -372,9 +1087,9 @@ export const ManagedServices = () => {
         : ['End-to-end data center migration and infrastructure sync.', 'Advanced capacity forecasting & active server balancing.', 'Real-time environment controls and server rack optimization.']
     },
     CLD: {
-      stats: ar 
+      stats: ar
         ? [{ val: '99.99%', label: 'توافر السحابة' }, { val: '12,000+', label: 'بيئات افتراضية' }, { val: 'متعدد / هجين', label: 'طبيعة النشر' }]
-        : [{ val: '99.99%', label: 'Cloud SLA' }, { val: '12,000%', label: 'Virtual Cores' }, { val: 'Multi / Hybrid', label: 'Deployment Model' }],
+        : [{ val: '99.99%', label: 'Cloud SLA' }, { val: '12,000+', label: 'Virtual Cores' }, { val: 'Multi / Hybrid', label: 'Deployment Model' }],
       pipeline: ar
         ? ['سحابة متعددة', 'بيئة الخوادم', 'موزع الأحمال', 'تمدد تلقائي']
         : ['Multi-Cloud Mesh', 'Virtualization', 'Load Balancer', 'Autoscale'],
@@ -383,9 +1098,9 @@ export const ManagedServices = () => {
         : ['Comprehensive management for multi-cloud & hybrid ecosystems.', 'Continuous real-time cloud cost controls and sizing audits.', 'Serverless deployments & responsive microservices topologies.']
     },
     CON: {
-      stats: ar 
+      stats: ar
         ? [{ val: '100%', label: 'نسبة النجاح' }, { val: '400+', label: 'دراسة استراتيجية' }, { val: 'شراكة كاملة', label: 'نموذج العلاقة' }]
-        : [{ val: '100%', label: 'Delivery Rate' }, { val: '400%', label: 'Blueprints Delivered' }, { val: 'Strategic Partner', label: 'Engagement Model' }],
+        : [{ val: '100%', label: 'Delivery Rate' }, { val: '400+', label: 'Blueprints Delivered' }, { val: 'Strategic Partner', label: 'Engagement Model' }],
       pipeline: ar
         ? ['تقييم الأصول', 'تحليل الفجوات', 'خريطة الطريق', 'تدقيق الحوكمة']
         : ['Assessment', 'Gap Analysis', 'Roadmap Build', 'Governance Audit'],
@@ -429,6 +1144,39 @@ export const ManagedServices = () => {
     ? ['قيادة وسيطرة', 'عمليات الخدمة', 'تطبيقات مُدارة', 'عمليات الشبكة', 'مركز البيانات', 'السحابة', 'الاستشارات']
     : ['Command & Control', 'Service Operations', 'App Managed Services', 'Network Operations', 'Data Center Ops', 'Cloud Services', 'Consultation'];
 
+  // Auto-cycle through services
+  const handleSetActive = useCallback((idx) => {
+    setActiveServiceIdx(idx);
+    setAutoCycle(false); // pause auto-cycle on manual interaction
+    // Resume auto-cycle after 15s of inactivity
+    if (autoCycleRef.current) clearTimeout(autoCycleRef.current);
+    autoCycleRef.current = setTimeout(() => setAutoCycle(true), 15000);
+  }, []);
+
+  useEffect(() => {
+    if (!autoCycle) return;
+    const timer = setInterval(() => {
+      setActiveServiceIdx(prev => (prev + 1) % services.length);
+    }, AUTO_CYCLE_INTERVAL);
+    return () => clearInterval(timer);
+  }, [autoCycle, services.length]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        handleSetActive((activeServiceIdx + 1) % services.length);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        handleSetActive((activeServiceIdx - 1 + services.length) % services.length);
+      }
+    };
+    // Only bind when the system dynamics section is in viewport
+    // For simplicity, always bind
+    return () => {};
+  }, [activeServiceIdx, services.length, handleSetActive]);
+
   return (
     <div dir={dir} style={{ background: T.navy, color: T.white, minHeight: '100vh', fontFamily: font }}>
 
@@ -437,31 +1185,40 @@ export const ManagedServices = () => {
         @keyframes ms-fadein { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
         @keyframes ms-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.7;transform:scale(0.92)} }
         @keyframes ms-line { from { width:0; } to { width:100%; } }
-        .ms-svc:hover { background: rgba(255,184,20,0.04) !important; border-color: rgba(255,184,20,0.18) !important; }
-        .ms-svc:hover .ms-icon { color: ${T.gold} !important; }
-        .ms-svc:hover .ms-num { color: rgba(255,184,20,0.14) !important; }
         .ms-pill:hover { background: rgba(255,184,20,0.12) !important; border-color: rgba(255,184,20,0.3) !important; color: ${T.gold} !important; }
         .ms-cta-primary { transition: all 0.2s ease; }
         .ms-cta-primary:hover { background: ${T.goldD} !important; transform: translateY(-1px); }
         .ms-cta-ghost { transition: all 0.2s ease; }
         .ms-cta-ghost:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; }
         .ms-why-row:hover { background: rgba(255,255,255,0.03) !important; }
-        
-        .ms-menu-item { transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.04); }
-        .ms-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,184,20,0.15) !important; }
-        .ms-menu-item.active { background: rgba(255,184,20,0.06) !important; border-color: ${T.gold} !important; box-shadow: 0 0 15px rgba(255,184,20,0.08); }
-        .ms-menu-item.active .ms-menu-icon { color: ${T.gold} !important; }
-        
+
         .ms-terminal-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
         .ms-terminal-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: all 0.6s ease; }
         .ms-terminal-btn:hover::before { left: 100%; }
         .ms-terminal-btn:hover { box-shadow: 0 0 20px rgba(255,184,20,0.25); }
-        
+
         .ms-pulse-dot { animation: ms-pulse 2.5s ease-in-out infinite; }
-        
+
         /* Custom scrollbar hiding for horizontal tabs */
         .scrollbar-none::-webkit-scrollbar { display: none; }
         .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* System Dynamics specific animations */
+        @keyframes sd-progress-ring {
+          from { stroke-dashoffset: var(--circumference, 220); }
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes sd-particle-move {
+          0% { left: 0%; }
+          100% { left: 100%; }
+        }
+        [dir="rtl"] .sd-particle-move {
+          animation-direction: reverse;
+        }
+
+        /* Auto-cycle toggle */
+        .sd-cycle-btn { transition: all 0.25s ease; }
+        .sd-cycle-btn:hover { background: rgba(255,184,20,0.08) !important; border-color: rgba(255,184,20,0.3) !important; }
       `}</style>
 
       {/* ── HERO — Three.js Generative Art ─────────── */}
@@ -473,12 +1230,11 @@ export const ManagedServices = () => {
         overflow: 'hidden',
         background: T.navy,
       }}>
-        {/* Three.js canvas fills the background */}
         <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: T.navy }} />}>
           <GenerativeArtScene />
         </Suspense>
 
-        {/* Gradient fade: scene → navy at bottom */}
+        {/* Gradient fade */}
         <div style={{
           position: 'absolute', inset: 0,
           background: `linear-gradient(to top, ${T.navy} 0%, rgba(6,30,49,0.65) 40%, transparent 70%)`,
@@ -486,7 +1242,7 @@ export const ManagedServices = () => {
           pointerEvents: 'none',
         }} />
 
-        {/* Content pinned to bottom — left-aligned like About page */}
+        {/* Content */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
           zIndex: 20,
@@ -495,7 +1251,7 @@ export const ManagedServices = () => {
           padding: '0 clamp(24px,6vw,80px) clamp(100px,14vw,160px)',
           maxWidth: 1200,
         }}>
-          {/* Eyebrow pill — same style as About page */}
+          {/* Eyebrow pill */}
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '6px 14px',
@@ -520,7 +1276,7 @@ export const ManagedServices = () => {
             </span>
           </div>
 
-          {/* H1 — extrabold, giant, italic serif gold accent word like About */}
+          {/* H1 */}
           <h1 className="text-4xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.05] mb-8 text-white" style={{ fontFamily: font }}>
             {ar ? (
               <span>الخدمات{' '}<span style={{ color: T.gold, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>المُدارة</span></span>
@@ -529,7 +1285,7 @@ export const ManagedServices = () => {
             )}
           </h1>
 
-          {/* Subhead — gold left-border like About tagline */}
+          {/* Subhead */}
           <p style={{
             fontSize: 'clamp(16px,1.8vw,20px)',
             fontWeight: 500,
@@ -590,7 +1346,7 @@ export const ManagedServices = () => {
           </div>
         </div>
 
-        {/* Gold accent line at the base */}
+        {/* Gold accent line */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: 2,
           background: `linear-gradient(90deg, transparent 0%, ${T.gold} 30%, ${T.gold} 70%, transparent 100%)`,
@@ -711,12 +1467,15 @@ export const ManagedServices = () => {
 
       <Rule />
 
-      {/* ── SERVICES GRID ────────────────────────── */}
+      {/* ══════════════════════════════════════════════
+         SYSTEM DYNAMICS — 7 Integrated Service Units
+         Interactive neural network visualization
+      ══════════════════════════════════════════════ */}
       <section id="ms-services" style={{
         maxWidth: 1200, margin: '0 auto',
         padding: 'clamp(64px,8vw,96px) clamp(24px,6vw,80px)',
       }}>
-        {/* Section label */}
+        {/* Section Header */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           marginBottom: 48,
@@ -726,7 +1485,7 @@ export const ManagedServices = () => {
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <div style={{ width: 20, height: 1, background: T.gold }} />
               <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
-                {ar ? 'محفظة الخدمات' : 'Service Portfolio'}
+                {ar ? 'ديناميكيات النظام' : 'System Dynamics'}
               </span>
             </div>
             <h2 style={{
@@ -737,346 +1496,172 @@ export const ManagedServices = () => {
               {ar ? '٧ وحدات خدمية متكاملة' : '7 Integrated Service Units'}
             </h2>
           </div>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            padding: '8px 16px',
-            border: `1px solid ${T.dim}`,
-            borderRadius: 4,
-          }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626', animation: 'ms-pulse 2.5s ease-in-out infinite' }} />
-            <span style={{ fontFamily: font, fontSize: 12, fontWeight: 600, color: T.muted }}>
-              {ar ? 'جميع الأنظمة تعمل' : 'All Systems Operational'}
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {/* Auto-cycle toggle */}
+            <button
+              onClick={() => setAutoCycle(!autoCycle)}
+              className="sd-cycle-btn"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '8px 14px',
+                border: `1px solid ${autoCycle ? 'rgba(255,184,20,0.3)' : T.dim}`,
+                borderRadius: 4,
+                background: autoCycle ? 'rgba(255,184,20,0.05)' : 'transparent',
+                cursor: 'pointer',
+                color: autoCycle ? T.gold : T.muted,
+                fontFamily: font, fontSize: 11, fontWeight: 600,
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ color: 'currentColor' }}>
+                {autoCycle ? (
+                  <path d="M10 9v6M14 9v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                ) : (
+                  <path d="M8 5v14l11-7z" fill="currentColor"/>
+                )}
+              </svg>
+              {ar ? (autoCycle ? 'إيقاف التشغيل' : 'تشغيل تلقائي') : (autoCycle ? 'Auto-cycling' : 'Play')}
+            </button>
+            {/* Status indicator */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '8px 16px',
+              border: `1px solid ${T.dim}`,
+              borderRadius: 4,
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626', animation: 'ms-pulse 2.5s ease-in-out infinite' }} />
+              <span style={{ fontFamily: font, fontSize: 12, fontWeight: 600, color: T.muted }}>
+                {ar ? 'جميع الأنظمة تعمل' : 'All Systems Operational'}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Interactive B2B Command Center Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
-          
-          {/* Left Column: Vertical Services Menu / Horizontal Slider on Mobile */}
-          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none" style={{ alignSelf: 'flex-start' }}>
-            {services.map((s, i) => {
-              const isActive = activeServiceIdx === i;
-              return (
-                <button
-                  key={i}
-                  onClick={() => setActiveServiceIdx(i)}
-                  className={`ms-menu-item group ${isActive ? 'active' : ''} lg:w-full`}
-                  style={{
-                    background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
-                    border: `1px solid ${isActive ? T.gold : T.border}`,
-                    borderRadius: 8,
-                    padding: '16px 20px',
-                    textAlign: ar ? 'right' : 'left',
-                    minWidth: 220,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 12,
-                    flexShrink: 0,
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
-                    {/* Icon */}
-                    <div className="ms-menu-icon" style={{
-                      color: isActive ? T.gold : T.muted,
-                      transition: 'color 0.25s ease',
-                      flexShrink: 0,
-                    }}>
-                      {icons[s.code]}
-                    </div>
-                    {/* Title & Status */}
-                    <div style={{ overflow: 'hidden' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <h3 style={{
-                          fontSize: 13.5, fontWeight: 700,
-                          color: T.white, margin: 0,
-                          fontFamily: font,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}>
-                          {s.title}
-                        </h3>
-                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#4AF626', flexShrink: 0 }} className="ms-pulse-dot" />
-                      </div>
-                      <span style={{ fontSize: 10.5, color: T.muted, fontFamily: font, display: 'block', marginTop: 1 }}>
-                        {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
-                      </span>
-                    </div>
-                  </div>
+        {/* ── System Dynamics Layout ── */}
+        {/* Desktop: SVG Map (left) + Detail Panel (right) */}
+        {/* Mobile: Horizontal Node Selector + Detail Panel */}
 
-                  {/* Operational stat chip */}
-                  <div style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: isActive ? T.gold : T.muted,
-                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.3)' : T.border}`,
-                    borderRadius: 4,
-                    padding: '3px 6px',
-                    background: isActive ? 'rgba(255,184,20,0.04)' : 'rgba(255,255,255,0.01)',
-                    fontFamily: font,
-                    letterSpacing: '-0.02em',
-                    flexShrink: 0,
-                  }}>
-                    {serviceDetails[s.code].stats[0].val}
-                  </div>
-                </button>
-              );
-            })}
+        {/* Desktop Layout */}
+        <div className="hidden lg:grid" style={{
+          gridTemplateColumns: ar ? '1fr 1fr' : '1fr 1fr',
+          gap: 32,
+          alignItems: 'start',
+        }}>
+          {/* SVG Neural Network Map */}
+          <div style={{
+            background: 'rgba(8,45,74,0.3)',
+            border: `1px solid ${T.border}`,
+            borderRadius: 14,
+            padding: '24px 16px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Subtle scan-line effect */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.005) 2px, rgba(255,255,255,0.005) 4px)',
+              pointerEvents: 'none',
+              zIndex: 1,
+            }} />
+            {/* Header bar */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              marginBottom: 12, paddingBottom: 12,
+              borderBottom: `1px solid ${T.border}`,
+              position: 'relative', zIndex: 2,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: T.gold, opacity: 0.7 }} />
+                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: T.gold, fontFamily: FONT }}>
+                  {ar ? 'خريطة ديناميكيات النظام' : 'SYSTEM DYNAMICS MAP'}
+                </span>
+              </div>
+              <span style={{ fontSize: 9.5, color: T.dim, fontFamily: 'monospace' }}>
+                NODES: 7 · LINKS: 14
+              </span>
+            </div>
+            {/* The SVG map */}
+            <SystemDynamicsMap
+              services={services}
+              serviceDetails={serviceDetails}
+              activeIdx={activeServiceIdx}
+              setActiveIdx={handleSetActive}
+              ar={ar}
+              font={font}
+            />
+            {/* Footer info */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              marginTop: 12, paddingTop: 12,
+              borderTop: `1px solid ${T.border}`,
+              position: 'relative', zIndex: 2,
+            }}>
+              <span style={{ fontSize: 9.5, color: T.dim, fontFamily: font }}>
+                {ar ? 'انقر على أي عقدة للتفاصيل' : 'Click any node for details'}
+              </span>
+              <span style={{ fontSize: 9.5, color: T.dim, fontFamily: 'monospace' }}>
+                ACTIVE: {services[activeServiceIdx].code}
+              </span>
+            </div>
           </div>
 
-          {/* Right Column: Dynamic Terminal Dashboard */}
-          <div style={{ position: 'relative' }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeServiceIdx}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.22 }}
-                style={{
-                  background: 'rgba(8,45,74,0.45)',
-                  backdropFilter: 'blur(16px)',
-                  border: `1px solid rgba(255,184,20,0.15)`,
-                  borderRadius: 12,
-                  padding: '32px 28px',
-                  minHeight: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: 28,
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Dashboard Grid Line Background Accent */}
-                <div style={{
-                  position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
-                  backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
-                  backgroundSize: '20px 20px',
-                  pointerEvents: 'none',
-                }} />
+          {/* Detail Panel */}
+          <AnimatePresence mode="wait">
+            <DetailPanel
+              key={activeServiceIdx}
+              service={services[activeServiceIdx]}
+              details={serviceDetails[services[activeServiceIdx].code]}
+              ar={ar}
+              font={font}
+            />
+          </AnimatePresence>
+        </div>
 
-                <div>
-                  {/* Dashboard Live Status Indicator */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{
-                        background: 'rgba(255,184,20,0.12)',
-                        border: `1px solid ${T.gold}`,
-                        color: T.gold,
-                        fontSize: 10,
-                        fontWeight: 800,
-                        padding: '3px 8px',
-                        borderRadius: 4,
-                        letterSpacing: '0.08em',
-                        fontFamily: font,
-                      }}>
-                        {services[activeServiceIdx].code}
-                      </div>
-                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626' }} className="ms-pulse-dot" />
-                        {ar ? 'نظام تشغيل حي ومباشر' : 'LIVE TELEMETRY ACTIVE'}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: 10.5, color: T.muted, fontFamily: 'monospace' }}>
-                      NODE_ID: {services[activeServiceIdx].code}_0X{activeServiceIdx + 7}A
-                    </div>
-                  </div>
+        {/* Mobile Layout */}
+        <div className="lg:hidden" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {/* Horizontal node selector */}
+          <MobileNodeSelector
+            services={services}
+            activeIdx={activeServiceIdx}
+            setActiveIdx={handleSetActive}
+            font={font}
+          />
 
-                  <h2 style={{
-                    fontSize: 'clamp(20px, 2.5vw, 24px)',
-                    fontWeight: 800,
-                    letterSpacing: '-0.025em',
-                    color: T.white,
-                    margin: '0 0 14px 0',
-                    fontFamily: font,
-                  }}>
-                    {services[activeServiceIdx].title}
-                  </h2>
+          {/* Detail Panel */}
+          <AnimatePresence mode="wait">
+            <DetailPanel
+              key={activeServiceIdx}
+              service={services[activeServiceIdx]}
+              details={serviceDetails[services[activeServiceIdx].code]}
+              ar={ar}
+              font={font}
+            />
+          </AnimatePresence>
+        </div>
 
-                  <p style={{
-                    fontSize: 14,
-                    lineHeight: 1.8,
-                    color: T.muted,
-                    margin: '0 0 24px 0',
-                    fontFamily: font,
-                  }}>
-                    {services[activeServiceIdx].body}
-                  </p>
-
-                  {/* ── Diagnostic Statistics Grid ── */}
-                  <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
-                    {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
-                      <div
-                        key={sIdx}
-                        style={{
-                          background: 'rgba(6,30,49,0.5)',
-                          border: `1px solid ${T.border}`,
-                          borderRadius: 8,
-                          padding: '14px 10px',
-                          textAlign: 'center',
-                          position: 'relative',
-                        }}
-                      >
-                        <div style={{
-                          fontSize: 'clamp(16px, 3vw, 20px)',
-                          fontWeight: 900,
-                          color: T.gold,
-                          marginBottom: 4,
-                          fontFamily: font,
-                          letterSpacing: '-0.03em',
-                        }}>
-                          {st.val}
-                        </div>
-                        <div style={{
-                          fontSize: 10,
-                          fontWeight: 500,
-                          color: T.muted,
-                          fontFamily: font,
-                          lineHeight: 1.2,
-                        }}>
-                          {st.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* ── Process Flow Map ── */}
-                  <div style={{
-                    background: 'rgba(6,30,49,0.3)',
-                    border: `1px solid ${T.border}`,
-                    borderRadius: 8,
-                    padding: '16px 14px',
-                    marginBottom: 28,
-                  }}>
-                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
-                      {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
-                      {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
-                        <React.Fragment key={idx}>
-                          {/* Step Node */}
-                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
-                            <div style={{
-                              width: 28, height: 28,
-                              borderRadius: '50%',
-                              border: `1.5px solid ${T.gold}`,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: 10,
-                              fontWeight: 'bold',
-                              color: T.gold,
-                              background: T.navy,
-                              boxShadow: '0 0 10px rgba(255,184,20,0.15)',
-                              marginBottom: 6,
-                            }}>
-                              {idx + 1}
-                            </div>
-                            <div style={{ fontSize: 10.5, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
-                              {step}
-                            </div>
-                          </div>
-                          
-                          {/* Connector Line */}
-                          {idx < 3 && (
-                            <div
-                              className="hidden sm:block"
-                              style={{
-                                flex: 1,
-                                height: 1.5,
-                                background: ar 
-                                  ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)` 
-                                  : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
-                                opacity: 0.3,
-                                position: 'relative',
-                                minWidth: 15,
-                              }}
-                            >
-                              <div
-                                className="ms-pulse-dot"
-                                style={{
-                                  position: 'absolute',
-                                  top: '50%',
-                                  left: ar ? 'auto' : '0%',
-                                  right: ar ? '0%' : 'auto',
-                                  width: 6,
-                                  height: 6,
-                                  borderRadius: '50%',
-                                  background: T.gold,
-                                  transform: 'translateY(-50%)',
-                                  boxShadow: '0 0 6px #FFB814',
-                                }}
-                              />
-                            </div>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* ── Operational Specs ── */}
-                  <div>
-                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
-                      {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
-                        <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
-                          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: T.gold, flexShrink: 0, marginTop: 4 }}>
-                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          <span style={{ fontSize: 12.5, color: T.muted, fontFamily: font, lineHeight: 1.45 }}>
-                            {bullet}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Secure Consultation Button */}
-                <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, marginTop: 6 }}>
-                  <button
-                    onClick={() => {
-                      window.location.hash = '#/contact';
-                    }}
-                    className="ms-terminal-btn"
-                    style={{
-                      width: '100%',
-                      background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
-                      color: T.navy,
-                      border: 'none',
-                      borderRadius: 6,
-                      padding: '12px 24px',
-                      fontSize: 13,
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
-                      fontFamily: font,
-                    }}
-                  >
-                    <span>
-                      {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
-                    </span>
-                    <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
-                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </button>
-                </div>
-
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
+        {/* ── Service index ribbon ── */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 6,
+          marginTop: 32,
+        }}>
+          {services.map((s, i) => (
+            <button
+              key={i}
+              onClick={() => handleSetActive(i)}
+              style={{
+                width: i === activeServiceIdx ? 32 : 8,
+                height: 8,
+                borderRadius: 4,
+                border: 'none',
+                background: i === activeServiceIdx ? T.gold : T.dim,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                opacity: i === activeServiceIdx ? 1 : 0.5,
+              }}
+              aria-label={`${s.code} - ${s.title}`}
+            />
+          ))}
         </div>
       </section>
 
