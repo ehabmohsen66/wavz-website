@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState, Suspense } from 'react';
 import * as THREE from 'three';
+import { motion } from 'framer-motion';
+import { Heart } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 
 /* ─────────────────────────────────────────────────────────────
@@ -247,6 +249,40 @@ const icons = {
     </svg>
   ),
 };
+
+/* ─── HeartFavorite component ─── */
+export function HeartFavorite() {
+  const [isLiked, setIsLiked] = useState(false);
+
+  return (
+    <div className="flex items-center justify-center">
+      <motion.button
+        onClick={() => {
+          setIsLiked(!isLiked);
+          alert("You are awesome!");
+        }}
+        whileTap={{ scale: 0.9 }}
+        className="rounded-full p-2 transition-colors hover:bg-white/10"
+      >
+        <motion.div
+          animate={{
+            scale: isLiked ? [1, 1.3, 1] : 1,
+          }}
+          transition={{
+            duration: 0.3,
+            ease: "easeInOut",
+          }}
+        >
+          <Heart
+            className={`h-6 w-6 transition-colors ${
+              isLiked ? "fill-red-500 text-red-500" : "text-gray-400"
+            }`}
+          />
+        </motion.div>
+      </motion.button>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════
    MAIN COMPONENT
@@ -853,9 +889,7 @@ export const ManagedServices = () => {
         <span style={{ fontFamily: font, fontSize: 12, color: T.dim }}>
           WAVZ Digital Transformation — Managed Services Division
         </span>
-        <span style={{ fontFamily: font, fontSize: 12, color: T.dim }}>
-          {ar ? 'محمي · سري · موثوق' : 'Secure · Confidential · Trusted'}
-        </span>
+        <HeartFavorite />
       </div>
     </div>
   );
