@@ -1,8 +1,64 @@
+import { useState, useEffect } from 'react';
 import { Brain, Cpu, Network, ArrowUpRight } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal } from '../hooks/index.js';
 
 const cardIcons = [Brain, Cpu, Network];
+
+/* ─── CountUp Component ─── */
+const CountUp = ({ value, duration = 3500, start = false }) => {
+  const [count, setCount] = useState(0);
+
+  // Parse numeric prefix and optional suffix (e.g. "18+" -> 18, "+")
+  const numMatch = String(value).match(/^(\d+)(.*)$/);
+  const endValue = numMatch ? parseInt(numMatch[1], 10) : 0;
+  const suffix = numMatch ? numMatch[2] : '';
+
+  useEffect(() => {
+    if (!start) {
+      setCount(0);
+      return;
+    }
+
+    let active = true;
+    let startTime = null;
+
+    const animate = (timestamp) => {
+      if (!active) return;
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const percentage = Math.min(progress / duration, 1);
+      
+      // Easing out cubic curve for organic deceleration
+      const eased = 1 - Math.pow(1 - percentage, 3);
+      
+      setCount(Math.floor(eased * endValue));
+
+      if (progress < duration) {
+        requestAnimationFrame(animate);
+      } else {
+        setCount(endValue);
+      }
+    };
+
+    // Stagger start slightly to let the card transition complete first
+    const delayTimeout = setTimeout(() => {
+      requestAnimationFrame(animate);
+    }, 450);
+
+    return () => {
+      active = false;
+      clearTimeout(delayTimeout);
+    };
+  }, [endValue, duration, start]);
+
+  return (
+    <span>
+      {count}
+      {suffix}
+    </span>
+  );
+};
 
 export const Offering = () => {
   const { t } = useLang();
@@ -78,10 +134,10 @@ const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '
 
   return (
     <div
-      className={`relative rounded-2xl p-8 lg:p-9 overflow-hidden hover-lift cursor-default ${
+      className={`group relative rounded-2xl p-8 lg:p-9 overflow-hidden hover-lift cursor-default transition-all duration-350 ${
         featured
           ? 'bg-[#082D4A] border border-[#0a3a5e]'
-          : 'bg-white border border-slate-200/80'
+          : 'bg-white border border-slate-200/80 hover:border-slate-300'
       } ${className}`}
       style={{
         opacity: visible ? 1 : 0,
@@ -119,12 +175,18 @@ const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '
         {/* Icon + tag row */}
         <div className="flex items-start justify-between mb-6">
           <div
-            className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-              featured ? 'bg-[#FFB814]/15' : 'bg-[#EEF6FF]'
+            className={`relative w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${
+              featured
+                ? 'bg-white/8 border border-white/12 group-hover:bg-white/15 group-hover:border-white/25 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.15)]'
+                : 'bg-[#EEF6FF] group-hover:bg-[#E0F0FE] group-hover:shadow-[0_0_15px_rgba(17,115,189,0.15)]'
             }`}
           >
             <Icon
-              className={`w-5 h-5 ${featured ? 'text-[#FFB814]' : 'text-[#1173BD]'}`}
+              className={`w-5 h-5 transition-all duration-500 ease-out ${
+                featured
+                  ? 'text-white/70 group-hover:text-white group-hover:rotate-6'
+                  : 'text-[#1173BD] group-hover:scale-110 ' + (Icon === Cpu ? 'group-hover:rotate-90' : 'group-hover:rotate-6')
+              }`}
               strokeWidth={1.5}
             />
           </div>
@@ -140,7 +202,7 @@ const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '
           <span>{first}</span>
           {second && (
             <span className={featured ? 'text-[#FFB814]' : 'text-[#1173BD]'}>
-              {second}
+              {' '}{second}
             </span>
           )}
         </h3>
@@ -154,9 +216,45 @@ const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '
           {card.desc}
         </p>
 
+        {/* Featured only: stat strip + service pillars */}
+        {featured && (
+          <>
+            {/* Divider */}
+            <div className="mt-7 mb-6 h-px bg-white/10" />
+
+            {/* Stat row */}
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              {[
+                { value: '18+', label: 'Years in MEA' },
+                { value: '47', label: 'Enterprise clients' },
+                { value: '6', label: 'Industries served' },
+              ].map(({ value, label }) => (
+                <div key={label}>
+                  <div className="text-[1.6rem] font-black text-white tabular-nums leading-none tracking-tight">
+                    <CountUp value={value} start={visible} />
+                  </div>
+                  <div className="mt-1 text-[11px] text-white/40 leading-tight">{label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Service pillars */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {['Roadmap Design', 'Risk Architecture', 'Budget Validation', 'Executive Briefing'].map((pill) => (
+                <span
+                  key={pill}
+                  className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-white/8 border border-white/12 text-white/60 tracking-wide"
+                >
+                  {pill}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+
         {/* Featured: bottom CTA */}
         {featured && (
-          <div className="mt-8 inline-flex items-center gap-2 text-[#FFB814] text-[13px] font-semibold">
+          <div className="inline-flex items-center gap-2 text-[#FFB814] text-[13px] font-semibold">
             <span>Learn more</span>
             <ArrowUpRight className="w-4 h-4" />
           </div>
@@ -192,9 +290,11 @@ const TagBadge = ({ tag, type, featured }) => {
 
 /* ─── Helpers ─── */
 const splitName = (name) => {
-  const keywords = ['WAVZ', 'Multi', 'Strategic', 'محاكي ', 'العمليات ', 'الاستشارات '];
+  const keywords = ['WAVZ', 'Multi', 'Strategic', 'محاكي', 'العمليات', 'الاستشارات'];
   for (const kw of keywords) {
-    if (name.includes(kw)) return [kw, name.replace(kw, '')];
+    if (name.includes(kw)) {
+      return [kw.trim(), name.replace(kw, '').trim()];
+    }
   }
-  return [name, ''];
+  return [name.trim(), ''];
 };

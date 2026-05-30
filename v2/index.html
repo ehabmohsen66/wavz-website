@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WAVZ V2 — Enterprise Digital Transformation</title>
+  <meta name="description" content="The turn-key platform for enterprise digital transformation." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* CSS Variables from DESIGN.md */
+    :root {
+      --void: #061E31;
+      --navy: #082D4A;
+      --ink: #0a3a5e;
+      --blue: #1173BD;
+      --sky: #97CFFA;
+      --gold: #FFB814;
+      --gold-hover: #F5A800;
+      --text-main: #FFFFFF;
+      --text-sec: rgba(255, 255, 255, 0.6);
+      --text-muted: rgba(255, 255, 255, 0.35);
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-hi: rgba(255, 255, 255, 0.12);
+      
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-inter: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--void);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; }
+    ul { list-style: none; }
+
+    /* Typography Classes */
+    .mono-nums {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    .eyebrow {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+    }
+    .eyebrow.gold {
+      background: rgba(255, 184, 20, 0.1);
+      border: 1px solid rgba(255, 184, 20, 0.3);
+      color: var(--gold);
+    }
+    .eyebrow.blue {
+      background: rgba(17, 115, 189, 0.1);
+      border: 1px solid rgba(17, 115, 189, 0.3);
+      color: var(--sky);
+    }
+    .h1-display {
+      font-size: clamp(3.5rem, 7vw, 7.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+    .h2-section {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-top: 1.5rem;
+    }
+    .body-large {
+      font-size: 1.125rem;
+      color: var(--text-sec);
+      max-width: 65ch;
+      line-height: 1.7;
+    }
+
+    /* Layout Utilities */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    @media (min-width: 1024px) {
+      .container { padding: 0 48px; }
+    }
+    .section-py {
+      padding: 96px 0;
+    }
+    @media (min-width: 1024px) {
+      .section-py { padding: 128px 0; }
+    }
+
+    /* Components */
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 14.5px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 150ms var(--ease-inter);
+      box-shadow: 0 4px 14px rgba(255, 184, 20, 0.15);
+    }
+    .btn-primary:hover {
+      background: var(--gold-hover);
+      box-shadow: 0 8px 24px rgba(255, 184, 20, 0.3);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+    
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 150ms var(--ease-inter);
+    }
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: inset 0 1px 0 var(--glass-hi), 0 10px 30px -10px rgba(0,0,0,0.3);
+      transition: all 300ms var(--ease-out);
+    }
+    .glass-card.interactive:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(17, 115, 189, 0.3);
+      transform: translateY(-4px);
+    }
+
+    /* Fixed Noise Overlay */
+    .noise-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Navbar */
+    .nav-pill {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: rgba(6, 30, 49, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-hi);
+      border-radius: 100px;
+      padding: 8px 8px 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: calc(100% - 48px);
+      max-width: 1100px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 20px 40px -10px rgba(0,0,0,0.5);
+    }
+    .nav-links {
+      display: none;
+      gap: 32px;
+    }
+    @media (min-width: 1024px) {
+      .nav-links { display: flex; }
+    }
+    .nav-links a {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-sec);
+      transition: color 150ms ease;
+    }
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+    
+    /* Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+      will-change: transform, opacity;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .delay-100 { transition-delay: 100ms; }
+    .delay-200 { transition-delay: 200ms; }
+    .delay-300 { transition-delay: 300ms; }
+
+    /* Custom Grids */
+    .grid-hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      align-items: center;
+      min-height: 100dvh;
+      padding-top: 120px;
+    }
+    @media (min-width: 1024px) {
+      .grid-hero {
+        grid-template-columns: 13fr 9fr;
+      }
+    }
+
+    .bento-offering {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-top: 64px;
+    }
+    @media (min-width: 1024px) {
+      .bento-offering {
+        grid-template-columns: 3fr 2fr;
+      }
+    }
+
+    .grid-benchmark {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      margin-top: 64px;
+    }
+    @media (min-width: 1024px) {
+      .grid-benchmark {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Glows */
+    .glow-blue {
+      position: absolute;
+      width: 80vw;
+      height: 80vw;
+      max-width: 800px;
+      max-height: 800px;
+      background: radial-gradient(circle, rgba(17,115,189,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Animations */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 40s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+    
+    @keyframes scaleX {
+      0% { transform: scaleX(0); }
+      100% { transform: scaleX(1); }
+    }
+    .progress-bar-fill {
+      transform-origin: left;
+      animation: scaleX 1.2s var(--ease-out) forwards;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="noise-layer"></div>
+
+  <!-- Navbar -->
+  <nav class="nav-pill">
+    <a href="#" class="flex items-center">
+      <img src="Logo.png" alt="WAVZ" style="height: 24px; filter: brightness(0) invert(1);" />
+    </a>
+    <div class="nav-links">
+      <a href="#solutions">Solutions</a>
+      <a href="#industries">Industries</a>
+      <a href="#partners">Partners</a>
+      <a href="#newsroom">Newsroom</a>
+      <a href="#about">About</a>
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <a href="#contact" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Get a Consultation</a>
+      <button class="menu-btn" style="display: none; color: white;">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+  </nav>
+  <style>
+    @media (max-width: 1023px) {
+      .nav-pill .btn-primary { display: none; }
+      .nav-pill .menu-btn { display: block; }
+    }
+  </style>
+
+  <!-- Hero Section -->
+  <section style="position: relative; overflow: hidden;">
+    <div class="glow-blue" style="top: -10%; left: -10%;"></div>
+    <div class="glow-blue" style="bottom: -20%; right: -10%; background: radial-gradient(circle, rgba(255,184,20,0.05) 0%, transparent 70%);"></div>
+    
+    <!-- Dot Grid -->
+    <div style="position: absolute; inset: 0; opacity: 0.08; background-image: radial-gradient(circle, #97CFFA 1px, transparent 1px); background-size: 40px 40px; pointer-events: none;"></div>
+
+    <div class="container grid-hero">
+      <div style="position: relative; z-index: 10;">
+        <div class="eyebrow gold reveal"><span style="width: 6px; height: 6px; background: var(--gold); border-radius: 50%;"></span> THE TURN-KEY PLATFORM</div>
+        <h1 class="h1-display reveal delay-100" style="margin: 24px 0;">
+          Enterprise<br>
+          <span style="color: var(--gold); font-style: italic; font-weight: 800;">Operations</span>
+        </h1>
+        <p class="body-large reveal delay-200" style="margin-bottom: 40px;">
+          SAP-grade ERP joins Temenos-grade banking, on YOUR infrastructure. 
+          <span style="color: white; font-weight: 600;">Multi-Industry</span> delivery that scales every operation. 
+          <span style="color: white; font-weight: 600;">Multi-Service</span> orchestration past 99.9% SLA.
+        </p>
+        <div class="reveal delay-300" style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <a href="#contact" class="btn-primary">
+            Get a Consultation <i data-lucide="arrow-right" style="width: 18px;"></i>
+          </a>
+          <a href="#calc" class="btn-ghost">
+            Calculate Your Savings
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal delay-200" style="position: relative; z-index: 10;">
+        <div class="glass-card" style="padding: 40px; text-align: center; border-color: rgba(17,115,189,0.3); background: rgba(8,45,74,0.6); backdrop-filter: blur(10px);">
+          <div style="font-size: 11px; font-weight: 700; color: var(--sky); letter-spacing: 0.1em; margin-bottom: 16px;">CLIENT WORKLOADS</div>
+          <i data-lucide="arrow-down" style="color: var(--sky); margin: 0 auto 16px auto; opacity: 0.5;"></i>
+          
+          <div style="background: var(--void); border: 1px solid var(--blue); padding: 24px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 0 40px rgba(17,115,189,0.2);">
+            <div style="color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: 0.2em; margin-bottom: 4px;">WAVZ ORCHESTRATOR</div>
+            <div style="font-weight: 700; font-size: 18px;">24/7 SOC + NOC</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; gap: 12px; margin-top: 24px;">
+            <div style="flex:1; background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; font-size: 12px; font-weight: 600; color: var(--text-sec); border: 1px solid var(--glass-border);">SAP Stack</div>
+            <div style="flex:1; background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; font-size: 12px; font-weight: 600; color: var(--text-sec); border: 1px solid var(--glass-border);">Banking</div>
+            <div style="flex:1; background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; font-size: 12px; font-weight: 600; color: var(--text-sec); border: 1px solid var(--glass-border);">Payments</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo Strip -->
+  <section style="padding: 40px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.02); overflow: hidden; position: relative;">
+    <div style="text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 24px; text-transform: uppercase;">
+      Trusted by Egypt's leading institutions
+    </div>
+    
+    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 100px; background: linear-gradient(to right, var(--void), transparent); z-index: 10;"></div>
+    <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 100px; background: linear-gradient(to left, var(--void), transparent); z-index: 10;"></div>
+
+    <div class="animate-marquee" style="gap: 24px; padding: 0 12px;">
+      <script>
+        const logos = ['Egypt Post', 'MCIT', 'H&D Bank', 'Egypt Trust', 'Maridive', 'La Poste', 'SC Zone', 'Prosecure', 'PFI', 'Baheya', 'Tietoevry', 'Teradata'];
+        const logoStripHtml = [...logos, ...logos].map(l => 
+          `<div style="padding: 12px 24px; border-radius: 99px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); font-weight: 600; font-size: 14px; white-space: nowrap;">${l}</div>`
+        ).join('');
+        document.write(logoStripHtml);
+      </script>
+    </div>
+  </section>
+
+  <!-- Offering (Asymmetric Bento) -->
+  <section class="section-py" style="position: relative;">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow blue mb-4"><i data-lucide="grid" style="width:12px;"></i> OFFERING</div>
+        <h2 class="h2-section">What We Deliver</h2>
+      </div>
+
+      <div class="bento-offering">
+        <!-- Featured Card (Left 60%) -->
+        <div class="glass-card interactive reveal delay-100" style="display: flex; flex-direction: column; background: rgba(8,45,74,0.4); border-color: rgba(17,115,189,0.3);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="brain" style="color: rgba(255,255,255,0.8);"></i>
+            </div>
+            <span style="font-size: 10px; font-weight: 800; letter-spacing: 0.15em; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; color: white;">CONSULTING</span>
+          </div>
+          <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: 16px; line-height: 1.1;">Strategic<span style="color: var(--gold);">Advisory</span></h3>
+          <p style="color: var(--text-sec); font-size: 15px; margin-bottom: 32px; flex: 1;">Real-world transformation roadmaps from MEA banking, postal, and government engagements. The advisory practice that informs every implementation.</p>
+          
+          <div style="border-top: 1px solid var(--glass-border); padding-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+            <div>
+              <div class="mono-nums" style="font-size: 1.5rem; font-weight: 700; color: white;">18+</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Years in MEA</div>
+            </div>
+            <div>
+              <div class="mono-nums" style="font-size: 1.5rem; font-weight: 700; color: white;">47</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Clients</div>
+            </div>
+            <div>
+              <div class="mono-nums" style="font-size: 1.5rem; font-weight: 700; color: white;">6</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Industries</div>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+            <span style="font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--glass-border); color: var(--text-sec);">Roadmap Design</span>
+            <span style="font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--glass-border); color: var(--text-sec);">Risk Architecture</span>
+            <span style="font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--glass-border); color: var(--text-sec);">Budget Validation</span>
+          </div>
+
+          <div style="color: var(--gold); font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            Learn more <i data-lucide="arrow-up-right" style="width: 14px;"></i>
+          </div>
+        </div>
+
+        <!-- Stacked Cards (Right 40%) -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          <div class="glass-card interactive reveal delay-200">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+              <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(17,115,189,0.1); display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="cpu" style="color: var(--blue); width: 18px;"></i>
+              </div>
+              <span style="font-size: 10px; font-weight: 800; letter-spacing: 0.15em; background: rgba(255,184,20,0.1); border: 1px solid rgba(255,184,20,0.3); padding: 4px 10px; border-radius: 4px; color: var(--gold);">PROPRIETARY</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; line-height: 1.1;">WAVZ<span style="color: var(--blue);">Simulator</span></h3>
+            <p style="color: var(--text-sec); font-size: 14px; margin-bottom: 24px;">Models implementation paths, resource placement, and risk strategies. Predicts programme bottlenecks a quarter ahead.</p>
+            <div style="color: var(--blue); font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">Learn more <i data-lucide="arrow-right" style="width: 14px;"></i></div>
+          </div>
+
+          <div class="glass-card interactive reveal delay-300">
+             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+              <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(17,115,189,0.1); display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="network" style="color: var(--blue); width: 18px;"></i>
+              </div>
+              <span style="font-size: 10px; font-weight: 800; letter-spacing: 0.15em; background: rgba(255,184,20,0.1); border: 1px solid rgba(255,184,20,0.3); padding: 4px 10px; border-radius: 4px; color: var(--gold);">PROPRIETARY</span>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; line-height: 1.1;">Multi<span style="color: var(--blue);">Operations</span></h3>
+            <p style="color: var(--text-sec); font-size: 14px; margin-bottom: 24px;">The runtime that's multi-industry, multi-service, multi-geography. SLA-aware routing, capacity-autoscaling, self-healing.</p>
+            <div style="color: var(--blue); font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">Learn more <i data-lucide="arrow-right" style="width: 14px;"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benchmark -->
+  <section class="section-py" style="background: rgba(8,45,74,0.3); border-top: 1px solid var(--glass-border);">
+    <div class="container grid-benchmark">
+      <div class="reveal">
+        <div class="eyebrow gold mb-4"><span style="width: 6px; height: 6px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold);"></span> LIVE & ENTERPRISE-GRADE</div>
+        <h2 class="h2-section" style="margin-top: 0; margin-bottom: 24px;">Operations<br><span style="color: var(--blue);">Center</span></h2>
+        <p class="body-large mb-6" style="margin-bottom: 32px;">
+          The 24/7 operations backbone for enterprises under critical workloads. Real recorded delivery patterns across hundreds of mission-critical workloads.
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px;">
+          <a href="#" class="btn-ghost" style="background: white; color: var(--navy);">Explore OperationsCenter</a>
+        </div>
+        
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); padding: 16px 24px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--gold); display: inline-block;">
+          $ wavz consult --industry=banking <span style="animation: pulse 1s step-end infinite;">_</span>
+        </div>
+      </div>
+
+      <div class="reveal delay-100" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; margin-bottom: 8px;">WHAT IT MEASURES</div>
+        
+        <script>
+          const metrics = [
+            { id: 'MTTR', label: 'Mean Time to Restore', val: '↓71.3%', num: 71, color: 'var(--blue)' },
+            { id: 'SLA', label: 'Service Level Achievement', val: '99.7%', num: 99, color: '#22C55E' },
+            { id: 'FCR', label: 'First-Call Resolution', val: '93.6%', num: 93, color: 'var(--blue)' },
+            { id: 'CSAT', label: 'Customer Satisfaction', val: '96.2%', num: 96, color: 'var(--gold)' },
+            { id: 'UP', label: 'Platform Availability', val: '99.9%', num: 99, color: '#22C55E' }
+          ];
+          
+          const metricHtml = metrics.map((m, i) => `
+            <div class="glass-card metric-row" style="padding: 16px 24px; border-radius: 12px; transition-delay: ${i*100}ms;">
+              <div style="display: flex; align-items: center; margin-bottom: 12px; gap: 16px;">
+                <span class="mono-nums" style="font-size: 12px; font-weight: 700; color: var(--text-muted); width: 40px;">${m.id}</span>
+                <span style="flex: 1; font-size: 14px; color: var(--text-sec);">${m.label}</span>
+                <span class="mono-nums" style="font-size: 16px; font-weight: 700; color: ${m.color};">${m.val}</span>
+              </div>
+              <div style="height: 4px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;">
+                <div class="progress-bar" style="height: 100%; width: ${m.num}%; background: ${m.color}; border-radius: 4px; transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease-out) ${300 + i*100}ms;"></div>
+              </div>
+            </div>
+          `).join('');
+          document.write(metricHtml);
+        </script>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section-py reveal" style="text-align: center;">
+    <div class="container">
+      <img src="WavzIcon.png" style="width: 48px; margin-bottom: 32px; opacity: 0.8;" />
+      <h2 class="h2-section" style="max-width: 800px; margin: 0 auto 24px auto;">Ready to transform your enterprise?</h2>
+      <p class="body-large" style="margin: 0 auto 48px auto;">See how WAVZ can cut your operations cost by 60% and eliminate digital transformation complexity.</p>
+      <a href="#contact" class="btn-primary" style="font-size: 16px; padding: 18px 36px;">
+        Get a Consultation <i data-lucide="arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--glass-border); padding: 80px 0 40px 0; background: var(--void);">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px; margin-bottom: 80px;">
+        <div>
+          <img src="Logo.png" style="height: 32px; filter: brightness(0) invert(1); margin-bottom: 24px;" />
+          <p style="color: var(--text-sec); font-size: 14px; max-width: 250px;">The turn-key platform for enterprise digital transformation.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 24px; letter-spacing: 0.1em; text-transform: uppercase;">Solutions</h4>
+          <ul style="display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: var(--text-sec);">
+            <li><a href="#">SAP Services</a></li>
+            <li><a href="#">Financial Services</a></li>
+            <li><a href="#">Managed Services</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; color: white; margin-bottom: 24px; letter-spacing: 0.1em; text-transform: uppercase;">Company</h4>
+          <ul style="display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: var(--text-sec);">
+            <li><a href="#">About WAVZ</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); padding-top: 32px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap; gap: 16px;">
+        <div>© 2026 WAVZ for Digital Transformation. All rights reserved.</div>
+        <div style="display: flex; gap: 24px;">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // Intersection Observer for scroll reveals
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          
+          // Trigger progress bars if inside metric row
+          if(entry.target.classList.contains('metric-row')) {
+            const bar = entry.target.querySelector('.progress-bar');
+            if(bar) bar.style.transform = 'scaleX(1)';
+          }
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .metric-row').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

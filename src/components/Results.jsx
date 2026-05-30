@@ -3,29 +3,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal } from '../hooks/index.js';
 import { Counter } from './Counter.jsx';
+import { CircularTestimonials } from './CircularTestimonials.jsx';
 
 export const Results = () => {
   const { t } = useLang();
   const [revealRef, visible] = useReveal();
-  const [qIdx, setQIdx] = useState(0);
-  const [fading, setFading] = useState(false);
 
-  const goTo = (idx) => {
-    setFading(true);
-    setTimeout(() => {
-      setQIdx(idx);
-      setFading(false);
-    }, 200);
-  };
-
-  // Auto-play every 5s when visible
-  useEffect(() => {
-    if (!visible) return;
-    const timer = setInterval(() => {
-      goTo((qIdx + 1) % t.results.quotes.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [visible, qIdx, t.results.quotes.length]);
 
   return (
     <section ref={revealRef} className="relative bg-white py-24 lg:py-32 border-t border-slate-200/60">
@@ -72,70 +55,26 @@ export const Results = () => {
         </div>
 
         {/* Quote carousel */}
-        <div className="mt-16 max-w-3xl mx-auto bg-slate-50 border border-slate-200 rounded-2xl relative overflow-hidden">
-          {/* Decorative quote mark */}
-          <div className="absolute top-4 start-6 text-[90px] text-[#FFB814]/15 font-serif leading-none select-none pointer-events-none" aria-hidden="true">
-            "
+        <div className="mt-20">
+          <div className="text-center mb-16 relative z-10">
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#082D4A]">Some of Our Client Testimonials</h2>
           </div>
-
-          <div className="px-14 pt-10 pb-8">
-            {/* Quote text with fade + slide */}
-            <blockquote
-              className="relative text-[17px] lg:text-[19px] leading-[1.6] text-[#082D4A] font-light text-center"
-              style={{
-                opacity: fading ? 0 : 1,
-                transform: fading ? 'translateY(6px)' : 'translateY(0)',
-                transition: 'opacity 200ms ease-out, transform 200ms ease-out',
-              }}
-            >
-              {t.results.quotes[qIdx].text}
-            </blockquote>
-
-            {/* Author */}
-            <div
-              className="mt-7 flex items-center justify-center gap-3"
-              style={{
-                opacity: fading ? 0 : 1,
-                transform: fading ? 'translateY(6px)' : 'translateY(0)',
-                transition: 'opacity 200ms ease-out, transform 200ms ease-out',
-              }}
-            >
-              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#1173BD] to-[#082D4A] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                {t.results.quotes[qIdx].author.split(' ').slice(-2).map((n) => n[0]).join('')}
-              </div>
-              <div className="text-start">
-                <div className="text-[14px] font-bold text-[#082D4A]">{t.results.quotes[qIdx].author}</div>
-                <div className="text-[12.5px] text-[#082D4A]/65">{t.results.quotes[qIdx].role}</div>
-              </div>
-            </div>
-
-            {/* Dot indicators */}
-            <div className="flex items-center justify-center gap-2 mt-6">
-              {t.results.quotes.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goTo(i)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    i === qIdx ? 'bg-[#FFB814] w-5' : 'bg-slate-300 w-2 hover:bg-slate-400'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Prev / Next */}
-          <button
-            onClick={() => goTo((qIdx - 1 + t.results.quotes.length) % t.results.quotes.length)}
-            className="absolute start-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:border-[#FFB814] hover:text-[#1173BD] transition-colors cursor-pointer shadow-sm"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => goTo((qIdx + 1) % t.results.quotes.length)}
-            className="absolute end-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:border-[#FFB814] hover:text-[#1173BD] transition-colors cursor-pointer shadow-sm"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+          <CircularTestimonials
+            testimonials={t.results.quotes.map((q, i) => ({
+              quote: q.text,
+              name: q.author,
+              designation: q.role,
+              src: q.image || `https://i.pravatar.cc/150?u=${encodeURIComponent(q.author)}`
+            }))}
+            colors={{
+              name: "#082D4A",
+              designation: "#1173BD",
+              testimony: "#4b5563",
+              arrowBackground: "#FFB814",
+              arrowForeground: "#082D4A",
+              arrowHoverBackground: "#F5A800"
+            }}
+          />
         </div>
       </div>
     </section>

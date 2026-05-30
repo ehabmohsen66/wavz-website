@@ -106,7 +106,7 @@ export const Benchmark = () => {
                 <ArrowRight className={`w-4 h-4 ${dir === 'rtl' ? 'rotate-180' : ''}`} />
               </a>
               <a
-                href="#"
+                href="#/savings-calculator"
                 className="press-scale inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-5 py-2.5 rounded-md text-[13.5px] font-medium cursor-pointer"
                 style={{
                   transition:

@@ -1,9 +1,20 @@
 import { useLang } from '../i18n/LangContext.jsx';
 
 const logos = [
-  'Egypt Post', 'MCIT', 'H&D Bank', 'Egypt Trust', 'Maridive',
-  'La Poste', 'SC Zone', 'Prosecure', 'PFI', 'Baheya',
-  'Tietoevry', 'Teradata',
+  { name: 'Egypt Post', src: '/EGYPT POST logo .png' },
+  { name: 'MCIT', src: '/MCIT-logos-Color-English-02-white-bg (1).png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'H&D Bank', src: '/Housing and Development Bank logo .png' },
+  { name: 'Egypt Trust', src: '/Egypt trust.png' },
+  { name: 'Maridive', src: '/Maridive & Oil Services SAE Logo.png', imgClass: 'h-10 scale-125 hover:scale-[1.4]' },
+  { name: 'La Poste', src: '/Logo-groupe-la-poste-2021.png' },
+  { name: 'SC Zone', src: '/sc-zonelogo-header.png' },
+  { name: 'Prosecure', src: '/ps9.jpeg', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'Baheya', src: '/Baheya logo.png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'Tietoevry', src: '/8b56ffb305d960f5_org.png' },
+  { name: 'Teradata', src: '/Teradata_logo_(2024).svg.png' },
+  { name: 'Next Bank', src: '/nxt bank logo.jpg', imgClass: 'h-10 scale-[1.65] hover:scale-[1.8] mix-blend-multiply' },
+  { name: 'PDC', src: '/PDC-Logo.png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'Detchland', src: '/detchland logo limited.png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
 ];
 
 export const LogoStrip = () => {
@@ -34,17 +45,22 @@ export const LogoStrip = () => {
         {[...logos, ...logos].map((logo, i) => (
           <div
             key={i}
-            className="flex items-center justify-center px-5 py-2.5 rounded-lg border border-slate-200 bg-white cursor-default"
+            className="flex items-center justify-center p-3 rounded-xl border border-slate-200 bg-white cursor-default flex-shrink-0"
             style={{
-              minWidth: '130px',
+              width: '180px',
+              height: '80px',
               transition: 'border-color 150ms ease, background-color 150ms ease',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(17,115,189,0.35)'; e.currentTarget.style.backgroundColor = '#EEF6FF'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = ''; e.currentTarget.style.backgroundColor = '#ffffff'; }}
           >
-            <span className="text-[13px] font-semibold text-slate-500 tracking-tight whitespace-nowrap">
-              {logo}
-            </span>
+            {logo.src ? (
+              <img src={logo.src} alt={logo.name} className={`w-auto object-contain transition-transform duration-300 ${logo.imgClass || 'max-h-12 hover:scale-110'}`} />
+            ) : (
+              <span className="text-[13px] font-semibold text-slate-500 tracking-tight leading-tight text-center whitespace-pre-wrap">
+                {logo.name}
+              </span>
+            )}
           </div>
         ))}
       </div>

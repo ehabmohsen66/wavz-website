@@ -1,9 +1,66 @@
+import { useState } from 'react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal } from '../hooks/index.js';
 
-const partners = ['SAP', 'Temenos', 'Tietoevry', 'Teradata', 'Nevis', 'MBME'];
-const clients = ['Egypt Post', 'MCIT', 'H&D Bank', 'SC Zone', 'Egypt Trust', 'Maridive', 'Baheya', 'Prosecure'];
-const frameworks = ['ITIL', 'COBIT', 'PMBOK', 'TOGAF', 'ISO 27001', 'PRINCE2'];
+const partners = [
+  { name: 'SAP', domain: 'sap.com' },
+  { name: 'Temenos', domain: 'temenos.com' },
+  { name: 'Tietoevry', domain: 'tietoevry.com', localSrc: '/8b56ffb305d960f5_org.png' },
+  { name: 'Teradata', domain: 'teradata.com', localSrc: '/Teradata_logo_(2024).svg.png' },
+  { name: 'Nevis', domain: 'nevis.net', localSrc: '/nevis_logo.png' },
+  { name: 'MBME', domain: 'mbme.ae' }
+];
+
+const clients = [
+  { name: 'Detchland', localSrc: '/detchland logo limited.png', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'Next Bank', localSrc: '/nxt bank logo.jpg', imgClass: 'max-h-16 scale-[1.65] hover:scale-[1.8] mix-blend-multiply' },
+  { name: 'PDC', localSrc: '/PDC-Logo.png', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'Egypt Post', domain: 'egyptpost.org', localSrc: '/EGYPT POST logo .png' },
+  { name: 'MCIT', domain: 'mcit.gov.eg', localSrc: '/MCIT-logos-Color-English-02-white-bg (1).png', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'H&D Bank', domain: 'hdb-egy.com', localSrc: '/Housing and Development Bank logo .png' },
+  { name: 'SC Zone', domain: 'sczone.eg', localSrc: '/sc-zonelogo-header.png' },
+  { name: 'Egypt Trust', domain: 'egypttrust.com', localSrc: '/Egypt trust.png' },
+  { name: 'Maridive', domain: 'maridivegroup.net', localSrc: '/Maridive & Oil Services SAE Logo.png', imgClass: 'max-h-16 scale-125 hover:scale-[1.4]' },
+  { name: 'Baheya', domain: 'baheya.org', localSrc: '/Baheya logo.png', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' },
+  { name: 'Prosecure', domain: 'prosecureme.com', localSrc: '/ps9.jpeg', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' }
+];
+
+const frameworks = [
+  { name: 'ITIL', domain: 'axelos.com' },
+  { name: 'COBIT', domain: 'isaca.org' },
+  { name: 'PMBOK', domain: 'pmi.org' },
+  { name: 'TOGAF', domain: 'opengroup.org' },
+  { name: 'ISO 27001', domain: 'iso.org' },
+  { name: 'PRINCE2', domain: 'axelos.com' }
+];
+
+const LogoBadge = ({ name, domain, localSrc, imgClass }) => {
+  const [error, setError] = useState(false);
+  
+  const containerClass = "flex items-center justify-center p-4 rounded-xl bg-white border border-slate-200 hover:border-[#FFB814]/50 transition-colors h-[96px] w-[220px] shadow-sm flex-shrink-0";
+
+  if (error || (!domain && !localSrc)) {
+    return (
+      <div className={containerClass}>
+        <span className="text-[13px] font-semibold text-slate-500 text-center tracking-tight leading-tight whitespace-pre-wrap">
+          {name}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className={containerClass}>
+      <img 
+        src={localSrc || `https://logos.hunter.io/${domain}`} 
+        alt={name} 
+        title={name}
+        className={`object-contain transition-transform duration-300 ${imgClass || 'max-h-16 max-w-[160px] hover:scale-110'}`}
+        onError={() => setError(true)}
+      />
+    </div>
+  );
+};
 
 export const Ecosystem = () => {
   const { t } = useLang();
@@ -18,48 +75,21 @@ export const Ecosystem = () => {
   return (
     <section id="solutions" ref={revealRef} className="relative bg-slate-50 py-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="mb-12">
-          <div className="inline-block px-3 py-1 rounded-md bg-[#FFF4D6] text-[#8B6914] text-[11.5px] font-bold tracking-[0.18em] mb-4">
-            {t.ecosystem.eyebrow}
-          </div>
-          <h2 className="text-4xl lg:text-6xl font-bold text-[#082D4A] tracking-[-0.03em] leading-[0.98]">
-            {t.ecosystem.title}
-          </h2>
-          <p className="mt-5 text-[15px] text-slate-600 max-w-2xl leading-relaxed">{t.ecosystem.lede}</p>
-        </div>
 
-        <div className={`mb-6 p-8 rounded-2xl bg-white border border-slate-200 transition-all duration-700 ${visible ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="text-[11.5px] font-bold tracking-[0.14em] text-[#8B6914] mb-5">
-            {t.ecosystem.featured}
-          </div>
-          <div className="flex flex-wrap items-center gap-5 justify-center">
-            <div className="px-6 py-3 rounded-xl bg-slate-50 border border-slate-200 text-2xl font-bold text-[#082D4A]" dir="ltr">
-              SAP
-            </div>
-            <div className="text-slate-400 text-2xl">+</div>
-            <div className="px-6 py-3 rounded-xl bg-slate-50 border border-slate-200 text-2xl font-bold text-[#082D4A]" dir="ltr">
-              Temenos
-            </div>
-          </div>
-          <p className="mt-5 text-center text-[14px] text-slate-600">{t.ecosystem.featuredDesc}</p>
-        </div>
 
-        <div className="grid lg:grid-cols-3 gap-4">
+
+
+        <div className="grid lg:grid-cols-3 gap-6">
           {groups.map((g, i) => (
             <div
               key={i}
-              className={`rounded-2xl bg-white border border-slate-200 p-6 ${visible ? 'opacity-100' : 'opacity-0'}`}
+              className={`rounded-2xl bg-white border border-slate-200 p-7 shadow-sm ${visible ? 'opacity-100' : 'opacity-0'}`}
               style={{ transition: `all 0.6s ${i * 100}ms` }}
             >
-              <div className="text-[11px] font-bold tracking-[0.14em] text-[#1173BD] mb-4">{g.title}</div>
-              <div className="flex flex-wrap gap-2">
+              <div className="text-[12px] font-bold tracking-[0.14em] text-[#1173BD] mb-6">{g.title}</div>
+              <div className="flex flex-wrap gap-3">
                 {g.items.map((it, j) => (
-                  <span
-                    key={j}
-                    className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-[12.5px] font-medium text-[#082D4A] hover:border-[#FFB814]/50 transition-colors"
-                  >
-                    {it}
-                  </span>
+                  <LogoBadge key={j} name={it.name} domain={it.domain} localSrc={it.localSrc} imgClass={it.imgClass} />
                 ))}
               </div>
             </div>

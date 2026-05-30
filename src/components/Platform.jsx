@@ -45,16 +45,16 @@ export const Platform = () => {
                 e.currentTarget.style.transform = visible ? 'translateY(0)' : 'translateY(16px)';
               }}
             >
-              {/* Large background number */}
+              {/* Architectural Background Number */}
               <div
-                className="absolute end-6 top-1/2 -translate-y-1/2 text-[6rem] font-black text-[#082D4A]/[0.04] leading-none select-none pointer-events-none"
+                className="absolute -top-10 -start-6 text-[12rem] font-black text-[#082D4A]/[0.02] leading-none select-none pointer-events-none transition-transform duration-700 group-hover:scale-110 group-hover:text-[#082D4A]/[0.03]"
                 aria-hidden="true"
                 dir="ltr"
               >
                 {String(i + 1).padStart(2, '0')}
               </div>
 
-              <div className="flex-1 relative">
+              <div className="flex-1 relative z-10">
                 <h3 className="text-[1.5rem] lg:text-[1.75rem] font-bold text-[#082D4A] tracking-tight leading-tight">
                   {card.title.split(card.accent).map((part, idx, arr) => (
                     <React.Fragment key={idx}>
@@ -73,9 +73,9 @@ export const Platform = () => {
               </div>
 
               {/* Arrow circle */}
-              <div className="hidden lg:flex w-12 h-12 rounded-full bg-slate-100 border border-slate-200 group-hover:bg-[#FFB814] group-hover:border-[#FFB814] items-center justify-center transition-all duration-300 flex-shrink-0">
+              <div className="hidden lg:flex w-12 h-12 rounded-full bg-slate-50 border border-slate-200 group-hover:bg-[#FFB814] group-hover:border-[#FFB814] group-hover:shadow-lg items-center justify-center transition-all duration-500 flex-shrink-0 z-10 group-hover:rotate-45">
                 <ArrowUpRight
-                  className={`w-4 h-4 text-[#082D4A] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${dir === 'rtl' ? 'rotate-[270deg]' : ''}`}
+                  className={`w-4 h-4 text-[#082D4A] transition-transform duration-500 ${dir === 'rtl' ? 'rotate-[270deg]' : ''}`}
                 />
               </div>
             </a>

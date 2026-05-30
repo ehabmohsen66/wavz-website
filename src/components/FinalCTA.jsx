@@ -1,9 +1,11 @@
 import { ArrowRight, Calendar, Phone } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal } from '../hooks/index.js';
+import { TextRotate } from './TextRotate.jsx';
+import { WavzWordmark } from './WavzLogo.jsx';
 
 export const FinalCTA = () => {
-  const { t, dir } = useLang();
+  const { t, lang, dir } = useLang();
   const [revealRef, visible] = useReveal();
 
   return (
@@ -22,29 +24,54 @@ export const FinalCTA = () => {
           background: 'linear-gradient(to right, transparent, rgba(255,184,20,0.5) 40%, rgba(255,184,20,0.5) 60%, transparent)',
         }}
       />
-      {/* Dot grid */}
-      <div
-        className="absolute inset-0 opacity-[0.06] pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #97CFFA 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+
 
       <div
         className={`relative max-w-[900px] mx-auto px-6 lg:px-12 text-center transition-all duration-700 ${
           visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
         }`}
       >
-        {/* WAVZ icon */}
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/6 border border-white/10 mb-8 mx-auto">
-          <img src="/WavzIcon.png" alt="WAVZ" className="w-10 h-10 object-contain" />
+        {/* WAVZ logo */}
+        <div className="flex justify-center mb-10 sm:mb-12 mx-auto -translate-x-2 sm:-translate-x-4 -translate-y-2 sm:-translate-y-4">
+          <WavzWordmark className="brightness-0 invert opacity-90 scale-150 sm:scale-[2] origin-center" />
         </div>
 
-        <h2 className="text-4xl lg:text-[5.5rem] font-black text-white tracking-[-0.04em] leading-[0.92]">
-          {t.cta.title}
+        <h2 className="text-3xl sm:text-4xl lg:text-[3.5rem] lg:leading-[1.2] font-black text-white tracking-[-0.03em] max-w-4xl mx-auto">
+          {lang === 'en' ? (
+            <>
+              <span className="block mb-2 sm:mb-3 opacity-90">Ready to</span>
+              <TextRotate
+                texts={[
+                  'transform your enterprise?',
+                  'scale your operations?',
+                  'optimize your SLA?',
+                  'minimize your MTTR?',
+                  'modernize your banking?',
+                ]}
+                mainClassName="inline-flex text-[#FFB814] font-black"
+                rotationInterval={3500}
+                splitBy="characters"
+              />
+            </>
+          ) : (
+            <>
+              <span className="block mb-2 sm:mb-3 opacity-90">جاهزٌ</span>
+              <TextRotate
+                texts={[
+                  'لتحويل مؤسستك؟',
+                  'لتوسيع عملياتك؟',
+                  'لتحسين اتفاقية الخدمة؟',
+                  'لتقليل زمن الاستعادة؟',
+                  'لتحديث نظامك المصرفي؟',
+                ]}
+                mainClassName="inline-flex text-[#FFB814] font-black"
+                rotationInterval={3500}
+                splitBy="characters"
+              />
+            </>
+          )}
         </h2>
-        <p className="mt-7 max-w-xl mx-auto text-[16px] text-white/50 leading-[1.7]">
+        <p className="mt-8 max-w-xl mx-auto text-[16px] text-white/50 leading-[1.7]">
           {t.cta.desc}
         </p>
 
@@ -62,7 +89,7 @@ export const FinalCTA = () => {
             <ArrowRight className={`w-4 h-4 transition-transform group-hover:translate-x-1 ${dir === 'rtl' ? 'rotate-180' : ''}`} />
           </a>
           <a
-            href="#"
+            href="#/savings-calculator"
             className="press-scale inline-flex items-center gap-2.5 bg-white/8 border border-white/15 text-white px-8 py-4 rounded-md text-[14.5px] font-medium cursor-pointer backdrop-blur-sm"
             style={{ transition: 'transform 120ms cubic-bezier(0.23,1,0.32,1), background-color 150ms ease, border-color 150ms ease' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; }}

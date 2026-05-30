@@ -102,36 +102,43 @@ export const Architecture = () => {
 };
 
 const DownArrow = () => (
-  <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-    <line x1="20" y1="0" x2="20" y2="34" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3">
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" className="overflow-visible">
+    <defs>
+      <marker id="arrow-down" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+        <polygon points="0 0, 6 3, 0 6" fill="#1173BD" />
+      </marker>
+    </defs>
+    <line x1="20" y1="0" x2="20" y2="36" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3" markerEnd="url(#arrow-down)">
       <animate attributeName="stroke-dashoffset" from="0" to="-12" dur="1s" repeatCount="indefinite" />
     </line>
-    <polygon points="20,40 14,30 26,30" fill="#1173BD" />
   </svg>
 );
 
 const BranchArrow = () => (
-  <svg viewBox="0 0 300 60" className="w-72 h-12">
-    <line x1="150" y1="0" x2="60" y2="50" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3">
+  <svg viewBox="0 0 300 60" className="w-72 h-12 overflow-visible">
+    <defs>
+      <marker id="arrow-branch" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+        <polygon points="0 0, 6 3, 0 6" fill="#1173BD" />
+      </marker>
+    </defs>
+    <line x1="150" y1="0" x2="60" y2="55" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3" markerEnd="url(#arrow-branch)">
       <animate attributeName="stroke-dashoffset" from="0" to="-12" dur="1s" repeatCount="indefinite" />
     </line>
-    <line x1="150" y1="0" x2="240" y2="50" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3">
+    <line x1="150" y1="0" x2="240" y2="55" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3" markerEnd="url(#arrow-branch)">
       <animate attributeName="stroke-dashoffset" from="0" to="-12" dur="1s" repeatCount="indefinite" />
     </line>
-    <polygon points="60,50 56,40 66,42" fill="#1173BD" />
-    <polygon points="240,50 234,42 244,40" fill="#1173BD" />
   </svg>
 );
 
 const MergeArrow = () => (
-  <svg viewBox="0 0 300 60" className="w-72 h-12">
-    <line x1="60" y1="0" x2="150" y2="50" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3">
+  <svg viewBox="0 0 300 60" className="w-72 h-12 overflow-visible">
+    <line x1="60" y1="0" x2="150" y2="48" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3">
       <animate attributeName="stroke-dashoffset" from="0" to="-12" dur="1s" repeatCount="indefinite" />
     </line>
-    <line x1="240" y1="0" x2="150" y2="50" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3">
+    <line x1="240" y1="0" x2="150" y2="48" stroke="#1173BD" strokeWidth="1.5" strokeDasharray="3 3">
       <animate attributeName="stroke-dashoffset" from="0" to="-12" dur="1s" repeatCount="indefinite" />
     </line>
-    <polygon points="150,50 144,40 156,40" fill="#1173BD" />
+    <polygon points="150,56 144,46 156,46" fill="#1173BD" />
   </svg>
 );
 
