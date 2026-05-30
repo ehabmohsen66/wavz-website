@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, Suspense } from 'react';
 import * as THREE from 'three';
 import { useLang } from '../i18n/LangContext.jsx';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─────────────────────────────────────────────────────────────
    Design Tokens — WAVZ Brand
@@ -244,6 +245,66 @@ export const PaymentServices = () => {
   const dir  = ar ? 'rtl' : 'ltr';
   const font = ar ? FONT_AR : FONT;
 
+  const [activeServiceIdx, setActiveServiceIdx] = useState(0);
+
+  const serviceDetails = {
+    ISS: {
+      stats: ar 
+        ? [{ val: '99.999%', label: 'اتفاقية مستوى الخدمة' }, { val: '12 مليون+', label: 'بطاقة نشطة مدارة' }, { val: '100%', label: 'التزام أمني كامل' }]
+        : [{ val: '99.999%', label: 'Uptime SLA' }, { val: '12M+', label: 'Active Cards Managed' }, { val: '100%', label: 'Compliance Level' }],
+      pipeline: ar
+        ? ['تمرير البطاقة', 'فحص القواعد والمخاطر', 'تفويض الرصيد الأساسي', 'إرسال إشعار الدفع']
+        : ['Card Swipe/Tap', 'Rules & Risk Parse', 'Core Ledger Auth', 'Alert Sent'],
+      bullets: ar
+        ? ['إصدار بطاقات ائتمانية ومسبقة الدفع مرنة وقابلة للتخصيص الكامل.', 'محرك قواعد فوري متكامل لفحص المخاطر والعمولات وتفويض المعاملات.', 'تأمين المعاملات والتفويض وفق أعلى معايير الحماية والتحقق المصرفي.']
+        : ['Highly configurable credit, debit and prepaid card issuance setups.', 'Integrated real-time merchant rule parsing and commission audits.', 'Encrypted card data authorization compliant with high security layers.']
+    },
+    ACQ: {
+      stats: ar 
+        ? [{ val: '$4.2B+', label: 'حجم المعالجة السنوية' }, { val: '80,000+', label: 'تاجر نشط في النظام' }, { val: 'متعددة', label: 'عملات التسوية المتاحة' }]
+        : [{ val: '$4.2B+', label: 'Processed Volume' }, { val: '80,000+', label: 'Active Merchants' }, { val: 'Multi-Cur', label: 'Settlement Currencies' }],
+      pipeline: ar
+        ? ['إدخال نقطة البيع', 'توجيه الاستحواذ', 'مزامنة شبكة الدفع', 'المقاصة والتسوية']
+        : ['POS Terminal In', 'Acquirer Route', 'Scheme Sync', 'Clearing & Settlement'],
+      bullets: ar
+        ? ['حلول معالجة دفع شاملة متعددة القنوات والعلامات التجارية والدول والعملات.', 'مجموعة واسعة من خيارات الاتصال بنقاط البيع POS والأجهزة الطرفية.', 'إدارة ومطابقة عمولات التجار وحسابات المردود تلقائياً.']
+        : ['Omni-channel, multi-brand and multi-currency processing arrays.', 'Vast range of secure connectivity routes for front-end terminals.', 'Automated merchant discount rate (MDR) calculations and clearings.']
+    },
+    SWT: {
+      stats: ar 
+        ? [{ val: '15,000', label: 'أقصى طاقة للمعاملات/ث' }, { val: '1.8B+', label: 'معاملات سنوية معالجة' }, { val: 'عالمي', label: 'الارتباط بالشبكات' }]
+        : [{ val: '15,000', label: 'Peak Switch TPS' }, { val: '1.8B+', label: 'Annual Transactions' }, { val: 'Global', label: 'Card Scheme Links' }],
+      pipeline: ar
+        ? ['بوابة التحويل', 'تحليل المعاملة', 'التوجيه والمقاصة', 'تأكيد العملية']
+        : ['Switch Input', 'Protocol Parse', 'Route & Clear', 'Response Handshake'],
+      bullets: ar
+        ? ['منصة تحويل معاملات مفتوحة وقابلة للتوسع بشكل هائل.', 'ربط مباشر مع شبكات فيزا وماستركارد والشبكات المحلية والوطنية الكبرى.', 'توزيع الأحمال المتقدم وإدارة وتوجيه المعاملات من POS والصراف الآلي والإنترنت.']
+        : ['Scalable open transaction switching platform for major domestic grids.', 'Direct interfaces to Visa, Mastercard and leading global card schemes.', 'Active load balancing and complete channel switching (POS, ATM, Web).']
+    },
+    INS: {
+      stats: ar 
+        ? [{ val: '2 ثانية>', label: 'زمن تسوية المدفوعات' }, { val: '100%', label: 'امتثال لمعايير ISO 20022' }, { val: 'رقمي كلياً', label: 'نموذج التدفق المالي' }]
+        : [{ val: '<2 Sec', label: 'Settlement Duration' }, { val: '100%', label: 'ISO 20022 Aligned' }, { val: 'All-Digital', label: 'Data Settlement Flow' }],
+      pipeline: ar
+        ? ['بدء العملية', 'مقاصة فورية RTGS', 'دفتر البنك المركزي', 'إيداع المستفيد']
+        : ['Payment Initiate', 'Instant RTGS Clear', 'Central Bank Ledger', 'Beneficiary Credit'],
+      bullets: ar
+        ? ['توفير أنظمة معالجة الدفع الفوري للبنوك المركزية والمشاركين.', 'الامتثال الكامل لمعايير المعاملات المالية الدولية الفورية ISO 20022.', 'تعزيز الانتقال للمعاملات غير النقدية ونشر حلول دفع فورية للمؤسسات.']
+        : ['Instant settlement infrastructures supporting central bank workflows.', 'ISO 20022 payment messaging standard integration natively.', 'Accelerated cash-to-digital transition with high-throughput settlement.']
+    },
+    API: {
+      stats: ar 
+        ? [{ val: '400+', label: 'شركات تكنولوجيا مالية نشطة' }, { val: '99.9%', label: 'نسبة نجاح طلبات الـ API' }, { val: 'PSD2', label: 'معايير الأمان المعتمدة' }]
+        : [{ val: '400+', label: 'Active Fintech Partners' }, { val: '99.9%', label: 'API Success Rate' }, { val: 'PSD2', label: 'Security Protocols' }],
+      pipeline: ar
+        ? ['طلب الـ API', 'تحقق OAuth آمن', 'مزامنة النظام البنكي', 'إرجاع البيانات مشفرة']
+        : ['API Request In', 'OAuth Security', 'Core Banking Sync', 'Encrypted Response'],
+      bullets: ar
+        ? ['منصة خدمات مصرفية مفتوحة لتمكين التعاون مع شركات Fintech والشركاء.', 'بيئة Sandbox آمنة لاختبار وتطوير الحلول والميزات الرقمية.', 'إدارة متطورة للتراخيص ومعدلات الاستعلامات والتحقق لضمان سلامة البيانات البنكية.']
+        : ['Open banking API structures optimized for fintech integrations.', 'Highly secure sandboxing environments for external third parties.', 'Robust client authentication, token parsing & rate-limiting modules.']
+    }
+  };
+
   /* ── Services data ── */
   const services = ar ? [
     {
@@ -345,6 +406,21 @@ export const PaymentServices = () => {
         .ps-cta-ghost:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; }
         .ps-row:hover { background: rgba(255,255,255,0.025) !important; }
         .ps-stat-gold::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:${T.gold}; }
+        
+        .ps-menu-item { transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.04); }
+        .ps-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,184,20,0.15) !important; }
+        .ps-menu-item.active { background: rgba(255,184,20,0.06) !important; border-color: ${T.gold} !important; box-shadow: 0 0 15px rgba(255,184,20,0.08); }
+        .ps-menu-item.active .ps-menu-icon { color: ${T.gold} !important; }
+        
+        .ps-terminal-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .ps-terminal-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: all 0.6s ease; }
+        .ps-terminal-btn:hover::before { left: 100%; }
+        .ps-terminal-btn:hover { box-shadow: 0 0 20px rgba(255,184,20,0.25); }
+        
+        .ps-pulse-dot { animation: ps-pulse 2.5s ease-in-out infinite; }
+        
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* ── HERO — Three.js Generative Art ── */}
@@ -592,59 +668,333 @@ export const PaymentServices = () => {
           </div>
         </div>
 
-        {/* grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill,minmax(min(320px,100%),1fr))',
-          gap: 1, background: T.border,
-          border: `1px solid ${T.border}`, borderRadius: 8, overflow: 'hidden',
-        }}>
-          {services.map((s, i) => (
-            <div key={i} className="ps-svc" style={{
-              background: T.navy2, padding: '32px 28px',
-              position: 'relative', border: '1px solid transparent',
-              transition: 'all 0.2s ease', cursor: 'default',
-            }}>
-              {/* background number */}
-              <div className="ps-num" style={{
-                position: 'absolute', top: 16,
-                right: ar ? 'auto' : 20, left: ar ? 20 : 'auto',
-                fontSize: 'clamp(40px, 8vw, 64px)', fontWeight: 900, letterSpacing: '-0.04em',
-                color: 'rgba(255,255,255,0.03)',
-                fontFamily: font, lineHeight: 1, userSelect: 'none',
-                transition: 'color 0.2s',
-              }}>
-                {String(i + 1).padStart(2, '0')}
-              </div>
+        {/* Interactive Payment Command Center Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
+          
+          {/* Left Column: Vertical Services Menu / Horizontal Tabs on Mobile */}
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none" style={{ alignSelf: 'flex-start' }}>
+            {services.map((s, i) => {
+              const isActive = activeServiceIdx === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveServiceIdx(i)}
+                  className={`ps-menu-item group ${isActive ? 'active' : ''} lg:w-full`}
+                  style={{
+                    background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
+                    border: `1px solid ${isActive ? T.gold : T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 20px',
+                    textAlign: ar ? 'right' : 'left',
+                    minWidth: 220,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 12,
+                    flexShrink: 0,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+                    {/* Icon */}
+                    <div className="ps-menu-icon" style={{
+                      color: isActive ? T.gold : T.muted,
+                      transition: 'color 0.25s ease',
+                      flexShrink: 0,
+                    }}>
+                      {icons[s.code]}
+                    </div>
+                    {/* Title & Status */}
+                    <div style={{ overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <h3 style={{
+                          fontSize: 13.5, fontWeight: 700,
+                          color: T.white, margin: 0,
+                          fontFamily: font,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
+                          {s.title}
+                        </h3>
+                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#4AF626', flexShrink: 0 }} className="ps-pulse-dot" />
+                      </div>
+                      <span style={{ fontSize: 10.5, color: T.muted, fontFamily: font, display: 'block', marginTop: 1 }}>
+                        {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
+                      </span>
+                    </div>
+                  </div>
 
-              <div className="ps-icon" style={{ color: T.muted, marginBottom: 20, transition: 'color 0.2s' }}>
-                {icons[s.code]}
-              </div>
+                  {/* Operational stat chip */}
+                  <div style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: isActive ? T.gold : T.muted,
+                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.3)' : T.border}`,
+                    borderRadius: 4,
+                    padding: '3px 6px',
+                    background: isActive ? 'rgba(255,184,20,0.04)' : 'rgba(255,255,255,0.01)',
+                    fontFamily: font,
+                    letterSpacing: '-0.02em',
+                    flexShrink: 0,
+                  }}>
+                    {serviceDetails[s.code].stats[0].val}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-              <div className="ps-code" style={{
-                display: 'inline-block', fontSize: 10, fontWeight: 700,
-                letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: T.gold, marginBottom: 10, fontFamily: font,
-                opacity: 0.75, transition: 'opacity 0.2s',
-              }}>
-                {s.code}
-              </div>
+          {/* Right Column: Dynamic Terminal Dashboard */}
+          <div style={{ position: 'relative' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeServiceIdx}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.22 }}
+                style={{
+                  background: 'rgba(8,45,74,0.45)',
+                  backdropFilter: 'blur(16px)',
+                  border: `1px solid rgba(255,184,20,0.15)`,
+                  borderRadius: 12,
+                  padding: '32px 28px',
+                  minHeight: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 28,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Dashboard Grid Line Background Accent */}
+                <div style={{
+                  position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
+                  backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
+                  backgroundSize: '20px 20px',
+                  pointerEvents: 'none',
+                }} />
 
-              <h3 style={{
-                fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em',
-                color: T.white, margin: '0 0 12px', lineHeight: 1.3, fontFamily: font,
-              }}>
-                {s.title}
-              </h3>
+                <div>
+                  {/* Dashboard Live Status Indicator */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{
+                        background: 'rgba(255,184,20,0.12)',
+                        border: `1px solid ${T.gold}`,
+                        color: T.gold,
+                        fontSize: 10,
+                        fontWeight: 800,
+                        padding: '3px 8px',
+                        borderRadius: 4,
+                        letterSpacing: '0.08em',
+                        fontFamily: font,
+                      }}>
+                        {services[activeServiceIdx].code}
+                      </div>
+                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626' }} className="ps-pulse-dot" />
+                        {ar ? 'نظام تشغيل المدفوعات حي ومباشر' : 'LIVE PAYMENT NODE ACTIVE'}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 10.5, color: T.muted, fontFamily: 'monospace' }}>
+                      NODE_ID: {services[activeServiceIdx].code}_PAY_SYS_0{activeServiceIdx + 1}A
+                    </div>
+                  </div>
 
-              <p style={{
-                fontSize: 13.5, lineHeight: 1.75,
-                color: T.muted, margin: 0, fontFamily: font, fontWeight: 400,
-              }}>
-                {s.body}
-              </p>
-            </div>
-          ))}
+                  <h2 style={{
+                    fontSize: 'clamp(20px, 2.5vw, 24px)',
+                    fontWeight: 800,
+                    letterSpacing: '-0.025em',
+                    color: T.white,
+                    margin: '0 0 14px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].title}
+                  </h2>
+
+                  <p style={{
+                    fontSize: 14,
+                    lineHeight: 1.8,
+                    color: T.muted,
+                    margin: '0 0 24px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].body}
+                  </p>
+
+                  {/* ── Diagnostic Statistics Grid ── */}
+                  <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
+                    {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
+                      <div
+                        key={sIdx}
+                        style={{
+                          background: 'rgba(6,30,49,0.5)',
+                          border: `1px solid ${T.border}`,
+                          borderRadius: 8,
+                          padding: '14px 10px',
+                          textAlign: 'center',
+                          position: 'relative',
+                        }}
+                      >
+                        <div style={{
+                          fontSize: 'clamp(16px, 3vw, 20px)',
+                          fontWeight: 900,
+                          color: T.gold,
+                          marginBottom: 4,
+                          fontFamily: font,
+                          letterSpacing: '-0.03em',
+                        }}>
+                          {st.val}
+                        </div>
+                        <div style={{
+                          fontSize: 10,
+                          fontWeight: 500,
+                          color: T.muted,
+                          fontFamily: font,
+                          lineHeight: 1.2,
+                        }}>
+                          {st.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ── Process Flow Map ── */}
+                  <div style={{
+                    background: 'rgba(6,30,49,0.3)',
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 14px',
+                    marginBottom: 28,
+                  }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+                      {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
+                      {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
+                        <React.Fragment key={idx}>
+                          {/* Step Node */}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
+                            <div style={{
+                              width: 28, height: 28,
+                              borderRadius: '50%',
+                              border: `1.5px solid ${T.gold}`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 10,
+                              fontWeight: 'bold',
+                              color: T.gold,
+                              background: T.navy,
+                              boxShadow: '0 0 10px rgba(255,184,20,0.15)',
+                              marginBottom: 6,
+                            }}>
+                              {idx + 1}
+                            </div>
+                            <div style={{ fontSize: 10.5, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
+                              {step}
+                            </div>
+                          </div>
+                          
+                          {/* Connector Line */}
+                          {idx < 3 && (
+                            <div
+                              className="hidden sm:block"
+                              style={{
+                                flex: 1,
+                                height: 1.5,
+                                background: ar 
+                                  ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)` 
+                                  : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
+                                opacity: 0.3,
+                                position: 'relative',
+                                minWidth: 15,
+                              }}
+                            >
+                              <div
+                                className="ps-pulse-dot"
+                                style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: ar ? 'auto' : '0%',
+                                  right: ar ? '0%' : 'auto',
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: '50%',
+                                  background: T.gold,
+                                  transform: 'translateY(-50%)',
+                                  boxShadow: '0 0 6px #FFB814',
+                                }}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ── Operational Specs ── */}
+                  <div>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
+                      {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
+                        <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
+                          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: T.gold, flexShrink: 0, marginTop: 4 }}>
+                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontSize: 12.5, color: T.muted, fontFamily: font, lineHeight: 1.45 }}>
+                            {bullet}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secure Payment Consultation Button */}
+                <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, marginTop: 6 }}>
+                  <button
+                    onClick={() => {
+                      window.location.hash = '#/contact';
+                    }}
+                    className="ps-terminal-btn"
+                    style={{
+                      width: '100%',
+                      background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
+                      color: T.navy,
+                      border: 'none',
+                      borderRadius: 6,
+                      padding: '12px 24px',
+                      fontSize: 13,
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      fontFamily: font,
+                    }}
+                  >
+                    <span>
+                      {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
         </div>
       </section>
 
