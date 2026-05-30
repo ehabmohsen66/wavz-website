@@ -361,29 +361,15 @@ const AUTO_CYCLE_INTERVAL = 6000; // ms per service in auto mode
 const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, ar, font }) => {
   const svgRef = useRef(null);
   const [hoveredIdx, setHoveredIdx] = useState(null);
-  const [dimensions, setDimensions] = useState({ w: 600, h: 520 });
   const containerRef = useRef(null);
 
-  // Responsive dimensions
-  useEffect(() => {
-    const measure = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const w = Math.min(rect.width, 720);
-        const h = Math.max(400, Math.min(w * 0.85, 560));
-        setDimensions({ w, h });
-      }
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, []);
-
-  const { w, h } = dimensions;
+  // Fixed viewBox dimensions with generous padding for labels
+  const w = 520;
+  const h = 480;
   const cx = w / 2;
   const cy = h / 2;
-  const radius = Math.min(w, h) * 0.36;
-  const nodeRadius = Math.min(w, h) * 0.055;
+  const radius = 140;
+  const nodeRadius = 26;
 
   // Calculate node positions in a circle
   const nodePositions = useMemo(() => {
@@ -415,10 +401,11 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
     <div ref={containerRef} style={{ width: '100%', position: 'relative' }}>
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${w} ${h}`}
+        viewBox="0 0 520 480"
         width="100%"
         height="auto"
-        style={{ display: 'block', overflow: 'visible' }}
+        style={{ display: 'block' }}
+        preserveAspectRatio="xMidYMid meet"
       >
         <defs>
           {/* Glow filter for active node */}
@@ -517,10 +504,10 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
             <animateTransform attributeName="transform" type="rotate" from={`0 ${cx} ${cy}`} to={`360 ${cx} ${cy}`} dur="20s" repeatCount="indefinite" />
           </circle>
           {/* Hub label */}
-          <text x={cx} y={cy - 6} textAnchor="middle" fill={T.gold} fontSize="8" fontWeight="800" letterSpacing="0.12em" fontFamily={FONT} style={{ textTransform: 'uppercase' }}>
+          <text x={cx} y={cy - 7} textAnchor="middle" fill={T.gold} fontSize="10" fontWeight="800" letterSpacing="0.12em" fontFamily={FONT} style={{ textTransform: 'uppercase' }}>
             {ar ? 'مركز' : 'WAVZ'}
           </text>
-          <text x={cx} y={cy + 5} textAnchor="middle" fill={T.white} fontSize="7" fontWeight="600" letterSpacing="0.08em" fontFamily={FONT}>
+          <text x={cx} y={cy + 7} textAnchor="middle" fill={T.white} fontSize="8.5" fontWeight="600" letterSpacing="0.08em" fontFamily={FONT}>
             {ar ? 'العمليات' : 'OPS CORE'}
           </text>
           {/* Pulsing ring */}
@@ -611,7 +598,7 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
                 textAnchor="middle"
                 dominantBaseline="central"
                 fill={isActive ? T.gold : isHovered ? T.blueL : T.muted}
-                fontSize={Math.max(9, nodeRadius * 0.38)}
+                fontSize="11"
                 fontWeight="800"
                 letterSpacing="0.08em"
                 fontFamily={FONT}
@@ -623,23 +610,42 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
               {/* External label */}
               {(() => {
                 const angle = (i / services.length) * Math.PI * 2 - Math.PI / 2;
-                const labelDist = nodeRadius + 18;
+                const labelDist = nodeRadius + 22;
                 const lx = pos.x + labelDist * Math.cos(angle);
                 const ly = pos.y + labelDist * Math.sin(angle);
-                const anchor = Math.abs(Math.cos(angle)) < 0.3 ? 'middle' : Math.cos(angle) > 0 ? 'start' : 'end';
+                // Determine text anchor based on position around the circle
+                const cosA = Math.cos(angle);
+                const anchor = Math.abs(cosA) < 0.25 ? 'middle' : cosA > 0 ? 'start' : 'end';
+                // Multiline: split title into max 2 lines of ~14 chars
+                const words = s.title.split(' ');
+                const lines = [];
+                let current = '';
+                words.forEach(word => {
+                  if ((current + ' ' + word).trim().length > 14 && current) {
+                    lines.push(current.trim());
+                    current = word;
+                  } else {
+                    current = (current + ' ' + word).trim();
+                  }
+                });
+                if (current) lines.push(current.trim());
+                const displayLines = lines.slice(0, 2);
                 return (
                   <text
                     x={lx} y={ly}
                     textAnchor={anchor}
-                    dominantBaseline="central"
                     fill={isActive ? T.white : T.muted}
-                    fontSize={Math.max(8, nodeRadius * 0.3)}
+                    fontSize="10"
                     fontWeight={isActive ? 700 : 500}
                     fontFamily={font}
                     opacity={isActive ? 1 : 0.7}
                     style={{ transition: 'all 0.3s ease', pointerEvents: 'none' }}
                   >
-                    {s.title.length > 20 ? s.title.substring(0, 18) + '…' : s.title}
+                    {displayLines.map((line, li) => (
+                      <tspan key={li} x={lx} dy={li === 0 ? 0 : 13} textAnchor={anchor}>
+                        {line}
+                      </tspan>
+                    ))}
                   </text>
                 );
               })()}
@@ -1542,8 +1548,8 @@ export const ManagedServices = () => {
 
         {/* Desktop Layout */}
         <div className="hidden lg:grid" style={{
-          gridTemplateColumns: ar ? '1fr 1fr' : '1fr 1fr',
-          gap: 32,
+          gridTemplateColumns: '1.05fr 0.95fr',
+          gap: 28,
           alignItems: 'start',
         }}>
           {/* SVG Neural Network Map */}
@@ -1551,9 +1557,8 @@ export const ManagedServices = () => {
             background: 'rgba(8,45,74,0.3)',
             border: `1px solid ${T.border}`,
             borderRadius: 14,
-            padding: '24px 16px',
+            padding: '20px 20px 16px',
             position: 'relative',
-            overflow: 'hidden',
           }}>
             {/* Subtle scan-line effect */}
             <div style={{
