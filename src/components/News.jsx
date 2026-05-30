@@ -297,11 +297,11 @@ export const News = ({ route }) => {
                 }`}
               >
                 {copied ? (
-                  <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 ) : (
-                  <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                 )}
@@ -320,20 +320,36 @@ export const News = ({ route }) => {
                   <a
                     key={rel.id}
                     href={`#/news/${rel.id}`}
-                    className="group flex flex-col bg-white border border-slate-200/80 rounded-2xl overflow-hidden hover:shadow-lg hover:border-slate-300 transition-all duration-250 p-5 cursor-pointer"
+                    className="group flex flex-col sm:flex-row bg-white border border-slate-200/80 rounded-2xl overflow-hidden hover:shadow-lg hover:border-slate-300 transition-all duration-250 cursor-pointer"
                   >
-                    <div className="flex items-center justify-between mb-3">
-                      <span className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md ${getCategoryStyles(rel.category)}`}>
-                        {newsData.categories[rel.category]}
+                    {/* Article Image */}
+                    {rel.image && (
+                      <div className="w-full sm:w-2/5 aspect-[16/10] sm:aspect-square overflow-hidden bg-slate-100 relative flex-shrink-0">
+                        <img
+                          src={rel.image}
+                          alt={rel.title}
+                          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Card Body */}
+                    <div className="p-5 flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md ${getCategoryStyles(rel.category)}`}>
+                            {newsData.categories[rel.category]}
+                          </span>
+                          <span className="text-[11px] text-slate-400">{rel.date}</span>
+                        </div>
+                        <h4 className="text-[14.5px] font-bold text-[#082D4A] leading-snug group-hover:text-[#1173BD] transition-colors duration-150 mb-2">
+                          {rel.title}
+                        </h4>
+                      </div>
+                      <span className="text-[12px] font-semibold text-[#1173BD] inline-flex items-center gap-1 mt-3">
+                        {newsData.readArticle} →
                       </span>
-                      <span className="text-[11px] text-slate-400">{rel.date}</span>
                     </div>
-                    <h4 className="text-[14.5px] font-bold text-[#082D4A] leading-snug group-hover:text-[#1173BD] transition-colors duration-150 flex-1 mb-2">
-                      {rel.title}
-                    </h4>
-                    <span className="text-[12px] font-semibold text-[#1173BD] inline-flex items-center gap-1 mt-2">
-                      {newsData.readArticle} →
-                    </span>
                   </a>
                 ))}
               </div>
