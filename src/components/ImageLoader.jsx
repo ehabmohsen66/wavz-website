@@ -4,23 +4,9 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
  * ImageLoader
  * -----------
  * Displays a blink-loading pixel grid that color-samples the target image,
- * then dissolves into the real image once loaded.
- *
- * Props:
- *   src              – image URL (required)
- *   alt              – img alt text (default: "")
- *   gridSize         – cell size in px (default: 20)
- *   cellShape        – "circle" | "square" (default: "circle")
- *   cellGap          – gap between cells in px (default: 2)
- *   cellColor        – fallback cell color (default: "#1e3a5f")
- *   blinkSpeed       – ms per blink cycle (default: 1000)
- *   transitionDuration – ms to transition cells to image colors (default: 800)
- *   fadeOutDuration  – ms to fade cells out after image shown (default: 600)
- *   loadingDelay     – minimum ms to show loading state (default: 1200)
- *   onLoad           – callback fired when image is ready
- *   className        – extra class names for wrapper
- *   width            – explicit width (default: "100%")
- *   height           – explicit height (default: "auto")
+ * then either:
+ *   - stayAsMosaic=true  → freezes the colored mosaic permanently (no image reveal)
+ *   - stayAsMosaic=false → dissolves cells away to reveal the real image (default)
  */
 export default function ImageLoader({
   src,
@@ -33,24 +19,25 @@ export default function ImageLoader({
   transitionDuration = 800,
   fadeOutDuration = 600,
   loadingDelay = 1200,
+  stayAsMosaic = false,   // ← new: keep mosaic as final visual
   onLoad = () => {},
   className = '',
   width,
   height,
 }) {
-  const [isLoading, setIsLoading]         = useState(true);
-  const [showImage, setShowImage]         = useState(false);
+  const [isLoading, setIsLoading]             = useState(true);
+  const [showImage, setShowImage]             = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isFadingOut, setIsFadingOut]     = useState(false);
-  const [gridCells, setGridCells]         = useState([]);
+  const [isFadingOut, setIsFadingOut]         = useState(false);
+  const [gridCells, setGridCells]             = useState([]);
 
-  const imageRef        = useRef(null);
-  const processedRef    = useRef(false);
-  const loadStartRef    = useRef(Date.now());
+  const imageRef     = useRef(null);
+  const processedRef = useRef(false);
+  const loadStartRef = useRef(Date.now());
 
   const dimensions = useMemo(() => ({
     w: parseInt(String(width))  || 800,
-    h: parseInt(String(height)) || 400,
+    h: parseInt(String(height)) || 300,
   }), [width, height]);
 
   /* ── Build grid ── */
@@ -63,13 +50,13 @@ export default function ImageLoader({
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         cells.push({
-          id:           `${r}-${c}`,
-          x:            c * step,
-          y:            r * step,
-          blinkDelay:   Math.random() * blinkSpeed,
-          fadeDelay:    Math.random() * fadeOutDuration,
+          id:             `${r}-${c}`,
+          x:              c * step,
+          y:              r * step,
+          blinkDelay:     Math.random() * blinkSpeed,
+          fadeDelay:      Math.random() * fadeOutDuration,
           initialOpacity: Math.random() * 0.7 + 0.3,
-          color:        null,
+          color:          null,
         });
       }
     }
@@ -116,15 +103,23 @@ export default function ImageLoader({
       setGridCells(updated);
       setIsLoading(false);
       setIsTransitioning(true);
-      setTimeout(() => setShowImage(true),             transitionDuration);
-      setTimeout(() => { setIsTransitioning(false); setIsFadingOut(true); }, transitionDuration);
+
+      if (stayAsMosaic) {
+        // Freeze: cells fill with sampled colors and STAY — no fade-out, no image reveal
+        setTimeout(() => setIsTransitioning(false), transitionDuration);
+      } else {
+        // Default: cells fill, then dissolve to reveal the real image
+        setTimeout(() => setShowImage(true),                                       transitionDuration);
+        setTimeout(() => { setIsTransitioning(false); setIsFadingOut(true); },     transitionDuration);
+      }
+
       onLoad();
     };
 
     const elapsed   = Date.now() - loadStartRef.current;
     const remaining = Math.max(0, loadingDelay - elapsed);
     setTimeout(run, remaining);
-  }, [dimensions, gridSize, transitionDuration, loadingDelay, sampleColor, onLoad]);
+  }, [dimensions, gridSize, transitionDuration, loadingDelay, stayAsMosaic, sampleColor, onLoad]);
 
   /* ── Trigger on image load ── */
   useEffect(() => {
@@ -139,21 +134,21 @@ export default function ImageLoader({
     }
   }, [gridCells, processImage]);
 
-  /* ── Per-cell inline style ── */
+  /* ── Per-cell style ── */
   const getCellStyle = useCallback((cell) => {
     const base = {
-      position:  'absolute',
-      left:      cell.x,
-      top:       cell.y,
+      position:   'absolute',
+      left:       cell.x,
+      top:        cell.y,
       willChange: 'opacity, background-color, width, height, left, top',
     };
 
     if (isLoading) return {
       ...base,
-      animation:          `il-blink ${blinkSpeed}ms infinite`,
-      animationDelay:     `${cell.blinkDelay}ms`,
-      animationFillMode:  'backwards',
-      backgroundColor:    cellColor,
+      animation:         `il-blink ${blinkSpeed}ms infinite`,
+      animationDelay:    `${cell.blinkDelay}ms`,
+      animationFillMode: 'backwards',
+      backgroundColor:   cellColor,
       width:   gridSize,
       height:  gridSize,
       opacity: cell.initialOpacity,
@@ -171,6 +166,17 @@ export default function ImageLoader({
       animation: 'none',
     };
 
+    // stayAsMosaic: after transition ends, cells stay solid and visible
+    if (stayAsMosaic && !isTransitioning && !isLoading) return {
+      ...base,
+      backgroundColor: cell.color || cellColor,
+      width:   gridSize + cellGap,
+      height:  gridSize + cellGap,
+      left:    cell.x - cellGap / 2,
+      top:     cell.y - cellGap / 2,
+      opacity: 1,
+    };
+
     if (isFadingOut) return {
       ...base,
       backgroundColor:  cell.color || cellColor,
@@ -184,7 +190,7 @@ export default function ImageLoader({
     };
 
     return base;
-  }, [isLoading, isTransitioning, isFadingOut, blinkSpeed, cellColor, gridSize, cellGap, transitionDuration, fadeOutDuration]);
+  }, [isLoading, isTransitioning, isFadingOut, stayAsMosaic, blinkSpeed, cellColor, gridSize, cellGap, transitionDuration, fadeOutDuration]);
 
   return (
     <div className={`relative ${className}`}>
@@ -203,31 +209,43 @@ export default function ImageLoader({
           aspectRatio: `${dimensions.w} / ${dimensions.h}`,
         }}
       >
-        {/* Pixel grid overlay */}
+        {/* Pixel grid */}
         {gridCells.length > 0 && (
           <div className="absolute inset-0 z-10 pointer-events-none">
             {gridCells.map(cell => (
               <div
                 key={cell.id}
-                className={cellShape === 'circle' ? 'rounded-full' : 'rounded'}
+                className={cellShape === 'circle' ? 'rounded-full' : 'rounded-sm'}
                 style={getCellStyle(cell)}
               />
             ))}
           </div>
         )}
 
-        {/* Actual image */}
-        <img
-          ref={imageRef}
-          src={src}
-          alt={alt}
-          crossOrigin="anonymous"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{
-            opacity:    showImage ? 1 : 0,
-            transition: 'opacity 300ms ease',
-          }}
-        />
+        {/* Actual image — hidden when stayAsMosaic */}
+        {!stayAsMosaic && (
+          <img
+            ref={imageRef}
+            src={src}
+            alt={alt}
+            crossOrigin="anonymous"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ opacity: showImage ? 1 : 0, transition: 'opacity 300ms ease' }}
+          />
+        )}
+
+        {/* Hidden image used only for color sampling when stayAsMosaic */}
+        {stayAsMosaic && (
+          <img
+            ref={imageRef}
+            src={src}
+            alt=""
+            crossOrigin="anonymous"
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ opacity: 0, pointerEvents: 'none' }}
+          />
+        )}
       </div>
     </div>
   );

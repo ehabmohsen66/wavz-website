@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
-import ImageLoader from './ImageLoader.jsx';
 
 /* ─────────────────────────────────────────────────────────────
    Design Tokens — WAVZ Brand
@@ -728,36 +727,6 @@ export const ManagedServices = () => {
             </div>
           ))}
 
-          {/* ── 8th cell: ImageLoader fills the empty space next to card 7 ── */}
-          <div style={{
-            background: T.navy,
-            position: 'relative',
-            overflow: 'hidden',
-            gridColumn: 'span 2',
-            minHeight: 280,
-          }}>
-            <ImageLoader
-              src="/consultation-bg.png"
-              alt="Strategic consultation visual"
-              gridSize={16}
-              cellShape="square"
-              cellGap={1}
-              cellColor="#0d3a5e"
-              blinkSpeed={900}
-              transitionDuration={1000}
-              fadeOutDuration={700}
-              loadingDelay={800}
-              width={800}
-              height={280}
-              className="w-full h-full"
-            />
-            {/* Layered overlay: left dark fade + gold accent gradient */}
-            <div style={{
-              position: 'absolute', inset: 0, pointerEvents: 'none',
-              background: 'linear-gradient(120deg, rgba(6,30,49,0.85) 0%, rgba(6,30,49,0.3) 40%, transparent 70%, rgba(255,184,20,0.06) 100%)',
-            }} />
-          
-          </div>
         </div>
       </section>
 
