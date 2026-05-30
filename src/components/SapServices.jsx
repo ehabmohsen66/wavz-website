@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, Suspense } from 'react';
 import * as THREE from 'three';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLang } from '../i18n/LangContext.jsx';
 
 /* ─────────────────────────────────────────────────────────────
@@ -246,6 +247,161 @@ export const SapServices = () => {
   const dir  = ar ? 'rtl' : 'ltr';
   const font = ar ? FONT_AR : FONT;
 
+  const [activeServiceIdx, setActiveServiceIdx] = useState(0);
+
+  const serviceDetails = {
+    BPM: {
+      stats: ar ? [
+        { val: '98%', label: 'كفاءة العمليات' },
+        { val: '180+', label: 'سير عمل مرسوم' },
+        { val: 'نشط', label: 'تحسين مستمر' }
+      ] : [
+        { val: '98%', label: 'Process Efficiency' },
+        { val: '180+', label: 'Workflows Mapped' },
+        { val: 'Live', label: 'Continuous Optimise' }
+      ],
+      pipeline: ar
+        ? ['رسم العمليات', 'تدقيق الاختناقات', 'إعادة تصميم BPR', 'الأتمتة']
+        : ['Process Map', 'Bottleneck Audit', 'BPR Refine', 'Automation'],
+      bullets: ar
+        ? [
+            'رسم وتحليل العمليات التجارية بدقة عالية لتحسين الأداء العام.',
+            'هندسة وإعادة تصميم العمليات (BPR) للتخلص من التعقيد والتأخير.',
+            'أتمتة سير العمل للتخلص من التكرار والتدخل اليدوي العقيم.'
+          ]
+        : [
+            'High-fidelity business process mapping & analysis for performance.',
+            'Process architecture & redesign (BPR) engineering to cut waste.',
+            'Workflow automation to eliminate redundancy & slow human touch.'
+          ]
+    },
+    ERP: {
+      stats: ar ? [
+        { val: '100%', label: 'وقت تشغيل النواة' },
+        { val: '40+', label: 'تطبيقات ناجحة' },
+        { val: 'معياري', label: 'بنية النظام' }
+      ] : [
+        { val: '100%', label: 'Core Uptime' },
+        { val: '40+', label: 'Successful Deploys' },
+        { val: 'Standard', label: 'Architecture' }
+      ],
+      pipeline: ar
+        ? ['مخطط المتطلبات', 'تدقيق الفجوات', 'تحميل البيانات', 'التشغيل الفعلي']
+        : ['Req Blueprint', 'Fit-Gap Audit', 'Data Load', 'Go-Live Transact'],
+      bullets: ar
+        ? [
+            'تخطيط موارد المؤسسات المتقدم المدعوم بنواة SAP S/4HANA.',
+            'تخطيط ذكي ورسم للعمليات التفصيلية عبر منصة SAP Signavio.',
+            'بنية تشغيل مرنة تشمل السحابي العام والخاص والمحلي حسب الحاجة.'
+          ]
+        : [
+            'Enterprise resource planning powered by advanced SAP S/4HANA core.',
+            'Signavio process intelligence blueprinting for clear process insight.',
+            'Multi-cloud, private cloud & on-premise flexible deployment options.'
+          ]
+    },
+    CMP: {
+      stats: ar ? [
+        { val: '100%', label: 'التكامل الشامل' },
+        { val: '6+', label: 'وحدات رئيسية مغطاة' },
+        { val: 'موحد', label: 'قاعدة البيانات' }
+      ] : [
+        { val: '100%', label: 'Integrated Modules' },
+        { val: '6+', label: 'Core Modules Covered' },
+        { val: 'Unified', label: 'Database Integrity' }
+      ],
+      pipeline: ar
+        ? ['إعداد الوحدات', 'ناقل التكامل', 'تحليلات الأعمال', 'التحقق الشامل']
+        : ['Module Setup', 'Integration Bus', 'BI Analytics', 'E2E Verify'],
+      bullets: ar
+        ? [
+            'تطبيق الوحدات متعددة الوظائف (Signavio, S/4HANA, CX, HCM) بتوافق كامل.',
+            'تحليلات البيانات الشاملة وذكاء الأعمال لدعم القرار التشغيلي.',
+            'ناقل تكامل شامل وقوي لربط بيئات تكنولوجيا المعلومات المتنوعة.'
+          ]
+        : [
+            'Cross-functional module implementation (Signavio, S/4HANA, CX, HCM).',
+            'End-to-end data analytics and business intelligence dashboards.',
+            'Robust integration bus connecting heterogeneous business software.'
+          ]
+    },
+    SUP: {
+      stats: ar ? [
+        { val: '99.95%', label: 'اتفاقية مستوى الخدمة' },
+        { val: '24/7', label: 'مركز الدعم والمراقبة' },
+        { val: 'لحظي', label: 'الاستجابة للمشكلات' }
+      ] : [
+        { val: '99.95%', label: 'Response SLA' },
+        { val: '24/7', label: 'Support Centre' },
+        { val: 'Instant', label: 'Emergency Support' }
+      ],
+      pipeline: ar
+        ? ['تسجيل التذكرة', 'فرز المشكلات', 'إصدار الرقع', 'اعتماد الخدمة']
+        : ['Ticket Log', 'Incident Triage', 'Patch Release', 'Service Signoff'],
+      bullets: ar
+        ? [
+            'دعم مستمر لكامل دورة حياة النظام بواسطة مهندسي SAP المعتمدين لدينا.',
+            'إدارة وقائية ذكية للمشكلات وحل الأعطال بشكل فوري وسريع.',
+            'تطوير وتحديث طلبات التغيير وضبط الأداء بشكل مستمر لرفع الكفاءة.'
+          ]
+        : [
+            'Full lifecycle continuous support from expert SAP certified engineers.',
+            'Preventive incident management & immediate expert troubleshooting.',
+            'Seamless change request development & performance tuning updates.'
+          ]
+    },
+    HCK: {
+      stats: ar ? [
+        { val: '100%', label: 'القيمة المدققة' },
+        { val: '<48ساعة', label: 'زمن التشخيص' },
+        { val: 'ممتاز', label: 'مستوى الامتثال' }
+      ] : [
+        { val: '100%', label: 'Value Audited' },
+        { val: '<48h', label: 'Diagnostics Latency' },
+        { val: 'Perfect', label: 'Compliance Level' }
+      ],
+      pipeline: ar
+        ? ['تدقيق النظام', 'تشخيص الأداء', 'توثيق الفجوات', 'خطة الترقية']
+        : ['ERP Audit', 'Perf Diagnostic', 'Gap Document', 'Upgrade Roadmap'],
+      bullets: ar
+        ? [
+            'عمليات تدقيق صارمة للنظام لمقارنة حالة ERP بأحدث معايير SAP.',
+            'تشخيص دقيق لاختناقات الأداء ومراجعة سعة قواعد البيانات والذاكرة.',
+            'خارطة طريق مخصصة وواضحة خطوة بخطوة لترقية نظام S/4HANA.'
+          ]
+        : [
+            'Rigorous system audits comparing ERP state with latest SAP standards.',
+            'Deep performance bottleneck diagnostics & DB memory sizing reviews.',
+            'Customized step-by-step SAP S/4HANA upgrade roadmaps.'
+          ]
+    },
+    CLO: {
+      stats: ar ? [
+        { val: '99.99%', label: 'اتفاقية مستوى الخدمة' },
+        { val: '88%', label: 'توفير البنية التحتية' },
+        { val: 'مرن', label: 'أنماط النشر والتشغيل' }
+      ] : [
+        { val: '99.99%', label: 'Cloud Uptime SLA' },
+        { val: '88%', label: 'Infra Savings' },
+        { val: 'Elastic', label: 'Deployment Modes' }
+      ],
+      pipeline: ar
+        ? ['تحديد الحجم السحابي', 'التهيئة الآمنة', 'التوسع المرن', 'تسليم العمليات']
+        : ['Cloud Sizing', 'Secure Provision', 'Elastic Scaling', 'Ops Handover'],
+      bullets: ar
+        ? [
+            'عمليات ترحيل سلسة وآمنة إلى السحابية الخاصة أو العامة أو الهجينة.',
+            'تحديد مثالي ومدروس لحجم البنية التحتية لتقليل تكاليف التشغيل.',
+            'بروتوكولات أمن سيبراني صارمة مع نسخ احتياطي وتماثل مستمر للبيانات.'
+          ]
+        : [
+            'Seamless and highly secure migrations to private, public, or hybrid cloud.',
+            'Optimized cloud resource sizing to minimize operational infrastructure cost.',
+            'Hardened cybersecurity protocols and continuous real-time data replication.'
+          ]
+    }
+  };
+
   /* ── SAP service cards ── */
   const services = ar ? [
     {
@@ -357,6 +513,21 @@ export const SapServices = () => {
         .sap-cta-ghost:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; }
         .sap-row:hover { background: rgba(255,255,255,0.025) !important; }
         .sap-stat-gold::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:${T.gold}; }
+        
+        .sap-menu-item { transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.04); }
+        .sap-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,184,20,0.15) !important; }
+        .sap-menu-item.active { background: rgba(255,184,20,0.06) !important; border-color: ${T.gold} !important; box-shadow: 0 0 15px rgba(255,184,20,0.08); }
+        .sap-menu-item.active .sap-menu-icon { color: ${T.gold} !important; }
+        
+        .sap-terminal-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .sap-terminal-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: all 0.6s ease; }
+        .sap-terminal-btn:hover::before { left: 100%; }
+        .sap-terminal-btn:hover { box-shadow: 0 0 20px rgba(255,184,20,0.25); }
+        
+        .sap-pulse-dot { animation: sap-pulse 2.5s ease-in-out infinite; }
+        
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* ── HERO — Three.js Generative Art (same as ManagedServices) ── */}
@@ -613,59 +784,333 @@ export const SapServices = () => {
           </div>
         </div>
 
-        {/* grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill,minmax(min(320px,100%),1fr))',
-          gap: 1, background: T.border,
-          border: `1px solid ${T.border}`, borderRadius: 8, overflow: 'hidden',
-        }}>
-          {services.map((s, i) => (
-            <div key={i} className="sap-svc" style={{
-              background: T.navy2, padding: '32px 28px',
-              position: 'relative', border: '1px solid transparent',
-              transition: 'all 0.2s ease', cursor: 'default',
-            }}>
-              {/* background number */}
-              <div className="sap-num" style={{
-                position: 'absolute', top: 16,
-                right: ar ? 'auto' : 20, left: ar ? 20 : 'auto',
-                fontSize: 'clamp(40px, 8vw, 64px)', fontWeight: 900, letterSpacing: '-0.04em',
-                color: 'rgba(255,255,255,0.03)',
-                fontFamily: font, lineHeight: 1, userSelect: 'none',
-                transition: 'color 0.2s',
-              }}>
-                {String(i + 1).padStart(2, '0')}
-              </div>
+        {/* Interactive SAP Services Command Center Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
+          
+          {/* Left Column: Vertical Services Menu / Horizontal Tabs on Mobile */}
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none" style={{ alignSelf: 'flex-start' }}>
+            {services.map((s, i) => {
+              const isActive = activeServiceIdx === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveServiceIdx(i)}
+                  className={`sap-menu-item group ${isActive ? 'active' : ''} lg:w-full`}
+                  style={{
+                    background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
+                    border: `1px solid ${isActive ? T.gold : T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 20px',
+                    textAlign: ar ? 'right' : 'left',
+                    minWidth: 220,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 12,
+                    flexShrink: 0,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+                    {/* Icon */}
+                    <div className="sap-menu-icon" style={{
+                      color: isActive ? T.gold : T.muted,
+                      transition: 'color 0.25s ease',
+                      flexShrink: 0,
+                    }}>
+                      {icons[s.code]}
+                    </div>
+                    {/* Title & Status */}
+                    <div style={{ overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <h3 style={{
+                          fontSize: 13.5, fontWeight: 700,
+                          color: T.white, margin: 0,
+                          fontFamily: font,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
+                          {s.title}
+                        </h3>
+                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#4AF626', flexShrink: 0 }} className="sap-pulse-dot" />
+                      </div>
+                      <span style={{ fontSize: 10.5, color: T.muted, fontFamily: font, display: 'block', marginTop: 1 }}>
+                        {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
+                      </span>
+                    </div>
+                  </div>
 
-              <div className="sap-icon" style={{ color: T.muted, marginBottom: 20, transition: 'color 0.2s' }}>
-                {icons[s.code]}
-              </div>
+                  {/* Operational stat chip */}
+                  <div style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: isActive ? T.gold : T.muted,
+                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.3)' : T.border}`,
+                    borderRadius: 4,
+                    padding: '3px 6px',
+                    background: isActive ? 'rgba(255,184,20,0.04)' : 'rgba(255,255,255,0.01)',
+                    fontFamily: font,
+                    letterSpacing: '-0.02em',
+                    flexShrink: 0,
+                  }}>
+                    {serviceDetails[s.code].stats[0].val}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-              <div className="sap-code" style={{
-                display: 'inline-block', fontSize: 10, fontWeight: 700,
-                letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: T.gold, marginBottom: 10, fontFamily: font,
-                opacity: 0.75, transition: 'opacity 0.2s',
-              }}>
-                {s.code}
-              </div>
+          {/* Right Column: Dynamic Terminal Dashboard */}
+          <div style={{ position: 'relative' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeServiceIdx}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.22 }}
+                style={{
+                  background: 'rgba(8,45,74,0.45)',
+                  backdropFilter: 'blur(16px)',
+                  border: `1px solid rgba(255,184,20,0.15)`,
+                  borderRadius: 12,
+                  padding: '32px 28px',
+                  minHeight: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 28,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Dashboard Grid Line Background Accent */}
+                <div style={{
+                  position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
+                  backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
+                  backgroundSize: '20px 20px',
+                  pointerEvents: 'none',
+                }} />
 
-              <h3 style={{
-                fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em',
-                color: T.white, margin: '0 0 12px', lineHeight: 1.3, fontFamily: font,
-              }}>
-                {s.title}
-              </h3>
+                <div>
+                  {/* Dashboard Live Status Indicator */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{
+                        background: 'rgba(255,184,20,0.12)',
+                        border: `1px solid ${T.gold}`,
+                        color: T.gold,
+                        fontSize: 10,
+                        fontWeight: 800,
+                        padding: '3px 8px',
+                        borderRadius: 4,
+                        letterSpacing: '0.08em',
+                        fontFamily: font,
+                      }}>
+                        {services[activeServiceIdx].code}
+                      </div>
+                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626' }} className="sap-pulse-dot" />
+                        {ar ? 'نظام تشغيل SAP حي ومباشر' : 'LIVE SAP NODE ACTIVE'}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 10.5, color: T.muted, fontFamily: 'monospace' }}>
+                      NODE_ID: {services[activeServiceIdx].code}_SAP_SYS_0{activeServiceIdx + 1}X
+                    </div>
+                  </div>
 
-              <p style={{
-                fontSize: 13.5, lineHeight: 1.75,
-                color: T.muted, margin: 0, fontFamily: font, fontWeight: 400,
-              }}>
-                {s.body}
-              </p>
-            </div>
-          ))}
+                  <h2 style={{
+                    fontSize: 'clamp(20px, 2.5vw, 24px)',
+                    fontWeight: 800,
+                    letterSpacing: '-0.025em',
+                    color: T.white,
+                    margin: '0 0 14px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].title}
+                  </h2>
+
+                  <p style={{
+                    fontSize: 14,
+                    lineHeight: 1.8,
+                    color: T.muted,
+                    margin: '0 0 24px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].body}
+                  </p>
+
+                  {/* ── Diagnostic Statistics Grid ── */}
+                  <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
+                    {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
+                      <div
+                        key={sIdx}
+                        style={{
+                          background: 'rgba(6,30,49,0.5)',
+                          border: `1px solid ${T.border}`,
+                          borderRadius: 8,
+                          padding: '14px 10px',
+                          textAlign: 'center',
+                          position: 'relative',
+                        }}
+                      >
+                        <div style={{
+                          fontSize: 'clamp(16px, 3vw, 20px)',
+                          fontWeight: 900,
+                          color: T.gold,
+                          marginBottom: 4,
+                          fontFamily: font,
+                          letterSpacing: '-0.03em',
+                        }}>
+                          {st.val}
+                        </div>
+                        <div style={{
+                          fontSize: 10,
+                          fontWeight: 500,
+                          color: T.muted,
+                          fontFamily: font,
+                          lineHeight: 1.2,
+                        }}>
+                          {st.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ── Process Flow Map ── */}
+                  <div style={{
+                    background: 'rgba(6,30,49,0.3)',
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 14px',
+                    marginBottom: 28,
+                  }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+                      {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
+                      {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
+                        <React.Fragment key={idx}>
+                          {/* Step Node */}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
+                            <div style={{
+                              width: 28, height: 28,
+                              borderRadius: '50%',
+                              border: `1.5px solid ${T.gold}`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 10,
+                              fontWeight: 'bold',
+                              color: T.gold,
+                              background: T.navy,
+                              boxShadow: '0 0 10px rgba(255,184,20,0.15)',
+                              marginBottom: 6,
+                            }}>
+                              {idx + 1}
+                            </div>
+                            <div style={{ fontSize: 10.5, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
+                              {step}
+                            </div>
+                          </div>
+                          
+                          {/* Connector Line */}
+                          {idx < 3 && (
+                            <div
+                              className="hidden sm:block"
+                              style={{
+                                flex: 1,
+                                height: 1.5,
+                                background: ar 
+                                  ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)` 
+                                  : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
+                                opacity: 0.3,
+                                position: 'relative',
+                                minWidth: 15,
+                              }}
+                            >
+                              <div
+                                className="sap-pulse-dot"
+                                style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: ar ? 'auto' : '0%',
+                                  right: ar ? '0%' : 'auto',
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: '50%',
+                                  background: T.gold,
+                                  transform: 'translateY(-50%)',
+                                  boxShadow: '0 0 6px #FFB814',
+                                }}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ── Operational Specs ── */}
+                  <div>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
+                      {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
+                        <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
+                          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: T.gold, flexShrink: 0, marginTop: 4 }}>
+                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontSize: 12.5, color: T.muted, fontFamily: font, lineHeight: 1.45 }}>
+                            {bullet}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secure SAP Consultation Button */}
+                <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, marginTop: 6 }}>
+                  <button
+                    onClick={() => {
+                      window.location.hash = '#/contact';
+                    }}
+                    className="sap-terminal-btn"
+                    style={{
+                      width: '100%',
+                      background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
+                      color: T.navy,
+                      border: 'none',
+                      borderRadius: 6,
+                      padding: '12px 24px',
+                      fontSize: 13,
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      fontFamily: font,
+                    }}
+                  >
+                    <span>
+                      {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
         </div>
       </section>
 
