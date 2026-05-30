@@ -302,7 +302,12 @@ export const SupportChat = () => {
     <ErrorBoundary>
       {/* Floating Robot Button */}
       {!dismissed && (
-        <div className="fixed bottom-[88px] right-6 z-[9999] flex flex-col items-end gap-3" dir={dir}>
+        <div 
+          className={`fixed bottom-[88px] z-[9999] flex flex-col gap-3 ${
+            dir === 'rtl' ? 'left-6 items-start' : 'right-6 items-end'
+          }`} 
+          dir={dir}
+        >
           {/* Close/Hide Button */}
           <AnimatePresence>
             {!open && (
@@ -312,7 +317,9 @@ export const SupportChat = () => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={handleDismiss}
                 title={lang === 'ar' ? 'إخفاء المساعد بالكامل' : 'Hide AI assistant entirely'}
-                className="absolute -top-2 -left-2 z-[10000] w-6 h-6 rounded-full bg-slate-900/90 border border-white/15 hover:bg-red-500 hover:border-red-500 text-white/70 hover:text-white flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer"
+                className={`absolute -top-2 z-[10000] w-6 h-6 rounded-full bg-slate-900/90 border border-white/15 hover:bg-red-500 hover:border-red-500 text-white/70 hover:text-white flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer ${
+                  dir === 'rtl' ? '-right-2' : '-left-2'
+                }`}
               >
                 <X className="w-3.5 h-3.5" />
               </motion.button>
@@ -374,7 +381,9 @@ export const SupportChat = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-            className="fixed bottom-[170px] right-6 z-[9998] w-[360px] max-h-[520px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-black/40 border border-slate-800"
+            className={`fixed bottom-[170px] z-[9998] w-[360px] max-h-[520px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-black/40 border border-slate-800 ${
+              dir === 'rtl' ? 'left-6' : 'right-6'
+            }`}
             style={{ background: 'rgba(6, 15, 30, 0.97)', backdropFilter: 'blur(20px)', direction: dir }}
           >
             {/* Header */}
@@ -524,7 +533,9 @@ export const SupportChat = () => {
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-[9999]"
+            className={`fixed bottom-6 z-[9999] ${
+              dir === 'rtl' ? 'left-6' : 'right-6'
+            }`}
             dir={dir}
           >
             <button
