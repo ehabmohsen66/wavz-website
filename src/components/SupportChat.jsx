@@ -215,11 +215,19 @@ export const SupportChat = () => {
       } 
       else if (leadState === 'collectEmail') {
         const emailVal = rawText.trim();
-        setLeadData((prev) => ({ ...prev, email: emailVal }));
-        setLeadState('collectCompany');
-        botReply = lang === 'ar'
-          ? "رائع! ما هو اسم شركتك، وما هي تفاصيل مشروعك أو التحدي المصرفي/الرقمي الذي يواجهك حالياً؟"
-          : "Got it! What company are you representing, and is there a specific digital or banking challenge you'd like us to discuss?";
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!emailRegex.test(emailVal)) {
+          botReply = lang === 'ar'
+            ? "يبدو أن البريد الإلكتروني غير صحيح. يرجى إدخال بريد إلكتروني صالح (مثال: name@company.com):"
+            : "That email address doesn't seem valid. Please provide a valid email address (e.g., name@company.com):";
+        } else {
+          setLeadData((prev) => ({ ...prev, email: emailVal }));
+          setLeadState('collectCompany');
+          botReply = lang === 'ar'
+            ? "رائع! ما هو اسم شركتك، وما هي تفاصيل مشروعك أو التحدي المصرفي/الرقمي الذي يواجهك حالياً؟"
+            : "Got it! What company are you representing, and is there a specific digital or banking challenge you'd like us to discuss?";
+        }
       } 
       else if (leadState === 'collectCompany') {
         const companyVal = rawText.trim();
