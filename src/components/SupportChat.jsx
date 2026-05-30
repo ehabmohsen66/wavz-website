@@ -1,34 +1,55 @@
-import { Suspense, lazy, useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { X, Send, ChevronDown, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLang } from '../i18n/LangContext.jsx';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
 
-// Public Spline robot scene removed due to 403 errors
-
-const INITIAL_MESSAGES = [
-  {
-    id: 1,
-    from: 'bot',
-    text: "Hi! I'm the WAVZ AI Assistant. How can I help you with your enterprise transformation today?",
-    time: 'now',
-  },
-];
-
-const BOT_REPLIES = [
-  "I'd be happy to help you explore how WAVZ can streamline your SAP or Temenos deployment. Want to schedule a consultation?",
-  "Great question! WAVZ covers Multi-Industry, Multi-Service, and Multi-Geography delivery under one accountable lead.",
-  "Our OperationsCenter runs 24/7 SOC + NOC — designed to keep your enterprise at 99.9% SLA. Shall I connect you with a specialist?",
-  "WAVZ has delivered results for 15+ enterprise clients across MEA banking, government, and postal sectors. Would you like a case study?",
-  "You can get started with a free consultation. Click 'Get a Consultation' in the nav — or I can arrange a call for you!",
-];
-
 export const SupportChat = () => {
+  const { lang, dir } = useLang();
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [replyIndex, setReplyIndex] = useState(0);
+  
+  // Lead Capture State
+  const [leadState, setLeadState] = useState('idle'); // 'idle' | 'collectName' | 'collectEmail' | 'collectCompany'
+  const [leadData, setLeadData] = useState({ name: '', email: '', company: '' });
+
+  // Localized Chat Texts
+  const chatT = {
+    en: {
+      title: "WAVZ AI Assistant",
+      status: "Online · Replies instantly",
+      placeholder: "Ask anything about WAVZ...",
+      initialMsg: "Hi! I'm the WAVZ AI Assistant. How can I help you with your enterprise transformation today?",
+      quickActions: ['Book a technical call 📞', 'Explore SAP Services 💼', 'Payment & Fintech Solutions 💳'],
+    },
+    ar: {
+      title: "مساعد WAVZ الذكي",
+      status: "متصل الآن · يرد فوراً",
+      placeholder: "اسأل أي شيء عن WAVZ...",
+      initialMsg: "مرحباً! أنا المساعد الذكي لـ WAVZ. كيف يمكنني مساعدتك في مشروع التحول الرقمي لمؤسستك اليوم؟",
+      quickActions: ['حجز استشارة فنية 📞', 'استكشف خدمات SAP 💼', 'حلول المدفوعات والـ Fintech 💳'],
+    }
+  };
+
+  const activeT = chatT[lang] || chatT.en;
+
+  const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+
+  // Initialize/Reset chat on language change
+  useEffect(() => {
+    setMessages([
+      {
+        id: 1,
+        from: 'bot',
+        text: activeT.initialMsg,
+        time: 'now',
+      }
+    ]);
+    setLeadState('idle');
+    setLeadData({ name: '', email: '', company: '' });
+  }, [lang]);
 
   useEffect(() => {
     if (open) {
@@ -36,19 +57,201 @@ export const SupportChat = () => {
     }
   }, [messages, open]);
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    const userMsg = { id: Date.now(), from: 'user', text: input.trim(), time: 'now' };
+  // Smart Q&A Knowledge Base
+  const getBotResponse = (lowerText) => {
+    // Lead Flow triggers
+    if (
+      lowerText.includes('call') || 
+      lowerText.includes('book') || 
+      lowerText.includes('contact') || 
+      lowerText.includes('specialist') || 
+      lowerText.includes('sales') || 
+      lowerText.includes('consult') || 
+      lowerText.includes('pricing') ||
+      lowerText.includes('price') ||
+      lowerText.includes('سعر') ||
+      lowerText.includes('تواصل') ||
+      lowerText.includes('حجز') ||
+      lowerText.includes('استشارة')
+    ) {
+      setLeadState('collectName');
+      return lang === 'ar'
+        ? "يسعدني جداً ترتيب استشارة فنية مخصصة لك مع كبار مهندسينا! للبدء، ما هو اسمك الكامل؟"
+        : "I would be delighted to arrange a technical consultation with our senior architects! To get started, what is your full name?";
+    }
+
+    // Keyword logic
+    if (lowerText.includes('sap') || lowerText.includes('erp') || lowerText.includes('ساب')) {
+      return lang === 'ar'
+        ? "WAVZ هي شريك SAP Gold معتمد. نحن نقدم خدمات استشارية شاملة لـ SAP ERP، وتطبيق الوحدات المخصصة، وترقيات النظام والهجرة السحابية، مع دعم فني متكامل على مدار الساعة طوال أيام الأسبوع."
+        : "WAVZ is a certified SAP Gold Partner. We provide comprehensive SAP ERP consulting, custom module implementation, system migrations, health checks, and ongoing 24/7 application support under an accountable managed services model.";
+    }
+    
+    if (
+      lowerText.includes('temenos') || 
+      lowerText.includes('t24') || 
+      lowerText.includes('core banking') || 
+      lowerText.includes('banking') ||
+      lowerText.includes('بانك') ||
+      lowerText.includes('بنك') ||
+      lowerText.includes('تيمينوس')
+    ) {
+      return lang === 'ar'
+        ? "نحن شريك تكامل مصارف أساسية موثوق، متخصصون في Temenos Transact وTemenos Infinity وأنظمة T24. ندعم البنوك الإقليمية في عمليات الترحيل الشامل، وربط واجهات البرمجة المخصصة، وإدارة قواعد البيانات، وزيادة الموارد التقنية المصرفية."
+        : "WAVZ is a trusted core banking integration partner, specialized in Temenos Transact, Temenos Infinity, and T24 systems. We support MEA banks with end-to-end migrations, custom banking APIs, database administration, and testing.";
+    }
+
+    if (
+      lowerText.includes('payment') || 
+      lowerText.includes('tietoevry') || 
+      lowerText.includes('fintech') || 
+      lowerText.includes('open banking') ||
+      lowerText.includes('دفع') ||
+      lowerText.includes('مدفوعات') ||
+      lowerText.includes('تيتوإيفري')
+    ) {
+      return lang === 'ar'
+        ? "نحن نتعاون مع شركة Tietoevry العالمية لتشغيل بنية المدفوعات من الجيل التالي، بما في ذلك إصدار البطاقات، وقبول التجار، والتحويل الفوري للمدفوعات، والخدمات المصرفية المفتوحة (Open Banking)."
+        : "We partner with Tietoevry to power next-generation payment systems, including card issuing, merchant acquiring, switching, processing, and instant payments. We also offer advanced API Banking platforms and Open Banking solutions.";
+    }
+
+    if (
+      lowerText.includes('cyber') || 
+      lowerText.includes('security') || 
+      lowerText.includes('soc') || 
+      lowerText.includes('noc') || 
+      lowerText.includes('nevis') ||
+      lowerText.includes('أمن') ||
+      lowerText.includes('سيبراني') ||
+      lowerText.includes('حماية')
+    ) {
+      return lang === 'ar'
+        ? "يدير مركز العمليات لدينا خدمات SOC وNOC على مدار الساعة طوال أيام الأسبوع لضمان جاهزية 99.9%. نحن نتعاون مع Nevis Security AG لتقديم حلول متطورة لإدارة الهوية والأمان المصرفي الفائق."
+        : "Our Operations Center runs 24/7. We offer a dedicated Security Operations Center (SOC) partnered with Nevis Security AG for banking-grade Identity Access Management (IAM) and secure login, alongside a Network Operations Center (NOC) ensuring a 99.9% uptime SLA.";
+    }
+
+    if (
+      lowerText.includes('ceo') || 
+      lowerText.includes('founder') || 
+      lowerText.includes('amr') || 
+      lowerText.includes('esmat') || 
+      lowerText.includes('عمرو') || 
+      lowerText.includes('عصمت')
+    ) {
+      return lang === 'ar'
+        ? "يقود شركة WAVZ الرئيس التنفيذي والعضو المنتدب المهندس عمرو عصمت. تأسست الشركة في عام 2015 كذراع للتحول الرقمي لشركة البريد للاستثمار (PFI)."
+        : "WAVZ is led by our Managing Director & CEO Eng. Amr Esmat. The company was founded in 2015 as the digital transformation arm of Post for Investment (PFI).";
+    }
+
+    if (
+      lowerText.includes('about') || 
+      lowerText.includes('who') || 
+      lowerText.includes('founded') || 
+      lowerText.includes('staff') || 
+      lowerText.includes('employee') ||
+      lowerText.includes('من نحن') ||
+      lowerText.includes('تأسيس') ||
+      lowerText.includes('موظف')
+    ) {
+      return lang === 'ar'
+        ? "تأسست WAVZ للتحول الرقمي في عام 2015 كذراع تقني. ونحن نضم اليوم أكثر من 1,300 متخصص يقدمون حلولاً وخدمات متطورة في مصر ودول الخليج وشرق أفريقيا."
+        : "WAVZ for Digital Transformation was founded in 2015. Today, we are home to over 1,300 tech specialists delivering cutting-edge enterprise solutions across Egypt, the GCC, and East Africa.";
+    }
+
+    if (
+      lowerText.includes('project') || 
+      lowerText.includes('sczone') || 
+      lowerText.includes('west port') || 
+      lowerText.includes('baheya') ||
+      lowerText.includes('مشروع') ||
+      lowerText.includes('بورسعيد') ||
+      lowerText.includes('بهية')
+    ) {
+      return lang === 'ar'
+        ? "تشمل مشاريعنا البارزة تطبيق التحول الرقمي للمنطقة الاقتصادية لقناة السويس (SC-Zone)، وإدارة مركز بيانات منطقة غرب بورسعيد الحرة، وبروتوكول دعم SAP لمؤسسة بهية لعلاج سرطان الثدي مجاناً."
+        : "Key WAVZ milestones include executing the Suez Canal Economic Zone (SC-Zone) digital transformation masterplan, managing the digital infrastructure of West Port Said Free Zone, and SAP support protocols for Baheya Foundation.";
+    }
+
+    if (
+      lowerText.includes('service') || 
+      lowerText.includes('offer') || 
+      lowerText.includes('managed') ||
+      lowerText.includes('خدمات') ||
+      lowerText.includes('عرض')
+    ) {
+      return lang === 'ar'
+        ? "نحن نقدم خدمات متميزة تشمل: العمليات المدارة (SOC/NOC)، وحلول التكنولوجيا المصرفية (Temenos)، وأنظمة مدفوعات Tietoevry، واستشارات SAP، وحلول التحول الرقمي الشاملة."
+        : "We offer high-value services across: Managed IT Operations (24/7 SOC/NOC), Core Banking Integrations (Temenos), Payment Systems (Tietoevry), SAP Consulting, and Digital Strategy Transformations.";
+    }
+
+    // Default Fallback
+    return lang === 'ar'
+      ? "هذا استفسار رائع! تتخصص WAVZ في التحول الرقمي المعقد، والأنظمة المصرفية (Temenos)، وحلول SAP، وخدمات الدعم المدارة 24/7. هل ترغب في التحدث مع مستشار فني لمناقشة متطلباتك؟"
+      : "That's an interesting inquiry! WAVZ specializes in complex digital transformations, core banking (Temenos), SAP ERP consulting, and 24/7 Managed Services (SOC/NOC). Would you like to connect with a senior technical consultant to discuss your specific needs?";
+  };
+
+  const sendMessage = (textToSend = '') => {
+    const rawText = textToSend || input;
+    if (!rawText.trim()) return;
+
+    // Push User message
+    const userMsg = { id: Date.now(), from: 'user', text: rawText.trim(), time: 'now' };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
 
     setTimeout(() => {
-      const reply = BOT_REPLIES[replyIndex % BOT_REPLIES.length];
-      setMessages((prev) => [...prev, { id: Date.now() + 1, from: 'bot', text: reply, time: 'now' }]);
-      setReplyIndex((i) => i + 1);
+      let botReply = '';
+      const lowerText = rawText.toLowerCase().trim();
+
+      // Conversational State Machine for Lead Capturing
+      if (leadState === 'collectName') {
+        const nameVal = rawText.trim();
+        setLeadData((prev) => ({ ...prev, name: nameVal }));
+        setLeadState('collectEmail');
+        botReply = lang === 'ar'
+          ? `سعدت بلقائك يا ${nameVal}! ما هو عنوان بريدك الإلكتروني الذي يمكننا التواصل معك من خلاله؟`
+          : `Nice to meet you, ${nameVal}! What is the best email address to reach you at?`;
+      } 
+      else if (leadState === 'collectEmail') {
+        const emailVal = rawText.trim();
+        setLeadData((prev) => ({ ...prev, email: emailVal }));
+        setLeadState('collectCompany');
+        botReply = lang === 'ar'
+          ? "رائع! ما هو اسم شركتك، وما هي تفاصيل مشروعك أو التحدي المصرفي/الرقمي الذي يواجهك حالياً؟"
+          : "Got it! What company are you representing, and is there a specific digital or banking challenge you'd like us to discuss?";
+      } 
+      else if (leadState === 'collectCompany') {
+        const companyVal = rawText.trim();
+        const finalLead = {
+          ...leadData,
+          company: companyVal,
+          date: new Date().toISOString()
+        };
+        
+        // Save Captured Lead to localStorage
+        try {
+          const existingLeads = JSON.parse(localStorage.getItem('wavz_leads') || '[]');
+          existingLeads.push(finalLead);
+          localStorage.setItem('wavz_leads', JSON.stringify(existingLeads));
+        } catch (e) {
+          console.error("Failed to save lead:", e);
+        }
+
+        setLeadState('idle');
+        setLeadData({ name: '', email: '', company: '' });
+        botReply = lang === 'ar'
+          ? `ممتاز يا ${finalLead.name}! لقد قمت بتسجيل استفسارك بنجاح. سيتواصل معك أحد مهندسي التحول الرقمي لدينا عبر البريد الإلكتروني (${finalLead.email}) في غضون 24 ساعة. شكراً لك!`
+          : `Excellent, ${finalLead.name}! I have successfully recorded your details. A WAVZ digital transformation architect will reach out to you at ${finalLead.email} within 24 hours to schedule a session. Thank you!`;
+      } 
+      else {
+        // Normal smart search logic
+        botReply = getBotResponse(lowerText);
+      }
+
+      setMessages((prev) => [...prev, { id: Date.now() + 1, from: 'bot', text: botReply, time: 'now' }]);
       setIsTyping(false);
-    }, 1200 + Math.random() * 800);
+    }, 800 + Math.random() * 600);
   };
 
   const handleKey = (e) => {
@@ -59,9 +262,9 @@ export const SupportChat = () => {
   };
 
   return (
-    <>
-      {/* Floating Robot Button - shifted up to avoid blocking privacy links */}
-      <div className="fixed bottom-[88px] right-6 z-[9999] flex flex-col items-end gap-3">
+    <ErrorBoundary>
+      {/* Floating Robot Button */}
+      <div className="fixed bottom-[88px] right-6 z-[9999] flex flex-col items-end gap-3" dir={dir}>
         <AnimatePresence>
           {!open && (
             <motion.div
@@ -71,7 +274,7 @@ export const SupportChat = () => {
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
               className="bg-[#082D4A] text-white text-[11.5px] font-semibold px-3.5 py-1.5 rounded-full shadow-lg border border-white/10 whitespace-nowrap"
             >
-              Ask WAVZ AI ✨
+              {lang === 'ar' ? 'اسأل مساعد WAVZ الذكي ✨' : 'Ask WAVZ AI ✨'}
             </motion.div>
           )}
         </AnimatePresence>
@@ -117,7 +320,7 @@ export const SupportChat = () => {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
             className="fixed bottom-[170px] right-6 z-[9998] w-[360px] max-h-[520px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-black/40 border border-slate-800"
-            style={{ background: 'rgba(6, 15, 30, 0.97)', backdropFilter: 'blur(20px)' }}
+            style={{ background: 'rgba(6, 15, 30, 0.97)', backdropFilter: 'blur(20px)', direction: dir }}
           >
             {/* Header */}
             <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/8 bg-gradient-to-r from-[#082D4A] to-[#0a3a5e]">
@@ -127,10 +330,10 @@ export const SupportChat = () => {
                 </div>
               </div>
               <div className="flex-1">
-                <div className="text-[13px] font-bold text-white">WAVZ AI Support</div>
+                <div className="text-[13px] font-bold text-white">{activeT.title}</div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10.5px] text-emerald-400 font-medium">Online · Typically replies instantly</span>
+                  <span className="text-[10.5px] text-emerald-400 font-medium">{activeT.status}</span>
                 </div>
               </div>
               <button
@@ -141,7 +344,32 @@ export const SupportChat = () => {
               </button>
             </div>
 
-            {/* Messages */}
+            {/* Registration Banner */}
+            {leadState !== 'idle' && (
+              <div className="bg-[#FFB814]/15 border-b border-[#FFB814]/25 px-4 py-2 text-[11px] text-[#FFB814] flex items-center justify-between font-semibold">
+                <span>{lang === 'ar' ? 'وضع حجز استشارة فنية 📞' : 'Consultation Booking Mode 📞'}</span>
+                <button 
+                  onClick={() => {
+                    setLeadState('idle');
+                    setLeadData({ name: '', email: '', company: '' });
+                    setMessages((prev) => [
+                      ...prev,
+                      {
+                        id: Date.now(),
+                        from: 'bot',
+                        text: lang === 'ar' ? 'تم إلغاء نموذج التسجيل. كيف يمكنني مساعدتك الآن؟' : 'Registration flow cancelled. How else can I assist you?',
+                        time: 'now'
+                      }
+                    ]);
+                  }}
+                  className="text-[10.5px] font-bold underline hover:text-white cursor-pointer px-1.5 py-0.5 rounded hover:bg-white/5"
+                >
+                  {lang === 'ar' ? 'إلغاء' : 'Cancel'}
+                </button>
+              </div>
+            )}
+
+            {/* Messages Container */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0" style={{ maxHeight: '340px' }}>
               {messages.map((msg) => (
                 <motion.div
@@ -157,7 +385,7 @@ export const SupportChat = () => {
                     </div>
                   )}
                   <div
-                    className={`max-w-[78%] px-3.5 py-2.5 rounded-2xl text-[12.5px] leading-[1.55] ${
+                    className={`max-w-[78%] px-3.5 py-2.5 rounded-2xl text-[12.5px] leading-[1.55] whitespace-pre-line ${
                       msg.from === 'user'
                         ? 'bg-[#FFB814] text-[#082D4A] font-semibold rounded-br-md'
                         : 'bg-white/8 text-white/85 border border-white/8 rounded-bl-md'
@@ -195,20 +423,22 @@ export const SupportChat = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick Actions */}
-            <div className="px-4 pb-2 flex gap-2 overflow-x-auto">
-              {['Book a call', 'Case studies', 'Pricing'].map((action) => (
-                <button
-                  key={action}
-                  onClick={() => setInput(action)}
-                  className="flex-shrink-0 text-[10.5px] px-3 py-1.5 rounded-full border border-[#1173BD]/40 text-[#38BDF8] hover:bg-[#1173BD]/20 transition-colors cursor-pointer whitespace-nowrap"
-                >
-                  {action}
-                </button>
-              ))}
-            </div>
+            {/* Quick Actions (only shown if not in lead capture flow) */}
+            {leadState === 'idle' && (
+              <div className="px-4 pb-2 flex gap-2 overflow-x-auto select-none scrollbar-thin">
+                {activeT.quickActions.map((action) => (
+                  <button
+                    key={action}
+                    onClick={() => sendMessage(action)}
+                    className="flex-shrink-0 text-[10.5px] px-3 py-1.5 rounded-full border border-[#1173BD]/40 text-[#38BDF8] hover:bg-[#1173BD]/20 transition-colors cursor-pointer whitespace-nowrap"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            )}
 
-            {/* Input */}
+            {/* Input Bar */}
             <div className="px-3 pb-3">
               <div className="flex items-center gap-2 bg-white/6 border border-white/10 rounded-xl px-3 py-2.5 focus-within:border-[#1173BD]/60 transition-colors">
                 <input
@@ -216,11 +446,11 @@ export const SupportChat = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKey}
-                  placeholder="Ask anything about WAVZ…"
+                  placeholder={activeT.placeholder}
                   className="flex-1 bg-transparent text-white text-[12.5px] placeholder:text-white/30 outline-none"
                 />
                 <button
-                  onClick={sendMessage}
+                  onClick={() => sendMessage()}
                   disabled={!input.trim()}
                   className="w-7 h-7 rounded-lg bg-[#FFB814] flex items-center justify-center flex-shrink-0 disabled:opacity-30 hover:bg-[#F5A800] transition-colors cursor-pointer disabled:cursor-not-allowed"
                 >
@@ -231,7 +461,7 @@ export const SupportChat = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </ErrorBoundary>
   );
 };
 
