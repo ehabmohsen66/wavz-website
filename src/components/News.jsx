@@ -220,6 +220,18 @@ export const News = ({ route }) => {
                 ? 'لمزيد من المعلومات حول حلولنا الاستشارية والتشغيلية الرقمية المتكاملة، لا تتردد في حجز استشارة فنية مخصصة مع قادة البنية التحتية والتحول الرقمي لدينا.'
                 : 'For more information regarding our disaggregated operational models and digital solutions, please do not hesitate to contact our technology architects for a full consulting session.'}
             </p>
+            {article.url && (
+              <p className="text-[13px] pt-2">
+                <a 
+                  href={article.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#1173BD] hover:underline font-semibold"
+                >
+                  {lang === 'ar' ? '← عرض المنشور الأصلي' : 'View original publication →'}
+                </a>
+              </p>
+            )}
           </div>
 
           {/* Related Articles Strip */}
