@@ -149,7 +149,7 @@ export const Journey = () => {
                 <div key={idx} className="flex gap-0 group">
 
                   {/* ── Year column ── */}
-                  <div className="flex flex-col items-center" style={{ width: '120px', flexShrink: 0 }}>
+                  <div className="flex flex-col items-center" style={{ width: 'clamp(60px, 18vw, 120px)', flexShrink: 0 }}>
                     {/* Year badge */}
                     <div
                       className="flex-shrink-0 rounded-xl px-4 py-2 mt-8 mb-0"
@@ -176,7 +176,7 @@ export const Journey = () => {
                   </div>
 
                   {/* ── Dot ── */}
-                  <div className="flex flex-col items-center" style={{ width: '40px', flexShrink: 0 }}>
+                  <div className="flex flex-col items-center" style={{ width: 'clamp(24px, 5vw, 40px)', flexShrink: 0 }}>
                     <div
                       className="w-4 h-4 rounded-full border-4 border-white shadow-sm mt-10 flex-shrink-0 transition-transform duration-300 group-hover:scale-125"
                       style={{

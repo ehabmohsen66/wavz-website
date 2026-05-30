@@ -496,11 +496,11 @@ export const FinancialServices = () => {
         <div style={{
           maxWidth: 1200, margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(4,1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
         }}>
           {stats.map((s, i) => (
             <div key={i} className={i === 0 ? 'fs-stat-gold' : ''} style={{
-              padding: '36px 32px',
+              padding: 'clamp(20px,4vw,36px) clamp(16px,3vw,32px)',
               borderRight: i < 3 ? `1px solid ${T.border}` : 'none',
               position: 'relative',
             }}>
@@ -528,7 +528,7 @@ export const FinancialServices = () => {
         maxWidth: 1200, margin: '0 auto',
         padding: 'clamp(64px,8vw,96px) clamp(24px,6vw,80px)',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
+        gridTemplateColumns: 'repeat(auto-fit,minmax(min(300px,100%),1fr))',
         gap: 64, alignItems: 'center',
       }}>
         <div>
@@ -621,7 +621,7 @@ export const FinancialServices = () => {
         {/* Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))',
+          gridTemplateColumns: 'repeat(auto-fill,minmax(min(320px,100%),1fr))',
           gap: 1,
           background: T.border,
           border: `1px solid ${T.border}`,
@@ -645,7 +645,7 @@ export const FinancialServices = () => {
               <div className="fs-num" style={{
                 position: 'absolute', top: 16,
                 right: ar ? 'auto' : 20, left: ar ? 20 : 'auto',
-                fontSize: 64, fontWeight: 900,
+                fontSize: 'clamp(40px, 8vw, 64px)', fontWeight: 900,
                 letterSpacing: '-0.04em',
                 color: 'rgba(255,255,255,0.03)',
                 fontFamily: font, lineHeight: 1,
@@ -745,7 +745,7 @@ export const FinancialServices = () => {
                 }}>
                   {row.n}
                 </div>
-                <div style={{ padding: '28px 32px' }}>
+                <div style={{ padding: 'clamp(16px,3vw,28px) clamp(16px,3vw,32px)' }}>
                   <div style={{ fontFamily: font, fontSize: 15, fontWeight: 700, color: T.white, marginBottom: 8 }}>
                     {row.title}
                   </div>
@@ -798,7 +798,7 @@ export const FinancialServices = () => {
                 }}>
                   {row.n}
                 </div>
-                <div style={{ padding: '28px 32px' }}>
+                <div style={{ padding: 'clamp(16px,3vw,28px) clamp(16px,3vw,32px)' }}>
                   <div style={{ fontFamily: font, fontSize: 15, fontWeight: 700, color: T.white, marginBottom: 8 }}>
                     {row.title}
                   </div>
@@ -817,7 +817,7 @@ export const FinancialServices = () => {
         maxWidth: 1200, margin: '0 auto',
         padding: 'clamp(72px,9vw,112px) clamp(24px,6vw,80px)',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))',
+        gridTemplateColumns: 'repeat(auto-fit,minmax(min(280px,100%),1fr))',
         gap: 64, alignItems: 'center',
       }}>
         <div>

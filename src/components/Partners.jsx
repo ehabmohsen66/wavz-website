@@ -192,7 +192,7 @@ export const Partners = () => {
             </p>
 
             {/* Stats row */}
-            <div style={{ display:'flex', flexWrap:'wrap', gap:40 }}>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:'clamp(16px, 5vw, 40px)' }}>
               {[
                 { num:'16+', label: isAr ? 'شريكًا تقنيًا'     : 'Technology Partners' },
                 { num:'10+', label: isAr ? 'سنوات من الشراكات' : 'Years of Alliances'  },

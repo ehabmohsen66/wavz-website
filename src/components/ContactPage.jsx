@@ -226,6 +226,12 @@ export const ContactPage = () => {
         .contact-social:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; background: rgba(255,184,20,0.05) !important; }
         .contact-svc-tag { transition: all 0.18s ease; }
         .contact-svc-tag:hover { background: rgba(255,184,20,0.08) !important; border-color: rgba(255,184,20,0.3) !important; color: ${T.gold} !important; cursor: default; }
+
+        .contact-grid { grid-template-columns: 1fr; }
+        @media (min-width: 1024px) { .contact-grid { grid-template-columns: minmax(0,1.15fr) minmax(0,0.85fr); } }
+
+        .contact-field-row { grid-template-columns: 1fr; }
+        @media (min-width: 640px) { .contact-field-row { grid-template-columns: 1fr 1fr; } }
       `}</style>
 
       {/* ══ HERO — cinematic video, light tint so the scene breathes ══ */}
@@ -320,11 +326,10 @@ export const ContactPage = () => {
       <div id="contact-form" />
 
       {/* ══ MAIN CONTENT ════════════════════════════════════════════════ */}
-      <section style={{
+      <section className="contact-grid" style={{
         maxWidth: 1200, margin: '0 auto',
         padding: 'clamp(48px,5vw,72px) clamp(24px,6vw,80px) clamp(56px,7vw,88px)',
         display: 'grid',
-        gridTemplateColumns: 'minmax(0,1.15fr) minmax(0,0.85fr)',
         gap: 64,
         alignItems: 'stretch',
       }}>
@@ -380,7 +385,7 @@ export const ContactPage = () => {
 
               <form onSubmit={handleSubmit} noValidate aria-label={ar ? 'نموذج التواصل' : 'Contact form'} style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: 20, flex: 1 }}>
                 {/* Row 1: Name + Company */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div className="contact-field-row" style={{ display: 'grid', gap: 16 }}>
                   {field('name', ar ? 'الاسم الكامل *' : 'Full Name *',
                     <input id="name" type="text" className="contact-input" autoComplete="name"
                       value={form.name} onChange={e => setForm(p => ({...p, name: e.target.value}))}
@@ -398,7 +403,7 @@ export const ContactPage = () => {
                 </div>
 
                 {/* Row 2: Email + Phone */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div className="contact-field-row" style={{ display: 'grid', gap: 16 }}>
                   {field('email', ar ? 'البريد الإلكتروني *' : 'Email Address *',
                     <input id="email" type="email" className="contact-input" autoComplete="email"
                       value={form.email} onChange={e => setForm(p => ({...p, email: e.target.value}))}

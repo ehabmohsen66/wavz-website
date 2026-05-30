@@ -221,7 +221,7 @@ const Globe = ({ size = 340 }) => {
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      style={{ width: size, height: size, cursor: 'grab', display: 'block' }}
+      style={{ width: size, height: size, maxWidth: '100%', cursor: 'grab', display: 'block' }}
     />
   );
 };
@@ -233,7 +233,7 @@ const Globe = ({ size = 340 }) => {
 ──────────────────────────────────────────────────────────── */
 const SplineHero = ({ title, description, isAr, dir }) => {
   return (
-    <section className="relative overflow-hidden w-full h-[100vh]">
+    <section className="relative overflow-hidden w-full min-h-screen">
       {/* SVG filter defs (glass + glow) */}
       <svg className="absolute inset-0 w-0 h-0 pointer-events-none">
         <defs>
@@ -316,7 +316,7 @@ const SplineHero = ({ title, description, isAr, dir }) => {
           </p>
 
           {/* Stats row */}
-          <div className="flex gap-8 md:gap-12" style={{ flexDirection: isAr ? 'row-reverse' : 'row' }}>
+          <div className="flex flex-wrap gap-4 md:gap-8 lg:gap-12" style={{ flexDirection: isAr ? 'row-reverse' : 'row' }}>
             {[
               { num: '7',    label: isAr ? 'عضو مجلس إدارة'       : 'Board Members'            },
               { num: '250+', label: isAr ? 'سنوات خبرة مجتمعة'    : 'Years Combined Experience' },
@@ -814,7 +814,7 @@ export const Board = () => {
           </section>
 
           {/* ── Footer CTA with Globe ── */}
-          <section className="mt-20 relative overflow-hidden rounded-3xl bg-[#061E31] border border-white/5 shadow-2xl px-8 py-14 md:px-16 md:py-20">
+          <section className="mt-20 relative overflow-hidden rounded-3xl bg-[#061E31] border border-white/5 shadow-2xl px-4 sm:px-8 py-14 md:px-16 md:py-20">
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#061E31] via-[#061E31]/80 to-transparent pointer-events-none z-10" />
 

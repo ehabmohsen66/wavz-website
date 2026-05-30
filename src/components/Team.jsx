@@ -696,7 +696,7 @@ const Globe = ({ size = 340 }) => {
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      style={{ width: size, height: size, cursor: 'grab', display: 'block' }}
+      style={{ width: size, height: size, maxWidth: '100%', cursor: 'grab', display: 'block' }}
     />
   );
 };
@@ -705,7 +705,7 @@ const Globe = ({ size = 340 }) => {
 const TeamHero = ({ lang, dir }) => {
   const isAr = lang === 'ar';
   return (
-    <section className="relative overflow-hidden w-full h-[100vh]">
+    <section className="relative overflow-hidden w-full min-h-screen">
       {/* SVG filter defs (glass + glow) */}
       <svg className="absolute inset-0 w-0 h-0 pointer-events-none">
         <defs>
@@ -787,7 +787,7 @@ const TeamHero = ({ lang, dir }) => {
           </p>
 
           {/* Stats row */}
-          <div className="flex gap-8 md:gap-12" style={{ flexDirection: isAr ? 'row-reverse' : 'row' }}>
+          <div className="flex flex-wrap gap-4 md:gap-8 lg:gap-12" style={{ flexDirection: isAr ? 'row-reverse' : 'row' }}>
             {[
               { num: '12', label: isAr ? 'قائدًا تنفيذيًا' : 'Executive Leaders' },
               { num: '400+', label: isAr ? 'سنوات خبرة مجتمعة' : 'Years Combined Exp.' },
@@ -859,7 +859,7 @@ export const Team = () => {
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {members.map((member, idx) => (
                 <TeamCard key={idx} member={member} idx={idx} lang={lang} />
               ))}
@@ -867,7 +867,7 @@ export const Team = () => {
           </section>
 
           {/* Footer CTA */}
-          <section className="mt-20 relative overflow-hidden rounded-3xl bg-[#061E31] border border-white/5 shadow-2xl px-8 py-14 md:px-16 md:py-20">
+          <section className="mt-20 relative overflow-hidden rounded-3xl bg-[#061E31] border border-white/5 shadow-2xl px-4 sm:px-8 py-14 md:px-16 md:py-20">
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#061E31] via-[#061E31]/80 to-transparent pointer-events-none z-10" />
 
