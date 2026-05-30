@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, Suspense } from 'react';
 import * as THREE from 'three';
 import { useLang } from '../i18n/LangContext.jsx';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─────────────────────────────────────────────────────────────
    Design Tokens — WAVZ Brand
@@ -251,6 +252,77 @@ export const FinancialServices = () => {
   const dir = ar ? 'rtl' : 'ltr';
   const font = ar ? "'Tajawal', sans-serif" : FONT;
 
+  const [activeServiceIdx, setActiveServiceIdx] = useState(0);
+
+  const serviceDetails = {
+    T24: {
+      stats: ar 
+        ? [{ val: '99.99%', label: 'دقة ترحيل البيانات' }, { val: '15 مليون+', label: 'حساب بنكي مرحّل' }, { val: 'صفر', label: 'فقدان المعاملات' }]
+        : [{ val: '99.99%', label: 'Migration Accuracy' }, { val: '15M+', label: 'Customer Ledgers Parsed' }, { val: 'Zero', label: 'Transaction Loss' }],
+      pipeline: ar
+        ? ['استخراج البيانات', 'خرائط الترحيل', 'تحميل تيمينوس', 'مطابقة الأرصدة']
+        : ['Extract Data', 'Schema Map', 'Temenos Load', 'Reconciliation'],
+      bullets: ar
+        ? ['الترحيل الآمن للأنظمة المصرفية القديمة إلى Temenos Transact T24.', 'مطابقة الحسابات العامة والدفاتر المصرفية لضمان التطابق.', 'التحقق المزدوج من المعاملات وتجنب توقف العمليات المصرفية.']
+        : ['Seamless database migration to Temenos Transact (T24) standard.', 'Rigorous end-to-end ledger reconciliation and value mapping.', 'Maker-Checker dual authorization support for business continuity.']
+    },
+    AML: {
+      stats: ar 
+        ? [{ val: 'فوري', label: 'سرعة فحص المعاملات' }, { val: '100%', label: 'مستوى الامتثال التنظيمي' }, { val: 'صفر', label: 'ثغرات غير مكتشفة' }]
+        : [{ val: 'Instant', label: 'Screening Latency' }, { val: '100%', label: 'Regulatory Compliance' }, { val: 'Zero', label: 'Undetected Anomaly' }],
+      pipeline: ar
+        ? ['تدفق المعاملة', 'فحص الجرائم', 'تقييم المخاطر', 'إشعار الامتثال']
+        : ['Transaction In', 'FCM Screening', 'Risk Scoring', 'Alert Issued'],
+      bullets: ar
+        ? ['التخفيف الفوري من الجرائم المالية والامتثال للأنظمة (FCM).', 'المواءمة الكاملة مع متطلبات البنك المركزي ومعايير KYC.', 'مراقبة مستمرة للكيانات عالية المخاطر والأطراف المشبوهة.']
+        : ['Real-time Financial Crime Mitigation (FCM) & parsing filters.', 'Central Bank alignment with unified KYC and screening protocols.', 'Continuous monitoring for high-risk PEP databases and networks.']
+    },
+    MIG: {
+      stats: ar 
+        ? [{ val: '95%', label: 'معدل اعتماد الموظفين' }, { val: '80%-', label: 'تقليص وقت التعطل' }, { val: '120+', label: 'ترقيات مصرفية ناجحة' }]
+        : [{ val: '95%', label: 'Staff Adoption Rate' }, { val: '80%-', label: 'Downtime Reduction' }, { val: '120+', label: 'Banking Upgrades' }],
+      pipeline: ar
+        ? ['تدقيق النظام', 'بيئة الاختبار الآمنة', 'مزامنة الأنظمة', 'إطلاق الخدمة']
+        : ['Audit Legacy', 'Sandbox Testing', 'Downtime Sync', 'User Go-Live'],
+      bullets: ar
+        ? ['إدارة وتوجيه مشاريع ترقية الأنظمة المصرفية والحلول الأساسية.', 'إدارة التغيير الشامل لضمان الانتقال السلس للموظفين والعملاء.', 'تحسين أوقات تعطل الأنظمة لضمان سلاسة المعاملات اليومية.']
+        : ['Orchestrating end-to-end core upgrade methodologies.', 'Structured change management to align operations & training.', 'Downtime mitigation planning ensuring seamless banking operations.']
+    },
+    TST: {
+      stats: ar 
+        ? [{ val: '99.9%', label: 'تغطية فحص الأخطاء' }, { val: '2,500+', label: 'سيناريوهات اختبار مؤتمتة' }, { val: 'معتمد', label: 'معايير الجودة' }]
+        : [{ val: '99.9%', label: 'QA Fault Coverage' }, { val: '2,500+', label: 'Automated Test Suites' }, { val: 'Certified', label: 'QA Framework' }],
+      pipeline: ar
+        ? ['تصميم السيناريو', 'اختبار الوظائف', 'اختبار الأحمال', 'شهادة الجودة']
+        : ['Design Specs', 'Function Run', 'Load Stress', 'QA Signoff'],
+      bullets: ar
+        ? ['الاختبارات الوظيفية واختبارات الأداء للأنظمة المصرفية الأساسية.', 'سيناريوهات اختبار التراجع المؤتمتة للبنية التحتية والمقاصة.', 'فرق ضمان جودة مصرفية معتمدة ومتوفرة عن بُعد وفي الموقع.']
+        : ['Functional, stress and volume testing for core transaction layers.', 'Automated regression test suites and end-of-day parsing loops.', 'Experienced and certified QA teams executing on-site or remote.']
+    },
+    DBA: {
+      stats: ar 
+        ? [{ val: '2ms>', label: 'استجابة قواعد البيانات' }, { val: '100%', label: 'سلامة وتكامل البيانات' }, { val: '30 TB+', label: 'بيانات مالية مؤمنة' }]
+        : [{ val: '<2ms', label: 'Query Latency' }, { val: '100%', label: 'Data Integrity' }, { val: '30 TB+', label: 'Secured Financials' }],
+      pipeline: ar
+        ? ['مراقبة الاستعلامات', 'تحسين الفهرسة', 'الخادم الاحتياطي', 'نسخ احتياطي مشفر']
+        : ['Query Monitor', 'Index Optimize', 'Failover Sync', 'Secured Backup'],
+      bullets: ar
+        ? ['إدارة قواعد البيانات MS SQL Server وPostgreSQL المصرفية.', 'التحسين والضبط المستمر لقواعد البيانات لضمان السرعة القصوى.', 'تأمين الخوادم والنسخ الاحتياطي التلقائي المشفر ضد الكوارث.']
+        : ['Enterprise support for MS SQL Server & PostgreSQL bank nodes.', 'Continuous query diagnostics, optimization and performance tuning.', 'High-availability failover cluster setups & encrypted backup paths.']
+    },
+    CON: {
+      stats: ar 
+        ? [{ val: '30+', label: 'خبير T24 معتمد' }, { val: '24/7', label: 'دعم فني متواصل' }, { val: '100%', label: 'نسبة تسليم المشاريع' }]
+        : [{ val: '30+', label: 'Certified T24 Experts' }, { val: '24/7', label: 'Resource Coverage' }, { val: '100%', label: 'Delivery Integrity' }],
+      pipeline: ar
+        ? ['تدقيق المهارات', 'توفير الخبير', 'دعم العمليات اليومية', 'مراجعة الأداء']
+        : ['Skill Audit', 'Expert Dispatch', 'Daily Operations', 'Performance Audit'],
+      bullets: ar
+        ? ['توفير خبراء Temenos Transact معتمدين لدعم الموارد اليومية للبنوك.', 'الدعم التشغيلي اليومي لمختلف الوحدات المالية والتقارير.', 'استشارات استراتيجية للإدارات العليا لتطوير التقنيات المصرفية.']
+        : ['Augmenting banking staff with Temenos Transact certified engineers.', 'Strategic operational advisory for digital core bank setups.', 'On-site execution expertise across multi-jurisdictional frameworks.']
+    }
+  };
+
   const services = ar ? [
     {
       code: 'T24',
@@ -351,7 +423,7 @@ export const FinancialServices = () => {
         @keyframes fs-fadein { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
         @keyframes fs-pulse  { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.65;transform:scale(0.9)} }
         @keyframes fs-shimmer { from { transform:translateX(-100%); } to { transform:translateX(100%); } }
-        .fs-svc:hover { background: rgba(255,184,20,0.04) !important; border-color: rgba(255,184,20,0.2) !important; }
+        .fs-svc:hover { background: rgba(255,184,20,0.04) !important; border-color: rgba(255,184,20,0.18) !important; }
         .fs-svc:hover .fs-icon { color: ${T.gold} !important; }
         .fs-svc:hover .fs-num  { color: rgba(255,184,20,0.12) !important; }
         .fs-svc:hover .fs-code { opacity: 1 !important; }
@@ -362,6 +434,21 @@ export const FinancialServices = () => {
         .fs-cta-ghost:hover   { border-color: ${T.gold} !important; color: ${T.gold} !important; }
         .fs-why-row:hover { background: rgba(255,255,255,0.025) !important; }
         .fs-stat-gold::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:${T.gold}; }
+        
+        .fs-menu-item { transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.04); }
+        .fs-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,184,20,0.15) !important; }
+        .fs-menu-item.active { background: rgba(255,184,20,0.06) !important; border-color: ${T.gold} !important; box-shadow: 0 0 15px rgba(255,184,20,0.08); }
+        .fs-menu-item.active .fs-menu-icon { color: ${T.gold} !important; }
+        
+        .fs-terminal-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .fs-terminal-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: all 0.6s ease; }
+        .fs-terminal-btn:hover::before { left: 100%; }
+        .fs-terminal-btn:hover { box-shadow: 0 0 20px rgba(255,184,20,0.25); }
+        
+        .fs-pulse-dot { animation: fs-pulse 2.5s ease-in-out infinite; }
+        
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* ── HERO — Three.js Generative Art ── */}
@@ -618,73 +705,333 @@ export const FinancialServices = () => {
           </div>
         </div>
 
-        {/* Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill,minmax(min(320px,100%),1fr))',
-          gap: 1,
-          background: T.border,
-          border: `1px solid ${T.border}`,
-          borderRadius: 8,
-          overflow: 'hidden',
-        }}>
-          {services.map((s, i) => (
-            <div
-              key={i}
-              className="fs-svc"
-              style={{
-                background: T.navy2,
-                padding: '32px 28px',
-                position: 'relative',
-                border: '1px solid transparent',
-                transition: 'all 0.2s ease',
-                cursor: 'default',
-              }}
-            >
-              {/* Background number */}
-              <div className="fs-num" style={{
-                position: 'absolute', top: 16,
-                right: ar ? 'auto' : 20, left: ar ? 20 : 'auto',
-                fontSize: 'clamp(40px, 8vw, 64px)', fontWeight: 900,
-                letterSpacing: '-0.04em',
-                color: 'rgba(255,255,255,0.03)',
-                fontFamily: font, lineHeight: 1,
-                userSelect: 'none',
-                transition: 'color 0.2s',
-              }}>
-                {String(i + 1).padStart(2, '0')}
-              </div>
+        {/* Interactive Banking Command Center Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
+          
+          {/* Left Column: Vertical Services Menu / Horizontal Tabs on Mobile */}
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none" style={{ alignSelf: 'flex-start' }}>
+            {services.map((s, i) => {
+              const isActive = activeServiceIdx === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveServiceIdx(i)}
+                  className={`fs-menu-item group ${isActive ? 'active' : ''} lg:w-full`}
+                  style={{
+                    background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
+                    border: `1px solid ${isActive ? T.gold : T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 20px',
+                    textAlign: ar ? 'right' : 'left',
+                    minWidth: 220,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 12,
+                    flexShrink: 0,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+                    {/* Icon */}
+                    <div className="fs-menu-icon" style={{
+                      color: isActive ? T.gold : T.muted,
+                      transition: 'color 0.25s ease',
+                      flexShrink: 0,
+                    }}>
+                      {icons[s.code]}
+                    </div>
+                    {/* Title & Status */}
+                    <div style={{ overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <h3 style={{
+                          fontSize: 13.5, fontWeight: 700,
+                          color: T.white, margin: 0,
+                          fontFamily: font,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
+                          {s.title}
+                        </h3>
+                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#4AF626', flexShrink: 0 }} className="fs-pulse-dot" />
+                      </div>
+                      <span style={{ fontSize: 10.5, color: T.muted, fontFamily: font, display: 'block', marginTop: 1 }}>
+                        {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
+                      </span>
+                    </div>
+                  </div>
 
-              {/* Icon */}
-              <div className="fs-icon" style={{ color: T.muted, marginBottom: 20, transition: 'color 0.2s' }}>
-                {icons[s.code]}
-              </div>
+                  {/* Operational stat chip */}
+                  <div style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: isActive ? T.gold : T.muted,
+                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.3)' : T.border}`,
+                    borderRadius: 4,
+                    padding: '3px 6px',
+                    background: isActive ? 'rgba(255,184,20,0.04)' : 'rgba(255,255,255,0.01)',
+                    fontFamily: font,
+                    letterSpacing: '-0.02em',
+                    flexShrink: 0,
+                  }}>
+                    {serviceDetails[s.code].stats[0].val}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-              {/* Code badge */}
-              <div className="fs-code" style={{
-                display: 'inline-block', fontSize: 10, fontWeight: 700,
-                letterSpacing: '0.16em', textTransform: 'uppercase',
-                color: T.gold, marginBottom: 10, fontFamily: font,
-                opacity: 0.75, transition: 'opacity 0.2s',
-              }}>
-                {s.code}
-              </div>
+          {/* Right Column: Dynamic Terminal Dashboard */}
+          <div style={{ position: 'relative' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeServiceIdx}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.22 }}
+                style={{
+                  background: 'rgba(8,45,74,0.45)',
+                  backdropFilter: 'blur(16px)',
+                  border: `1px solid rgba(255,184,20,0.15)`,
+                  borderRadius: 12,
+                  padding: '32px 28px',
+                  minHeight: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 28,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Dashboard Grid Line Background Accent */}
+                <div style={{
+                  position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
+                  backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
+                  backgroundSize: '20px 20px',
+                  pointerEvents: 'none',
+                }} />
 
-              <h3 style={{
-                fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em',
-                color: T.white, margin: '0 0 12px', lineHeight: 1.3, fontFamily: font,
-              }}>
-                {s.title}
-              </h3>
+                <div>
+                  {/* Dashboard Live Status Indicator */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{
+                        background: 'rgba(255,184,20,0.12)',
+                        border: `1px solid ${T.gold}`,
+                        color: T.gold,
+                        fontSize: 10,
+                        fontWeight: 800,
+                        padding: '3px 8px',
+                        borderRadius: 4,
+                        letterSpacing: '0.08em',
+                        fontFamily: font,
+                      }}>
+                        {services[activeServiceIdx].code}
+                      </div>
+                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626' }} className="fs-pulse-dot" />
+                        {ar ? 'نظام تشغيل مصرفي حي ومباشر' : 'LIVE BANKING NODE ACTIVE'}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 10.5, color: T.muted, fontFamily: 'monospace' }}>
+                      NODE_ID: {services[activeServiceIdx].code}_BANK_CORE_0{activeServiceIdx + 1}A
+                    </div>
+                  </div>
 
-              <p style={{
-                fontSize: 13.5, lineHeight: 1.75,
-                color: T.muted, margin: 0, fontFamily: font, fontWeight: 400,
-              }}>
-                {s.body}
-              </p>
-            </div>
-          ))}
+                  <h2 style={{
+                    fontSize: 'clamp(20px, 2.5vw, 24px)',
+                    fontWeight: 800,
+                    letterSpacing: '-0.025em',
+                    color: T.white,
+                    margin: '0 0 14px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].title}
+                  </h2>
+
+                  <p style={{
+                    fontSize: 14,
+                    lineHeight: 1.8,
+                    color: T.muted,
+                    margin: '0 0 24px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].body}
+                  </p>
+
+                  {/* ── Diagnostic Statistics Grid ── */}
+                  <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
+                    {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
+                      <div
+                        key={sIdx}
+                        style={{
+                          background: 'rgba(6,30,49,0.5)',
+                          border: `1px solid ${T.border}`,
+                          borderRadius: 8,
+                          padding: '14px 10px',
+                          textAlign: 'center',
+                          position: 'relative',
+                        }}
+                      >
+                        <div style={{
+                          fontSize: 'clamp(16px, 3vw, 20px)',
+                          fontWeight: 900,
+                          color: T.gold,
+                          marginBottom: 4,
+                          fontFamily: font,
+                          letterSpacing: '-0.03em',
+                        }}>
+                          {st.val}
+                        </div>
+                        <div style={{
+                          fontSize: 10,
+                          fontWeight: 500,
+                          color: T.muted,
+                          fontFamily: font,
+                          lineHeight: 1.2,
+                        }}>
+                          {st.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ── Process Flow Map ── */}
+                  <div style={{
+                    background: 'rgba(6,30,49,0.3)',
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 14px',
+                    marginBottom: 28,
+                  }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+                      {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
+                      {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
+                        <React.Fragment key={idx}>
+                          {/* Step Node */}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
+                            <div style={{
+                              width: 28, height: 28,
+                              borderRadius: '50%',
+                              border: `1.5px solid ${T.gold}`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 10,
+                              fontWeight: 'bold',
+                              color: T.gold,
+                              background: T.navy,
+                              boxShadow: '0 0 10px rgba(255,184,20,0.15)',
+                              marginBottom: 6,
+                            }}>
+                              {idx + 1}
+                            </div>
+                            <div style={{ fontSize: 10.5, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
+                              {step}
+                            </div>
+                          </div>
+                          
+                          {/* Connector Line */}
+                          {idx < 3 && (
+                            <div
+                              className="hidden sm:block"
+                              style={{
+                                flex: 1,
+                                height: 1.5,
+                                background: ar 
+                                  ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)` 
+                                  : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
+                                opacity: 0.3,
+                                position: 'relative',
+                                minWidth: 15,
+                              }}
+                            >
+                              <div
+                                className="fs-pulse-dot"
+                                style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: ar ? 'auto' : '0%',
+                                  right: ar ? '0%' : 'auto',
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: '50%',
+                                  background: T.gold,
+                                  transform: 'translateY(-50%)',
+                                  boxShadow: '0 0 6px #FFB814',
+                                }}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ── Operational Specs ── */}
+                  <div>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
+                      {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
+                        <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
+                          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: T.gold, flexShrink: 0, marginTop: 4 }}>
+                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontSize: 12.5, color: T.muted, fontFamily: font, lineHeight: 1.45 }}>
+                            {bullet}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secure Banking Consultation Button */}
+                <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, marginTop: 6 }}>
+                  <button
+                    onClick={() => {
+                      window.location.hash = '#/contact';
+                    }}
+                    className="fs-terminal-btn"
+                    style={{
+                      width: '100%',
+                      background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
+                      color: T.navy,
+                      border: 'none',
+                      borderRadius: 6,
+                      padding: '12px 24px',
+                      fontSize: 13,
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      fontFamily: font,
+                    }}
+                  >
+                    <span>
+                      {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
         </div>
       </section>
 
