@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, Suspense } from 'react';
 import * as THREE from 'three';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 
@@ -313,6 +313,88 @@ export const ManagedServices = () => {
   const dir = ar ? 'rtl' : 'ltr';
   const font = ar ? "'Tajawal', sans-serif" : FONT;
 
+  const [activeServiceIdx, setActiveServiceIdx] = useState(0);
+
+  const serviceDetails = {
+    CCC: {
+      stats: ar 
+        ? [{ val: '99.99%', label: 'اتفاقية مستوى الخدمة' }, { val: '240+', label: 'الأزمات النشطة سنوياً' }, { val: 'فوري', label: 'سرعة الاستجابة' }]
+        : [{ val: '99.99%', label: 'Uptime SLA' }, { val: '240+', label: 'Annual Crises' }, { val: 'Immediate', label: 'Response Rate' }],
+      pipeline: ar
+        ? ['كشف الثغرات', 'تحليل المخاطر', 'غرفة العمليات', 'الحل النهائي']
+        : ['Anomaly Detect', 'Risk Analysis', 'Crisis Room', 'Resolution'],
+      bullets: ar
+        ? ['مراقبة وتحليل التهديدات الفورية على مدار الساعة.', 'بروتوكولات استجابة سريعة ومعتمدة لإدارة الحوادث.', 'عوكمة شاملة واتصالات منسقة خلال الأزمات.']
+        : ['24/7 real-time anomaly detection and deep threat parsing.', 'Proven emergency response protocols for instant mitigation.', 'Full crisis governance and unified stakeholder coordination.']
+    },
+    SOC: {
+      stats: ar 
+        ? [{ val: '99.95%', label: 'اتفاقية مستوى الخدمة' }, { val: '1.2 مليون+', label: 'تفاعل عملاء سنوي' }, { val: 'شامل القنوات', label: 'قنوات الاتصال' }]
+        : [{ val: '99.95%', label: 'Service SLA' }, { val: '1.2M+', label: 'Annual Interactions' }, { val: 'Omni-channel', label: 'Interaction Model' }],
+      pipeline: ar
+        ? ['قنوات الاتصال', 'سياق المعاملة', 'التوجيه الذكي', 'حل الخدمة']
+        : ['Channels In', 'CRM Context', 'Smart Routing', 'Fulfillment'],
+      bullets: ar
+        ? ['إدارة مراكز الاتصال عبر قنوات متعددة (صوت، بريد، دردشة).', 'تكامل عميق مع أنظمة إدارة علاقات العملاء (CRM).', 'تحسين مستمر للتكاليف التشغيلية بفضل التوجيه الذكي.']
+        : ['Omni-channel contact center management (voice, email, chat).', 'Deep integration with leading enterprise CRM core platforms.', 'Operational cost reduction powered by intelligent routing.']
+    },
+    AMS: {
+      stats: ar 
+        ? [{ val: '99.90%', label: 'اتفاقية مستوى الخدمة' }, { val: '80+', label: 'تطبيقات قيد التشغيل' }, { val: 'مستمر', label: 'دورة الإصدار' }]
+        : [{ val: '99.90%', label: 'Application SLA' }, { val: '80+', label: 'Production Apps' }, { val: 'Continuous', label: 'Release Cycle' }],
+      pipeline: ar
+        ? ['كود المصدر', 'فحص الجودة', 'بيئة الاختبار', 'نشر التطبيق']
+        : ['Git Commit', 'Quality Scan', 'Staging Sandbox', 'Deployment'],
+      bullets: ar
+        ? ['دعم شامل لدورة حياة التطبيقات وتطويرها وصيانتها.', 'حوكمة صارمة للإصدارات لمنع فترات التوقف.', 'تحديث الأنظمة القديمة ونقلها لحلول سحابية حديثة.']
+        : ['End-to-end support for application lifecycle & refactoring.', 'Strict release governance to ensure high system availability.', 'Legacy modernizations to scalable container environments.']
+    },
+    NOC: {
+      stats: ar 
+        ? [{ val: '99.999%', label: 'اتفاقية مستوى الخدمة' }, { val: '4.5 Tbps', label: 'نطاق تدفق البيانات' }, { val: 'عالمي', label: 'نطاق التغطية' }]
+        : [{ val: '99.999%', label: 'Network SLA' }, { val: '4.5 Tbps', label: 'Peak Traffic' }, { val: 'Global / GNOC', label: 'Coverage Grid' }],
+      pipeline: ar
+        ? ['حركة البيانات', 'تحليل الأداء', 'توجيه آلي', 'العمود الفقري']
+        : ['Traffic In', 'Flow Analysis', 'Auto Routing', 'Core Backbone'],
+      bullets: ar
+        ? ['مراقبة مستمرة على مدار الساعة للشبكات المعقدة.', 'معايير مشغلين كبرى بخبرة في البنى التحتية الوطنية.', 'إدارة وتوجيه آلي لحركة المرور لمنع الاختناقات.']
+        : ['24/7/365 active monitoring for complex scale networks.', 'GNOC standard operations for national-scale infrastructure.', 'Automated routing & telemetry to preempt traffic choke points.']
+    },
+    DCO: {
+      stats: ar 
+        ? [{ val: '99.999%', label: 'توافر الأجهزة' }, { val: '5,000+', label: 'خوادم نشطة' }, { val: '88%', label: 'كفاءة الطاقة المدارة' }]
+        : [{ val: '99.999%', label: 'Hardware SLA' }, { val: '5,000+', label: 'Active Servers' }, { val: '88%', label: 'Power Efficiency' }],
+      pipeline: ar
+        ? ['الطاقة والتبريد', 'رفوف الخوادم', 'الخوادم الافتراضية', 'بوابة العميل']
+        : ['Power & Cool', 'Server Racks', 'Hypervisor Grid', 'Client Portal'],
+      bullets: ar
+        ? ['تخطيط دقيق لعمليات نقل وترحيل الخوادم والأجهزة.', 'تنبؤ متقدم بالسعات وتحسين استهلاك الطاقة.', 'مراقبة فورية للبنية التحتية والتحكم البيئي الحراري.']
+        : ['End-to-end data center migration and infrastructure sync.', 'Advanced capacity forecasting & active server balancing.', 'Real-time environment controls and server rack optimization.']
+    },
+    CLD: {
+      stats: ar 
+        ? [{ val: '99.99%', label: 'توافر السحابة' }, { val: '12,000+', label: 'بيئات افتراضية' }, { val: 'متعدد / هجين', label: 'طبيعة النشر' }]
+        : [{ val: '99.99%', label: 'Cloud SLA' }, { val: '12,000%', label: 'Virtual Cores' }, { val: 'Multi / Hybrid', label: 'Deployment Model' }],
+      pipeline: ar
+        ? ['سحابة متعددة', 'بيئة الخوادم', 'موزع الأحمال', 'تمدد تلقائي']
+        : ['Multi-Cloud Mesh', 'Virtualization', 'Load Balancer', 'Autoscale'],
+      bullets: ar
+        ? ['إدارة السحابة الهجينة والمتعددة عبر منصات AWS وAzure والسحب الخاصة.', 'مراقبة التكاليف الفورية لمنع الهدر المالي وتحسين الاستخدام.', 'تصميم ونشر بنية الخدمات الدقيقة الحديثة بدون خادم.']
+        : ['Comprehensive management for multi-cloud & hybrid ecosystems.', 'Continuous real-time cloud cost controls and sizing audits.', 'Serverless deployments & responsive microservices topologies.']
+    },
+    CON: {
+      stats: ar 
+        ? [{ val: '100%', label: 'نسبة النجاح' }, { val: '400+', label: 'دراسة استراتيجية' }, { val: 'شراكة كاملة', label: 'نموذج العلاقة' }]
+        : [{ val: '100%', label: 'Delivery Rate' }, { val: '400%', label: 'Blueprints Delivered' }, { val: 'Strategic Partner', label: 'Engagement Model' }],
+      pipeline: ar
+        ? ['تقييم الأصول', 'تحليل الفجوات', 'خريطة الطريق', 'تدقيق الحوكمة']
+        : ['Assessment', 'Gap Analysis', 'Roadmap Build', 'Governance Audit'],
+      bullets: ar
+        ? ['مواءمة استراتيجية بين تطورات تقنية المعلومات وأهداف عملك.', 'تقييم شامل للوضع الحالي وتقديم خارطة طريق قابلة للتنفيذ.', 'تحسين الكفاءة التشغيلية وترشيد النفقات التشغيلية.']
+        : ['Direct alignment between IT architecture and commercial goals.', 'Holistic current-state audits and actionable future plans.', 'Systematic operations refinement and capital expenditure saving.']
+    }
+  };
+
   const services = ar ? [
     { code: 'CCC', title: 'مركز القيادة والسيطرة', body: 'مجموعة لا مثيل لها من الأداء والبساطة والموثوقية لحماية الأصول الحيوية. فرق خبيرة متمرسة في إدارة الأزمات واتخاذ القرار والاستجابة الطارئة الاحترافية.' },
     { code: 'SOC', title: 'مركز عمليات الخدمة', body: 'خدمات إدارة مراكز الاتصال تركّز على تجربة العملاء والعلامة التجارية وخفض التكاليف وتحسين العمليات، من المكالمات التقليدية إلى قنوات الاتصال المتعددة.' },
@@ -364,6 +446,22 @@ export const ManagedServices = () => {
         .ms-cta-ghost { transition: all 0.2s ease; }
         .ms-cta-ghost:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; }
         .ms-why-row:hover { background: rgba(255,255,255,0.03) !important; }
+        
+        .ms-menu-item { transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.04); }
+        .ms-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,184,20,0.15) !important; }
+        .ms-menu-item.active { background: rgba(255,184,20,0.06) !important; border-color: ${T.gold} !important; box-shadow: 0 0 15px rgba(255,184,20,0.08); }
+        .ms-menu-item.active .ms-menu-icon { color: ${T.gold} !important; }
+        
+        .ms-terminal-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .ms-terminal-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: all 0.6s ease; }
+        .ms-terminal-btn:hover::before { left: 100%; }
+        .ms-terminal-btn:hover { box-shadow: 0 0 20px rgba(255,184,20,0.25); }
+        
+        .ms-pulse-dot { animation: ms-pulse 2.5s ease-in-out infinite; }
+        
+        /* Custom scrollbar hiding for horizontal tabs */
+        .scrollbar-none::-webkit-scrollbar { display: none; }
+        .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* ── HERO — Three.js Generative Art ─────────── */}
@@ -652,80 +750,332 @@ export const ManagedServices = () => {
           </div>
         </div>
 
-        {/* Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill,minmax(min(320px,100%),1fr))',
-          gap: 1,
-          background: T.border,
-          border: `1px solid ${T.border}`,
-          borderRadius: 8,
-          overflow: 'hidden',
-        }}>
-          {services.map((s, i) => (
-            <div
-              key={i}
-              className="ms-svc"
-              style={{
-                background: T.navy2,
-                padding: '32px 28px',
-                position: 'relative',
-                border: '1px solid transparent',
-                transition: 'all 0.2s ease',
-                cursor: 'default',
-              }}
-            >
-              {/* Service number — large background numeral */}
-              <div className="ms-num" style={{
-                position: 'absolute', top: 16, right: ar ? 'auto' : 20, left: ar ? 20 : 'auto',
-                fontSize: 'clamp(40px, 8vw, 64px)', fontWeight: 900, letterSpacing: '-0.04em',
-                color: 'rgba(255,255,255,0.035)',
-                fontFamily: font, lineHeight: 1,
-                userSelect: 'none',
-                transition: 'color 0.2s',
-              }}>
-                {String(i + 1).padStart(2, '0')}
-              </div>
+        {/* Interactive B2B Command Center Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
+          
+          {/* Left Column: Vertical Services Menu / Horizontal Slider on Mobile */}
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none" style={{ alignSelf: 'flex-start' }}>
+            {services.map((s, i) => {
+              const isActive = activeServiceIdx === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveServiceIdx(i)}
+                  className={`ms-menu-item group ${isActive ? 'active' : ''} lg:w-full`}
+                  style={{
+                    background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
+                    border: `1px solid ${isActive ? T.gold : T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 20px',
+                    textAlign: ar ? 'right' : 'left',
+                    minWidth: 220,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 12,
+                    flexShrink: 0,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+                    {/* Icon */}
+                    <div className="ms-menu-icon" style={{
+                      color: isActive ? T.gold : T.muted,
+                      transition: 'color 0.25s ease',
+                      flexShrink: 0,
+                    }}>
+                      {icons[s.code]}
+                    </div>
+                    {/* Title & Status */}
+                    <div style={{ overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <h3 style={{
+                          fontSize: 13.5, fontWeight: 700,
+                          color: T.white, margin: 0,
+                          fontFamily: font,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}>
+                          {s.title}
+                        </h3>
+                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#4AF626', flexShrink: 0 }} className="ms-pulse-dot" />
+                      </div>
+                      <span style={{ fontSize: 10.5, color: T.muted, fontFamily: font, display: 'block', marginTop: 1 }}>
+                        {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
+                      </span>
+                    </div>
+                  </div>
 
-              {/* Icon */}
-              <div className="ms-icon" style={{
-                color: T.muted,
-                marginBottom: 20,
-                transition: 'color 0.2s',
-              }}>
-                {icons[s.code]}
-              </div>
+                  {/* Operational stat chip */}
+                  <div style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: isActive ? T.gold : T.muted,
+                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.3)' : T.border}`,
+                    borderRadius: 4,
+                    padding: '3px 6px',
+                    background: isActive ? 'rgba(255,184,20,0.04)' : 'rgba(255,255,255,0.01)',
+                    fontFamily: font,
+                    letterSpacing: '-0.02em',
+                    flexShrink: 0,
+                  }}>
+                    {serviceDetails[s.code].stats[0].val}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-              {/* Code badge */}
-              <div style={{
-                display: 'inline-block',
-                fontSize: 10, fontWeight: 700,
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: T.gold,
-                marginBottom: 10,
-                fontFamily: font,
-              }}>
-                {s.code}
-              </div>
+          {/* Right Column: Dynamic Terminal Dashboard */}
+          <div style={{ position: 'relative' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeServiceIdx}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.22 }}
+                style={{
+                  background: 'rgba(8,45,74,0.45)',
+                  backdropFilter: 'blur(16px)',
+                  border: `1px solid rgba(255,184,20,0.15)`,
+                  borderRadius: 12,
+                  padding: '32px 28px',
+                  minHeight: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 28,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Dashboard Grid Line Background Accent */}
+                <div style={{
+                  position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
+                  backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
+                  backgroundSize: '20px 20px',
+                  pointerEvents: 'none',
+                }} />
 
-              <h3 style={{
-                fontSize: 16, fontWeight: 700,
-                letterSpacing: '-0.01em',
-                color: T.white, margin: '0 0 12px',
-                lineHeight: 1.3, fontFamily: font,
-              }}>
-                {s.title}
-              </h3>
+                <div>
+                  {/* Dashboard Live Status Indicator */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{
+                        background: 'rgba(255,184,20,0.12)',
+                        border: `1px solid ${T.gold}`,
+                        color: T.gold,
+                        fontSize: 10,
+                        fontWeight: 800,
+                        padding: '3px 8px',
+                        borderRadius: 4,
+                        letterSpacing: '0.08em',
+                        fontFamily: font,
+                      }}>
+                        {services[activeServiceIdx].code}
+                      </div>
+                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626' }} className="ms-pulse-dot" />
+                        {ar ? 'نظام تشغيل حي ومباشر' : 'LIVE TELEMETRY ACTIVE'}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 10.5, color: T.muted, fontFamily: 'monospace' }}>
+                      NODE_ID: {services[activeServiceIdx].code}_0X{activeServiceIdx + 7}A
+                    </div>
+                  </div>
 
-              <p style={{
-                fontSize: 13.5, lineHeight: 1.75,
-                color: T.muted, margin: 0, fontFamily: font, fontWeight: 400,
-              }}>
-                {s.body}
-              </p>
-            </div>
-          ))}
+                  <h2 style={{
+                    fontSize: 'clamp(20px, 2.5vw, 24px)',
+                    fontWeight: 800,
+                    letterSpacing: '-0.025em',
+                    color: T.white,
+                    margin: '0 0 14px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].title}
+                  </h2>
+
+                  <p style={{
+                    fontSize: 14,
+                    lineHeight: 1.8,
+                    color: T.muted,
+                    margin: '0 0 24px 0',
+                    fontFamily: font,
+                  }}>
+                    {services[activeServiceIdx].body}
+                  </p>
+
+                  {/* ── Diagnostic Statistics Grid ── */}
+                  <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
+                    {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
+                      <div
+                        key={sIdx}
+                        style={{
+                          background: 'rgba(6,30,49,0.5)',
+                          border: `1px solid ${T.border}`,
+                          borderRadius: 8,
+                          padding: '14px 10px',
+                          textAlign: 'center',
+                          position: 'relative',
+                        }}
+                      >
+                        <div style={{
+                          fontSize: 'clamp(16px, 3vw, 20px)',
+                          fontWeight: 900,
+                          color: T.gold,
+                          marginBottom: 4,
+                          fontFamily: font,
+                          letterSpacing: '-0.03em',
+                        }}>
+                          {st.val}
+                        </div>
+                        <div style={{
+                          fontSize: 10,
+                          fontWeight: 500,
+                          color: T.muted,
+                          fontFamily: font,
+                          lineHeight: 1.2,
+                        }}>
+                          {st.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ── Process Flow Map ── */}
+                  <div style={{
+                    background: 'rgba(6,30,49,0.3)',
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 8,
+                    padding: '16px 14px',
+                    marginBottom: 28,
+                  }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+                      {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
+                      {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
+                        <React.Fragment key={idx}>
+                          {/* Step Node */}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
+                            <div style={{
+                              width: 28, height: 28,
+                              borderRadius: '50%',
+                              border: `1.5px solid ${T.gold}`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: 10,
+                              fontWeight: 'bold',
+                              color: T.gold,
+                              background: T.navy,
+                              boxShadow: '0 0 10px rgba(255,184,20,0.15)',
+                              marginBottom: 6,
+                            }}>
+                              {idx + 1}
+                            </div>
+                            <div style={{ fontSize: 10.5, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
+                              {step}
+                            </div>
+                          </div>
+                          
+                          {/* Connector Line */}
+                          {idx < 3 && (
+                            <div
+                              className="hidden sm:block"
+                              style={{
+                                flex: 1,
+                                height: 1.5,
+                                background: ar 
+                                  ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)` 
+                                  : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
+                                opacity: 0.3,
+                                position: 'relative',
+                                minWidth: 15,
+                              }}
+                            >
+                              <div
+                                className="ms-pulse-dot"
+                                style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  left: ar ? 'auto' : '0%',
+                                  right: ar ? '0%' : 'auto',
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: '50%',
+                                  background: T.gold,
+                                  transform: 'translateY(-50%)',
+                                  boxShadow: '0 0 6px #FFB814',
+                                }}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ── Operational Specs ── */}
+                  <div>
+                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
+                      {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
+                        <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
+                          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: T.gold, flexShrink: 0, marginTop: 4 }}>
+                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontSize: 12.5, color: T.muted, fontFamily: font, lineHeight: 1.45 }}>
+                            {bullet}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secure Consultation Button */}
+                <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, marginTop: 6 }}>
+                  <button
+                    onClick={() => {
+                      window.location.hash = '#/contact';
+                    }}
+                    className="ms-terminal-btn"
+                    style={{
+                      width: '100%',
+                      background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
+                      color: T.navy,
+                      border: 'none',
+                      borderRadius: 6,
+                      padding: '12px 24px',
+                      fontSize: 13,
+                      fontWeight: 800,
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      fontFamily: font,
+                    }}
+                  >
+                    <span>
+                      {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
+                    </span>
+                    <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
         </div>
       </section>
