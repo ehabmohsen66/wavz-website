@@ -46,6 +46,13 @@ export const translations = {
       eyebrow: 'OFFERING',
       title: 'What We Deliver',
       lede: 'Strategy feeds architecture. Architecture feeds operations. Operations close the loop. Loop closes daily.',
+      learnMore: 'Learn more',
+      stats: {
+        years: 'Years in MEA',
+        clients: 'Enterprise clients',
+        industries: 'Industries served',
+      },
+      pills: ['Roadmap Design', 'Risk Architecture', 'Budget Validation', 'Executive Briefing'],
       cards: [
         {
           name: 'StrategicAdvisory',
@@ -886,6 +893,13 @@ For more information about WAVZ for Digital Transformation and our services, con
       eyebrow: 'العرض',
       title: 'ما نُقدِّمه',
       lede: 'الاستراتيجية تُغذِّي الهندسة. الهندسة تُغذِّي العمليات. العمليات تُغلِق الحلقة. الحلقة تُغلَق يومياً.',
+      learnMore: 'تعرف على المزيد',
+      stats: {
+        years: 'سنوات في الشرق الأوسط وأفريقيا',
+        clients: 'عملاء من الشركات والمؤسسات',
+        industries: 'قطاعات نخدمها',
+      },
+      pills: ['تصميم خارطة الطريق', 'بنية هندسة المخاطر', 'التحقق من الميزانية', 'الإيجاز التنفيذي'],
       cards: [
         { name: 'الاستشارات الاستراتيجية', tag: 'استشارات', tagType: 'green', desc: 'خرائطُ تحوُّلٍ من ارتباطات حقيقية مع البنوك والبريد والحكومات في المنطقة. الممارسةُ الاستشاريةُ التي تُغذِّي كل تطبيق.' },
         { name: 'محاكي WAVZ', tag: 'حصري', tagType: 'yellow', desc: 'يُحاكي مساراتِ التطبيق، توزيع الموارد، واستراتيجيات المخاطر. يتنبَّأ باختناقات البرامج قبل ربعٍ كامل. يُوجِّه التسليم.' },

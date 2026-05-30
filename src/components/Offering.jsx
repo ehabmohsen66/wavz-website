@@ -88,7 +88,7 @@ export const Offering = () => {
             <h2 className="text-4xl lg:text-6xl font-bold text-[#082D4A] tracking-[-0.03em] leading-[0.98] max-w-xl">
               {t.offering.title}
             </h2>
-            <p className="text-[15px] text-slate-500 max-w-sm leading-relaxed lg:text-right">
+            <p className="text-[15px] text-slate-500 max-w-sm leading-relaxed lg:text-end">
               {t.offering.lede}
             </p>
           </div>
@@ -130,6 +130,7 @@ export const Offering = () => {
 
 /* ─── BentoCard ─── */
 const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '' }) => {
+  const { t, dir } = useLang();
   const [first, second] = splitName(card.name);
 
   return (
@@ -225,9 +226,9 @@ const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '
             {/* Stat row */}
             <div className="grid grid-cols-3 gap-4 mb-6">
               {[
-                { value: '18+', label: 'Years in MEA' },
-                { value: '47', label: 'Enterprise clients' },
-                { value: '6', label: 'Industries served' },
+                { value: '18+', label: t.offering.stats.years },
+                { value: '47', label: t.offering.stats.clients },
+                { value: '6', label: t.offering.stats.industries },
               ].map(({ value, label }) => (
                 <div key={label}>
                   <div className="text-[1.6rem] font-black text-white tabular-nums leading-none tracking-tight">
@@ -240,7 +241,7 @@ const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '
 
             {/* Service pillars */}
             <div className="flex flex-wrap gap-2 mb-8">
-              {['Roadmap Design', 'Risk Architecture', 'Budget Validation', 'Executive Briefing'].map((pill) => (
+              {t.offering.pills.map((pill) => (
                 <span
                   key={pill}
                   className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-white/8 border border-white/12 text-white/60 tracking-wide"
@@ -255,8 +256,8 @@ const BentoCard = ({ card, Icon, featured = false, delay, visible, className = '
         {/* Featured: bottom CTA */}
         {featured && (
           <div className="inline-flex items-center gap-2 text-[#FFB814] text-[13px] font-semibold">
-            <span>Learn more</span>
-            <ArrowUpRight className="w-4 h-4" />
+            <span>{t.offering.learnMore}</span>
+            <ArrowUpRight className={`w-4 h-4 ${dir === 'rtl' ? '-scale-x-100' : ''}`} />
           </div>
         )}
       </div>
