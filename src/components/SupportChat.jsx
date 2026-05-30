@@ -10,6 +10,35 @@ export const SupportChat = () => {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   
+  // Entirely hide/dismiss state
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return localStorage.getItem('wavz_chat_dismissed') === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const handleDismiss = (e) => {
+    e.stopPropagation();
+    setDismissed(true);
+    setOpen(false);
+    try {
+      localStorage.setItem('wavz_chat_dismissed', 'true');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleRestore = () => {
+    setDismissed(false);
+    try {
+      localStorage.removeItem('wavz_chat_dismissed');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
   // Lead Capture State
   const [leadState, setLeadState] = useState('idle'); // 'idle' | 'collectName' | 'collectEmail' | 'collectCompany'
   const [leadData, setLeadData] = useState({ name: '', email: '', company: '' });
@@ -272,52 +301,70 @@ export const SupportChat = () => {
   return (
     <ErrorBoundary>
       {/* Floating Robot Button */}
-      <div className="fixed bottom-[88px] right-6 z-[9999] flex flex-col items-end gap-3" dir={dir}>
-        <AnimatePresence>
-          {!open && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.85 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.85 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              className="bg-[#082D4A] text-white text-[11.5px] font-semibold px-3.5 py-1.5 rounded-full shadow-lg border border-white/10 whitespace-nowrap"
-            >
-              {lang === 'ar' ? 'اسأل مساعد WAVZ الذكي ✨' : 'Ask WAVZ AI ✨'}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <motion.button
-          onClick={() => setOpen(!open)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="relative w-[72px] h-[72px] rounded-full overflow-hidden shadow-2xl shadow-[#1173BD]/40 border-2 border-[#1173BD]/60 bg-slate-950 cursor-pointer"
-          style={{ outline: 'none' }}
-        >
-          {/* Pulsing ring */}
-          <span className="absolute inset-0 rounded-full border-2 border-[#38BDF8]/40 animate-ping" />
-
-          {/* Static Robot Icon */}
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-[#082D4A] to-slate-950 relative group">
-            <div className="absolute inset-0 bg-[#38BDF8]/10 animate-pulse rounded-full" />
-            <Bot className="w-8 h-8 text-[#38BDF8] relative z-10 transition-transform group-hover:scale-110 duration-300" />
-          </div>
-
-          {/* Open/Close overlay icon */}
+      {!dismissed && (
+        <div className="fixed bottom-[88px] right-6 z-[9999] flex flex-col items-end gap-3" dir={dir}>
+          {/* Close/Hide Button */}
           <AnimatePresence>
-            {open && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
+            {!open && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                className="absolute inset-0 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm rounded-full"
+                exit={{ opacity: 0, scale: 0.8 }}
+                onClick={handleDismiss}
+                title={lang === 'ar' ? 'إخفاء المساعد بالكامل' : 'Hide AI assistant entirely'}
+                className="absolute -top-2 -left-2 z-[10000] w-6 h-6 rounded-full bg-slate-900/90 border border-white/15 hover:bg-red-500 hover:border-red-500 text-white/70 hover:text-white flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer"
               >
-                <ChevronDown className="w-6 h-6 text-white" />
+                <X className="w-3.5 h-3.5" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {!open && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.85 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.85 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                className="bg-[#082D4A] text-white text-[11.5px] font-semibold px-3.5 py-1.5 rounded-full shadow-lg border border-white/10 whitespace-nowrap"
+              >
+                {lang === 'ar' ? 'اسأل مساعد WAVZ الذكي ✨' : 'Ask WAVZ AI ✨'}
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.button>
-      </div>
+
+          <motion.button
+            onClick={() => setOpen(!open)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="relative w-[72px] h-[72px] rounded-full overflow-hidden shadow-2xl shadow-[#1173BD]/40 border-2 border-[#1173BD]/60 bg-slate-950 cursor-pointer"
+            style={{ outline: 'none' }}
+          >
+            {/* Pulsing ring */}
+            <span className="absolute inset-0 rounded-full border-2 border-[#38BDF8]/40 animate-ping" />
+
+            {/* Static Robot Icon */}
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-[#082D4A] to-slate-950 relative group">
+              <div className="absolute inset-0 bg-[#38BDF8]/10 animate-pulse rounded-full" />
+              <Bot className="w-8 h-8 text-[#38BDF8] relative z-10 transition-transform group-hover:scale-110 duration-300" />
+            </div>
+
+            {/* Open/Close overlay icon */}
+            <AnimatePresence>
+              {open && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  className="absolute inset-0 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm rounded-full"
+                >
+                  <ChevronDown className="w-6 h-6 text-white" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </div>
+      )}
 
       {/* Chat Panel */}
       <AnimatePresence>
@@ -466,6 +513,34 @@ export const SupportChat = () => {
                 </button>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Small Restore Button when fully dismissed */}
+      <AnimatePresence>
+        {dismissed && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.9 }}
+            className="fixed bottom-6 right-6 z-[9999]"
+            dir={dir}
+          >
+            <button
+              onClick={handleRestore}
+              title={lang === 'ar' ? 'إظهار مساعد الذكاء الاصطناعي' : 'Show AI Assistant'}
+              className="group relative w-10 h-10 rounded-full bg-[#082D4A]/80 backdrop-blur-md border border-[#1173BD]/40 text-[#38BDF8] hover:text-white hover:bg-[#1173BD] hover:border-[#1173BD] flex items-center justify-center transition-all duration-250 shadow-lg cursor-pointer"
+            >
+              <Bot className="w-5 h-5 transition-transform group-hover:scale-110" />
+              
+              {/* Tooltip on hover */}
+              <span className={`absolute bottom-full mb-2 hidden group-hover:block whitespace-nowrap bg-slate-950 text-white text-[10.5px] font-semibold px-2.5 py-1 rounded shadow-md border border-white/10 ${
+                dir === 'rtl' ? 'left-0' : 'right-0'
+              }`}>
+                {lang === 'ar' ? 'إظهار مساعد WAVZ ✨' : 'Show WAVZ AI ✨'}
+              </span>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
