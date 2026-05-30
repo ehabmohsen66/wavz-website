@@ -88,7 +88,7 @@ export const News = ({ route }) => {
     const matchesSearch =
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.content.toLowerCase().includes(searchQuery.toLowerCase());
+      (article.content || '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -177,9 +177,44 @@ export const News = ({ route }) => {
 
           {/* Body Text Content */}
           <div className="prose prose-slate max-w-none text-slate-700 text-[15.5px] leading-[1.8] space-y-6">
-            {article.content.split('\n\n').map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+            {article.content ? (
+              article.content.split('\n\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))
+            ) : (
+              <div className="space-y-6">
+                <p className="text-lg text-slate-800 font-normal leading-relaxed">
+                  {article.excerpt}
+                </p>
+                
+                {/* Premium Interactive Call-to-Action for external reading */}
+                <div className="mt-8 p-6 lg:p-8 rounded-2xl border border-[#1173BD]/20 bg-gradient-to-br from-[#082D4A]/5 to-[#1173BD]/5 backdrop-blur-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFB814]/10 rounded-full blur-3xl pointer-events-none" />
+                  <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    <div className="space-y-2">
+                      <h4 className="text-[17px] font-bold text-[#082D4A] tracking-tight">
+                        {lang === 'ar' ? 'البيان الصحفي الكامل متوفر الآن' : 'Full Press Release Available'}
+                      </h4>
+                      <p className="text-[13.5px] text-slate-600 leading-relaxed max-w-md">
+                        {lang === 'ar' 
+                          ? 'هذا الملخص يمثل جزءاً من تغطيتنا الإعلامية. يمكنك الانتقال إلى المصدر الأصلي للاطلاع على كامل البيان الصحفي والتفاصيل الرسمية.' 
+                          : 'This summary is part of our media coverage. You can read the complete official press release with full architectural details on the original publication portal.'}
+                      </p>
+                    </div>
+                    <a
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#1173BD] text-white hover:bg-[#082D4A] text-[13.5px] font-bold transition-all duration-300 shadow-md whitespace-nowrap"
+                    >
+                      {lang === 'ar' ? 'اقرأ البيان الكامل' : 'Read Full Release'}
+                      <span className={dir === 'rtl' ? 'rotate-180' : ''}>→</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <p className="text-slate-400 text-[14px] pt-4 italic">
               {lang === 'ar' 
                 ? 'لمزيد من المعلومات حول حلولنا الاستشارية والتشغيلية الرقمية المتكاملة، لا تتردد في حجز استشارة فنية مخصصة مع قادة البنية التحتية والتحول الرقمي لدينا.'
