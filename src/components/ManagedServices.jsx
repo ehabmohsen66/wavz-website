@@ -255,14 +255,34 @@ export function HeartFavorite() {
   const [isLiked, setIsLiked] = useState(false);
 
   return (
-    <div className="flex items-center justify-center">
-      <motion.button
-        onClick={() => {
-          setIsLiked(!isLiked);
-          alert("You are awesome!");
+    <div className="flex flex-col items-center justify-center relative" style={{ minHeight: '44px' }}>
+      {/* Floating text above the heart */}
+      <motion.div
+        initial={{ opacity: 0, y: 4, scale: 0.9 }}
+        animate={{ 
+          opacity: isLiked ? 1 : 0, 
+          y: isLiked ? -24 : 4,
+          scale: isLiked ? 1 : 0.9 
         }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        style={{
+          position: 'absolute',
+          color: '#FFB814',
+          fontSize: '11px',
+          fontWeight: 700,
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
+          fontFamily: 'Outfit, system-ui, sans-serif'
+        }}
+      >
+        You are awesome!
+      </motion.div>
+
+      <motion.button
+        onClick={() => setIsLiked(!isLiked)}
         whileTap={{ scale: 0.9 }}
         className="rounded-full p-2 transition-colors hover:bg-white/10"
+        style={{ cursor: 'pointer' }}
       >
         <motion.div
           animate={{
