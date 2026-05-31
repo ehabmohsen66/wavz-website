@@ -755,6 +755,26 @@ export const BlogPage = ({ route }) => {
         .blog-search:focus { border-color: #1173BD !important; outline: none; }
         .blog-cat:hover  { border-color: rgba(17,115,189,0.3) !important; color: #1173BD !important; }
         .blog-cat-active { background: rgba(255,184,20,0.12) !important; border-color: rgba(255,184,20,0.4) !important; color: #FFB814 !important; }
+        .blog-cats-container {
+          display: flex;
+          flex-wrap: nowrap;
+          gap: 8px;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          padding: 4px 10px;
+          width: 100%;
+          justify-content: flex-start;
+          box-sizing: border-box;
+        }
+        .blog-cats-container::-webkit-scrollbar {
+          display: none;
+        }
+        @media (min-width: 1200px) {
+          .blog-cats-container {
+            justify-content: center;
+          }
+        }
         @media (max-width: 640px) {
           .featured-grid { grid-template-columns: 1fr !important; }
           .featured-img  { min-height: 200px !important; aspect-ratio: 16/9; }
@@ -843,7 +863,7 @@ export const BlogPage = ({ route }) => {
           borderRadius: 16, padding: '24px 28px',
         }}>
           {/* Category filters */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', width: '100%' }}>
+          <div className="blog-cats-container">
             {cats.map(cat => {
               const isActive = activeCat === cat;
               return (
@@ -859,6 +879,8 @@ export const BlogPage = ({ route }) => {
                     background: isActive ? 'rgba(255,184,20,0.12)' : 'rgba(255,255,255,0.04)',
                     color: isActive ? T.gold : 'rgba(145,196,245,0.6)',
                     cursor: 'pointer', transition: 'all 0.18s ease',
+                    flexShrink: 0,
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {cat}
