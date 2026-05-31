@@ -107,15 +107,31 @@ const WhyCard = ({ item, idx }) => {
 /* ══════════════════════════════════════════════════════
    MAIN PAGE
 ══════════════════════════════════════════════════════ */
+import { usePartners } from '../hooks/index.js';
+
 export const Partners = () => {
   const { lang, dir } = useLang();
   const isAr     = lang === 'ar';
   const whyItems = isAr ? WHY_PARTNER_AR : WHY_PARTNER_EN;
 
-  const logos = PARTNERS.map(p => ({ src: p.logo, name: p.name }));
-  const row1  = logos.slice(0, 8);
-  const row2  = logos.slice(7);
-  const rep   = arr => [...arr, ...arr, ...arr, ...arr];
+  const { data: dbPartners } = usePartners([]);
+
+  const mappedPartners = (dbPartners && dbPartners.length > 0)
+    ? dbPartners.map(p => {
+        let logoUrl = p.logo || '';
+        if (logoUrl && !logoUrl.startsWith('http') && !logoUrl.startsWith('data:')) {
+          const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
+          logoUrl = `${backendBase}${logoUrl}`;
+        }
+        return { name: p.name, logo: logoUrl };
+      })
+    : PARTNERS;
+
+  const logos = mappedPartners.map(p => ({ src: p.logo, name: p.name }));
+  const row1  = logos.slice(0, Math.ceil(logos.length / 2));
+  const row2  = logos.slice(Math.ceil(logos.length / 2) - 1);
+  const rep   = arr => arr.length > 0 ? [...arr, ...arr, ...arr, ...arr] : [];
+
 
   return (
     <div className="relative w-full" dir={dir}>

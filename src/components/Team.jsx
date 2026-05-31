@@ -3,6 +3,66 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Users, ChevronDown, ChevronUp, Briefcase } from 'lucide-react';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { useLang } from '../i18n/LangContext.jsx';
+import { useTeam } from '../hooks/index.js';
+
+const mapDbMemberToMember = (dbMem, ar) => {
+  let photoUrl = dbMem.photo || '';
+  if (photoUrl && !photoUrl.startsWith('http') && !photoUrl.startsWith('data:')) {
+    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
+    photoUrl = `${backendBase}${photoUrl}`;
+  }
+
+  let department = ar ? 'التكنولوجيا' : 'Technology';
+  const role = ar ? dbMem.title_ar : dbMem.title_en;
+  const roleLower = (role || '').toLowerCase();
+  
+  if (roleLower.includes('ceo') || roleLower.includes('managing') || roleLower.includes('مدير عام') || roleLower.includes('رئيس تنفيذي')) {
+    department = ar ? 'التنفيذية' : 'Executive';
+  } else if (roleLower.includes('finance') || roleLower.includes('مالي')) {
+    department = ar ? 'المالية' : 'Finance';
+  } else if (roleLower.includes('human') || roleLower.includes('موارد')) {
+    department = ar ? 'رأس المال البشري' : 'Human Capital';
+  } else if (roleLower.includes('commercial') || roleLower.includes('تجاري')) {
+    department = ar ? 'التجارية' : 'Commercial';
+  } else if (roleLower.includes('postal') || roleLower.includes('بريد')) {
+    department = ar ? 'تطوير الأعمال' : 'Business Development';
+  } else if (roleLower.includes('sap')) {
+    department = ar ? 'SAP' : 'SAP';
+  } else if (roleLower.includes('partner') || roleLower.includes('شراكات')) {
+    department = ar ? 'الشراكات' : 'Partnerships';
+  } else if (roleLower.includes('legal') || roleLower.includes('قانوني')) {
+    department = ar ? 'القانونية' : 'Legal';
+  } else if (roleLower.includes('data') || roleLower.includes('ai') || roleLower.includes('بيانات')) {
+    department = ar ? 'البيانات والذكاء الاصطناعي' : 'Data & AI';
+  }
+
+  let years = '15+';
+  const match = (dbMem.bio_en || '').match(/(\d+)\+?\s*years/i);
+  if (match) {
+    years = `${match[1]}+`;
+  } else {
+    const matchAr = (dbMem.bio_ar || '').match(/(\d+)\+?\s*عام/);
+    if (matchAr) {
+      years = `+${matchAr[1]}`;
+    }
+  }
+
+  const highlight = ar 
+    ? `${dbMem.title_ar} · خبرة ${years}` 
+    : `${dbMem.title_en} · ${years} Years`;
+
+  return {
+    photo: photoUrl,
+    name: ar ? dbMem.name_ar : dbMem.name_en,
+    role: ar ? dbMem.title_ar : dbMem.title_en,
+    department: department,
+    years: years,
+    highlight: highlight,
+    bio: ar ? dbMem.bio_ar : dbMem.bio_en,
+    type: dbMem.type
+  };
+};
+
 
 /* ── Team data ── */
 const TEAM_EN = [
@@ -820,11 +880,16 @@ const TeamHero = ({ lang, dir }) => {
 export const Team = () => {
   const { lang, dir } = useLang();
   const isAr = lang === 'ar';
-  const members = isAr ? TEAM_AR : TEAM_EN;
+
+  const { data: dbTeam } = useTeam([]);
+  const members = (dbTeam && dbTeam.length > 0)
+    ? dbTeam.filter(m => m.type === 'exec').map(m => mapDbMemberToMember(m, isAr))
+    : (isAr ? TEAM_AR : TEAM_EN);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
 
   return (
     <div className="relative w-full" dir={dir}>

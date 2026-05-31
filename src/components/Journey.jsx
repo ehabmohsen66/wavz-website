@@ -14,8 +14,10 @@ import {
 } from 'lucide-react';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { useLang } from '../i18n/LangContext.jsx';
-import { useReveal } from '../hooks/index.js';
+import { useReveal, useTimeline } from '../hooks/index.js';
 import { Boxes } from './ui/background-boxes.jsx';
+import * as LucideIcons from 'lucide-react';
+
 
 const STEP_ICONS = [
   <Package className="w-5 h-5" />,
@@ -41,6 +43,7 @@ const STEP_COLORS = [
 
 export const Journey = () => {
   const { t, lang, dir } = useLang();
+  const ar = lang === 'ar';
   const [revealRef, visible] = useReveal();
 
   useEffect(() => {
@@ -48,6 +51,21 @@ export const Journey = () => {
   }, []);
 
   const data = t.journey;
+
+  // Fetch timeline dynamically from DB
+  const { data: dbTimeline } = useTimeline(data.steps);
+
+  const stepsList = (dbTimeline && dbTimeline.length > 0 && dbTimeline !== data.steps)
+    ? dbTimeline.map(item => ({
+        year: item.year,
+        title: ar ? item.title_ar : item.title_en,
+        items: ar ? item.items_ar : item.items_en,
+        desc: ar ? item.desc_ar : item.desc_en,
+        icon: item.icon,
+        color_scheme: item.color_scheme
+      }))
+    : data.steps;
+
 
   return (
     <div className="relative overflow-hidden w-full" dir={dir}>
@@ -141,9 +159,18 @@ export const Journey = () => {
           className={`transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
         >
           <div className="space-y-0">
-            {data.steps.map((step, idx) => {
+            {stepsList.map((step, idx) => {
               const color = STEP_COLORS[idx % STEP_COLORS.length];
-              const isLast = idx === data.steps.length - 1;
+              const isLast = idx === stepsList.length - 1;
+
+              // Resolve icon dynamically from DB or standard list
+              let iconElement = React.cloneElement(STEP_ICONS[idx % STEP_ICONS.length], { className: 'w-5 h-5' });
+              if (step.icon) {
+                const LucideIconComponent = LucideIcons[step.icon];
+                if (LucideIconComponent) {
+                  iconElement = <LucideIconComponent className="w-5 h-5" />;
+                }
+              }
 
               return (
                 <div key={idx} className="flex gap-0 group">
@@ -214,16 +241,28 @@ export const Journey = () => {
                         <div
                           className={`flex-shrink-0 w-11 h-11 rounded-xl ${color.bg} ${color.text} flex items-center justify-center mt-0.5`}
                         >
-                          {React.cloneElement(STEP_ICONS[idx % STEP_ICONS.length], { className: 'w-5 h-5' })}
+                          {iconElement}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <h3 className="text-[18px] font-extrabold text-[#082D4A] mb-2 leading-tight">
                             {step.title}
                           </h3>
-                          <p className="text-[14.5px] text-slate-500 leading-relaxed">
-                            {step.desc}
-                          </p>
+                          {step.desc ? (
+                            <p className="text-[14.5px] text-slate-500 leading-relaxed">
+                              {step.desc}
+                            </p>
+                          ) : Array.isArray(step.items) ? (
+                            <ul className="list-disc ps-5 pe-2 space-y-1 text-[14.5px] text-slate-500 leading-relaxed">
+                              {step.items.map((item, itemIdx) => (
+                                <li key={itemIdx}>{item}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-[14.5px] text-slate-500 leading-relaxed">
+                              {step.items}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -232,6 +271,7 @@ export const Journey = () => {
               );
             })}
           </div>
+
         </section>
 
         {/* ── Footer CTA ── */}

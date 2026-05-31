@@ -5,6 +5,41 @@ import { useLang } from '../i18n/LangContext.jsx';
 import blogData from './blog_contents_multilang.json';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { SearchBar } from './SearchBar.jsx';
+import { useBlog } from '../hooks/index.js';
+
+const mapDbPostToPost = (dbPost) => {
+  const dateObj = new Date(dbPost.published_at || dbPost.created_at);
+  const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const arMonths = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  const dateArStr = `${dateObj.getDate()} ${arMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+  let imageUrl = dbPost.image || '';
+  if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
+    imageUrl = `${backendBase}${imageUrl}`;
+  }
+
+  return {
+    id: dbPost.id,
+    slug: dbPost.slug,
+    title: dbPost.title_en,
+    titleAr: dbPost.title_ar,
+    date: dateStr,
+    dateAr: dateArStr,
+    category: dbPost.category_en || 'General',
+    categoryAr: dbPost.category_ar || 'عام',
+    readTime: String(dbPost.read_time || '5'),
+    excerpt: dbPost.excerpt_en,
+    excerptAr: dbPost.excerpt_ar,
+    url: `#/blog/${dbPost.slug}`,
+    image: imageUrl,
+    accent: dbPost.accent_color || '#FFB814',
+    tag: dbPost.tags || 'News',
+    blocks_en: dbPost.blocks_en || [],
+    blocks_ar: dbPost.blocks_ar || []
+  };
+};
+
 
 /* ─── Design tokens ─── */
 const T = {
@@ -388,13 +423,14 @@ const PostCard = ({ post, ar, font, index }) => {
 };
 
 /* ─── Blog Post Detail View ─── */
-const BlogDetailView = ({ post, ar, font }) => {
-  const content = blogData[post.slug];
-  const blocks = ar ? (content?.ar_blocks || content?.en_blocks) : (content?.en_blocks || content?.ar_blocks);
+const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
+  const content = post.blocks_en || post.blocks_ar ? post : blogData[post.slug];
+  const blocks = ar ? (content?.blocks_ar || content?.ar_blocks || content?.en_blocks || content?.blocks_en) : (content?.blocks_en || content?.en_blocks || content?.ar_blocks || content?.blocks_ar);
 
-  const related = POSTS_WITH_SLUGS
-    .filter(p => p.slug !== post.slug)
-    .slice(0, 3);
+  const related = allPosts.length > 0
+    ? allPosts.filter(p => p.slug !== post.slug).slice(0, 3)
+    : POSTS_WITH_SLUGS.filter(p => p.slug !== post.slug).slice(0, 3);
+
 
   if (!content || !blocks) {
     return (
@@ -655,6 +691,19 @@ export const BlogPage = ({ route }) => {
   const dir  = ar ? 'rtl' : 'ltr';
   const font = ar ? FONT_AR : FONT;
 
+  const { data: dbPosts } = useBlog(null, POSTS);
+
+  const postsList = (dbPosts && dbPosts.length > 0 ? dbPosts : POSTS).map(p => {
+    if (p.published_at || p.created_at) {
+      return mapDbPostToPost(p);
+    }
+    if (!p.slug) {
+      const slug = p.url?.replace('https://wavz.com.eg/', '')?.split('/')[0] || '';
+      return { ...p, slug };
+    }
+    return p;
+  });
+
   const [search, setSearch]     = useState('');
   const [activeCat, setActiveCat] = useState(ar ? 'الكل' : 'All');
 
@@ -664,16 +713,16 @@ export const BlogPage = ({ route }) => {
 
   const isBlogDetailRoute = route && route.startsWith('#/blog/');
   const activeSlug = isBlogDetailRoute ? route.replace('#/blog/', '') : null;
-  const currentPost = isBlogDetailRoute ? POSTS_WITH_SLUGS.find(p => p.slug === activeSlug) : null;
+  const currentPost = isBlogDetailRoute ? postsList.find(p => p.slug === activeSlug) : null;
 
   if (isBlogDetailRoute && currentPost) {
-    return <BlogDetailView post={currentPost} ar={ar} font={font} />;
+    return <BlogDetailView post={currentPost} ar={ar} font={font} allPosts={postsList} />;
   }
 
   const cats     = ar ? ALL_CATS_AR : ALL_CATS_EN;
   const allLabel = ar ? 'الكل' : 'All';
 
-  const filtered = POSTS_WITH_SLUGS.filter(p => {
+  const filtered = postsList.filter(p => {
     const catMatch = activeCat === allLabel ||
       (ar ? p.categoryAr === activeCat : p.category === activeCat);
     const q = search.toLowerCase();
@@ -681,6 +730,7 @@ export const BlogPage = ({ route }) => {
                        (ar ? p.excerptAr : p.excerpt).toLowerCase().includes(q);
     return catMatch && (search === '' || titleMatch);
   });
+
 
   const featured = filtered[0];
   const rest     = filtered.slice(1);

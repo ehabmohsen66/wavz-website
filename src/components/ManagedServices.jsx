@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
+import { useServices } from '../hooks/index.js';
 
 /* ─────────────────────────────────────────────────────────────
    Design Tokens — WAVZ Brand
@@ -818,7 +819,9 @@ export const ManagedServices = () => {
   const [autoCycle, setAutoCycle] = useState(true);
   const autoCycleRef = useRef(null);
 
-  const serviceDetails = {
+  const { data: dbServices } = useServices('managed-services');
+
+  const fallbackServiceDetails = {
     CCC: {
       stats: ar
         ? [{ val: '99.99%', label: 'اتفاقية مستوى الخدمة' }, { val: '240+', label: 'الأزمات النشطة سنوياً' }, { val: 'فوري', label: 'سرعة الاستجابة' }]
@@ -877,7 +880,7 @@ export const ManagedServices = () => {
     CLD: {
       stats: ar
         ? [{ val: '99.99%', label: 'توافر السحابة' }, { val: '12,000+', label: 'بيئات افتراضية' }, { val: 'متعدد / هجين', label: 'طبيعة النشر' }]
-        : [{ val: '99.99%', label: 'Cloud SLA' }, { val: '12,000+', label: 'Virtual Cores' }, { val: 'Multi / Hybrid', label: 'Deployment Model' }],
+        : [{ val: '99.99%', label: 'Cloud SLA' }, { val: '12,000%', label: 'Virtual Cores' }, { val: 'Multi / Hybrid', label: 'Deployment Model' }],
       pipeline: ar
         ? ['سحابة متعددة', 'بيئة الخوادم', 'موزع الأحمال', 'تمدد تلقائي']
         : ['Multi-Cloud Mesh', 'Virtualization', 'Load Balancer', 'Autoscale'],
@@ -888,7 +891,7 @@ export const ManagedServices = () => {
     CON: {
       stats: ar
         ? [{ val: '100%', label: 'نسبة النجاح' }, { val: '400+', label: 'دراسة استراتيجية' }, { val: 'شراكة كاملة', label: 'نموذج العلاقة' }]
-        : [{ val: '100%', label: 'Delivery Rate' }, { val: '400+', label: 'Blueprints Delivered' }, { val: 'Strategic Partner', label: 'Engagement Model' }],
+        : [{ val: '100%', label: 'Delivery Rate' }, { val: '400%', label: 'Blueprints Delivered' }, { val: 'Strategic Partner', label: 'Engagement Model' }],
       pipeline: ar
         ? ['تقييم الأصول', 'تحليل الفجوات', 'خريطة الطريق', 'تدقيق الحوكمة']
         : ['Assessment', 'Gap Analysis', 'Roadmap Build', 'Governance Audit'],
@@ -898,7 +901,7 @@ export const ManagedServices = () => {
     }
   };
 
-  const services = ar ? [
+  const fallbackServices = ar ? [
     { code: 'CCC', title: 'مركز القيادة والسيطرة', body: 'مجموعة لا مثيل لها من الأداء والبساطة والموثوقية لحماية الأصول الحيوية. فرق خبيرة متمرسة في إدارة الأزمات واتخاذ القرار والاستجابة الطارئة الاحترافية.' },
     { code: 'SOC', title: 'مركز عمليات الخدمة', body: 'خدمات إدارة مراكز الاتصال تركّز على تجربة العملاء والعلامة التجارية وخفض التكاليف وتحسين العمليات، من المكالمات التقليدية إلى قنوات الاتصال المتعددة.' },
     { code: 'AMS', title: 'خدمات التطبيقات المُدارة', body: 'تفويض تطوير وتعزيز وصيانة تطبيقاتك لضمان أداء النظام مع تقليل النفقات، استناداً إلى خمسة محاور: الاستراتيجية والحوكمة والتنظيم والعملية والتطبيق.' },
@@ -915,6 +918,38 @@ export const ManagedServices = () => {
     { code: 'CLD', title: 'Cloud Managed Services', body: 'IaaS, PaaS and SaaS encompassing workload modernisation, migration consulting, infrastructure maintenance and real-time 24×7 monitoring for scalability and cost efficiency.' },
     { code: 'CON', title: 'Consultation Services', body: 'Strategic partnership aligning cutting-edge IT advancements with your unique business objectives, optimising costs and operational efficiency through precisely tailored solutions.' },
   ];
+
+  const services = useMemo(() => {
+    if (dbServices && dbServices.length > 0) {
+      return dbServices.map(s => ({
+        code: s.code,
+        title: ar ? (s.title_ar || s.title_en) : s.title_en,
+        body: ar ? (s.body_ar || s.body_en) : s.body_en,
+        icon: s.icon || s.code
+      }));
+    }
+    return fallbackServices;
+  }, [dbServices, ar]);
+
+  const serviceDetails = useMemo(() => {
+    if (dbServices && dbServices.length > 0) {
+      const details = {};
+      dbServices.forEach(s => {
+        details[s.code] = {
+          stats: (s.stats || []).map(st => ({
+            val: st.value,
+            label: ar ? (st.label_ar || st.label_en) : st.label_en
+          })),
+          pipeline: (s.pipelines || []).map(p => ar ? (p.step_ar || p.step_en) : p.step_en),
+          bullets: (s.bullets || []).map(b => ar ? (b.text_ar || b.text_en) : b.text_en)
+        };
+      });
+      return details;
+    }
+    return fallbackServiceDetails;
+  }, [dbServices, ar]);
+
+  const safeActiveIdx = activeServiceIdx < services.length ? activeServiceIdx : 0;
 
   const stats = ar ? [
     { value: 99, suffix: '.9%', label: 'Uptime SLA', sub: 'اتفاقية مستوى الخدمة' },
@@ -1340,7 +1375,7 @@ export const ManagedServices = () => {
                 key={s.code}
                 service={s}
                 details={serviceDetails[s.code]}
-                isActive={i === activeServiceIdx}
+                isActive={i === safeActiveIdx}
                 onSelect={() => handleSetActive(i)}
                 font={font}
               />
@@ -1350,9 +1385,9 @@ export const ManagedServices = () => {
           {/* Single Detail Panel — updates when card changes */}
           <AnimatePresence mode="wait">
             <DetailPanel
-              key={activeServiceIdx}
-              service={services[activeServiceIdx]}
-              details={serviceDetails[services[activeServiceIdx].code]}
+              key={safeActiveIdx}
+              service={services[safeActiveIdx] || services[0]}
+              details={serviceDetails[(services[safeActiveIdx] || services[0])?.code]}
               ar={ar}
               font={font}
             />
@@ -1370,14 +1405,14 @@ export const ManagedServices = () => {
                 key={i}
                 onClick={() => handleSetActive(i)}
                 style={{
-                  width: i === activeServiceIdx ? 32 : 8,
+                  width: i === safeActiveIdx ? 32 : 8,
                   height: 8,
                   borderRadius: 4,
                   border: 'none',
-                  background: i === activeServiceIdx ? '#1173BD' : 'rgba(8,28,50,0.15)',
+                  background: i === safeActiveIdx ? '#1173BD' : 'rgba(8,28,50,0.15)',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  opacity: i === activeServiceIdx ? 1 : 0.5,
+                  opacity: i === safeActiveIdx ? 1 : 0.5,
                 }}
                 aria-label={`${s.code} - ${s.title}`}
               />

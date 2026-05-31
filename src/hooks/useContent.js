@@ -1,0 +1,264 @@
+import { useState, useEffect } from 'react';
+import api from '../api/client';
+
+export const useTimeline = (fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchTimeline = async () => {
+      try {
+        const response = await api.get('/timeline');
+        if (!active) return;
+        
+        // Parse items_en and items_ar if they are JSON strings
+        const formatted = (response || []).map(item => {
+          let items_en = item.items_en;
+          let items_ar = item.items_ar;
+          if (typeof items_en === 'string') {
+            try { items_en = JSON.parse(items_en); } catch (e) { items_en = []; }
+          }
+          if (typeof items_ar === 'string') {
+            try { items_ar = JSON.parse(items_ar); } catch (e) { items_ar = []; }
+          }
+          return { ...item, items_en, items_ar };
+        });
+
+        setData(formatted);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchTimeline();
+    return () => { active = false; };
+  }, []);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const useTestimonials = (fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchTestimonials = async () => {
+      try {
+        const response = await api.get('/testimonials');
+        if (!active) return;
+        setData(response);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchTestimonials();
+    return () => { active = false; };
+  }, []);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const useNavigation = (fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchNavigation = async () => {
+      try {
+        const response = await api.get('/navigation');
+        if (!active) return;
+        setData(response);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchNavigation();
+    return () => { active = false; };
+  }, []);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const useBlog = (slug = null, fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchBlog = async () => {
+      try {
+        const endpoint = slug ? `/blog/${slug}` : '/blog';
+        const response = await api.get(endpoint);
+        if (!active) return;
+
+        if (slug) {
+          // Single post response, parse JSON content blocks
+          let blocks_en = response.blocks_en;
+          let blocks_ar = response.blocks_ar;
+          if (typeof blocks_en === 'string') {
+            try { blocks_en = JSON.parse(blocks_en); } catch (e) { blocks_en = []; }
+          }
+          if (typeof blocks_ar === 'string') {
+            try { blocks_ar = JSON.parse(blocks_ar); } catch (e) { blocks_ar = []; }
+          }
+          setData({ ...response, blocks_en, blocks_ar });
+        } else {
+          // List of posts
+          const formatted = (response || []).map(post => {
+            let blocks_en = post.blocks_en;
+            let blocks_ar = post.blocks_ar;
+            if (typeof blocks_en === 'string') {
+              try { blocks_en = JSON.parse(blocks_en); } catch (e) { blocks_en = []; }
+            }
+            if (typeof blocks_ar === 'string') {
+              try { blocks_ar = JSON.parse(blocks_ar); } catch (e) { blocks_ar = []; }
+            }
+            return { ...post, blocks_en, blocks_ar };
+          });
+          setData(formatted);
+        }
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchBlog();
+    return () => { active = false; };
+  }, [slug]);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const useNews = (id = null, fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchNews = async () => {
+      try {
+        const endpoint = id ? `/news/${id}` : '/news';
+        const response = await api.get(endpoint);
+        if (!active) return;
+        setData(response);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchNews();
+    return () => { active = false; };
+  }, [id]);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const useTeam = (fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchTeam = async () => {
+      try {
+        const response = await api.get('/team');
+        if (!active) return;
+        setData(response);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchTeam();
+    return () => { active = false; };
+  }, []);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const usePartners = (fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchPartners = async () => {
+      try {
+        const response = await api.get('/partners');
+        if (!active) return;
+        setData(response);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchPartners();
+    return () => { active = false; };
+  }, []);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const useServices = (pageSlug, fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!pageSlug) return;
+    let active = true;
+    const fetchServices = async () => {
+      try {
+        const response = await api.get(`/services/${pageSlug}`);
+        if (!active) return;
+        
+        // Parse dynamic stats, pipelines, and bullets inside services if needed, 
+        // since our backend controller retrieves them pre-structured
+        setData(response);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchServices();
+    return () => { active = false; };
+  }, [pageSlug]);
+
+  return { data: data || fallback, loading, error };
+};

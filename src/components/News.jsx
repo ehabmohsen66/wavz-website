@@ -2,9 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Calendar, Clock, ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
-import { useReveal } from '../hooks/index.js';
+import { useReveal, useNews } from '../hooks/index.js';
 import { SearchBar } from './SearchBar.jsx';
 import { MeshGradient } from '@paper-design/shaders-react';
+
+const mapDbArticleToArticle = (dbArt, ar) => {
+  const dateObj = new Date(dbArt.date || dbArt.published_at || dbArt.created_at);
+  const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const arMonths = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  const dateArStr = `${dateObj.getDate()} ${arMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+  let imageUrl = dbArt.image || '';
+  if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
+    imageUrl = `${backendBase}${imageUrl}`;
+  }
+
+  const readTimeStr = ar 
+    ? `${dbArt.read_time || '5'} دقائق القراءة` 
+    : `${dbArt.read_time || '5'} min read`;
+
+  return {
+    id: String(dbArt.id),
+    title: ar ? dbArt.title_ar : dbArt.title_en,
+    excerpt: ar ? dbArt.excerpt_ar : dbArt.excerpt_en,
+    content: ar ? dbArt.content_ar : dbArt.content_en,
+    date: ar ? dateArStr : dateStr,
+    readTime: readTimeStr,
+    category: dbArt.category || 'announcement',
+    image: imageUrl,
+    url: dbArt.url || '#'
+  };
+};
+
 
 /* ─── GridBeam hero components (ported from GridBeam.tsx) ─── */
 const Beam = () => (
@@ -54,6 +84,7 @@ const GridBeam = ({ children }) => (
 
 export const News = ({ route }) => {
   const { t, lang, dir } = useLang();
+  const ar = lang === 'ar';
   const [revealRef, visible] = useReveal();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
@@ -67,6 +98,12 @@ export const News = ({ route }) => {
 
   const newsData = t.news;
   const articles = newsData?.items || [];
+
+  const { data: dbNews } = useNews(null, articles);
+  const mappedArticles = (dbNews && dbNews.length > 0 && dbNews !== articles)
+    ? dbNews.map(a => mapDbArticleToArticle(a, ar))
+    : articles;
+
 
   // Reset scroll and queries on route changes
   useEffect(() => {
@@ -90,7 +127,7 @@ export const News = ({ route }) => {
   };
 
   // Filter and search logic for the newsroom list
-  const filteredArticles = articles.filter((article) => {
+  const filteredArticles = mappedArticles.filter((article) => {
     const matchesFilter = activeFilter === 'all' || article.category === activeFilter;
     const matchesSearch =
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -100,7 +137,7 @@ export const News = ({ route }) => {
   });
 
   // Featured first 3 articles for landing grid
-  const landingArticles = articles.slice(0, 3);
+  const landingArticles = mappedArticles.slice(0, 3);
 
   // Router resolution
   const isNewsroomRoute = route === '#/news';
@@ -109,7 +146,8 @@ export const News = ({ route }) => {
   if (isArticleRoute) {
     // ── Dedicated Article Inner Page View ──
     const articleId = route.replace('#/news/', '');
-    const article = articles.find((a) => a.id === articleId);
+    const article = mappedArticles.find((a) => a.id === articleId);
+
 
     if (!article) {
       return (
@@ -127,7 +165,7 @@ export const News = ({ route }) => {
     }
 
     // Get 2 related articles (excluding the active one)
-    const relatedArticles = articles
+    const relatedArticles = mappedArticles
       .filter((a) => a.id !== article.id)
       .slice(0, 2);
 
@@ -363,7 +401,7 @@ export const News = ({ route }) => {
   if (isNewsroomRoute) {
     // ── Dedicated Newsroom List Page View ──
     return (
-      <div style={{ background: '#061E31', minHeight: '100vh', color: '#F0F4F8' }}>
+      <div className="w-full" style={{ background: '#F8FAFC', minHeight: '100vh', color: '#082D4A' }}>
 
         {/* ══ MESHGRADIENT HERO ══ */}
         <div style={{ position: 'relative', overflow: 'hidden' }}>
@@ -384,7 +422,7 @@ export const News = ({ route }) => {
           {/* Bottom fade gradient masking */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
-            background: 'linear-gradient(to top, #061E31, transparent)',
+            background: 'linear-gradient(to top, #F8FAFC, transparent)',
             pointerEvents: 'none', zIndex: 1,
           }} />
 
@@ -487,9 +525,10 @@ export const News = ({ route }) => {
             display: 'flex', flexWrap: 'wrap', gap: 12,
             alignItems: 'center', justifyContent: 'space-between',
             marginBottom: 36,
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: 12, padding: '14px 18px',
+            background: '#082D4A',
+            border: '1px solid rgba(17,115,189,0.2)',
+            boxShadow: '0 8px 24px rgba(8,45,74,0.12)',
+            borderRadius: 14, padding: '14px 18px',
           }}>
             {/* Filter Tabs */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -539,66 +578,54 @@ export const News = ({ route }) => {
                 <a
                   key={article.id}
                   href={`#/news/${article.id}`}
+                  className="group flex flex-col bg-white border border-slate-200/80 rounded-2xl overflow-hidden hover-lift cursor-pointer transition-all duration-350"
                   style={{
-                    display: 'flex', flexDirection: 'column',
-                    background: '#082D4A',
-                    border: '1px solid rgba(255,255,255,0.07)',
-                    borderRadius: 12, overflow: 'hidden',
-                    textDecoration: 'none', cursor: 'pointer',
-                    transition: 'border-color 0.2s, transform 0.2s',
+                    boxShadow: '0 4px 16px rgba(8,45,74,0.04)',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(17,115,189,0.4)'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'none'; }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = '#1173BD';
+                    e.currentTarget.style.boxShadow = '0 12px 28px rgba(8,45,74,0.08)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = '';
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(8,45,74,0.04)';
+                  }}
                 >
                   {article.image && (
-                    <div style={{ width: '100%', aspectRatio: '16/10', overflow: 'hidden', position: 'relative' }}>
+                    <div className="w-full aspect-[16/10] overflow-hidden bg-slate-100 relative">
                       <img
                         src={article.image}
                         alt={article.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.45s ease' }}
-                        onMouseOver={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
-                        onMouseOut={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                       />
-                      <div style={{ position: 'absolute', top: 12, left: dir === 'rtl' ? 'auto' : 12, right: dir === 'rtl' ? 12 : 'auto' }}>
-                        <span style={{
-                          fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
-                          padding: '3px 8px', borderRadius: 4,
-                          background: 'rgba(6,30,49,0.85)', backdropFilter: 'blur(8px)',
-                          border: '1px solid rgba(255,255,255,0.12)', color: '#FFB814',
-                          fontFamily: "'Outfit', sans-serif",
-                        }}>
+                      <div className="absolute top-4 start-4">
+                        <span className={`text-[9.5px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-md shadow-sm ${getCategoryStyles(article.category)}`}>
                           {newsData.categories[article.category]}
                         </span>
                       </div>
                     </div>
                   )}
 
-                  <div style={{ padding: '22px 24px', flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'rgba(145,196,245,0.45)', fontSize: 11.5 }}>
-                      <Calendar style={{ width: 13, height: 13 }} />
-                      <span style={{ fontFamily: "'Outfit', sans-serif" }}>{article.date}</span>
+                  <div className="p-6 flex-1 flex flex-col gap-3">
+                    <div className="flex items-center gap-1.5 text-[11.5px] text-slate-400">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{article.date}</span>
                     </div>
-                    <h4 style={{
-                      fontSize: '1.1rem', fontWeight: 700, color: '#F0F4F8',
-                      lineHeight: 1.3, letterSpacing: '-0.02em', margin: 0,
-                      fontFamily: "'Outfit', sans-serif",
-                      transition: 'color 0.2s',
-                    }}>
+                    <h4 className="text-[1.15rem] font-bold text-[#082D4A] leading-snug tracking-tight mb-1 group-hover:text-[#1173BD] transition-colors duration-200">
                       {article.title}
                     </h4>
-                    <p style={{ fontSize: 13.5, color: 'rgba(145,196,245,0.62)', lineHeight: 1.7, margin: 0, flex: 1,
-                      display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                      fontFamily: "'Outfit', sans-serif",
-                    }}>
+                    <p className="text-[13.5px] text-slate-500 leading-relaxed mb-4 flex-1 line-clamp-3">
                       {article.excerpt}
                     </p>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 'auto' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'rgba(145,196,245,0.4)', fontSize: 11.5 }}>
-                        <Clock style={{ width: 13, height: 13 }} />
-                        <span style={{ fontFamily: "'Outfit', sans-serif" }}>{article.readTime}</span>
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
+                      <div className="flex items-center gap-1.5 text-[11.5px] text-slate-400">
+                        <Clock className="w-3.5 h-3.5" />
+                        <span>{article.readTime}</span>
                       </div>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: '#1173BD', fontFamily: "'Outfit', sans-serif" }}>
-                        {newsData.readArticle} →
+                      <span className="text-[13px] font-semibold text-[#1173BD] inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+                        {newsData.readArticle}
+                        <span className={`transition-transform duration-200 group-hover:translate-x-0.5 ${dir === 'rtl' ? 'rotate-180' : ''}`}>→</span>
                       </span>
                     </div>
                   </div>
@@ -606,7 +633,7 @@ export const News = ({ route }) => {
               ))}
             </div>
           ) : (
-            <div style={{ textAlign: 'center', padding: '80px 0', color: 'rgba(145,196,245,0.5)', fontFamily: "'Outfit', sans-serif" }}>
+            <div style={{ textAlign: 'center', padding: '80px 0', color: '#64748b', fontFamily: "'Outfit', sans-serif" }}>
               <BookOpen style={{ width: 48, height: 48, margin: '0 auto 12px', opacity: 0.4 }} />
               <p style={{ fontSize: 15, fontWeight: 600 }}>
                 {lang === 'ar' ? 'لا توجد نتائج تطابق بحثك' : 'No articles match your search'}

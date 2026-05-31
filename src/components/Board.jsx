@@ -7,6 +7,43 @@ import {
   Award, Briefcase, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
+import { useTeam } from '../hooks/index.js';
+
+const mapDbMemberToBoardMember = (dbMem, ar) => {
+  let photoUrl = dbMem.photo || '';
+  if (photoUrl && !photoUrl.startsWith('http') && !photoUrl.startsWith('data:')) {
+    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
+    photoUrl = `${backendBase}${photoUrl}`;
+  }
+
+  let years = '30+';
+  const match = (dbMem.bio_en || '').match(/(\d+)\+?\s*years/i);
+  if (match) {
+    years = `${match[1]}+`;
+  } else {
+    const matchAr = (dbMem.bio_ar || '').match(/(\d+)\+?\s*عام/);
+    if (matchAr) {
+      years = `+${matchAr[1]}`;
+    }
+  }
+
+  const highlight = ar 
+    ? `${dbMem.title_ar} · خبرة ${years}` 
+    : `${dbMem.title_en} · ${years} Years`;
+
+  const isChair = (dbMem.title_en || '').toLowerCase().includes('chair');
+
+  return {
+    name: ar ? dbMem.name_ar : dbMem.name_en,
+    role: ar ? dbMem.title_ar : dbMem.title_en,
+    photo: photoUrl,
+    shortBio: ar ? (dbMem.bio_ar || '').substring(0, 100) : (dbMem.bio_en || '').substring(0, 100),
+    fullBio: ar ? dbMem.bio_ar : dbMem.bio_en,
+    highlight: highlight,
+    isChair: isChair
+  };
+};
+
 
 /* ────────────────────────────────────────────────────────────
    Canvas Globe — Fibonacci dot sphere + animated arc connections
@@ -736,15 +773,22 @@ const MemberCard = ({ member, idx, lang, dir }) => {
 /* ── Main page ── */
 export const Board = () => {
   const { lang, dir } = useLang();
+  const isAr = lang === 'ar';
+  
+  const staticMembers = isAr ? BOARD_DATA.ar : BOARD_DATA.en;
+  
+  const { data: dbTeam } = useTeam([]);
+  const members = (dbTeam && dbTeam.length > 0)
+    ? dbTeam.filter(m => m.type === 'board').map(m => mapDbMemberToBoardMember(m, isAr))
+    : staticMembers;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const members = lang === 'ar' ? BOARD_DATA.ar : BOARD_DATA.en;
-  const isAr = lang === 'ar';
-  const chair = members[0];
-  const rest = members.slice(1);
+  const chair = members.find(m => m.isChair) || members[0];
+  const rest = members.filter(m => m !== chair);
+
 
   return (
     <div className="relative w-full" dir={dir}>

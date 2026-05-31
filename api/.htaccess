@@ -1,0 +1,43 @@
+# ============================================================
+# WAVZ CMS API — Apache Configuration
+# ============================================================
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Set base path
+RewriteBase /api/
+
+# ---- CORS Headers ----
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header always set Access-Control-Max-Age "3600"
+</IfModule>
+
+# Handle preflight OPTIONS requests
+RewriteRule ^(.*)$ $1 [R=200,L] 
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# ---- Deny access to sensitive files ----
+<FilesMatch "\.(sql|env|log|md)$">
+    Require all denied
+</FilesMatch>
+
+<Files "config.php">
+    Require all denied
+</Files>
+
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+# ---- Block directory listing ----
+Options -Indexes
+
+# ---- Route all requests to index.php ----
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
