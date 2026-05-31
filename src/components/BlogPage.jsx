@@ -352,13 +352,23 @@ const PostCard = ({ post, ar, font, index }) => {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: (index % 3) * 0.07, ease: [0.16, 1, 0.3, 1] }}
+      className="hover-lift"
       style={{
         display: 'flex', flexDirection: 'column',
-        background: T.navy2, border: `1px solid ${T.border}`,
-        borderRadius: 10, overflow: 'hidden',
+        background: '#ffffff', border: '1px solid rgba(17,115,189,0.12)',
+        borderRadius: 12, overflow: 'hidden',
         textDecoration: 'none', cursor: 'pointer',
+        boxShadow: '0 4px 16px rgba(8,45,74,0.04)',
+        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
       }}
-      whileHover={{ borderColor: `${post.accent}44`, y: -4 }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = 'rgba(17,115,189,0.3)';
+        e.currentTarget.style.boxShadow = '0 12px 28px rgba(8,45,74,0.08)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = 'rgba(17,115,189,0.12)';
+        e.currentTarget.style.boxShadow = '0 4px 16px rgba(8,45,74,0.04)';
+      }}
       whileTap={{ scale: 0.99 }}
     >
       {/* Thumbnail */}
@@ -379,11 +389,12 @@ const PostCard = ({ post, ar, font, index }) => {
         <div style={{
           position: 'absolute', top: 10,
           left: ar ? 'auto' : 10, right: ar ? 10 : 'auto',
-          padding: '3px 8px', borderRadius: 4,
-          background: 'rgba(6,30,49,0.82)', backdropFilter: 'blur(8px)',
+          padding: '3.5px 10px', borderRadius: 4,
+          background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)',
           border: `1px solid ${post.accent}44`,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
         }}>
-          <span style={{ fontFamily: font, fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: post.accent }}>
+          <span style={{ fontFamily: font, fontSize: 10.5, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: post.accent }}>
             {ar ? post.categoryAr : post.category}
           </span>
         </div>
@@ -394,25 +405,25 @@ const PostCard = ({ post, ar, font, index }) => {
         <h3 style={{
           fontFamily: font, fontSize: 'clamp(14px,1.4vw,16px)', fontWeight: 700,
           lineHeight: 1.35, letterSpacing: '-0.015em',
-          color: T.white, margin: 0,
+          color: '#082D4A', margin: 0,
         }}>
           {ar ? post.titleAr : post.title}
         </h3>
         <p style={{
-          fontFamily: font, fontSize: 12.5, lineHeight: 1.7, color: T.muted, margin: 0,
+          fontFamily: font, fontSize: 12.5, lineHeight: 1.7, color: '#475569', margin: 0,
           display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
         }}>
           {ar ? post.excerptAr : post.excerpt}
         </p>
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          marginTop: 'auto', paddingTop: 10, borderTop: `1px solid ${T.border}`,
+          marginTop: 'auto', paddingTop: 10, borderTop: '1px solid rgba(17,115,189,0.08)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: T.dim }}>
-            <Calendar size={11} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#64748b' }}>
+            <Calendar size={11} style={{ color: '#94a3b8' }} />
             <span style={{ fontFamily: font, fontSize: 11 }}>{ar ? post.dateAr : post.date}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: post.accent, fontSize: 11, fontFamily: font, fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#1173BD', fontSize: 11, fontFamily: font, fontWeight: 600 }}>
             {ar ? 'اقرأ المزيد' : 'Read more'}
             <ChevronRight size={13} />
           </div>
@@ -446,7 +457,7 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
   }
 
   return (
-    <div dir={ar ? 'rtl' : 'ltr'} style={{ background: T.navy, color: T.white, fontFamily: font }}>
+    <div dir={ar ? 'rtl' : 'ltr'} style={{ background: '#F8FAFC', color: '#334155', fontFamily: font }}>
       <div style={{
         position: 'relative', width: '100%',
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)',
@@ -484,7 +495,7 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
         <div style={{
           position: 'relative', zIndex: 1,
           padding: 'clamp(120px,15vw,160px) clamp(24px,6vw,80px) clamp(56px,7vw,72px)',
-          background: 'linear-gradient(to bottom, transparent 0%, #061E31 100%)',
+          background: 'linear-gradient(to bottom, transparent 0%, #F8FAFC 100%)',
         }}>
           <div style={{ maxWidth: 900, margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 32 }}>
@@ -560,7 +571,7 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
               return (
                 <Tag key={i} style={{
                   fontFamily: font,
-                  color: T.white,
+                  color: '#082D4A',
                   fontWeight: 800,
                   letterSpacing: '-0.02em',
                   marginTop: 32,
@@ -582,11 +593,11 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
                   fontStyle: 'italic',
                   margin: '24px 0',
                   padding: '20px 24px',
-                  background: 'rgba(255,184,20,0.03)',
-                  borderLeft: ar ? 'none' : `4px solid ${T.gold}`,
-                  borderRight: ar ? `4px solid ${T.gold}` : 'none',
+                  background: 'rgba(17,115,189,0.04)',
+                  borderLeft: ar ? 'none' : `4px solid #1173BD`,
+                  borderRight: ar ? `4px solid #1173BD` : 'none',
                   borderRadius: 6,
-                  color: T.white,
+                  color: '#334155',
                   lineHeight: 1.8,
                   fontSize: 16,
                 }}>
@@ -604,7 +615,7 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 12,
-                  color: 'rgba(240, 244, 248, 0.85)',
+                  color: '#334155',
                   lineHeight: 1.75,
                   fontSize: 15.5,
                 }}>
@@ -623,7 +634,7 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
                   fontFamily: font,
                   fontSize: 16.5,
                   lineHeight: 1.85,
-                  color: 'rgba(240, 244, 248, 0.85)',
+                  color: '#334155',
                   margin: 0,
                   letterSpacing: '0.01em',
                 }}>
@@ -634,16 +645,17 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
           })}
         </div>
 
-        <div style={{ borderTop: `1px solid ${T.border}`, marginTop: 64, paddingTop: 40, textAlign: ar ? 'right' : 'left' }}>
+        <div style={{ borderTop: '1px solid rgba(17,115,189,0.08)', marginTop: 64, paddingTop: 40, textAlign: ar ? 'right' : 'left' }}>
           <a href="#/blog" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '12px 24px', borderRadius: 6,
-            background: 'transparent', border: `1px solid ${T.border}`,
-            color: T.white, textDecoration: 'none', fontSize: 14, fontWeight: 700,
+            background: '#ffffff', border: '1px solid rgba(17,115,189,0.15)',
+            color: '#082D4A', textDecoration: 'none', fontSize: 14, fontWeight: 700,
+            boxShadow: '0 2px 8px rgba(8,45,74,0.04)',
             transition: 'all 0.2s ease',
           }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = T.gold; e.currentTarget.style.color = T.gold; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.white; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = '#1173BD'; e.currentTarget.style.color = '#1173BD'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(17,115,189,0.15)'; e.currentTarget.style.color = '#082D4A'; }}
           >
             {ar ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             {ar ? 'العودة لجميع المقالات' : 'Back to All Articles'}
@@ -651,11 +663,11 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
         </div>
       </section>
 
-      <section style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, padding: '64px 24px' }}>
+      <section style={{ background: '#FAFBFD', borderTop: '1px solid rgba(17,115,189,0.08)', padding: '64px 24px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32 }}>
-            <div style={{ width: 20, height: 1, background: T.gold }} />
-            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+            <div style={{ width: 20, height: 2, background: '#1173BD' }} />
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#082D4A', fontFamily: font }}>
               {ar ? 'مقالات ذات صلة' : 'Related Articles'}
             </span>
           </div>
@@ -736,12 +748,12 @@ export const BlogPage = ({ route }) => {
   const rest     = filtered.slice(1);
 
   return (
-    <div dir={dir} style={{ background: T.navy, color: T.white, minHeight: '100vh', fontFamily: font }}>
+    <div dir={dir} style={{ background: '#F8FAFC', color: '#082D4A', minHeight: '100vh', fontFamily: font }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
-        .blog-search:focus { border-color: #FFB814 !important; outline: none; }
-        .blog-cat:hover  { border-color: rgba(255,184,20,0.3) !important; color: #FFB814 !important; }
+        .blog-search:focus { border-color: #1173BD !important; outline: none; }
+        .blog-cat:hover  { border-color: rgba(17,115,189,0.3) !important; color: #1173BD !important; }
         .blog-cat-active { background: rgba(255,184,20,0.12) !important; border-color: rgba(255,184,20,0.4) !important; color: #FFB814 !important; }
         @media (max-width: 640px) {
           .featured-grid { grid-template-columns: 1fr !important; }
@@ -768,7 +780,7 @@ export const BlogPage = ({ route }) => {
         {/* Bottom fade gradient masking */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
-          background: 'linear-gradient(to top, #061E31, transparent)',
+          background: 'linear-gradient(to top, #F8FAFC, transparent)',
           pointerEvents: 'none', zIndex: 1,
         }} />
 
@@ -825,8 +837,9 @@ export const BlogPage = ({ route }) => {
           display: 'flex', flexDirection: 'column', gap: 24,
           alignItems: 'center', justifyContent: 'center',
           marginBottom: 48,
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: '#082D4A',
+          border: '1px solid rgba(17,115,189,0.2)',
+          boxShadow: '0 8px 24px rgba(8,45,74,0.12)',
           borderRadius: 16, padding: '24px 28px',
         }}>
           {/* Category filters */}
@@ -841,10 +854,10 @@ export const BlogPage = ({ route }) => {
                   style={{
                     fontFamily: font, fontSize: 12, fontWeight: isActive ? 700 : 500,
                     padding: '6px 14px',
-                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.4)' : T.dim}`,
+                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.4)' : 'rgba(255,255,255,0.1)'}`,
                     borderRadius: 100,
-                    background: isActive ? 'rgba(255,184,20,0.12)' : 'transparent',
-                    color: isActive ? T.gold : T.muted,
+                    background: isActive ? 'rgba(255,184,20,0.12)' : 'rgba(255,255,255,0.04)',
+                    color: isActive ? T.gold : 'rgba(145,196,245,0.6)',
                     cursor: 'pointer', transition: 'all 0.18s ease',
                   }}
                 >
@@ -868,7 +881,7 @@ export const BlogPage = ({ route }) => {
         {filtered.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            style={{ textAlign: 'center', padding: '80px 0', color: T.muted, fontFamily: font, fontSize: 15 }}
+            style={{ textAlign: 'center', padding: '80px 0', color: '#64748b', fontFamily: font, fontSize: 15 }}
           >
             {ar ? 'لا توجد مقالات تطابق بحثك.' : 'No articles match your search.'}
           </motion.div>
@@ -877,8 +890,8 @@ export const BlogPage = ({ route }) => {
             {featured && (
               <div style={{ marginBottom: 56 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-                  <div style={{ width: 20, height: 1, background: T.gold }} />
-                  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+                  <div style={{ width: 20, height: 2, background: '#1173BD' }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#082D4A', fontFamily: font }}>
                     {ar ? 'المقال المميز' : 'Featured Article'}
                   </span>
                 </div>
@@ -889,11 +902,11 @@ export const BlogPage = ({ route }) => {
             {rest.length > 0 && (
               <>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
-                  <div style={{ width: 20, height: 1, background: T.gold }} />
-                  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+                  <div style={{ width: 20, height: 2, background: '#1173BD' }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#082D4A', fontFamily: font }}>
                     {ar ? 'جميع المقالات' : 'All Articles'}
                   </span>
-                  <span style={{ fontFamily: font, fontSize: 11, color: T.dim }}>({rest.length})</span>
+                  <span style={{ fontFamily: font, fontSize: 11, color: '#64748b' }}>({rest.length})</span>
                 </div>
                 <div style={{
                   display: 'grid',

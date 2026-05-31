@@ -181,7 +181,7 @@ export const ContactPage = () => {
 
   const field = (id, label, el) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <label htmlFor={id} style={{ fontSize: 12.5, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: errors[id] ? T.error : T.muted, fontFamily: font, transition: 'color 0.2s' }}>
+      <label htmlFor={id} style={{ fontSize: 12.5, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: errors[id] ? T.error : '#475569', fontFamily: font, transition: 'color 0.2s' }}>
         {label}
       </label>
       {el}
@@ -193,9 +193,9 @@ export const ContactPage = () => {
 
   const inputStyle = (id) => ({
     width: '100%', padding: '11px 14px',
-    background: 'rgba(255,255,255,0.04)',
-    border: `1px solid ${errors[id] ? T.error : T.border}`,
-    borderRadius: 6, color: T.white, fontFamily: font, fontSize: 14,
+    background: '#ffffff',
+    border: `1px solid ${errors[id] ? T.error : 'rgba(17,115,189,0.15)'}`,
+    borderRadius: 6, color: '#082D4A', fontFamily: font, fontSize: 14,
     outline: 'none', transition: 'border-color 0.2s, background 0.2s',
     boxSizing: 'border-box',
   });
@@ -203,7 +203,7 @@ export const ContactPage = () => {
   const svcs = SERVICES[ar ? 'ar' : 'en'];
 
   return (
-    <div dir={dir} style={{ background: T.navy, color: T.white, minHeight: '100vh', fontFamily: font }}>
+    <div dir={dir} style={{ background: '#F8FAFC', color: '#082D4A', minHeight: '100vh', fontFamily: font }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
@@ -216,16 +216,16 @@ export const ContactPage = () => {
           *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
 
-        .contact-input:focus { border-color: ${T.gold} !important; background: rgba(255,184,20,0.04) !important; outline: none; }
-        .contact-select:focus { border-color: ${T.gold} !important; background: rgba(255,184,20,0.04) !important; outline: none; }
-        .contact-textarea:focus { border-color: ${T.gold} !important; background: rgba(255,184,20,0.04) !important; outline: none; }
+        .contact-input:focus { border-color: #1173BD !important; background: rgba(17,115,189,0.02) !important; outline: none; color: #082D4A !important; }
+        .contact-select:focus { border-color: #1173BD !important; background: rgba(17,115,189,0.02) !important; outline: none; color: #082D4A !important; }
+        .contact-textarea:focus { border-color: #1173BD !important; background: rgba(17,115,189,0.02) !important; outline: none; color: #082D4A !important; }
         .contact-btn:hover:not(:disabled) { background: ${T.goldD} !important; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,184,20,0.3) !important; }
         .contact-btn:focus-visible { outline: 2px solid ${T.gold}; outline-offset: 3px; }
         .contact-btn:disabled { opacity: 0.7; cursor: not-allowed; }
-        .contact-info-item:hover .contact-info-icon { color: ${T.gold} !important; }
-        .contact-social:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; background: rgba(255,184,20,0.05) !important; }
+        .contact-info-item:hover .contact-info-icon { color: #1173BD !important; }
+        .contact-social:hover { border-color: #1173BD !important; color: #1173BD !important; background: rgba(17,115,189,0.05) !important; }
         .contact-svc-tag { transition: all 0.18s ease; }
-        .contact-svc-tag:hover { background: rgba(255,184,20,0.08) !important; border-color: rgba(255,184,20,0.3) !important; color: ${T.gold} !important; cursor: default; }
+        .contact-svc-tag:hover { background: rgba(17,115,189,0.08) !important; border-color: rgba(17,115,189,0.3) !important; color: #1173BD !important; cursor: default; }
 
         .contact-grid { grid-template-columns: 1fr; }
         @media (min-width: 1024px) { .contact-grid { grid-template-columns: minmax(0,1.15fr) minmax(0,0.85fr); } }
@@ -251,7 +251,7 @@ export const ContactPage = () => {
           {/* Gradient — only fades to navy at the very bottom */}
           <div style={{
             position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-            background: 'linear-gradient(to bottom, rgba(6,30,49,0.05) 0%, transparent 40%, rgba(6,30,49,0.65) 80%, #061E31 100%)',
+            background: 'linear-gradient(to bottom, rgba(6,30,49,0.05) 0%, transparent 40%, rgba(6,30,49,0.65) 80%, #F8FAFC 100%)',
           }} />
 
           {/* Gold accent line at the base */}
@@ -338,10 +338,11 @@ export const ContactPage = () => {
         <FadeIn style={{ height: '100%' }}>
           {status === 'success' ? (
             <div style={{
-              background: T.navy2, border: `1px solid rgba(34,197,94,0.25)`,
+              background: '#ffffff', border: `1px solid rgba(34,197,94,0.25)`,
               borderRadius: 12, padding: 'clamp(40px,5vw,64px)',
               display: 'flex', flexDirection: 'column', alignItems: 'center',
               textAlign: 'center', gap: 20,
+              boxShadow: '0 8px 30px rgba(8,45,74,0.06)',
               animation: 'contact-scaleup 0.45s ease',
             }}>
               <div style={{
@@ -354,31 +355,31 @@ export const ContactPage = () => {
                 {Icon.Check}
               </div>
               <div>
-                <h2 style={{ fontFamily: font, fontSize: 22, fontWeight: 700, color: T.white, margin: '0 0 10px' }}>
+                <h2 style={{ fontFamily: font, fontSize: 22, fontWeight: 700, color: '#082D4A', margin: '0 0 10px' }}>
                   {ar ? 'تم إرسال رسالتك بنجاح!' : 'Message sent successfully!'}
                 </h2>
-                <p style={{ fontFamily: font, fontSize: 14.5, lineHeight: 1.7, color: T.muted, margin: 0 }}>
+                <p style={{ fontFamily: font, fontSize: 14.5, lineHeight: 1.7, color: '#475569', margin: 0 }}>
                   {ar
                     ? 'شكراً لتواصلك مع WAVZ. سيتوائم بريدك الإلكتروني مع info@wavz.com.eg.'
                     : 'Thank you for contacting WAVZ. Your inquiry email draft has been generated.'}
                 </p>
               </div>
               <button onClick={() => { setForm({ name:'',company:'',email:'',phone:'',service:'',message:'' }); setStatus('idle'); }}
-                style={{ fontFamily: font, fontSize: 13.5, fontWeight: 600, color: T.gold, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                style={{ fontFamily: font, fontSize: 13.5, fontWeight: 600, color: '#1173BD', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
                 {ar ? 'إرسال رسالة أخرى' : 'Send another message'}
               </button>
             </div>
           ) : (
-            <div style={{ background: T.navy2, border: `1px solid ${T.border}`, borderRadius: 12, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ background: '#ffffff', border: '1px solid rgba(17,115,189,0.12)', borderRadius: 12, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column', boxShadow: '0 8px 30px rgba(8,45,74,0.06)' }}>
               {/* Form header */}
-              <div style={{ padding: '28px 32px', borderBottom: `1px solid ${T.border}` }}>
+              <div style={{ padding: '28px 32px', borderBottom: '1px solid rgba(17,115,189,0.08)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 20, height: 1, background: T.gold }} />
-                  <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+                  <div style={{ width: 20, height: 2, background: '#1173BD' }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#1173BD', fontFamily: font }}>
                     {ar ? 'نموذج التواصل' : 'Contact Form'}
                   </span>
                 </div>
-                <h2 style={{ fontFamily: font, fontSize: 20, fontWeight: 700, color: T.white, margin: '10px 0 0' }}>
+                <h2 style={{ fontFamily: font, fontSize: 22, fontWeight: 800, color: '#082D4A', margin: '10px 0 0' }}>
                   {ar ? 'أخبرنا عن مشروعك' : 'Tell us about your project'}
                 </h2>
               </div>
@@ -428,15 +429,15 @@ export const ContactPage = () => {
                       style={{ ...inputStyle('service'), appearance: 'none', cursor: 'pointer', paddingRight: ar ? 14 : 36, paddingLeft: ar ? 36 : 14 }}
                       aria-required="true" aria-invalid={!!errors.service}
                     >
-                      <option value="" style={{ background: T.navy2 }}>{ar ? '— اختر الخدمة —' : '— Select a service —'}</option>
+                      <option value="" style={{ background: '#ffffff', color: '#082D4A' }}>{ar ? '— اختر الخدمة —' : '— Select a service —'}</option>
                       {svcs.map((s, i) => (
-                        <option key={i} value={s} style={{ background: T.navy2 }}>{s}</option>
+                        <option key={i} value={s} style={{ background: '#ffffff', color: '#082D4A' }}>{s}</option>
                       ))}
                     </select>
                     <div style={{
                       position: 'absolute', top: '50%', transform: 'translateY(-50%)',
                       right: ar ? 'auto' : 12, left: ar ? 12 : 'auto',
-                      color: T.muted, pointerEvents: 'none',
+                      color: '#94a3b8', pointerEvents: 'none',
                     }}>
                       {Icon.ChevronDown}
                     </div>
@@ -473,7 +474,7 @@ export const ContactPage = () => {
                   )}
                 </button>
 
-                <p style={{ fontFamily: font, fontSize: 12, color: T.muted, margin: 0, lineHeight: 1.5 }}>
+                <p style={{ fontFamily: font, fontSize: 12, color: '#64748b', margin: 0, lineHeight: 1.5 }}>
                   {ar
                     ? 'بإرسال هذا النموذج، أنت توافق على أن يتواصل معك فريق WAVZ بشأن طلبك.'
                     : 'By submitting this form, you agree to WAVZ contacting you regarding your enquiry.'}
@@ -487,14 +488,15 @@ export const ContactPage = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 28, height: '100%' }}>
           <FadeIn delay={0.1} style={{ height: '100%' }}>
             <div style={{ 
-              background: T.navy2, 
-              border: `1px solid ${T.border}`, 
+              background: '#ffffff', 
+              border: '1px solid rgba(17,115,189,0.12)', 
               borderRadius: 12, 
               padding: '32px 28px',
               display: 'flex',
               flexDirection: 'column',
               gap: 28,
               height: '100%',
+              boxShadow: '0 8px 30px rgba(8,45,74,0.06)',
               boxSizing: 'border-box'
             }}>
               {/* Centered Title */}
@@ -502,8 +504,8 @@ export const ContactPage = () => {
                 <h2 style={{ 
                   fontFamily: font, 
                   fontSize: 20, 
-                  fontWeight: 700, 
-                  color: T.gold, 
+                  fontWeight: 800, 
+                  color: '#082D4A', 
                   margin: 0,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em'
@@ -516,11 +518,11 @@ export const ContactPage = () => {
               <div style={{ 
                 borderRadius: 8, 
                 overflow: 'hidden', 
-                border: `1px solid ${T.border}`,
+                border: '1px solid rgba(17,115,189,0.08)',
                 flex: 1,
                 minHeight: 280,
                 width: '100%',
-                background: T.navy,
+                background: '#FAFBFD',
                 position: 'relative'
               }}>
                 <iframe 
@@ -543,9 +545,9 @@ export const ContactPage = () => {
                 {[
                   {
                     icon: (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.gold} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill={T.gold} fillOpacity="0.25"/>
-                        <circle cx="12" cy="10" r="3" fill={T.navy2}/>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1173BD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="#1173BD" fillOpacity="0.25"/>
+                        <circle cx="12" cy="10" r="3" fill="#ffffff"/>
                       </svg>
                     ),
                     value: ar ? 'منطقة التكنولوجيا بالمعادي، مربع MB3، مبنى B2، القاهرة، مصر.' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt.',
@@ -553,8 +555,8 @@ export const ContactPage = () => {
                   },
                   {
                     icon: (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.gold} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                        <rect x="2" y="4" width="20" height="16" rx="2" fill={T.gold} fillOpacity="0.25"/>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1173BD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                        <rect x="2" y="4" width="20" height="16" rx="2" fill="#1173BD" fillOpacity="0.25"/>
                         <path d="M2 7l10 7 10-7"/>
                       </svg>
                     ),
@@ -563,8 +565,8 @@ export const ContactPage = () => {
                   },
                   {
                     icon: (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.gold} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.08 4.18 2 2 0 0 1 5.09 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L9.91 9.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" fill={T.gold} fillOpacity="0.25"/>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1173BD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.08 4.18 2 2 0 0 1 5.09 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L9.91 9.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" fill="#1173BD" fillOpacity="0.25"/>
                       </svg>
                     ),
                     value: '+2 02 2120 1430',
@@ -572,8 +574,8 @@ export const ContactPage = () => {
                   },
                   {
                     icon: (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.gold} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                        <circle cx="12" cy="12" r="10" fill={T.gold} fillOpacity="0.25"/>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1173BD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                        <circle cx="12" cy="12" r="10" fill="#1173BD" fillOpacity="0.25"/>
                         <line x1="2" y1="12" x2="22" y2="12"/>
                         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                       </svg>
@@ -583,7 +585,7 @@ export const ContactPage = () => {
                   }
                 ].map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,184,20,0.1)', flexShrink: 0, marginTop: item.href ? 0 : 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'rgba(17,115,189,0.08)', flexShrink: 0, marginTop: item.href ? 0 : 2 }}>
                       {item.icon}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 44 }}>
@@ -592,13 +594,13 @@ export const ContactPage = () => {
                           fontFamily: font, 
                           fontSize: 14, 
                           fontWeight: 600, 
-                          color: T.white, 
+                          color: '#082D4A', 
                           textDecoration: 'none',
                           lineHeight: 1.5,
                           transition: 'color 0.18s' 
                         }}
-                          onMouseEnter={e => e.currentTarget.style.color = T.gold}
-                          onMouseLeave={e => e.currentTarget.style.color = T.white}
+                          onMouseEnter={e => e.currentTarget.style.color = '#1173BD'}
+                          onMouseLeave={e => e.currentTarget.style.color = '#082D4A'}
                         >
                           {item.value}
                         </a>
@@ -607,7 +609,7 @@ export const ContactPage = () => {
                           fontFamily: font, 
                           fontSize: 14, 
                           fontWeight: 500, 
-                          color: T.white,
+                          color: '#082D4A',
                           lineHeight: 1.5
                         }}>
                           {item.value}

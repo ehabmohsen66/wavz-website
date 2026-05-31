@@ -229,7 +229,7 @@ export default function App() {
       <LangProvider>
         <ErrorBoundary>
           <Nav />
-          <div style={{ paddingTop: '0', minHeight: '100vh', background: '#061E31' }}>
+          <div style={{ paddingTop: '0', minHeight: '100vh', background: '#F8FAFC' }}>
             <ContactPage />
           </div>
           <Footer />
@@ -245,7 +245,7 @@ export default function App() {
       <LangProvider>
         <ErrorBoundary>
           <Nav />
-          <div style={{ paddingTop: '0', minHeight: '100vh', background: '#061E31' }}>
+          <div style={{ paddingTop: '0', minHeight: '100vh', background: '#F8FAFC' }}>
             <BlogPage route={currentRoute} />
           </div>
           <Footer />
