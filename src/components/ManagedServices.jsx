@@ -363,48 +363,49 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const containerRef = useRef(null);
 
-  // Fixed viewBox dimensions with generous padding for labels
-  const w = 520;
-  const h = 480;
-  const cx = w / 2;
-  const cy = h / 2;
-  const radius = 140;
+  // Fixed viewBox — 560 wide, 500 tall
+  // Center shifted DOWN to give top nodes + labels full room
+  const VW = 560;
+  const VH = 500;
+  const cx = 280;   // horizontal center
+  const cy = 270;   // vertical center — shifted down from 250 so top has ~90px padding
+  const radius = 130; // orbital radius
   const nodeRadius = 26;
 
   // Calculate node positions in a circle
+  // Node 0 (CCC) starts at top (angle = -PI/2)
   const nodePositions = useMemo(() => {
     return services.map((_, i) => {
       const angle = (i / services.length) * Math.PI * 2 - Math.PI / 2;
       return {
         x: cx + radius * Math.cos(angle),
         y: cy + radius * Math.sin(angle),
+        angle,
       };
     });
-  }, [services.length, cx, cy, radius]);
+  }, [services.length]);
 
-  // Generate connection lines (each node to center + adjacent nodes)
+  // Generate connections
   const connections = useMemo(() => {
     const conns = [];
-    // Each node to center hub
     nodePositions.forEach((pos, i) => {
       conns.push({ from: { x: cx, y: cy }, to: pos, type: 'hub', idx: i });
     });
-    // Adjacent nodes connected
     nodePositions.forEach((pos, i) => {
       const next = nodePositions[(i + 1) % nodePositions.length];
       conns.push({ from: pos, to: next, type: 'ring', idx: i });
     });
     return conns;
-  }, [nodePositions, cx, cy]);
+  }, [nodePositions]);
 
   return (
     <div ref={containerRef} style={{ width: '100%', position: 'relative' }}>
       <svg
         ref={svgRef}
-        viewBox="0 0 520 480"
+        viewBox={`0 0 ${VW} ${VH}`}
         width="100%"
         height="auto"
-        style={{ display: 'block' }}
+        style={{ display: 'block', overflow: 'visible' }}
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
@@ -444,8 +445,8 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
         </defs>
 
         {/* ── Orbital ring guides ── */}
-        <circle cx={cx} cy={cy} r={radius} fill="none" stroke={T.border} strokeWidth="1" strokeDasharray="4 6" opacity="0.5" />
-        <circle cx={cx} cy={cy} r={radius * 0.55} fill="none" stroke={T.border} strokeWidth="0.5" strokeDasharray="2 8" opacity="0.3" />
+        <circle cx={cx} cy={cy} r={radius} fill="none" stroke={T.border} strokeWidth="1" strokeDasharray="4 6" opacity="0.4" />
+        <circle cx={cx} cy={cy} r={radius * 0.5} fill="none" stroke={T.border} strokeWidth="0.5" strokeDasharray="2 8" opacity="0.25" />
 
         {/* ── Connection lines (ring) ── */}
         {connections.filter(c => c.type === 'ring').map((conn, i) => (
@@ -607,29 +608,16 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
                 {s.code}
               </text>
 
-              {/* External label */}
+              {/* External label — placed radially outward */}
               {(() => {
-                const angle = (i / services.length) * Math.PI * 2 - Math.PI / 2;
-                const labelDist = nodeRadius + 22;
-                const lx = pos.x + labelDist * Math.cos(angle);
-                const ly = pos.y + labelDist * Math.sin(angle);
-                // Determine text anchor based on position around the circle
+                const angle = pos.angle;
+                // push label 44px beyond node edge
+                const LABEL_DIST = nodeRadius + 44;
+                const lx = pos.x + LABEL_DIST * Math.cos(angle);
+                const ly = pos.y + LABEL_DIST * Math.sin(angle);
                 const cosA = Math.cos(angle);
-                const anchor = Math.abs(cosA) < 0.25 ? 'middle' : cosA > 0 ? 'start' : 'end';
-                // Multiline: split title into max 2 lines of ~14 chars
-                const words = s.title.split(' ');
-                const lines = [];
-                let current = '';
-                words.forEach(word => {
-                  if ((current + ' ' + word).trim().length > 14 && current) {
-                    lines.push(current.trim());
-                    current = word;
-                  } else {
-                    current = (current + ' ' + word).trim();
-                  }
-                });
-                if (current) lines.push(current.trim());
-                const displayLines = lines.slice(0, 2);
+                const anchor = Math.abs(cosA) < 0.3 ? 'middle' : cosA > 0 ? 'start' : 'end';
+                const lines = wrapTitle(s.title);
                 return (
                   <text
                     x={lx} y={ly}
@@ -638,10 +626,10 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
                     fontSize="10"
                     fontWeight={isActive ? 700 : 500}
                     fontFamily={font}
-                    opacity={isActive ? 1 : 0.7}
+                    opacity={isActive ? 1 : 0.75}
                     style={{ transition: 'all 0.3s ease', pointerEvents: 'none' }}
                   >
-                    {displayLines.map((line, li) => (
+                    {lines.map((line, li) => (
                       <tspan key={li} x={lx} dy={li === 0 ? 0 : 13} textAnchor={anchor}>
                         {line}
                       </tspan>
@@ -656,6 +644,23 @@ const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, 
     </div>
   );
 };
+
+/* label helper: wrap a title into max-2 lines of ≤14 chars */
+function wrapTitle(title, maxLen = 14) {
+  const words = title.split(' ');
+  const lines = [];
+  let cur = '';
+  words.forEach(w => {
+    if (cur && (cur + ' ' + w).length > maxLen) {
+      lines.push(cur);
+      cur = w;
+    } else {
+      cur = cur ? cur + ' ' + w : w;
+    }
+  });
+  if (cur) lines.push(cur);
+  return lines.slice(0, 2);
+}
 
 
 /* ═══════════════════════════════════════════════════════════
