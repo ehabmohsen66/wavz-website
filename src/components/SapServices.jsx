@@ -788,14 +788,14 @@ export const SapServices = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
           
           {/* Left Column: Vertical Services Menu / Horizontal Tabs on Mobile */}
-          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none" style={{ alignSelf: 'flex-start' }}>
+          <div className="flex flex-row lg:flex-col lg:h-full overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none">
             {services.map((s, i) => {
               const isActive = activeServiceIdx === i;
               return (
                 <button
                   key={i}
                   onClick={() => setActiveServiceIdx(i)}
-                  className={`sap-menu-item group ${isActive ? 'active' : ''} lg:w-full`}
+                  className={`sap-menu-item group ${isActive ? 'active' : ''} lg:w-full lg:flex-1`}
                   style={{
                     background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
                     border: `1px solid ${isActive ? T.gold : T.border}`,
