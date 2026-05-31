@@ -782,7 +782,7 @@ export const BlogPage = ({ route }) => {
       `}</style>
 
       {/* ══ SOLID NAVY HERO ══ */}
-      <div style={{ position: 'relative', overflow: 'hidden', background: '#061E31', borderBottom: `1px solid ${T.border}` }}>
+      <div style={{ position: 'relative', overflow: 'hidden', background: '#061E31' }}>
         {/* Bottom fade gradient masking */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
@@ -835,6 +835,13 @@ export const BlogPage = ({ route }) => {
 
           </div>
         </div>
+
+        {/* Blue accent line at the base */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 2,
+          background: 'linear-gradient(90deg, transparent 0%, rgba(17,115,189,0.18) 30%, rgba(17,115,189,0.18) 70%, transparent 100%)',
+          zIndex: 10, opacity: 0.55,
+        }} />
       </div>
 
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(48px,6vw,72px) clamp(24px,6vw,80px)' }}>
