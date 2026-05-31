@@ -371,7 +371,7 @@ const ServiceCard = ({ service, details, isActive, onSelect, font }) => (
       background: isActive ? 'rgba(255,184,20,0.06)' : 'rgba(8,28,50,0.6)',
       border: `1.5px solid ${isActive ? T.gold : T.border}`,
       borderRadius: 14,
-      padding: '18px 16px',
+      padding: 'clamp(12px, 1.5vh, 16px) clamp(8px, 1vw, 12px)',
       textAlign: 'left',
       cursor: 'pointer',
       transition: 'all 0.25s ease',
@@ -1327,12 +1327,12 @@ export const ManagedServices = () => {
         {/* One layout for all screen sizes — no duplication */}
 
         {/* 7 Service Cards Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-          gap: 12,
-          marginBottom: 28,
-        }}>
+        <div
+          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3"
+          style={{
+            marginBottom: 28,
+          }}
+        >
           {services.map((s, i) => (
             <ServiceCard
               key={s.code}
