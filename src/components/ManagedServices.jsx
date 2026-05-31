@@ -358,309 +358,85 @@ export function HeartFavorite() {
 
 const AUTO_CYCLE_INTERVAL = 6000; // ms per service in auto mode
 
-const SystemDynamicsMap = ({ services, serviceDetails, activeIdx, setActiveIdx, ar, font }) => {
-  const svgRef = useRef(null);
-  const [hoveredIdx, setHoveredIdx] = useState(null);
-  const containerRef = useRef(null);
+/* ═══════════════════════════════════════════════════
+   SERVICE CARD — compact card for the grid selector
+═══════════════════════════════════════════════════ */
+const ServiceCard = ({ service, details, isActive, onSelect, font }) => (
+  <button
+    onClick={onSelect}
+    aria-label={service.title}
+    aria-pressed={isActive}
+    style={{
+      width: '100%',
+      background: isActive ? 'rgba(255,184,20,0.06)' : 'rgba(8,28,50,0.6)',
+      border: `1.5px solid ${isActive ? T.gold : T.border}`,
+      borderRadius: 14,
+      padding: '18px 16px',
+      textAlign: 'left',
+      cursor: 'pointer',
+      transition: 'all 0.25s ease',
+      boxShadow: isActive ? '0 0 24px rgba(255,184,20,0.12)' : 'none',
+      position: 'relative',
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 10,
+    }}
+  >
+    {/* Active gold bar at left edge */}
+    {isActive && (
+      <div style={{
+        position: 'absolute', top: 0, left: 0, bottom: 0, width: 3,
+        background: `linear-gradient(180deg, ${T.gold}, ${T.goldD})`,
+        borderRadius: '14px 0 0 14px',
+      }} />
+    )}
 
-  // Fixed viewBox — 560 wide, 500 tall
-  // Center shifted DOWN to give top nodes + labels full room
-  const VW = 560;
-  const VH = 500;
-  const cx = 280;   // horizontal center
-  const cy = 270;   // vertical center — shifted down from 250 so top has ~90px padding
-  const radius = 130; // orbital radius
-  const nodeRadius = 26;
-
-  // Calculate node positions in a circle
-  // Node 0 (CCC) starts at top (angle = -PI/2)
-  const nodePositions = useMemo(() => {
-    return services.map((_, i) => {
-      const angle = (i / services.length) * Math.PI * 2 - Math.PI / 2;
-      return {
-        x: cx + radius * Math.cos(angle),
-        y: cy + radius * Math.sin(angle),
-        angle,
-      };
-    });
-  }, [services.length]);
-
-  // Generate connections
-  const connections = useMemo(() => {
-    const conns = [];
-    nodePositions.forEach((pos, i) => {
-      conns.push({ from: { x: cx, y: cy }, to: pos, type: 'hub', idx: i });
-    });
-    nodePositions.forEach((pos, i) => {
-      const next = nodePositions[(i + 1) % nodePositions.length];
-      conns.push({ from: pos, to: next, type: 'ring', idx: i });
-    });
-    return conns;
-  }, [nodePositions]);
-
-  return (
-    <div ref={containerRef} style={{ width: '100%', position: 'relative' }}>
-      <svg
-        ref={svgRef}
-        viewBox={`0 0 ${VW} ${VH}`}
-        width="100%"
-        height="auto"
-        style={{ display: 'block', overflow: 'visible' }}
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <defs>
-          {/* Glow filter for active node */}
-          <filter id="sd-glow-gold" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feFlood floodColor={T.gold} floodOpacity="0.35" result="color" />
-            <feComposite in="color" in2="blur" operator="in" result="shadow" />
-            <feMerge>
-              <feMergeNode in="shadow" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter id="sd-glow-blue" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feFlood floodColor={T.blueL} floodOpacity="0.2" result="color" />
-            <feComposite in="color" in2="blur" operator="in" result="shadow" />
-            <feMerge>
-              <feMergeNode in="shadow" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-
-          {/* Animated gradient for particle flow */}
-          <linearGradient id="sd-flow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={T.gold} stopOpacity="0" />
-            <stop offset="50%" stopColor={T.gold} stopOpacity="0.9" />
-            <stop offset="100%" stopColor={T.gold} stopOpacity="0" />
-          </linearGradient>
-
-          {/* Radial gradient for center hub */}
-          <radialGradient id="sd-hub-grad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={T.gold} stopOpacity="0.15" />
-            <stop offset="60%" stopColor={T.navy} stopOpacity="0.8" />
-            <stop offset="100%" stopColor={T.navy} stopOpacity="1" />
-          </radialGradient>
-        </defs>
-
-        {/* ── Orbital ring guides ── */}
-        <circle cx={cx} cy={cy} r={radius} fill="none" stroke={T.border} strokeWidth="1" strokeDasharray="4 6" opacity="0.4" />
-        <circle cx={cx} cy={cy} r={radius * 0.5} fill="none" stroke={T.border} strokeWidth="0.5" strokeDasharray="2 8" opacity="0.25" />
-
-        {/* ── Connection lines (ring) ── */}
-        {connections.filter(c => c.type === 'ring').map((conn, i) => (
-          <line
-            key={`ring-${i}`}
-            x1={conn.from.x} y1={conn.from.y}
-            x2={conn.to.x} y2={conn.to.y}
-            stroke={T.dim}
-            strokeWidth="0.8"
-            opacity="0.4"
-          />
-        ))}
-
-        {/* ── Connection lines (hub to nodes) with animated particles ── */}
-        {connections.filter(c => c.type === 'hub').map((conn, i) => {
-          const isActive = i === activeIdx;
-          const isHovered = i === hoveredIdx;
-          return (
-            <g key={`hub-${i}`}>
-              {/* Static connection line */}
-              <line
-                x1={conn.from.x} y1={conn.from.y}
-                x2={conn.to.x} y2={conn.to.y}
-                stroke={isActive ? T.gold : isHovered ? T.blueL : T.dim}
-                strokeWidth={isActive ? 1.5 : 0.8}
-                opacity={isActive ? 0.7 : isHovered ? 0.5 : 0.25}
-                style={{ transition: 'all 0.4s ease' }}
-              />
-              {/* Animated particle along the line */}
-              <circle r="2.5" fill={isActive ? T.gold : T.blueL} opacity={isActive ? 0.9 : 0.3}>
-                <animateMotion
-                  dur={isActive ? '2s' : '4s'}
-                  repeatCount="indefinite"
-                  path={`M${conn.from.x},${conn.from.y} L${conn.to.x},${conn.to.y}`}
-                />
-              </circle>
-              {/* Reverse particle for active nodes */}
-              {isActive && (
-                <circle r="2" fill={T.gold} opacity="0.5">
-                  <animateMotion
-                    dur="3s"
-                    repeatCount="indefinite"
-                    path={`M${conn.to.x},${conn.to.y} L${conn.from.x},${conn.from.y}`}
-                  />
-                </circle>
-              )}
-            </g>
-          );
-        })}
-
-        {/* ── Center Hub ── */}
-        <g style={{ cursor: 'default' }}>
-          <circle cx={cx} cy={cy} r={nodeRadius * 1.5} fill="url(#sd-hub-grad)" stroke={T.gold} strokeWidth="1.5" opacity="0.9" />
-          {/* Inner rotating ring */}
-          <circle cx={cx} cy={cy} r={nodeRadius * 1.15} fill="none" stroke={T.gold} strokeWidth="0.5" strokeDasharray="3 5" opacity="0.4">
-            <animateTransform attributeName="transform" type="rotate" from={`0 ${cx} ${cy}`} to={`360 ${cx} ${cy}`} dur="20s" repeatCount="indefinite" />
-          </circle>
-          {/* Hub label */}
-          <text x={cx} y={cy - 7} textAnchor="middle" fill={T.gold} fontSize="10" fontWeight="800" letterSpacing="0.12em" fontFamily={FONT} style={{ textTransform: 'uppercase' }}>
-            {ar ? 'مركز' : 'WAVZ'}
-          </text>
-          <text x={cx} y={cy + 7} textAnchor="middle" fill={T.white} fontSize="8.5" fontWeight="600" letterSpacing="0.08em" fontFamily={FONT}>
-            {ar ? 'العمليات' : 'OPS CORE'}
-          </text>
-          {/* Pulsing ring */}
-          <circle cx={cx} cy={cy} r={nodeRadius * 1.5} fill="none" stroke={T.gold} strokeWidth="1" opacity="0.15">
-            <animate attributeName="r" values={`${nodeRadius * 1.5};${nodeRadius * 2};${nodeRadius * 1.5}`} dur="3s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.15;0;0.15" dur="3s" repeatCount="indefinite" />
-          </circle>
-        </g>
-
-        {/* ── Service Nodes ── */}
-        {nodePositions.map((pos, i) => {
-          const isActive = i === activeIdx;
-          const isHovered = i === hoveredIdx;
-          const s = services[i];
-          return (
-            <g
-              key={i}
-              style={{ cursor: 'pointer' }}
-              onClick={() => setActiveIdx(i)}
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveIdx(i); }}
-              aria-label={s.title}
-            >
-              {/* Outer glow ring for active */}
-              {isActive && (
-                <circle cx={pos.x} cy={pos.y} r={nodeRadius + 8} fill="none" stroke={T.gold} strokeWidth="1" opacity="0.2">
-                  <animate attributeName="r" values={`${nodeRadius + 8};${nodeRadius + 14};${nodeRadius + 8}`} dur="2.5s" repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0.2;0.05;0.2" dur="2.5s" repeatCount="indefinite" />
-                </circle>
-              )}
-
-              {/* Progress ring (auto-cycle indicator) */}
-              {isActive && (
-                <circle
-                  cx={pos.x} cy={pos.y}
-                  r={nodeRadius + 4}
-                  fill="none"
-                  stroke={T.gold}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeDasharray={`${2 * Math.PI * (nodeRadius + 4)}`}
-                  strokeDashoffset={`${2 * Math.PI * (nodeRadius + 4)}`}
-                  opacity="0.6"
-                  style={{
-                    transformOrigin: `${pos.x}px ${pos.y}px`,
-                    transform: 'rotate(-90deg)',
-                    animation: `sd-progress-ring ${AUTO_CYCLE_INTERVAL}ms linear forwards`,
-                  }}
-                />
-              )}
-
-              {/* Node background */}
-              <circle
-                cx={pos.x} cy={pos.y}
-                r={nodeRadius}
-                fill={T.navy}
-                stroke={isActive ? T.gold : isHovered ? T.blueL : T.dim}
-                strokeWidth={isActive ? 2 : 1.2}
-                filter={isActive ? 'url(#sd-glow-gold)' : isHovered ? 'url(#sd-glow-blue)' : 'none'}
-                style={{ transition: 'stroke 0.3s ease, stroke-width 0.3s ease' }}
-              />
-
-              {/* Inner gradient fill */}
-              <circle
-                cx={pos.x} cy={pos.y}
-                r={nodeRadius - 1}
-                fill={isActive ? 'rgba(255,184,20,0.08)' : isHovered ? 'rgba(75,163,227,0.05)' : 'transparent'}
-                style={{ transition: 'fill 0.3s ease' }}
-              />
-
-              {/* Status dot */}
-              <circle
-                cx={pos.x + nodeRadius * 0.6}
-                cy={pos.y - nodeRadius * 0.6}
-                r="3"
-                fill="#4AF626"
-                opacity={isActive ? 1 : 0.5}
-              >
-                <animate attributeName="opacity" values={isActive ? '1;0.5;1' : '0.5;0.3;0.5'} dur="2.5s" repeatCount="indefinite" />
-              </circle>
-
-              {/* Node code label */}
-              <text
-                x={pos.x} y={pos.y + 1}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill={isActive ? T.gold : isHovered ? T.blueL : T.muted}
-                fontSize="11"
-                fontWeight="800"
-                letterSpacing="0.08em"
-                fontFamily={FONT}
-                style={{ transition: 'fill 0.3s ease', pointerEvents: 'none' }}
-              >
-                {s.code}
-              </text>
-
-              {/* External label — placed radially outward */}
-              {(() => {
-                const angle = pos.angle;
-                // push label 44px beyond node edge
-                const LABEL_DIST = nodeRadius + 44;
-                const lx = pos.x + LABEL_DIST * Math.cos(angle);
-                const ly = pos.y + LABEL_DIST * Math.sin(angle);
-                const cosA = Math.cos(angle);
-                const anchor = Math.abs(cosA) < 0.3 ? 'middle' : cosA > 0 ? 'start' : 'end';
-                const lines = wrapTitle(s.title);
-                return (
-                  <text
-                    x={lx} y={ly}
-                    textAnchor={anchor}
-                    fill={isActive ? T.white : T.muted}
-                    fontSize="10"
-                    fontWeight={isActive ? 700 : 500}
-                    fontFamily={font}
-                    opacity={isActive ? 1 : 0.75}
-                    style={{ transition: 'all 0.3s ease', pointerEvents: 'none' }}
-                  >
-                    {lines.map((line, li) => (
-                      <tspan key={li} x={lx} dy={li === 0 ? 0 : 13} textAnchor={anchor}>
-                        {line}
-                      </tspan>
-                    ))}
-                  </text>
-                );
-              })()}
-            </g>
-          );
-        })}
-      </svg>
+    {/* Top row: code badge + status dot */}
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <span style={{
+        background: isActive ? 'rgba(255,184,20,0.15)' : 'rgba(255,255,255,0.05)',
+        border: `1px solid ${isActive ? T.gold : T.dim}`,
+        color: isActive ? T.gold : T.muted,
+        fontSize: 10, fontWeight: 800, letterSpacing: '0.1em',
+        padding: '3px 8px', borderRadius: 4, fontFamily: FONT,
+      }}>{service.code}</span>
+      <div style={{
+        width: 7, height: 7, borderRadius: '50%',
+        background: '#4AF626',
+        opacity: isActive ? 1 : 0.4,
+        boxShadow: isActive ? '0 0 6px #4AF626' : 'none',
+        transition: 'all 0.3s',
+      }} />
     </div>
-  );
-};
 
-/* label helper: wrap a title into max-2 lines of ≤14 chars */
-function wrapTitle(title, maxLen = 14) {
-  const words = title.split(' ');
-  const lines = [];
-  let cur = '';
-  words.forEach(w => {
-    if (cur && (cur + ' ' + w).length > maxLen) {
-      lines.push(cur);
-      cur = w;
-    } else {
-      cur = cur ? cur + ' ' + w : w;
-    }
-  });
-  if (cur) lines.push(cur);
-  return lines.slice(0, 2);
-}
+    {/* Icon */}
+    <div style={{ color: isActive ? T.gold : T.muted, transition: 'color 0.25s' }}>
+      {icons[service.code]}
+    </div>
+
+    {/* Title */}
+    <div style={{
+      fontSize: 13, fontWeight: 700, color: T.white,
+      lineHeight: 1.3, fontFamily: font,
+    }}>
+      {service.title}
+    </div>
+
+    {/* Primary SLA stat */}
+    <div style={{
+      fontSize: 12, fontWeight: 700,
+      color: isActive ? T.gold : T.muted,
+      transition: 'color 0.25s', fontFamily: FONT,
+    }}>
+      {details?.stats?.[0]?.val}
+      <span style={{ fontWeight: 400, fontSize: 10, marginLeft: 4, color: T.muted }}>
+        {details?.stats?.[0]?.label}
+      </span>
+    </div>
+  </button>
+);
+
 
 
 /* ═══════════════════════════════════════════════════════════
@@ -1547,113 +1323,45 @@ export const ManagedServices = () => {
           </div>
         </div>
 
-        {/* ── System Dynamics Layout ── */}
-        {/* Desktop: SVG Map (left) + Detail Panel (right) */}
-        {/* Mobile: Horizontal Node Selector + Detail Panel */}
+        {/* ── Unified Layout: Card Grid + Single Detail Panel ── */}
+        {/* One layout for all screen sizes — no duplication */}
 
-        {/* Desktop Layout */}
-        <div className="hidden lg:grid" style={{
-          gridTemplateColumns: '1.05fr 0.95fr',
-          gap: 28,
-          alignItems: 'start',
+        {/* 7 Service Cards Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+          gap: 12,
+          marginBottom: 28,
         }}>
-          {/* SVG Neural Network Map */}
-          <div style={{
-            background: 'rgba(8,45,74,0.3)',
-            border: `1px solid ${T.border}`,
-            borderRadius: 14,
-            padding: '20px 20px 16px',
-            position: 'relative',
-          }}>
-            {/* Subtle scan-line effect */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.005) 2px, rgba(255,255,255,0.005) 4px)',
-              pointerEvents: 'none',
-              zIndex: 1,
-            }} />
-            {/* Header bar */}
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              marginBottom: 12, paddingBottom: 12,
-              borderBottom: `1px solid ${T.border}`,
-              position: 'relative', zIndex: 2,
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: T.gold, opacity: 0.7 }} />
-                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: T.gold, fontFamily: FONT }}>
-                  {ar ? 'خريطة ديناميكيات النظام' : 'SYSTEM DYNAMICS MAP'}
-                </span>
-              </div>
-              <span style={{ fontSize: 9.5, color: T.dim, fontFamily: 'monospace' }}>
-                NODES: 7 · LINKS: 14
-              </span>
-            </div>
-            {/* The SVG map */}
-            <SystemDynamicsMap
-              services={services}
-              serviceDetails={serviceDetails}
-              activeIdx={activeServiceIdx}
-              setActiveIdx={handleSetActive}
-              ar={ar}
+          {services.map((s, i) => (
+            <ServiceCard
+              key={s.code}
+              service={s}
+              details={serviceDetails[s.code]}
+              isActive={i === activeServiceIdx}
+              onSelect={() => handleSetActive(i)}
               font={font}
             />
-            {/* Footer info */}
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              marginTop: 12, paddingTop: 12,
-              borderTop: `1px solid ${T.border}`,
-              position: 'relative', zIndex: 2,
-            }}>
-              <span style={{ fontSize: 9.5, color: T.dim, fontFamily: font }}>
-                {ar ? 'انقر على أي عقدة للتفاصيل' : 'Click any node for details'}
-              </span>
-              <span style={{ fontSize: 9.5, color: T.dim, fontFamily: 'monospace' }}>
-                ACTIVE: {services[activeServiceIdx].code}
-              </span>
-            </div>
-          </div>
-
-          {/* Detail Panel */}
-          <AnimatePresence mode="wait">
-            <DetailPanel
-              key={activeServiceIdx}
-              service={services[activeServiceIdx]}
-              details={serviceDetails[services[activeServiceIdx].code]}
-              ar={ar}
-              font={font}
-            />
-          </AnimatePresence>
+          ))}
         </div>
 
-        {/* Mobile Layout */}
-        <div className="lg:hidden" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {/* Horizontal node selector */}
-          <MobileNodeSelector
-            services={services}
-            activeIdx={activeServiceIdx}
-            setActiveIdx={handleSetActive}
+        {/* Single Detail Panel — updates when card changes */}
+        <AnimatePresence mode="wait">
+          <DetailPanel
+            key={activeServiceIdx}
+            service={services[activeServiceIdx]}
+            details={serviceDetails[services[activeServiceIdx].code]}
+            ar={ar}
             font={font}
           />
+        </AnimatePresence>
 
-          {/* Detail Panel */}
-          <AnimatePresence mode="wait">
-            <DetailPanel
-              key={activeServiceIdx}
-              service={services[activeServiceIdx]}
-              details={serviceDetails[services[activeServiceIdx].code]}
-              ar={ar}
-              font={font}
-            />
-          </AnimatePresence>
-        </div>
-
-        {/* ── Service index ribbon ── */}
+        {/* Dot navigation */}
         <div style={{
           display: 'flex',
           justifyContent: 'center',
           gap: 6,
-          marginTop: 32,
+          marginTop: 24,
         }}>
           {services.map((s, i) => (
             <button
