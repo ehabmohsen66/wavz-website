@@ -781,8 +781,29 @@ export const BlogPage = ({ route }) => {
         }
       `}</style>
 
-      {/* ══ CLEAN LIGHT HERO ══ */}
-      <div style={{ position: 'relative', overflow: 'hidden', background: '#F8FAFC', borderBottom: '1px solid rgba(17,115,189,0.08)' }}>
+      {/* ══ MESHGRADIENT HERO ══ */}
+      <div style={{ position: 'relative', overflow: 'hidden', borderBottom: `1px solid ${T.border}` }}>
+        {/* Animated mesh gradient layers */}
+        <MeshGradient
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+          colors={['#000d1a', '#082D4A', '#1173BD', '#0d3a6e', '#FFB814']}
+          speed={0.25}
+          backgroundColor="#000d1a"
+        />
+        <MeshGradient
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.3, zIndex: 0 }}
+          colors={['#000000', '#ffffff', '#1173BD', '#FFB814']}
+          speed={0.15}
+          wireframe="true"
+          backgroundColor="transparent"
+        />
+        {/* Bottom fade gradient masking */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
+          background: 'linear-gradient(to top, #F8FAFC 0%, rgba(248, 250, 252, 0) 100%)',
+          pointerEvents: 'none', zIndex: 1,
+        }} />
+
         <div style={{
           position: 'relative', zIndex: 2,
           padding: 'clamp(120px,15vw,180px) clamp(24px,6vw,80px) clamp(64px,8vw,96px)',
@@ -794,12 +815,12 @@ export const BlogPage = ({ route }) => {
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '5px 14px', borderRadius: 100,
-                border: '1px solid rgba(17,115,189,0.25)',
-                background: 'rgba(17,115,189,0.08)', marginBottom: 28,
+                border: `1px solid rgba(255,184,20,0.3)`,
+                background: 'rgba(255,184,20,0.08)', marginBottom: 28,
               }}
             >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#1173BD', display: 'inline-block' }} />
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#1173BD', fontFamily: font }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: T.gold, display: 'inline-block' }} />
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
                 {ar ? 'المدونة' : 'Blog'}
               </span>
             </motion.div>
@@ -807,11 +828,11 @@ export const BlogPage = ({ route }) => {
             <motion.h1
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.05] mb-8 text-[#082D4A]"
+              className="text-4xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.05] mb-8 text-white"
               style={{ fontFamily: font }}
             >
               WAVZ{' '}
-              <span style={{ color: '#1173BD', fontStyle: 'italic' }}>
+              <span style={{ color: T.gold, fontStyle: 'italic' }}>
                 {ar ? 'المدونة' : 'Blog'}
               </span>
             </motion.h1>
@@ -819,7 +840,7 @@ export const BlogPage = ({ route }) => {
             <motion.p
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              style={{ fontSize: 'clamp(15px,1.7vw,19px)', lineHeight: 1.7, color: '#475569', maxWidth: 540, margin: '0 0 40px', fontFamily: font }}
+              style={{ fontSize: 'clamp(15px,1.7vw,19px)', lineHeight: 1.7, color: T.muted, maxWidth: 540, margin: '0 0 40px', fontFamily: font }}
             >
               {ar
                 ? 'ابقَ على اطلاع بأحدث اتجاهات تكنولوجيا المعلومات والخدمات المُدارة والتحول الرقمي من فريق خبراء WAVZ.'
