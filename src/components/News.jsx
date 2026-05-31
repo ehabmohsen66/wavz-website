@@ -403,22 +403,8 @@ export const News = ({ route }) => {
     return (
       <div className="w-full" style={{ background: '#F8FAFC', minHeight: '100vh', color: '#082D4A' }}>
 
-        {/* ══ MESHGRADIENT HERO ══ */}
-        <div style={{ position: 'relative', overflow: 'hidden' }}>
-          {/* Animated mesh gradient layers */}
-          <MeshGradient
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
-            colors={['#000d1a', '#082D4A', '#1173BD', '#0d3a6e', '#FFB814']}
-            speed={0.25}
-            backgroundColor="#000d1a"
-          />
-          <MeshGradient
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.3, zIndex: 0 }}
-            colors={['#000000', '#ffffff', '#1173BD', '#FFB814']}
-            speed={0.15}
-            wireframe="true"
-            backgroundColor="transparent"
-          />
+        {/* ══ SOLID NAVY HERO ══ */}
+        <div style={{ position: 'relative', overflow: 'hidden', background: '#061E31' }}>
           {/* Bottom fade gradient masking */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
