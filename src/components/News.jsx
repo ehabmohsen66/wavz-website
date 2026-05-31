@@ -469,29 +469,6 @@ export const News = ({ route }) => {
                   {newsData.lede}
                 </p>
               </motion.div>
-
-
-              {/* Back link */}
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.45 }}
-                style={{ marginTop: 40 }}
-              >
-                <a
-                  href="#/"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
-                    color: 'rgba(145,196,245,0.5)', fontSize: 13, fontWeight: 600,
-                    textDecoration: 'none', transition: 'color 0.2s',
-                    fontFamily: "'Outfit', sans-serif",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#FFB814'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(145,196,245,0.5)'; }}
-                >
-                  {dir === 'rtl' ? <ArrowRight style={{ width: 14, height: 14 }} /> : <ArrowLeft style={{ width: 14, height: 14 }} />}
-                  {lang === 'ar' ? 'العودة للرئيسية' : 'Back to Home'}
-                </a>
-              </motion.div>
             </div>
           </div>
 
