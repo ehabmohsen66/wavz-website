@@ -251,13 +251,13 @@ export const ContactPage = () => {
           {/* Gradient — only fades to navy at the very bottom */}
           <div style={{
             position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-            background: 'linear-gradient(to bottom, rgba(6,30,49,0.05) 0%, transparent 40%, rgba(6,30,49,0.65) 80%, #F8FAFC 100%)',
+            background: 'linear-gradient(to bottom, rgba(6,30,49,0.05) 0%, rgba(6,30,49,0) 40%, rgba(6,30,49,0.65) 80%, #F8FAFC 100%)',
           }} />
 
-          {/* Gold accent line at the base */}
+          {/* Blue accent line at the base */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: 2,
-            background: `linear-gradient(90deg, transparent 0%, ${T.gold} 30%, ${T.gold} 70%, transparent 100%)`,
+            background: 'linear-gradient(90deg, transparent 0%, rgba(17,115,189,0.18) 30%, rgba(17,115,189,0.18) 70%, transparent 100%)',
             zIndex: 10, opacity: 0.55,
           }} />
 

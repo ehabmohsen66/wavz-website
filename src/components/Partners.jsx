@@ -152,7 +152,7 @@ export const Partners = () => {
 
         {/* Bottom fade to white page */}
         <div className="absolute bottom-0 inset-x-0 h-48 pointer-events-none z-10"
-          style={{ background:'linear-gradient(to top, #F8FAFC, transparent)' }} />
+          style={{ background:'linear-gradient(to top, #F8FAFC 0%, rgba(248, 250, 252, 0) 100%)' }} />
 
         {/* Hero content */}
         <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 lg:px-12 flex flex-col justify-between min-h-[75vh]">

@@ -422,7 +422,7 @@ export const News = ({ route }) => {
           {/* Bottom fade gradient masking */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
-            background: 'linear-gradient(to top, #F8FAFC, transparent)',
+            background: 'linear-gradient(to top, #F8FAFC 0%, rgba(248, 250, 252, 0) 100%)',
             pointerEvents: 'none', zIndex: 1,
           }} />
 
@@ -509,10 +509,10 @@ export const News = ({ route }) => {
             </div>
           </div>
 
-          {/* Gold accent line at the base */}
+          {/* Blue accent line at the base */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: 2,
-            background: 'linear-gradient(90deg, transparent 0%, #FFB814 30%, #FFB814 70%, transparent 100%)',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(17,115,189,0.18) 30%, rgba(17,115,189,0.18) 70%, transparent 100%)',
             zIndex: 10, opacity: 0.55,
           }} />
         </div>
