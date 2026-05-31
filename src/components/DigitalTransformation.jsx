@@ -698,356 +698,380 @@ export const DigitalTransformation = () => {
 
       {/* ── SERVICES GRID ── */}
       <section id="dt-services" style={{
-        maxWidth: 1200, margin: '0 auto',
-        padding: 'clamp(64px,8vw,96px) clamp(24px,6vw,80px)',
+        background: '#F8FAFC',
+        width: '100%',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 48, flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <div style={{ width: 20, height: 1, background: T.gold }} />
-              <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
-                {ar ? 'محفظة الخدمات' : 'Services Portfolio'}
+        <div style={{
+          maxWidth: 1200, margin: '0 auto',
+          padding: 'clamp(64px,8vw,96px) clamp(24px,6vw,80px)',
+        }}>
+          {/* Section header */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            marginBottom: 48, flexWrap: 'wrap', gap: 16,
+          }}>
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <div style={{ width: 20, height: 1, background: '#1173BD' }} />
+                <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#1173BD', fontFamily: font }}>
+                  {ar ? 'محفظة الخدمات' : 'Services Portfolio'}
+                </span>
+              </div>
+              <h2 style={{
+                fontSize: 'clamp(24px,3vw,38px)',
+                fontWeight: 800, letterSpacing: '-0.025em',
+                color: '#082D4A', margin: 0, fontFamily: font,
+              }}>
+                {ar ? '٦ خدمات تحول رقمي متكاملة' : '6 Integrated Digital Transformation Services'}
+              </h2>
+            </div>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '8px 16px',
+              border: '1px solid rgba(8,28,50,0.1)',
+              borderRadius: 4,
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#059669', animation: 'dt-pulse 2.5s ease-in-out infinite' }} />
+              <span style={{ fontFamily: font, fontSize: 12, fontWeight: 600, color: 'rgba(8,28,50,0.6)' }}>
+                {ar ? 'جميع الأنظمة تعمل' : 'All Systems Operational'}
               </span>
             </div>
-            <h2 style={{ fontSize: 'clamp(24px,3vw,38px)', fontWeight: 800, letterSpacing: '-0.025em', color: T.white, margin: 0, fontFamily: font }}>
-              {ar ? '٦ خدمات تحول رقمي متكاملة' : '6 Integrated Digital Transformation Services'}
-            </h2>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', border: `1px solid ${T.dim}`, borderRadius: 4 }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626', animation: 'dt-pulse 2.5s ease-in-out infinite' }} />
-            <span style={{ fontFamily: font, fontSize: 12, fontWeight: 600, color: T.muted }}>
-              {ar ? 'جميع الأنظمة تعمل' : 'All Systems Operational'}
-            </span>
-          </div>
-        </div>
-
-        {/* Interactive Digital Transformation Services Command Center Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
-          
-          {/* Left Column: Vertical Services Menu / Horizontal Tabs on Mobile */}
-          <div className="flex flex-row lg:flex-col lg:h-full overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none">
-            {services.map((s, i) => {
-              const isActive = activeServiceIdx === i;
-              return (
-                <button
-                  key={i}
-                  onClick={() => setActiveServiceIdx(i)}
-                  className={`dt-menu-item group ${isActive ? 'active' : ''} lg:w-full lg:flex-1`}
-                  style={{
-                    background: isActive ? 'rgba(255,184,20,0.06)' : T.navy2,
-                    border: `1px solid ${isActive ? T.gold : T.border}`,
-                    borderRadius: 8,
-                    padding: '16px 20px',
-                    textAlign: ar ? 'right' : 'left',
-                    minWidth: 220,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 12,
-                    flexShrink: 0,
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
-                    {/* Icon */}
-                    <div className="dt-menu-icon" style={{
-                      color: isActive ? T.gold : T.muted,
-                      transition: 'color 0.25s ease',
-                      flexShrink: 0,
-                    }}>
-                      {icons[s.code]}
-                    </div>
-                    {/* Title & Status */}
-                    <div style={{ overflow: 'hidden' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <h3 style={{
-                          fontSize: 13.5, fontWeight: 700,
-                          color: T.white, margin: 0,
-                          fontFamily: font,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}>
-                          {s.title}
-                        </h3>
-                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#4AF626', flexShrink: 0 }} className="dt-pulse-dot" />
-                      </div>
-                      <span style={{ fontSize: 10.5, color: T.muted, fontFamily: font, display: 'block', marginTop: 1 }}>
-                        {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Operational stat chip */}
-                  <div style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: isActive ? T.gold : T.muted,
-                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.3)' : T.border}`,
-                    borderRadius: 4,
-                    padding: '3px 6px',
-                    background: isActive ? 'rgba(255,184,20,0.04)' : 'rgba(255,255,255,0.01)',
-                    fontFamily: font,
-                    letterSpacing: '-0.02em',
-                    flexShrink: 0,
-                  }}>
-                    {serviceDetails[s.code].stats[0].val}
-                  </div>
-                </button>
-              );
-            })}
           </div>
 
-          {/* Right Column: Dynamic Terminal Dashboard */}
-          <div style={{ position: 'relative' }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeServiceIdx}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.22 }}
-                style={{
-                  background: 'rgba(8,45,74,0.45)',
-                  backdropFilter: 'blur(16px)',
-                  border: `1px solid rgba(255,184,20,0.15)`,
-                  borderRadius: 12,
-                  padding: '32px 28px',
-                  minHeight: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: 28,
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Dashboard Grid Line Background Accent */}
-                <div style={{
-                  position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
-                  backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
-                  backgroundSize: '20px 20px',
-                  pointerEvents: 'none',
-                }} />
-
-                <div>
-                  {/* Dashboard Live Status Indicator */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{
-                        background: 'rgba(255,184,20,0.12)',
-                        border: `1px solid ${T.gold}`,
-                        color: T.gold,
-                        fontSize: 10,
-                        fontWeight: 800,
-                        padding: '3px 8px',
-                        borderRadius: 4,
-                        letterSpacing: '0.08em',
-                        fontFamily: font,
-                      }}>
-                        {services[activeServiceIdx].code}
-                      </div>
-                      <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626' }} className="dt-pulse-dot" />
-                        {ar ? 'نظام التحول الرقمي حي ومباشر' : 'LIVE TRANSFORMATION NODE ACTIVE'}
-                      </span>
-                    </div>
-                    <div style={{ fontSize: 10.5, color: T.muted, fontFamily: 'monospace' }}>
-                      NODE_ID: {services[activeServiceIdx].code}_DIG_SYS_0{activeServiceIdx + 1}Y
-                    </div>
-                  </div>
-
-                  <h2 style={{
-                    fontSize: 'clamp(20px, 2.5vw, 24px)',
-                    fontWeight: 800,
-                    letterSpacing: '-0.025em',
-                    color: T.white,
-                    margin: '0 0 14px 0',
-                    fontFamily: font,
-                  }}>
-                    {services[activeServiceIdx].title}
-                  </h2>
-
-                  <p style={{
-                    fontSize: 14,
-                    lineHeight: 1.8,
-                    color: T.muted,
-                    margin: '0 0 24px 0',
-                    fontFamily: font,
-                  }}>
-                    {services[activeServiceIdx].body}
-                  </p>
-
-                  {/* ── Diagnostic Statistics Grid ── */}
-                  <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
-                    {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
-                      <div
-                        key={sIdx}
-                        style={{
-                          background: 'rgba(6,30,49,0.5)',
-                          border: `1px solid ${T.border}`,
-                          borderRadius: 8,
-                          padding: '14px 10px',
-                          textAlign: 'center',
-                          position: 'relative',
-                        }}
-                      >
-                        <div style={{
-                          fontSize: 'clamp(16px, 3vw, 20px)',
-                          fontWeight: 900,
-                          color: T.gold,
-                          marginBottom: 4,
-                          fontFamily: font,
-                          letterSpacing: '-0.03em',
-                        }}>
-                          {st.val}
-                        </div>
-                        <div style={{
-                          fontSize: 10,
-                          fontWeight: 500,
-                          color: T.muted,
-                          fontFamily: font,
-                          lineHeight: 1.2,
-                        }}>
-                          {st.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* ── Process Flow Map ── */}
-                  <div style={{
-                    background: 'rgba(6,30,49,0.3)',
-                    border: `1px solid ${T.border}`,
-                    borderRadius: 8,
-                    padding: '16px 14px',
-                    marginBottom: 28,
-                  }}>
-                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
-                      {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
-                      {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
-                        <React.Fragment key={idx}>
-                          {/* Step Node */}
-                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
-                            <div style={{
-                              width: 28, height: 28,
-                              borderRadius: '50%',
-                              border: `1.5px solid ${T.gold}`,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: 10,
-                              fontWeight: 'bold',
-                              color: T.gold,
-                              background: T.navy,
-                              boxShadow: '0 0 10px rgba(255,184,20,0.15)',
-                              marginBottom: 6,
-                            }}>
-                              {idx + 1}
-                            </div>
-                            <div style={{ fontSize: 10.5, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
-                              {step}
-                            </div>
-                          </div>
-                          
-                          {/* Connector Line */}
-                          {idx < 3 && (
-                            <div
-                              className="hidden sm:block"
-                              style={{
-                                flex: 1,
-                                height: 1.5,
-                                background: ar 
-                                  ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)` 
-                                  : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
-                                opacity: 0.3,
-                                position: 'relative',
-                                minWidth: 15,
-                              }}
-                            >
-                              <div
-                                className="dt-pulse-dot"
-                                style={{
-                                  position: 'absolute',
-                                  top: '50%',
-                                  left: ar ? 'auto' : '0%',
-                                  right: ar ? '0%' : 'auto',
-                                  width: 6,
-                                  height: 6,
-                                  borderRadius: '50%',
-                                  background: T.gold,
-                                  transform: 'translateY(-50%)',
-                                  boxShadow: '0 0 6px #FFB814',
-                                }}
-                              />
-                            </div>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* ── Operational Specs ── */}
-                  <div>
-                    <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
-                      {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
-                        <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
-                          <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: T.gold, flexShrink: 0, marginTop: 4 }}>
-                            <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          <span style={{ fontSize: 12.5, color: T.muted, fontFamily: font, lineHeight: 1.45 }}>
-                            {bullet}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Secure Consultation Button */}
-                <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, marginTop: 6 }}>
+          {/* Interactive Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-8" style={{ marginTop: 24 }}>
+            
+            {/* Left Column: Vertical Services Menu */}
+            <div className="flex flex-row lg:flex-col lg:h-full overflow-x-auto lg:overflow-x-visible gap-3 pb-3 lg:pb-0 scrollbar-none">
+              {services.map((s, i) => {
+                const isActive = activeServiceIdx === i;
+                return (
                   <button
-                    onClick={() => {
-                      window.location.hash = '#/contact';
-                    }}
-                    className="dt-terminal-btn"
+                    key={i}
+                    onClick={() => setActiveServiceIdx(i)}
+                    className={`dt-menu-item group ${isActive ? 'active' : ''} lg:w-full lg:flex-1`}
                     style={{
-                      width: '100%',
-                      background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
-                      color: T.navy,
-                      border: 'none',
-                      borderRadius: 6,
-                      padding: '12px 24px',
-                      fontSize: 13,
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
+                      background: isActive ? 'rgba(255,184,20,0.08)' : '#ffffff',
+                      border: `1.5px solid ${isActive ? T.gold : 'rgba(17,115,189,0.12)'}`,
+                      borderRadius: 14,
+                      padding: '16px 20px',
+                      textAlign: ar ? 'right' : 'left',
+                      minWidth: 220,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
-                      fontFamily: font,
+                      justifyContent: 'space-between',
+                      gap: 12,
+                      flexShrink: 0,
+                      transition: 'all 0.25s ease',
+                      boxShadow: isActive ? '0 8px 24px rgba(255,184,20,0.1)' : '0 2px 10px rgba(8,45,74,0.03)',
                     }}
                   >
-                    <span>
-                      {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
-                    </span>
-                    <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
-                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+                      {/* Icon */}
+                      <div className="dt-menu-icon" style={{
+                        color: isActive ? T.goldD : '#1173BD',
+                        opacity: isActive ? 1 : 0.7,
+                        transition: 'color 0.25s ease',
+                        flexShrink: 0,
+                      }}>
+                        {icons[s.code]}
+                      </div>
+                      {/* Title & Status */}
+                      <div style={{ overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <h3 style={{
+                            fontSize: 13.5, fontWeight: 700,
+                            color: '#082D4A', margin: 0,
+                            fontFamily: font,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}>
+                            {s.title}
+                          </h3>
+                          <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#059669', flexShrink: 0 }} />
+                        </div>
+                        <span style={{ fontSize: 10.5, color: 'rgba(8,28,50,0.5)', fontFamily: font, display: 'block', marginTop: 1 }}>
+                          {s.code} · {ar ? 'مراقبة نشطة' : 'Active'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Operational stat chip */}
+                    <div style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      color: isActive ? T.goldD : '#1173BD',
+                      border: `1px solid ${isActive ? T.gold : 'rgba(17,115,189,0.12)'}`,
+                      borderRadius: 4,
+                      padding: '3px 6px',
+                      background: isActive ? 'rgba(255,184,20,0.15)' : 'rgba(8,28,50,0.04)',
+                      fontFamily: font,
+                      letterSpacing: '-0.02em',
+                      flexShrink: 0,
+                    }}>
+                      {serviceDetails[s.code].stats[0].val}
+                    </div>
                   </button>
-                </div>
+                );
+              })}
+            </div>
 
-              </motion.div>
-            </AnimatePresence>
+            {/* Right Column: Dynamic Terminal Dashboard */}
+            <div style={{ position: 'relative' }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeServiceIdx}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.22 }}
+                  style={{
+                    background: '#ffffff',
+                    border: `1px solid rgba(17,115,189,0.12)`,
+                    borderRadius: 14,
+                    padding: '32px 28px',
+                    minHeight: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: 28,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    boxShadow: '0 10px 30px rgba(8,45,74,0.05)',
+                  }}
+                >
+                  {/* Dashboard Grid Line Background Accent */}
+                  <div style={{
+                    position: 'absolute', top: 0, right: 0, bottom: 0, left: 0,
+                    backgroundImage: 'radial-gradient(rgba(17,115,189,0.03) 1px, transparent 0)',
+                    backgroundSize: '20px 20px',
+                    pointerEvents: 'none',
+                  }} />
+
+                  <div>
+                    {/* Dashboard Live Status Indicator */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12, position: 'relative', zIndex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div style={{
+                          background: 'rgba(255,184,20,0.15)',
+                          border: `1px solid ${T.gold}`,
+                          color: T.goldD,
+                          fontSize: 10,
+                          fontWeight: 800,
+                          padding: '3px 8px',
+                          borderRadius: 4,
+                          letterSpacing: '0.08em',
+                          fontFamily: font,
+                        }}>
+                          {services[activeServiceIdx].code}
+                        </div>
+                        <span style={{ fontSize: 10.5, fontWeight: 700, color: '#059669', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#059669' }} />
+                          {ar ? 'نظام التحول الرقمي حي ومباشر' : 'LIVE TRANSFORMATION NODE ACTIVE'}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 10.5, color: 'rgba(8,28,50,0.3)', fontFamily: 'monospace' }}>
+                        NODE_ID: {services[activeServiceIdx].code}_DIG_SYS_0{activeServiceIdx + 1}Y
+                      </div>
+                    </div>
+
+                    <h2 style={{
+                      fontSize: 'clamp(20px, 2.5vw, 24px)',
+                      fontWeight: 800,
+                      letterSpacing: '-0.025em',
+                      color: '#082D4A',
+                      margin: '0 0 14px 0',
+                      fontFamily: font,
+                      position: 'relative', zIndex: 1,
+                    }}>
+                      {services[activeServiceIdx].title}
+                    </h2>
+
+                    <p style={{
+                      fontSize: 14,
+                      lineHeight: 1.8,
+                      color: 'rgba(8,28,50,0.7)',
+                      margin: '0 0 24px 0',
+                      fontFamily: font,
+                      position: 'relative', zIndex: 1,
+                    }}>
+                      {services[activeServiceIdx].body}
+                    </p>
+
+                    {/* ── Diagnostic Statistics Grid ── */}
+                    <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28, position: 'relative', zIndex: 1 }}>
+                      {serviceDetails[services[activeServiceIdx].code].stats.map((st, sIdx) => (
+                        <div
+                          key={sIdx}
+                          style={{
+                            background: '#FAFBFD',
+                            border: `1px solid rgba(17,115,189,0.08)`,
+                            borderRadius: 10,
+                            padding: '14px 10px',
+                            textAlign: 'center',
+                            position: 'relative',
+                          }}
+                        >
+                          <div style={{
+                            fontSize: 'clamp(16px, 3vw, 20px)',
+                            fontWeight: 900,
+                            color: '#1173BD',
+                            marginBottom: 4,
+                            fontFamily: font,
+                            letterSpacing: '-0.03em',
+                          }}>
+                            {st.val}
+                          </div>
+                          <div style={{
+                            fontSize: 10,
+                            fontWeight: 500,
+                            color: 'rgba(8,28,50,0.5)',
+                            fontFamily: font,
+                            lineHeight: 1.2,
+                          }}>
+                            {st.label}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* ── Process Flow Map ── */}
+                    <div style={{
+                      background: '#FAFBFD',
+                      border: `1px solid rgba(17,115,189,0.08)`,
+                      borderRadius: 10,
+                      padding: '16px 14px',
+                      marginBottom: 28,
+                      position: 'relative', zIndex: 1,
+                    }}>
+                      <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: '#1173BD', textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+                        {ar ? 'مخطط تدفق العمليات ثنائي الاتجاه' : 'BI-DIRECTIONAL PROCESS FLOW MAP'}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 6, position: 'relative', width: '100%', flexWrap: 'wrap' }} className="sm:flex-nowrap">
+                        {serviceDetails[services[activeServiceIdx].code].pipeline.map((step, idx) => (
+                          <React.Fragment key={idx}>
+                            {/* Step Node */}
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, textAlign: 'center', zIndex: 10, minWidth: 70 }}>
+                              <div style={{
+                                width: 28, height: 28,
+                                borderRadius: '50%',
+                                border: `1.5px solid ${T.blue}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: 10,
+                                fontWeight: 'bold',
+                                color: '#ffffff',
+                                background: T.blue,
+                                boxShadow: '0 0 10px rgba(17,115,189,0.15)',
+                                marginBottom: 6,
+                              }}>
+                                {idx + 1}
+                              </div>
+                              <div style={{ fontSize: 10.5, fontWeight: 600, color: '#082D4A', fontFamily: font, lineHeight: 1.2 }}>
+                                {step}
+                              </div>
+                            </div>
+                            
+                            {/* Connector Line */}
+                            {idx < serviceDetails[services[activeServiceIdx].code].pipeline.length - 1 && (
+                              <div
+                                className="hidden sm:block"
+                                style={{
+                                  flex: 1,
+                                  height: 1.5,
+                                  background: ar 
+                                    ? `linear-gradient(270deg, ${T.blue} 0%, ${T.blueL} 100%)` 
+                                    : `linear-gradient(90deg, ${T.blue} 0%, ${T.blueL} 100%)`,
+                                  opacity: 0.3,
+                                  position: 'relative',
+                                  minWidth: 15,
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: ar ? 'auto' : '0%',
+                                    right: ar ? '0%' : 'auto',
+                                    width: 6,
+                                    height: 6,
+                                    borderRadius: '50%',
+                                    background: T.blue,
+                                    transform: 'translateY(-50%)',
+                                    boxShadow: '0 0 6px #1173BD',
+                                    animation: `sd-particle-move 2s linear infinite`,
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* ── Operational Specs ── */}
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                      <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: '#1173BD', textTransform: 'uppercase', marginBottom: 12, fontFamily: font }}>
+                        {ar ? 'المواصفات والقدرات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {serviceDetails[services[activeServiceIdx].code].bullets.map((bullet, bIdx) => (
+                          <div key={bIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}>
+                            <svg viewBox="0 0 24 24" fill="none" width="13" height="13" style={{ color: '#1173BD', flexShrink: 0, marginTop: 4 }}>
+                              <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span style={{ fontSize: 12.5, color: 'rgba(8,28,50,0.7)', fontFamily: font, lineHeight: 1.45 }}>
+                              {bullet}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Secure Consultation Button */}
+                  <div style={{ borderTop: `1px solid rgba(8,28,50,0.08)`, paddingTop: 20, marginTop: 6, position: 'relative', zIndex: 1 }}>
+                    <button
+                      onClick={() => {
+                        window.location.hash = '#/contact';
+                      }}
+                      className="dt-terminal-btn"
+                      style={{
+                        width: '100%',
+                        background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
+                        color: T.navy,
+                        border: 'none',
+                        borderRadius: 8,
+                        padding: '12px 24px',
+                        fontSize: 13,
+                        fontWeight: 800,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        fontFamily: font,
+                      }}
+                    >
+                      <span>
+                        {ar ? 'تفعيل الاتصال الآمن والاستشارة' : 'INITIATE SECURE CONSULTATION'}
+                      </span>
+                      <svg viewBox="0 0 24 24" fill="none" width="15" height="15" style={{ transform: ar ? 'rotate(180deg)' : 'none' }}>
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
           </div>
-
         </div>
       </section>
 

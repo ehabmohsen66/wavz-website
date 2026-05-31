@@ -368,14 +368,14 @@ const ServiceCard = ({ service, details, isActive, onSelect, font }) => (
     aria-pressed={isActive}
     style={{
       width: '100%',
-      background: isActive ? 'rgba(255,184,20,0.06)' : 'rgba(8,28,50,0.6)',
-      border: `1.5px solid ${isActive ? T.gold : T.border}`,
+      background: isActive ? 'rgba(255,184,20,0.08)' : '#ffffff',
+      border: `1.5px solid ${isActive ? T.gold : 'rgba(17,115,189,0.12)'}`,
       borderRadius: 14,
       padding: 'clamp(12px, 1.5vh, 16px) clamp(8px, 1vw, 12px)',
       textAlign: 'left',
       cursor: 'pointer',
       transition: 'all 0.25s ease',
-      boxShadow: isActive ? '0 0 24px rgba(255,184,20,0.12)' : 'none',
+      boxShadow: isActive ? '0 8px 24px rgba(255,184,20,0.1)' : '0 2px 10px rgba(8,45,74,0.03)',
       position: 'relative',
       overflow: 'hidden',
       display: 'flex',
@@ -395,11 +395,12 @@ const ServiceCard = ({ service, details, isActive, onSelect, font }) => (
     {/* Top row: code badge + status dot */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <span style={{
-        background: isActive ? 'rgba(255,184,20,0.15)' : 'rgba(255,255,255,0.05)',
-        border: `1px solid ${isActive ? T.gold : T.dim}`,
-        color: isActive ? T.gold : T.muted,
+        background: isActive ? 'rgba(255,184,20,0.15)' : 'rgba(8,28,50,0.04)',
+        border: `1px solid ${isActive ? T.gold : 'rgba(8,28,50,0.08)'}`,
+        color: isActive ? T.goldD : '#082D4A',
         fontSize: 10, fontWeight: 800, letterSpacing: '0.1em',
         padding: '3px 8px', borderRadius: 4, fontFamily: FONT,
+        opacity: isActive ? 1 : 0.6,
       }}>{service.code}</span>
       <div style={{
         width: 7, height: 7, borderRadius: '50%',
@@ -411,13 +412,13 @@ const ServiceCard = ({ service, details, isActive, onSelect, font }) => (
     </div>
 
     {/* Icon */}
-    <div style={{ color: isActive ? T.gold : T.muted, transition: 'color 0.25s' }}>
+    <div style={{ color: isActive ? T.goldD : '#1173BD', opacity: isActive ? 1 : 0.7, transition: 'color 0.25s' }}>
       {icons[service.code]}
     </div>
 
     {/* Title */}
     <div style={{
-      fontSize: 13, fontWeight: 700, color: T.white,
+      fontSize: 13, fontWeight: 700, color: '#082D4A',
       lineHeight: 1.3, fontFamily: font,
     }}>
       {service.title}
@@ -426,11 +427,11 @@ const ServiceCard = ({ service, details, isActive, onSelect, font }) => (
     {/* Primary SLA stat */}
     <div style={{
       fontSize: 12, fontWeight: 700,
-      color: isActive ? T.gold : T.muted,
+      color: isActive ? T.goldD : '#1173BD',
       transition: 'color 0.25s', fontFamily: FONT,
     }}>
       {details?.stats?.[0]?.val}
-      <span style={{ fontWeight: 400, fontSize: 10, marginLeft: 4, color: T.muted }}>
+      <span style={{ fontWeight: 500, fontSize: 10, marginLeft: 4, color: 'rgba(8,28,50,0.5)' }}>
         {details?.stats?.[0]?.label}
       </span>
     </div>
@@ -451,19 +452,19 @@ const DetailPanel = ({ service, details, ar, font }) => {
       exit={{ opacity: 0, y: -20, scale: 0.98 }}
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       style={{
-        background: 'rgba(8,45,74,0.5)',
-        backdropFilter: 'blur(16px)',
-        border: `1px solid rgba(255,184,20,0.15)`,
+        background: '#ffffff',
+        border: `1px solid rgba(17,115,189,0.12)`,
         borderRadius: 14,
         padding: 'clamp(24px, 4vw, 36px)',
         position: 'relative',
         overflow: 'hidden',
+        boxShadow: '0 10px 30px rgba(8,45,74,0.05)',
       }}
     >
-      {/* Grid dot pattern background */}
+      {/* Subtle light background dot pattern */}
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'radial-gradient(rgba(255,184,20,0.02) 1px, transparent 0)',
+        backgroundImage: 'radial-gradient(rgba(17,115,189,0.03) 1px, transparent 0)',
         backgroundSize: '18px 18px',
         pointerEvents: 'none',
       }} />
@@ -472,9 +473,9 @@ const DetailPanel = ({ service, details, ar, font }) => {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12, position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
-            background: 'rgba(255,184,20,0.12)',
+            background: 'rgba(255,184,20,0.15)',
             border: `1px solid ${T.gold}`,
-            color: T.gold,
+            color: T.goldD,
             fontSize: 10,
             fontWeight: 800,
             padding: '4px 10px',
@@ -484,12 +485,12 @@ const DetailPanel = ({ service, details, ar, font }) => {
           }}>
             {service.code}
           </div>
-          <span style={{ fontSize: 10.5, fontWeight: 700, color: '#4AF626', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626', display: 'inline-block', animation: 'ms-pulse 2.5s ease-in-out infinite' }} />
+          <span style={{ fontSize: 10.5, fontWeight: 700, color: '#059669', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: 6, fontFamily: font }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#059669', display: 'inline-block', animation: 'ms-pulse 2.5s ease-in-out infinite' }} />
             {ar ? 'تدفق بيانات حي' : 'LIVE DATA STREAM'}
           </span>
         </div>
-        <div style={{ fontSize: 10, color: T.dim, fontFamily: 'monospace' }}>
+        <div style={{ fontSize: 10, color: 'rgba(8,28,50,0.3)', fontFamily: 'monospace' }}>
           SYS/{service.code}/ACTIVE
         </div>
       </div>
@@ -499,7 +500,7 @@ const DetailPanel = ({ service, details, ar, font }) => {
         fontSize: 'clamp(20px, 2.8vw, 28px)',
         fontWeight: 800,
         letterSpacing: '-0.025em',
-        color: T.white,
+        color: '#082D4A',
         margin: '0 0 12px 0',
         fontFamily: font,
         position: 'relative', zIndex: 1,
@@ -511,7 +512,7 @@ const DetailPanel = ({ service, details, ar, font }) => {
       <p style={{
         fontSize: 14,
         lineHeight: 1.8,
-        color: T.muted,
+        color: 'rgba(8,28,50,0.7)',
         margin: '0 0 28px 0',
         fontFamily: font,
         position: 'relative', zIndex: 1,
@@ -534,8 +535,8 @@ const DetailPanel = ({ service, details, ar, font }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: sIdx * 0.08, duration: 0.3 }}
             style={{
-              background: 'rgba(6,30,49,0.6)',
-              border: `1px solid ${T.border}`,
+              background: '#FAFBFD',
+              border: `1px solid rgba(17,115,189,0.08)`,
               borderRadius: 10,
               padding: 'clamp(12px, 2vw, 18px) clamp(8px, 1.5vw, 14px)',
               textAlign: 'center',
@@ -546,13 +547,13 @@ const DetailPanel = ({ service, details, ar, font }) => {
             {/* Top accent line */}
             <div style={{
               position: 'absolute', top: 0, left: '20%', right: '20%', height: 2,
-              background: `linear-gradient(90deg, transparent, ${T.gold}, transparent)`,
+              background: `linear-gradient(90deg, transparent, ${T.blue}, transparent)`,
               opacity: 0.4,
             }} />
             <div style={{
               fontSize: 'clamp(18px, 3vw, 24px)',
               fontWeight: 900,
-              color: T.gold,
+              color: '#1173BD',
               marginBottom: 4,
               fontFamily: font,
               letterSpacing: '-0.03em',
@@ -562,7 +563,7 @@ const DetailPanel = ({ service, details, ar, font }) => {
             <div style={{
               fontSize: 10.5,
               fontWeight: 500,
-              color: T.muted,
+              color: 'rgba(8,28,50,0.5)',
               fontFamily: font,
               lineHeight: 1.3,
             }}>
@@ -574,14 +575,14 @@ const DetailPanel = ({ service, details, ar, font }) => {
 
       {/* ── Process Flow Map ── */}
       <div style={{
-        background: 'rgba(6,30,49,0.35)',
-        border: `1px solid ${T.border}`,
+        background: '#FAFBFD',
+        border: `1px solid rgba(17,115,189,0.08)`,
         borderRadius: 10,
         padding: 'clamp(14px, 2vw, 20px)',
         marginBottom: 28,
         position: 'relative', zIndex: 1,
       }}>
-        <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 16, fontFamily: font }}>
+        <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: '#1173BD', textTransform: 'uppercase', marginBottom: 16, fontFamily: font }}>
           {ar ? 'مخطط تدفق العمليات' : 'PROCESS FLOW MAP'}
         </div>
         <div style={{ display: 'flex', flexDirection: ar ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4, position: 'relative', flexWrap: 'wrap' }}>
@@ -597,20 +598,20 @@ const DetailPanel = ({ service, details, ar, font }) => {
                 <div style={{
                   width: 30, height: 30,
                   borderRadius: '50%',
-                  border: `1.5px solid ${T.gold}`,
+                  border: `1.5px solid ${T.blue}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: 10.5,
                   fontWeight: 'bold',
-                  color: T.gold,
-                  background: T.navy,
-                  boxShadow: '0 0 12px rgba(255,184,20,0.15)',
+                  color: '#ffffff',
+                  background: T.blue,
+                  boxShadow: '0 0 12px rgba(17,115,189,0.15)',
                   marginBottom: 6,
                 }}>
                   {idx + 1}
                 </div>
-                <div style={{ fontSize: 10, fontWeight: 600, color: T.white, fontFamily: font, lineHeight: 1.2 }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: '#082D4A', fontFamily: font, lineHeight: 1.2 }}>
                   {step}
                 </div>
               </motion.div>
@@ -622,8 +623,8 @@ const DetailPanel = ({ service, details, ar, font }) => {
                     flex: 1,
                     height: 1.5,
                     background: ar
-                      ? `linear-gradient(270deg, ${T.gold} 0%, ${T.blue} 100%)`
-                      : `linear-gradient(90deg, ${T.gold} 0%, ${T.blue} 100%)`,
+                      ? `linear-gradient(270deg, ${T.blue} 0%, ${T.blueL} 100%)`
+                      : `linear-gradient(90deg, ${T.blue} 0%, ${T.blueL} 100%)`,
                     opacity: 0.3,
                     position: 'relative',
                     minWidth: 12,
@@ -634,9 +635,9 @@ const DetailPanel = ({ service, details, ar, font }) => {
                     top: '50%',
                     width: 5, height: 5,
                     borderRadius: '50%',
-                    background: T.gold,
+                    background: T.blue,
                     transform: 'translateY(-50%)',
-                    boxShadow: '0 0 6px #FFB814',
+                    boxShadow: '0 0 6px #1173BD',
                     animation: `sd-particle-move 2s linear infinite`,
                     left: ar ? 'auto' : 0,
                     right: ar ? 0 : 'auto',
@@ -650,7 +651,7 @@ const DetailPanel = ({ service, details, ar, font }) => {
 
       {/* ── Operational Specifications ── */}
       <div style={{ position: 'relative', zIndex: 1, marginBottom: 24 }}>
-        <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: T.gold, textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
+        <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.12em', color: '#1173BD', textTransform: 'uppercase', marginBottom: 14, fontFamily: font }}>
           {ar ? 'المواصفات التشغيلية' : 'OPERATIONAL SPECIFICATIONS'}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -662,10 +663,10 @@ const DetailPanel = ({ service, details, ar, font }) => {
               transition={{ delay: 0.15 + bIdx * 0.08 }}
               style={{ display: 'flex', alignItems: 'flex-start', gap: 10, textAlign: ar ? 'right' : 'left' }}
             >
-              <svg viewBox="0 0 24 24" fill="none" width="14" height="14" style={{ color: T.gold, flexShrink: 0, marginTop: 3 }}>
+              <svg viewBox="0 0 24 24" fill="none" width="14" height="14" style={{ color: '#1173BD', flexShrink: 0, marginTop: 3 }}>
                 <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span style={{ fontSize: 13, color: T.muted, fontFamily: font, lineHeight: 1.5 }}>
+              <span style={{ fontSize: 13, color: 'rgba(8,28,50,0.7)', fontFamily: font, lineHeight: 1.5 }}>
                 {bullet}
               </span>
             </motion.div>
@@ -674,7 +675,7 @@ const DetailPanel = ({ service, details, ar, font }) => {
       </div>
 
       {/* ── CTA Button ── */}
-      <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 20, position: 'relative', zIndex: 1 }}>
+      <div style={{ borderTop: `1px solid rgba(8,28,50,0.08)`, paddingTop: 20, position: 'relative', zIndex: 1 }}>
         <button
           onClick={() => { window.location.hash = '#/contact'; }}
           className="ms-terminal-btn"
@@ -707,7 +708,7 @@ const DetailPanel = ({ service, details, ar, font }) => {
       </div>
     </motion.div>
   );
-};
+};;
 
 
 /* ═══════════════════════════════════════════════════
@@ -1259,127 +1260,129 @@ export const ManagedServices = () => {
          Interactive neural network visualization
       ══════════════════════════════════════════════ */}
       <section id="ms-services" style={{
-        maxWidth: 1200, margin: '0 auto',
-        padding: 'clamp(64px,8vw,96px) clamp(24px,6vw,80px)',
+        background: '#F8FAFC',
+        width: '100%',
       }}>
-        {/* Section Header */}
         <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          marginBottom: 48,
-          flexWrap: 'wrap', gap: 16,
+          maxWidth: 1200, margin: '0 auto',
+          padding: 'clamp(64px,8vw,96px) clamp(24px,6vw,80px)',
         }}>
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <div style={{ width: 20, height: 1, background: T.gold }} />
-              <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
-                {ar ? 'ديناميكيات النظام' : 'System Dynamics'}
-              </span>
+          {/* Section Header */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            marginBottom: 48,
+            flexWrap: 'wrap', gap: 16,
+          }}>
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <div style={{ width: 20, height: 1, background: '#1173BD' }} />
+                <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#1173BD', fontFamily: font }}>
+                  {ar ? 'ديناميكيات النظام' : 'System Dynamics'}
+                </span>
+              </div>
+              <h2 style={{
+                fontSize: 'clamp(26px,3vw,38px)',
+                fontWeight: 800, letterSpacing: '-0.025em',
+                color: '#082D4A', margin: 0, fontFamily: font,
+              }}>
+                {ar ? '٧ وحدات خدمية متكاملة' : '7 Integrated Service Units'}
+              </h2>
             </div>
-            <h2 style={{
-              fontSize: 'clamp(26px,3vw,38px)',
-              fontWeight: 800, letterSpacing: '-0.025em',
-              color: T.white, margin: 0, fontFamily: font,
-            }}>
-              {ar ? '٧ وحدات خدمية متكاملة' : '7 Integrated Service Units'}
-            </h2>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            {/* Auto-cycle toggle */}
-            <button
-              onClick={() => setAutoCycle(!autoCycle)}
-              className="sd-cycle-btn"
-              style={{
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {/* Auto-cycle toggle */}
+              <button
+                onClick={() => setAutoCycle(!autoCycle)}
+                className="sd-cycle-btn"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '8px 14px',
+                  border: `1px solid ${autoCycle ? 'rgba(255,184,20,0.3)' : 'rgba(8,28,50,0.1)'}`,
+                  borderRadius: 4,
+                  background: autoCycle ? 'rgba(255,184,20,0.05)' : 'transparent',
+                  cursor: 'pointer',
+                  color: autoCycle ? T.goldD : '#082D4A',
+                  fontFamily: font, fontSize: 11, fontWeight: 600,
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ color: 'currentColor' }}>
+                  {autoCycle ? (
+                    <path d="M10 9v6M14 9v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  ) : (
+                    <path d="M8 5v14l11-7z" fill="currentColor"/>
+                  )}
+                </svg>
+                {ar ? (autoCycle ? 'إيقاف التشغيل' : 'تشغيل تلقائي') : (autoCycle ? 'Auto-cycling' : 'Play')}
+              </button>
+              {/* Status indicator */}
+              <div style={{
                 display: 'flex', alignItems: 'center', gap: 8,
-                padding: '8px 14px',
-                border: `1px solid ${autoCycle ? 'rgba(255,184,20,0.3)' : T.dim}`,
+                padding: '8px 16px',
+                border: '1px solid rgba(8,28,50,0.1)',
                 borderRadius: 4,
-                background: autoCycle ? 'rgba(255,184,20,0.05)' : 'transparent',
-                cursor: 'pointer',
-                color: autoCycle ? T.gold : T.muted,
-                fontFamily: font, fontSize: 11, fontWeight: 600,
-              }}
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ color: 'currentColor' }}>
-                {autoCycle ? (
-                  <path d="M10 9v6M14 9v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                ) : (
-                  <path d="M8 5v14l11-7z" fill="currentColor"/>
-                )}
-              </svg>
-              {ar ? (autoCycle ? 'إيقاف التشغيل' : 'تشغيل تلقائي') : (autoCycle ? 'Auto-cycling' : 'Play')}
-            </button>
-            {/* Status indicator */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '8px 16px',
-              border: `1px solid ${T.dim}`,
-              borderRadius: 4,
-            }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4AF626', animation: 'ms-pulse 2.5s ease-in-out infinite' }} />
-              <span style={{ fontFamily: font, fontSize: 12, fontWeight: 600, color: T.muted }}>
-                {ar ? 'جميع الأنظمة تعمل' : 'All Systems Operational'}
-              </span>
+              }}>
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#059669', animation: 'ms-pulse 2.5s ease-in-out infinite' }} />
+                <span style={{ fontFamily: font, fontSize: 12, fontWeight: 600, color: 'rgba(8,28,50,0.6)' }}>
+                  {ar ? 'جميع الأنظمة تعمل' : 'All Systems Operational'}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ── Unified Layout: Card Grid + Single Detail Panel ── */}
-        {/* One layout for all screen sizes — no duplication */}
+          {/* 7 Service Cards Grid */}
+          <div
+            className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3"
+            style={{
+              marginBottom: 28,
+            }}
+          >
+            {services.map((s, i) => (
+              <ServiceCard
+                key={s.code}
+                service={s}
+                details={serviceDetails[s.code]}
+                isActive={i === activeServiceIdx}
+                onSelect={() => handleSetActive(i)}
+                font={font}
+              />
+            ))}
+          </div>
 
-        {/* 7 Service Cards Grid */}
-        <div
-          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3"
-          style={{
-            marginBottom: 28,
-          }}
-        >
-          {services.map((s, i) => (
-            <ServiceCard
-              key={s.code}
-              service={s}
-              details={serviceDetails[s.code]}
-              isActive={i === activeServiceIdx}
-              onSelect={() => handleSetActive(i)}
+          {/* Single Detail Panel — updates when card changes */}
+          <AnimatePresence mode="wait">
+            <DetailPanel
+              key={activeServiceIdx}
+              service={services[activeServiceIdx]}
+              details={serviceDetails[services[activeServiceIdx].code]}
+              ar={ar}
               font={font}
             />
-          ))}
-        </div>
+          </AnimatePresence>
 
-        {/* Single Detail Panel — updates when card changes */}
-        <AnimatePresence mode="wait">
-          <DetailPanel
-            key={activeServiceIdx}
-            service={services[activeServiceIdx]}
-            details={serviceDetails[services[activeServiceIdx].code]}
-            ar={ar}
-            font={font}
-          />
-        </AnimatePresence>
-
-        {/* Dot navigation */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: 6,
-          marginTop: 24,
-        }}>
-          {services.map((s, i) => (
-            <button
-              key={i}
-              onClick={() => handleSetActive(i)}
-              style={{
-                width: i === activeServiceIdx ? 32 : 8,
-                height: 8,
-                borderRadius: 4,
-                border: 'none',
-                background: i === activeServiceIdx ? T.gold : T.dim,
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                opacity: i === activeServiceIdx ? 1 : 0.5,
-              }}
-              aria-label={`${s.code} - ${s.title}`}
-            />
-          ))}
+          {/* Dot navigation */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 6,
+            marginTop: 24,
+          }}>
+            {services.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => handleSetActive(i)}
+                style={{
+                  width: i === activeServiceIdx ? 32 : 8,
+                  height: 8,
+                  borderRadius: 4,
+                  border: 'none',
+                  background: i === activeServiceIdx ? '#1173BD' : 'rgba(8,28,50,0.15)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  opacity: i === activeServiceIdx ? 1 : 0.5,
+                }}
+                aria-label={`${s.code} - ${s.title}`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
