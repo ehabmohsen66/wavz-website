@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { 
-  ShieldCheck, 
+  Users,
+  ShieldCheck,
   Globe, 
   Cpu, 
   Handshake, 
