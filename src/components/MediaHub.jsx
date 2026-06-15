@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+
 import {
   Megaphone, BookOpen, Lightbulb, CalendarDays, Share2, ArrowRight, ArrowLeft, Newspaper
 } from 'lucide-react';
