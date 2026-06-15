@@ -26,6 +26,8 @@ import { FinancialServices } from './components/FinancialServices.jsx';
 import { PaymentServices } from './components/PaymentServices.jsx';
 import { SapServices } from './components/SapServices.jsx';
 import { DigitalTransformation } from './components/DigitalTransformation.jsx';
+import { OracleSolutions } from './components/OracleSolutions.jsx';
+import { DataAI } from './components/DataAI.jsx';
 import { ContactPage } from './components/ContactPage.jsx';
 import { BlogPage } from './components/BlogPage.jsx';
 import { SavingsCalculator } from './components/SavingsCalculator.jsx';
@@ -70,6 +72,8 @@ export default function App() {
   const isPaymentServicesRoute       = currentRoute === '#/payment-services';
   const isSapServicesRoute           = currentRoute === '#/sap-services';
   const isDigitalTransformRoute      = currentRoute === '#/digital-transformation';
+  const isOracleSolutionsRoute       = currentRoute === '#/oracle-solutions';
+  const isDataAIRoute                = currentRoute === '#/data-ai';
   const isContactRoute               = currentRoute === '#/contact';
   const isBlogRoute                  = currentRoute === '#/blog' || currentRoute.startsWith('#/blog/');
   const isSavingsCalcRoute             = currentRoute === '#/savings-calculator';
@@ -77,6 +81,7 @@ export default function App() {
     '#/', '#/about', '#/journey', '#/board', '#/team', '#/partners', '#/news',
     '#/managed-services', '#/financial-services', '#/payment-services',
     '#/sap-services', '#/digital-transformation', '#/contact', '#/blog', '#/savings-calculator',
+    '#/oracle-solutions', '#/data-ai',
     '#/news/press-releases', '#/news/client-stories', '#/news/insights', '#/news/events', '#/news/social'
   ].some(r =>
     currentRoute === r ||
@@ -212,7 +217,7 @@ export default function App() {
     );
   }
 
-  // Digital Transformation page route
+  // Digital Transformation page route (kept accessible, removed from nav)
   if (isDigitalTransformRoute) {
     return (
       <LangProvider>
@@ -220,6 +225,38 @@ export default function App() {
           <Nav />
           <div style={{ paddingTop: '0', minHeight: '100vh', background: '#061E31' }}>
             <DigitalTransformation />
+          </div>
+          <Footer />
+          <SupportChat />
+        </ErrorBoundary>
+      </LangProvider>
+    );
+  }
+
+  // Oracle Technology Solutions page route
+  if (isOracleSolutionsRoute) {
+    return (
+      <LangProvider>
+        <ErrorBoundary>
+          <Nav />
+          <div style={{ paddingTop: '0', minHeight: '100vh', background: '#061E31' }}>
+            <OracleSolutions />
+          </div>
+          <Footer />
+          <SupportChat />
+        </ErrorBoundary>
+      </LangProvider>
+    );
+  }
+
+  // Data & AI Solutions page route
+  if (isDataAIRoute) {
+    return (
+      <LangProvider>
+        <ErrorBoundary>
+          <Nav />
+          <div style={{ paddingTop: '0', minHeight: '100vh', background: '#061E31' }}>
+            <DataAI />
           </div>
           <Footer />
           <SupportChat />

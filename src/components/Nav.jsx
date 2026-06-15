@@ -105,11 +105,10 @@ export const Nav = () => {
 
 
   const solutionsItems = [
-    { href: '#/managed-services',      label: isAr ? 'الخدمات المُدارة'      : 'Managed Services' },
-    { href: '#/financial-services',    label: isAr ? 'الخدمات المالية'        : 'Financial Services' },
-    { href: '#/payment-services',      label: isAr ? 'خدمات الدفع'            : 'Payment Services' },
-    { href: '#/sap-services',          label: isAr ? 'خدمات SAP'              : 'SAP Services' },
-    { href: '#/digital-transformation',label: isAr ? 'التحول الرقمي'          : 'Digital Transformation' },
+    { href: '#/managed-services',   label: isAr ? 'الخدمات المُدارة'             : 'Managed Services' },
+    { href: '#/sap-services',       label: isAr ? 'حلول وخدمات SAP'         : 'SAP Solutions & Services' },
+    { href: '#/oracle-solutions',   label: isAr ? 'حلول Oracle التقنية'     : 'Oracle Technology Solutions' },
+    { href: '#/data-ai',            label: isAr ? 'حلول البيانات والذكاء الاصطناعي' : 'Data & AI Solutions' },
   ];
 
 
