@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { 
-  Users, 
   ShieldCheck, 
   Globe, 
   Cpu, 
@@ -23,87 +22,15 @@ import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal } from '../hooks/index.js';
 import { SolutionsPortfolio } from './SolutionsPortfolio.jsx';
 
-const teamMembers = [
-  {
-    image: "/board-photos/Khaled-Abdallah.png",
-    name: "Mr. Khalid Abdallah",
-    role: "Chairman of the Board",
-    nameAr: "خالد عبد الله",
-    roleAr: "رئيس مجلس الإدارة",
-    quoteEn: "WAVZ’s strategic vision is built on trust, excellence, and a commitment to delivering world-class digital transformation for our regional partners.",
-    quoteAr: "تتأسس رؤية WAVZ الاستراتيجية على الثقة، والتميز، والالتزام بتقديم تحول رقمي ذو مستوى عالمي لشركائنا الإقليميين."
-  },
-  {
-    image: "https://wavz.com.eg/wp-content/uploads/2025/11/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg",
-    name: "Amany Zaki",
-    role: "CEO & Managing Director",
-    nameAr: "أماني زكي",
-    roleAr: "الرئيس التنفيذي والعضو المنتدب",
-    quoteEn: "At WAVZ, we believe in synergy as the driving force behind success stories. Together with our partners, we build nurtured business environments that pursue the highest levels of digital excellence.",
-    quoteAr: "في WAVZ، نؤمن بالتآزر باعتباره القوة الدافعة وراء قصص النجاح. مع شركائنا، نبني بيئات عمل متكاملة تسعى لتحقيق أعلى مستويات التميز الرقمي."
-  },
-  {
-    image: "/board-photos/Hassan-Helmyy.png",
-    name: "Mr. Hassan Helmy",
-    role: "Board Member",
-    nameAr: "حسن حلمي",
-    roleAr: "عضو مجلس الإدارة",
-    quoteEn: "Governance and sustainable growth are the pillars of WAVZ, ensuring we scale responsibly while creating lasting value for our stakeholders.",
-    quoteAr: "الحوكمة والنمو المستدام هما الركيزتان الأساسيتان لـ WAVZ، مما يضمن لنا التوسع بمسؤولية مع خلق قيمة دائمة لشركائنا."
-  },
-  {
-    image: "https://wavz.com.eg/wp-content/uploads/2023/12/Mohamed-El-Hossini-LR.jpg.webp",
-    name: "Mohamed El-Hossini",
-    role: "Chief Technology Officer",
-    nameAr: "محمد الحسيني",
-    roleAr: "رئيس قطاع التكنولوجيا",
-    quoteEn: "Innovation is at the core of our technical delivery. We design and operate resilient, heterogeneous architectures that keep our clients ahead in a fast-evolving digital landscape.",
-    quoteAr: "الابتكار هو جوهر تقديمنا الفني. نحن نصمم ونشغل بنيات برمجية مرنة ومتكاملة تبقي عملائنا في الصدارة في مشهد رقمي سريع التطور."
-  },
-  {
-    image: "https://wavz.com.eg/wp-content/uploads/2023/12/Mostafa-Riad-LR.jpg.webp",
-    name: "Mostafa Riad",
-    role: "Director of Finance",
-    nameAr: "مصطفى رياض",
-    roleAr: "مدير الشؤون المالية",
-    quoteEn: "Financial discipline combined with strategic investments enables WAVZ to achieve high performance, resource optimization, and stable regional expansion.",
-    quoteAr: "الانضباط المالي مقترناً بالاستثمارات الاستراتيجية يمكن WAVZ من تحقيق أداء عالٍ، وتحسين الموارد، وتوسع إقليمي مستقر."
-  },
-  {
-    image: "https://wavz.com.eg/wp-content/uploads/2023/12/Amr-Sadek-LR.jpg.webp",
-    name: "Amr Sadek",
-    role: "Human Capital Director",
-    nameAr: "عمرو صادق",
-    roleAr: "مدير قطاع الموارد البشرية",
-    quoteEn: "WAVZ’s greatest asset is our talented people. By fostering a culture of continuous learning and leadership, we empower our team to drive exceptional outcomes.",
-    quoteAr: "أكبر أصول WAVZ هو موظفونا الموهوبون. من خلال تعزيز ثقافة التعلم المستمر والقيادة، نمكن فريقنا من تحقيق نتائج استثنائية."
-  },
-  {
-    image: "https://wavz.com.eg/wp-content/uploads/2023/12/Doaa-Sayed-LR.jpg.webp",
-    name: "Doaa Sayed",
-    role: "Strategic Alliances Manager",
-    nameAr: "دعاء سيد",
-    roleAr: "مدير التحالفات الاستراتيجية",
-    quoteEn: "Building bridges with global technology leaders allows WAVZ to bring turn-key, world-class solutions to local markets, creating powerful, shared success stories.",
-    quoteAr: "إن بناء الجسور مع قادة التكنولوجيا العالميين يتيح لـ WAVZ تقديم حلول متكاملة ذات مستوى عالمي للأسواق المحلية، مما يخلق قصص نجاح مشتركة وقوية."
-  },
-];
+
 
 export const About = () => {
   const { t, lang, dir } = useLang();
   const [revealRef, visible] = useReveal();
-  const [activeQuoteIdx, setActiveQuoteIdx] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveQuoteIdx((prev) => (prev + 1) % teamMembers.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [activeQuoteIdx]);
 
   const data = t.about;
 
@@ -466,144 +393,10 @@ export const About = () => {
           </div>
         </section>
 
-        {/* ── Section 6: Leadership Team Scrolling Marquee ── */}
-        <section className="relative w-full overflow-hidden bg-transparent py-16 md:py-24 border-t border-slate-200/50 mt-16">
-          <style>{`
-            @keyframes about-marquee-scroll {
-              0%   { transform: translate3d(0, 0, 0); }
-              100% { transform: translate3d(-50%, 0, 0); }
-            }
-            .about-marquee-track {
-              display: flex;
-              flex-wrap: nowrap;
-              width: max-content;
-              will-change: transform;
-              animation: about-marquee-scroll 55s linear infinite;
-              backface-visibility: hidden;
-              transform: translateZ(0);
-            }
-            .about-marquee-track:hover {
-              animation-play-state: paused;
-            }
-          `}</style>
+
+
           
-          <div className="relative z-10 mx-auto max-w-7xl">
-            <div className="mx-auto mb-16 flex max-w-5xl flex-col items-center px-6 text-center lg:px-0">
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1173BD] text-white shadow-md">
-                <Users className="w-5 h-5 text-white" />
-              </div>
 
-              <h2 className="relative mb-4 font-bold text-3xl lg:text-5xl text-[#082D4A] tracking-tight">
-                {lang === 'ar' ? 'فريق القيادة والتميز' : 'Leadership & Excellence Team'}
-              </h2>
-              <p className="max-w-2xl text-[15px] text-slate-500 leading-relaxed">
-                {lang === 'ar' 
-                  ? 'يجمع مجلس إدارتنا وفريقنا التنفيذي بين عقود من الخبرة الاستشارية والتكنولوجية لقيادة مسيرة التحول الرقمي في المنطقة.'
-                  : 'Our board and executive team combine decades of advisory and technological expertise, steering WAVZ\'s mission to transform regional business landscapes.'}
-              </p>
-            </div>
-
-            {/* Marquee Row */}
-            <div className="relative w-full overflow-hidden py-4">
-              {/* Fade gradient masks */}
-              <div className="pointer-events-none absolute top-0 left-0 z-10 h-full w-24 bg-gradient-to-r from-[#F8FAFC] to-transparent" />
-              <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-24 bg-gradient-to-l from-[#F8FAFC] to-transparent" />
-
-              {/* No gap on track — margin-right is part of each card's slot so -50% is mathematically exact */}
-              <div className="about-marquee-track">
-                {[...teamMembers, ...teamMembers].map((member, i) => (
-                  <div
-                    className="group flex shrink-0 flex-col relative"
-                    key={i}
-                    style={{ width: 240, marginRight: 24 }}
-                  >
-                    <div className="relative h-80 w-full overflow-hidden rounded-2xl bg-slate-900 border border-slate-200/50 shadow-md">
-                      <img
-                        alt={member.name}
-                        className="h-full w-full object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0 select-none pointer-events-none"
-                        src={member.image}
-                        loading="eager"
-                        decoding="async"
-                      />
-                      <div className="absolute bottom-3 inset-x-3 rounded-xl bg-slate-950/85 backdrop-blur-md p-3 border border-white/5 whitespace-normal">
-                        <h3 className="font-bold text-white text-[14.5px] leading-tight">
-                          {member.name}
-                        </h3>
-                        <p className="text-[#FFB814] text-xs font-semibold mt-0.5">
-                          {member.role}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom Strategic Quote with dynamic rotation — hidden for now */}
-            {false && (
-            <div className="mx-auto mt-20 max-w-3xl px-6 text-center lg:px-0" style={{ minHeight: 340 }}>
-              <motion.div
-                key={activeQuoteIdx}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center"
-              >
-                <p 
-                  className="mb-8 font-semibold text-lg md:text-xl text-[#082D4A] leading-relaxed italic"
-                  style={{ fontFamily: lang === 'ar' ? 'Tajawal, sans-serif' : 'inherit' }}
-                >
-                  "{lang === 'ar' ? teamMembers[activeQuoteIdx].quoteAr : teamMembers[activeQuoteIdx].quoteEn}"
-                </p>
-                
-                <div className="flex flex-col items-center gap-3.5">
-                  <div className="relative h-28 w-28 md:h-32 md:w-32 overflow-hidden rounded-full border-2 border-[#FFB814] p-0.5 shadow-lg transition-transform duration-300 hover:scale-105">
-                    <img
-                      alt={teamMembers[activeQuoteIdx].name}
-                      className="h-full w-full object-cover rounded-full select-none pointer-events-none"
-                      src={teamMembers[activeQuoteIdx].image}
-                    />
-                  </div>
-                  <div className="text-center">
-                    <p className="font-bold text-[#082D4A] text-base md:text-lg">
-                      {lang === 'ar' ? teamMembers[activeQuoteIdx].nameAr : teamMembers[activeQuoteIdx].name}
-                    </p>
-                    <p className="text-slate-500 text-xs md:text-sm font-semibold mt-0.5">
-                      {lang === 'ar' ? teamMembers[activeQuoteIdx].roleAr : teamMembers[activeQuoteIdx].role}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Interactive Profile Selector Row */}
-                <div className="flex flex-wrap justify-center items-center gap-2.5 mt-8 max-w-xl mx-auto border-t border-slate-200/50 pt-6 w-full">
-                  {teamMembers.map((member, idx) => {
-                    const isActive = idx === activeQuoteIdx;
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => setActiveQuoteIdx(idx)}
-                        className={`relative h-11 w-11 rounded-full overflow-hidden transition-all duration-300 border-2 ${
-                          isActive 
-                            ? 'border-[#FFB814] scale-110 shadow-md' 
-                            : 'border-transparent opacity-40 hover:opacity-85 hover:scale-105 grayscale hover:grayscale-0'
-                        }`}
-                        title={lang === 'ar' ? member.nameAr : member.name}
-                      >
-                        <img
-                          src={member.image}
-                          alt={member.name}
-                          className="h-full w-full object-cover"
-                        />
-                      </button>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            </div>
-            )}
-          </div>
-        </section>
 
       </div>
     </div>
