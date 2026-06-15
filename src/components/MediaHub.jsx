@@ -100,9 +100,13 @@ export const MediaHub = () => {
             <div className="lg:sticky lg:top-32 rounded-2xl overflow-hidden shadow-sm border"
               style={{ background: '#061E31', borderColor: 'rgba(255,255,255,0.06)' }}>
               <div className="p-8 lg:p-9">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
-                  style={{ background: 'rgba(17,115,189,0.25)' }}>
-                  <Newspaper className="w-6 h-6" style={{ color: '#38BDF8' }} />
+                <div className="relative w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-slate-900/40 border border-white/5 shadow-md p-2 overflow-hidden">
+                  <span className="absolute inset-0 rounded-xl border border-[#38BDF8]/20 animate-pulse" />
+                  <img 
+                    src="/WavzIcon.png" 
+                    alt="WAVZ" 
+                    className="w-8 h-8 object-contain brightness-110 relative z-10" 
+                  />
                 </div>
                 <h2 className="font-bold text-white mb-4"
                   style={{ fontSize: 'clamp(1.3rem,2vw,1.75rem)', lineHeight: 1.2, fontFamily: "'Outfit', sans-serif" }}>
