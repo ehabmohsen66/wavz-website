@@ -534,9 +534,9 @@ export const SapServices = () => {
       <section style={{
         position: 'relative',
         width: '100%',
-        minHeight: '100vh',
+        minHeight: 560,
         display: 'flex',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         overflow: 'hidden',
         background: T.navy,
       }}>
@@ -566,7 +566,7 @@ export const SapServices = () => {
           zIndex: 20,
           display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
           textAlign: 'start',
-          padding: '130px clamp(24px,6vw,80px) clamp(48px,5vw,72px)',
+          padding: '135px clamp(24px,6vw,80px) 75px',
           maxWidth: 1200,
           width: '100%',
           margin: '0 auto',

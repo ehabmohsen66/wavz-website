@@ -1044,12 +1044,12 @@ export const ManagedServices = () => {
         .sd-cycle-btn:hover { background: rgba(255,184,20,0.08) !important; border-color: rgba(255,184,20,0.3) !important; }
       `}</style>
 
-      {/* ── HERO — Three.js Generative Art ─────────── */}
       <section style={{
         position: 'relative',
         width: '100%',
-        height: '100vh',
-        minHeight: 600,
+        minHeight: 560,
+        display: 'flex',
+        alignItems: 'center',
         overflow: 'hidden',
         background: T.navy,
       }}>
@@ -1067,12 +1067,14 @@ export const ManagedServices = () => {
 
         {/* Content */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
+          position: 'relative',
           zIndex: 20,
           display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
           textAlign: 'start',
-          padding: '0 clamp(24px,6vw,80px) clamp(100px,14vw,160px)',
+          padding: '135px clamp(24px,6vw,80px) 75px',
           maxWidth: 1200,
+          width: '100%',
+          margin: '0 auto',
         }}>
           {/* Eyebrow pill */}
           <div style={{

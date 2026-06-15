@@ -451,14 +451,13 @@ export const FinancialServices = () => {
         .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* ── HERO — Three.js Generative Art ── */}
       <section style={{
         position: 'relative',
         width: '100%',
-        height: '100vh',
-        minHeight: 600,
+        minHeight: 560,
+        display: 'flex',
+        alignItems: 'center',
         overflow: 'hidden',
-        
         background: T.navy,
       }}>
         <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: T.navy }} />}>
@@ -475,12 +474,14 @@ export const FinancialServices = () => {
 
         {/* Content pinned to bottom */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
+          position: 'relative',
           zIndex: 20,
           display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
           textAlign: 'start',
-          padding: '0 clamp(24px,6vw,80px) clamp(48px,5vw,72px)',
+          padding: '135px clamp(24px,6vw,80px) 75px',
           maxWidth: 1200,
+          width: '100%',
+          margin: '0 auto',
         }}>
           {/* Eyebrow pill */}
           <div style={{

@@ -202,7 +202,7 @@ export const OracleSolutions = () => {
     <div style={{ background: T.navy, minHeight: '100vh', color: T.white, fontFamily: font }} dir={dir}>
 
       {/* ── Hero ── */}
-      <section style={{ position: 'relative', overflow: 'hidden', minHeight: 520, display: 'flex', alignItems: 'center' }}>
+      <section style={{ position: 'relative', overflow: 'hidden', minHeight: 560, display: 'flex', alignItems: 'center' }}>
         <div style={{ position: 'absolute', inset: 0, opacity: 0.18 }}>
           <GenerativeArtScene />
         </div>
@@ -212,7 +212,7 @@ export const OracleSolutions = () => {
         }} />
         <div style={{ position: 'absolute', bottom: 0, inset: 'auto 0 0 0', height: 120, background: `linear-gradient(to bottom, transparent, ${T.navy})` }} />
 
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: 'clamp(100px,14vw,160px) clamp(24px,6vw,80px) clamp(60px,8vw,100px)' }}>
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: '135px clamp(24px,6vw,80px) 75px', width: '100%' }}>
 
           {/* Oracle SVG Logo */}
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
