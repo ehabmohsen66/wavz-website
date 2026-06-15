@@ -73,23 +73,11 @@ export const Hero = () => {
             </span>
           </h1>
 
-          {/* Lede */}
-          <p
-            className="mt-6 max-w-xl text-[14px] lg:text-[15px] text-white/70 leading-[1.7] fade-slide-up"
-            style={{ animationDelay: '0.15s' }}
-          >
-            {t.hero.lede1}
-            <span className="text-[#38BDF8] font-semibold">{t.hero.ledeAccent1}</span>
-            {t.hero.lede2}
-            <span className="text-[#38BDF8] font-semibold">{t.hero.ledeAccent2}</span>
-            {t.hero.lede3}
-            <span className="text-[#38BDF8] font-semibold">{t.hero.ledeAccent3}</span>
-            {t.hero.lede4}
-          </p>
+
 
           {/* CTAs */}
           <div
-            className="mt-8 flex flex-wrap gap-3 fade-slide-up"
+            className="mt-10 flex flex-wrap gap-3 fade-slide-up"
             style={{ animationDelay: '0.25s' }}
           >
             <a
