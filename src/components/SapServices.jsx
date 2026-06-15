@@ -502,27 +502,27 @@ export const SapServices = () => {
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
         @keyframes sap-fadein { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
         @keyframes sap-pulse  { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.88)} }
-        .sap-svc:hover { background: rgba(255,184,20,0.04) !important; border-color: rgba(255,184,20,0.2) !important; }
-        .sap-svc:hover .sap-icon { color: ${T.gold} !important; }
-        .sap-svc:hover .sap-num  { color: rgba(255,184,20,0.12) !important; }
+        .sap-svc:hover { background: rgba(0,112,242,0.04) !important; border-color: rgba(0,112,242,0.2) !important; }
+        .sap-svc:hover .sap-icon { color: #0070F2 !important; }
+        .sap-svc:hover .sap-num  { color: rgba(0,112,242,0.12) !important; }
         .sap-svc:hover .sap-code { opacity: 1 !important; }
-        .sap-pill:hover { background: rgba(255,184,20,0.1) !important; border-color: rgba(255,184,20,0.3) !important; color: ${T.gold} !important; }
+        .sap-pill:hover { background: rgba(0,112,242,0.08) !important; border-color: rgba(0,112,242,0.25) !important; color: #00b1eb !important; }
         .sap-cta-primary { transition: all 0.22s cubic-bezier(0.32,0.72,0,1); }
-        .sap-cta-primary:hover { background: ${T.goldD} !important; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,184,20,0.28) !important; }
+        .sap-cta-primary:hover { background: #005bc4 !important; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,112,242,0.28) !important; }
         .sap-cta-ghost { transition: all 0.22s ease; }
-        .sap-cta-ghost:hover { border-color: ${T.gold} !important; color: ${T.gold} !important; }
+        .sap-cta-ghost:hover { border-color: #0070F2 !important; color: #00b1eb !important; }
         .sap-row:hover { background: rgba(255,255,255,0.025) !important; }
-        .sap-stat-gold::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:${T.gold}; }
+        .sap-stat-blue::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:#0070F2; }
         
         .sap-menu-item { transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.04); }
-        .sap-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(255,184,20,0.15) !important; }
-        .sap-menu-item.active { background: rgba(255,184,20,0.06) !important; border-color: ${T.gold} !important; box-shadow: 0 0 15px rgba(255,184,20,0.08); }
-        .sap-menu-item.active .sap-menu-icon { color: ${T.gold} !important; }
+        .sap-menu-item:hover { background: rgba(255,255,255,0.02) !important; border-color: rgba(0,112,242,0.15) !important; }
+        .sap-menu-item.active { background: rgba(0,112,242,0.06) !important; border-color: #0070F2 !important; box-shadow: 0 0 15px rgba(0,112,242,0.08); }
+        .sap-menu-item.active .sap-menu-icon { color: #0070F2 !important; }
         
         .sap-terminal-btn { transition: all 0.2s ease; position: relative; overflow: hidden; }
         .sap-terminal-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: all 0.6s ease; }
         .sap-terminal-btn:hover::before { left: 100%; }
-        .sap-terminal-btn:hover { box-shadow: 0 0 20px rgba(255,184,20,0.25); }
+        .sap-terminal-btn:hover { box-shadow: 0 0 20px rgba(0,112,242,0.25); }
         
         .sap-pulse-dot { animation: sap-pulse 2.5s ease-in-out infinite; }
         
@@ -537,7 +537,6 @@ export const SapServices = () => {
         height: '100vh',
         minHeight: 600,
         overflow: 'hidden',
-        
         background: T.navy,
       }}>
         <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: T.navy }} />}>
@@ -552,6 +551,14 @@ export const SapServices = () => {
           pointerEvents: 'none',
         }} />
 
+        {/* Radial brand glow */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,112,242,0.12) 0%, transparent 70%)',
+          zIndex: 10,
+          pointerEvents: 'none',
+        }} />
+
         {/* Content pinned to bottom */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
@@ -561,61 +568,112 @@ export const SapServices = () => {
           padding: '0 clamp(24px,6vw,80px) clamp(48px,5vw,72px)',
           maxWidth: 1200,
         }}>
-          {/* Eyebrow pill */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            padding: '6px 14px',
-            borderRadius: 100,
-            border: '1px solid rgba(255,255,255,0.2)',
-            background: 'rgba(255,255,255,0.05)',
-            backdropFilter: 'blur(8px)',
-            marginBottom: 24,
-            animation: 'sap-fadein 0.6s 0.1s both',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ color: T.gold, flexShrink: 0 }}>
-              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" fill="currentColor"/>
+          {/* SAP SVG Logo */}
+          <motion.div 
+            initial={{ opacity: 0, y: 8 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
+            style={{ marginBottom: 28 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 60.79" style={{ height: 44, width: 'auto' }} aria-label="SAP">
+              <defs>
+                <linearGradient id="sap-gradient-hero" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#00b1eb" />
+                  <stop offset="21%" stopColor="#009ad9" />
+                  <stop offset="52%" stopColor="#007fc4" />
+                  <stop offset="79%" stopColor="#006eb8" />
+                  <stop offset="100%" stopColor="#0069b4" />
+                </linearGradient>
+              </defs>
+              <path fill="url(#sap-gradient-hero)" d="M0,60.79h62.1L122.88,0H0V60.79z" />
+              <path fill="#FFFFFF" d="M72.92,12.16H60.79l0.04,28.54L50.26,12.15l-10.48,0l-9.02,23.85c-0.96-6.07-7.23-8.16-12.17-9.73 c-3.26-1.05-6.72-2.59-6.68-4.29c0.03-1.4,1.85-2.69,5.48-2.5c2.43,0.13,4.58,0.33,8.85,2.39l4.2-7.32 c-3.9-1.98-9.28-3.24-13.7-3.24h-0.03c-5.15,0-9.44,1.67-12.1,4.42c-1.85,1.92-2.85,4.36-2.89,7.06c-0.07,3.71,1.29,6.34,4.15,8.45 c2.42,1.77,5.5,2.92,8.23,3.76c3.36,1.04,6.1,1.95,6.07,3.87c-0.03,0.7-0.29,1.36-0.8,1.89c-0.84,0.86-2.12,1.19-3.9,1.22 c-3.43,0.07-5.97-0.47-10.01-2.86l-3.74,7.42c4.04,2.3,8.33,3.45,13.21,3.45l1.1-0.01c4.24-0.08,7.69-1.09,10.43-3.3 c0.16-0.13,0.3-0.25,0.44-0.38l-0.46,2.37l10.24-0.03l1.84-4.7c1.93,0.66,4.13,1.02,6.46,1.02c2.27,0,4.41-0.35,6.3-0.97l1.28,4.65 l18.37,0.02l0.04-10.72h3.91c9.45,0,15.03-4.81,15.03-12.87C89.91,16.07,84.48,12.16,72.92,12.16L72.92,12.16z M44.97,36.56 c-1.41,0-2.74-0.25-3.87-0.68l3.83-12.1H45l3.77,12.13C47.63,36.32,46.34,36.56,44.97,36.56L44.97,36.56L44.97,36.56z M73.63,29.61 h-2.67v-9.75h2.67c3.55,0,6.39,1.18,6.39,4.81C80.02,28.42,77.19,29.61,73.63,29.61L73.63,29.61L73.63,29.61z" />
             </svg>
+          </motion.div>
+
+          {/* Eyebrow pill */}
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.45, delay: 0.05, ease: [0.16,1,0.3,1] }}
+            style={{ 
+              display: 'inline-flex', alignItems: 'center', gap: 8, 
+              padding: '5px 14px', 
+              borderRadius: 100, 
+              border: '1px solid rgba(0,112,242,0.35)', 
+              background: 'rgba(0,112,242,0.1)', 
+              marginBottom: 24 
+            }}
+          >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#0070F2', display: 'inline-block' }} />
             <span style={{
               fontSize: 11.5, fontWeight: 700,
               letterSpacing: '0.16em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.9)',
+              color: '#00b1eb',
               fontFamily: font,
             }}>
               {ar ? 'خدمات SAP المتكاملة' : 'SAP SERVICES & SOLUTIONS'}
             </span>
-          </div>
+          </motion.div>
 
           {/* H1 */}
-          <h1 className="text-4xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.05] mb-8 text-white" style={{ fontFamily: font }}>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.6, delay: 0.08, ease: [0.16,1,0.3,1] }}
+            className="text-4xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.05] mb-8 text-white" 
+            style={{ fontFamily: font }}
+          >
             {ar ? (
-              <span>حلول <span style={{ color: T.gold, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>SAP</span> المتكاملة لنمو أعمالك</span>
+              <span>حلول <span style={{ color: '#00b1eb', fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>SAP</span> المتكاملة لنمو أعمالك</span>
             ) : (
-              <span>Streamline Business with{' '}<span style={{ color: T.gold, fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>SAP Services</span></span>
+              <span>Streamline Business with{' '}<span style={{ color: '#00b1eb', fontStyle: 'italic', fontFamily: 'Georgia, serif' }}>SAP Services</span></span>
             )}
-          </h1>
+          </motion.h1>
 
           {/* Subhead */}
-          <p style={{
-            fontSize: 'clamp(16px,1.8vw,20px)',
-            fontWeight: 500,
-            lineHeight: 1.65,
-            color: 'rgba(255,255,255,0.8)',
-            maxWidth: 560,
-            margin: '0 0 36px',
-            fontFamily: font,
-            borderLeft: ar ? 'none' : `4px solid ${T.gold}`,
-            borderRight: ar ? `4px solid ${T.gold}` : 'none',
-            paddingLeft: ar ? 0 : 20,
-            paddingRight: ar ? 20 : 0,
-            paddingTop: 4, paddingBottom: 4,
-            textAlign: ar ? 'right' : 'left',
-            animation: 'sap-fadein 0.6s 0.5s both',
-          }}>
+          <motion.p 
+            initial={{ opacity: 0, y: 14 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.55, delay: 0.18, ease: [0.16,1,0.3,1] }}
+            style={{
+              fontSize: 'clamp(16px,1.8vw,20px)',
+              fontWeight: 500,
+              lineHeight: 1.65,
+              color: 'rgba(255,255,255,0.8)',
+              maxWidth: 560,
+              margin: '0 0 28px',
+              fontFamily: font,
+              borderLeft: ar ? 'none' : `4px solid #0070F2`,
+              borderRight: ar ? `4px solid #0070F2` : 'none',
+              paddingLeft: ar ? 0 : 20,
+              paddingRight: ar ? 20 : 0,
+              paddingTop: 4, paddingBottom: 4,
+              textAlign: ar ? 'right' : 'left',
+            }}
+          >
             {ar
               ? 'شريكك الموثوق لإدارة العمليات التجارية الفعّالة وتطبيق تطبيقات الأعمال المتكاملة وخدمات SAP الشاملة.'
               : 'Your trusted partner for efficient business process management and seamless business application implementations with comprehensive SAP services and solutions.'}
-          </p>
+          </motion.p>
+
+          {/* SAP product suite badges */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.45, delay: 0.28, ease: [0.16,1,0.3,1] }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36 }}
+          >
+            {modules.map((prod, i) => (
+              <span key={i} style={{
+                fontSize: 12, fontWeight: 600, padding: '5px 13px', borderRadius: 6,
+                background: 'rgba(0,112,242,0.08)',
+                border: '1px solid rgba(0,112,242,0.28)',
+                color: '#00b1eb',
+                fontFamily: font,
+              }}>{prod}</span>
+            ))}
+          </motion.div>
 
           {/* CTAs */}
           <div style={{
@@ -629,7 +687,7 @@ export const SapServices = () => {
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '13px 28px',
-                background: T.gold, color: T.navy,
+                background: '#0070F2', color: '#fff',
                 fontFamily: font, fontWeight: 700, fontSize: 14,
                 textDecoration: 'none', borderRadius: 6,
               }}
@@ -657,10 +715,10 @@ export const SapServices = () => {
           </div>
         </div>
 
-        {/* Gold accent line at the base */}
+        {/* Blue accent line at the base */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: 2,
-          background: `linear-gradient(90deg, transparent 0%, ${T.gold} 30%, ${T.gold} 70%, transparent 100%)`,
+          background: `linear-gradient(90deg, transparent 0%, #0070F2 30%, #0070F2 70%, transparent 100%)`,
           zIndex: 10, opacity: 0.55,
         }} />
       </section>
@@ -672,7 +730,7 @@ export const SapServices = () => {
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
         }}>
           {stats.map((s, i) => (
-            <div key={i} className={i === 0 ? 'sap-stat-gold' : ''} style={{
+            <div key={i} className={i === 0 ? 'sap-stat-blue' : ''} style={{
               padding: 'clamp(20px,4vw,36px) clamp(16px,3vw,32px)',
               borderRight: i < 3 ? `1px solid ${T.border}` : 'none',
               position: 'relative',
@@ -680,7 +738,7 @@ export const SapServices = () => {
               <div style={{
                 fontSize: 'clamp(28px,3.2vw,44px)', fontWeight: 800,
                 letterSpacing: '-0.03em',
-                color: i === 0 ? T.gold : T.white,
+                color: i === 0 ? '#00b1eb' : T.white,
                 fontFamily: font, marginBottom: 4,
               }}>
                 <CountUp to={s.value} suffix={s.suffix} />
@@ -804,8 +862,8 @@ export const SapServices = () => {
                     onClick={() => setActiveServiceIdx(i)}
                     className={`sap-menu-item group ${isActive ? 'active' : ''} lg:w-full lg:flex-1`}
                     style={{
-                      background: isActive ? 'rgba(255,184,20,0.08)' : '#ffffff',
-                      border: `1.5px solid ${isActive ? T.gold : 'rgba(17,115,189,0.12)'}`,
+                      background: isActive ? 'rgba(0,112,242,0.06)' : '#ffffff',
+                      border: `1.5px solid ${isActive ? '#0070F2' : 'rgba(17,115,189,0.12)'}`,
                       borderRadius: 14,
                       padding: '16px 20px',
                       textAlign: ar ? 'right' : 'left',
@@ -817,13 +875,13 @@ export const SapServices = () => {
                       gap: 12,
                       flexShrink: 0,
                       transition: 'all 0.25s ease',
-                      boxShadow: isActive ? '0 8px 24px rgba(255,184,20,0.1)' : '0 2px 10px rgba(8,45,74,0.03)',
+                      boxShadow: isActive ? '0 8px 24px rgba(0,112,242,0.1)' : '0 2px 10px rgba(8,45,74,0.03)',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
                       {/* Icon */}
                       <div className="sap-menu-icon" style={{
-                        color: isActive ? T.goldD : '#1173BD',
+                        color: isActive ? '#0070F2' : '#1173BD',
                         opacity: isActive ? 1 : 0.7,
                         transition: 'color 0.25s ease',
                         flexShrink: 0,
@@ -855,11 +913,11 @@ export const SapServices = () => {
                     <div style={{
                       fontSize: 11,
                       fontWeight: 700,
-                      color: isActive ? T.goldD : '#1173BD',
-                      border: `1px solid ${isActive ? T.gold : 'rgba(17,115,189,0.12)'}`,
+                      color: isActive ? '#0070F2' : '#1173BD',
+                      border: `1px solid ${isActive ? '#0070F2' : 'rgba(17,115,189,0.12)'}`,
                       borderRadius: 4,
                       padding: '3px 6px',
-                      background: isActive ? 'rgba(255,184,20,0.15)' : 'rgba(8,28,50,0.04)',
+                      background: isActive ? 'rgba(0,112,242,0.15)' : 'rgba(8,28,50,0.04)',
                       fontFamily: font,
                       letterSpacing: '-0.02em',
                       flexShrink: 0,
@@ -908,9 +966,9 @@ export const SapServices = () => {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 12, position: 'relative', zIndex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <div style={{
-                          background: 'rgba(255,184,20,0.15)',
-                          border: `1px solid ${T.gold}`,
-                          color: T.goldD,
+                          background: 'rgba(0,112,242,0.12)',
+                          border: '1px solid #0070F2',
+                          color: '#0070F2',
                           fontSize: 10,
                           fontWeight: 800,
                           padding: '3px 8px',
@@ -1094,8 +1152,8 @@ export const SapServices = () => {
                       className="sap-terminal-btn"
                       style={{
                         width: '100%',
-                        background: `linear-gradient(135deg, ${T.gold} 0%, ${T.goldD} 100%)`,
-                        color: T.navy,
+                        background: `linear-gradient(135deg, #00b1eb 0%, #0069b4 100%)`,
+                        color: '#ffffff',
                         border: 'none',
                         borderRadius: 8,
                         padding: '12px 24px',
@@ -1165,7 +1223,7 @@ export const SapServices = () => {
                 <div style={{
                   padding: '28px 0 28px 28px',
                   fontFamily: font, fontSize: 11, fontWeight: 700,
-                  letterSpacing: '0.1em', color: T.gold,
+                  letterSpacing: '0.1em', color: '#00b1eb',
                   borderRight: `1px solid ${T.border}`,
                   display: 'flex', alignItems: 'flex-start', paddingTop: 32,
                 }}>
@@ -1188,18 +1246,18 @@ export const SapServices = () => {
             marginTop: 40,
             display: 'inline-flex', alignItems: 'center', gap: 16,
             padding: '18px 28px',
-            border: `1px solid ${T.borderG}`,
+            border: `1px solid rgba(0,112,242,0.22)`,
             borderRadius: 8,
-            background: 'rgba(255,184,20,0.04)',
+            background: 'rgba(0,112,242,0.04)',
           }}>
             <div style={{
               width: 40, height: 40, borderRadius: 8,
-              background: 'rgba(255,184,20,0.12)',
+              background: 'rgba(0,112,242,0.12)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
             }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" fill={T.gold}/>
+                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" fill="#00b1eb"/>
               </svg>
             </div>
             <div>
@@ -1226,8 +1284,8 @@ export const SapServices = () => {
       }}>
         <div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-            <div style={{ width: 20, height: 1, background: T.gold }} />
-            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+            <div style={{ width: 20, height: 1, background: '#0070F2' }} />
+            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#00b1eb', fontFamily: font }}>
               {ar ? 'تواصل معنا' : 'Get in Touch'}
             </span>
           </div>
@@ -1247,7 +1305,7 @@ export const SapServices = () => {
             <a href="mailto:sales@wavz.com.eg" className="sap-cta-primary" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '13px 28px',
-              background: T.gold, color: T.navy,
+              background: '#0070F2', color: '#fff',
               fontFamily: font, fontWeight: 700, fontSize: 14,
               textDecoration: 'none', borderRadius: 6,
             }}>
@@ -1272,7 +1330,7 @@ export const SapServices = () => {
           borderRadius: 8, overflow: 'hidden',
         }}>
           <div style={{ padding: '28px 32px', borderBottom: `1px solid ${T.border}` }}>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: T.gold, fontFamily: font, marginBottom: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#00b1eb', fontFamily: font, marginBottom: 16 }}>
               {ar ? 'معلومات التواصل' : 'Contact Information'}
             </div>
             {[
@@ -1288,7 +1346,7 @@ export const SapServices = () => {
             ))}
           </div>
           <div style={{ padding: '24px 32px' }}>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: T.gold, fontFamily: font, marginBottom: 14 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#00b1eb', fontFamily: font, marginBottom: 14 }}>
               {ar ? 'مجالات الخبرة' : 'Areas of Expertise'}
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
