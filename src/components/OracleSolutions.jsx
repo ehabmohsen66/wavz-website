@@ -213,7 +213,21 @@ export const OracleSolutions = () => {
         <div style={{ position: 'absolute', bottom: 0, inset: 'auto 0 0 0', height: 120, background: `linear-gradient(to bottom, transparent, ${T.navy})` }} />
 
         <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: 'clamp(100px,14vw,160px) clamp(24px,6vw,80px) clamp(60px,8vw,100px)' }}>
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.16,1,0.3,1] }}
+
+          {/* Oracle SVG Logo */}
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
+            style={{ marginBottom: 28 }}>
+            {/* Official Oracle logo SVG — red ellipse mark + wordmark */}
+            <svg viewBox="0 0 230 44" xmlns="http://www.w3.org/2000/svg" style={{ height: 36, width: 'auto' }} aria-label="Oracle">
+              {/* Oracle ellipse logomark */}
+              <ellipse cx="22" cy="22" rx="22" ry="22" fill="#C74634"/>
+              <ellipse cx="22" cy="22" rx="11" ry="22" fill="#C74634" opacity="0"/>
+              {/* Oracle wordmark letters */}
+              <text x="52" y="31" fontFamily="'Outfit', Arial, Helvetica, sans-serif" fontWeight="800" fontSize="28" fill="#C74634" letterSpacing="1">ORACLE</text>
+            </svg>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.05, ease: [0.16,1,0.3,1] }}
             style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px', borderRadius: 100, border: '1px solid rgba(199,70,52,0.35)', background: 'rgba(199,70,52,0.1)', marginBottom: 24 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C74634', display: 'inline-block' }} />
             <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C74634', fontFamily: font }}>
@@ -231,11 +245,26 @@ export const OracleSolutions = () => {
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.18, ease: [0.16,1,0.3,1] }}
-            style={{ fontSize: 'clamp(15px,1.4vw,17px)', color: T.muted, lineHeight: 1.72, maxWidth: 540, margin: 0 }}>
+            style={{ fontSize: 'clamp(15px,1.4vw,17px)', color: T.muted, lineHeight: 1.72, maxWidth: 540, margin: '0 0 28px' }}>
             {ar
               ? 'تسليم شامل عبر OCI و Exadata و Fusion Cloud وEBS وAPEX. جاهز للنشر الهجين والسحابي مع عمليات FinOps ومزايا الذكاء الاصطناعي في قواعد البيانات.'
               : 'OCI · Exadata · Fusion Cloud ERP · Oracle EBS · Oracle APEX. Hybrid-ready with FinOps-managed operations and vector/AI-enabled database capabilities.'}
           </motion.p>
+
+          {/* Oracle product suite badges */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.28, ease: [0.16,1,0.3,1] }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            {['OCI', 'Exadata', 'Fusion Cloud ERP', 'Oracle EBS', 'Oracle APEX', 'FinOps'].map((prod, i) => (
+              <span key={i} style={{
+                fontSize: 12, fontWeight: 600, padding: '5px 13px', borderRadius: 6,
+                background: 'rgba(199,70,52,0.08)',
+                border: '1px solid rgba(199,70,52,0.28)',
+                color: '#C74634',
+                fontFamily: font,
+              }}>{prod}</span>
+            ))}
+          </motion.div>
+
         </div>
       </section>
 
