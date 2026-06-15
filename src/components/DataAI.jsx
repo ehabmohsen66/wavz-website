@@ -277,6 +277,33 @@ export const DataAI = () => {
         <div style={{ position: 'absolute', bottom: 0, inset: 'auto 0 0 0', height: 120, background: `linear-gradient(to bottom, transparent, ${T.navy})` }} />
 
         <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: '135px clamp(24px,6vw,80px) 75px', width: '100%' }}>
+          {/* Robot SVG Logo */}
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
+            style={{ marginBottom: 28 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style={{ height: 48, width: 'auto' }} aria-label="Robot">
+              <defs>
+                <linearGradient id="robot-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#A78BFA" />
+                  <stop offset="100%" stopColor="#7C3AED" />
+                </linearGradient>
+              </defs>
+              {/* Antenna stem */}
+              <rect x="47.5" y="18" width="5" height="15" rx="2.5" fill="url(#robot-gradient)" />
+              {/* Antenna top */}
+              <circle cx="50" cy="14" r="6.5" fill="url(#robot-gradient)" />
+              {/* Head */}
+              <rect x="10" y="38" width="80" height="42" rx="12" fill="url(#robot-gradient)" />
+              {/* Left Eye */}
+              <circle cx="34" cy="59" r="7.5" fill="#061E31" />
+              {/* Right Eye */}
+              <circle cx="66" cy="59" r="7.5" fill="#061E31" />
+              {/* Bottom line 1 */}
+              <rect x="22" y="86" width="56" height="5" rx="2.5" fill="url(#robot-gradient)" />
+              {/* Bottom line 2 */}
+              <rect x="34" y="95" width="32" height="5" rx="2.5" fill="url(#robot-gradient)" />
+            </svg>
+          </motion.div>
+
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.16,1,0.3,1] }}
             style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px', borderRadius: 100, border: '1px solid rgba(124,58,237,0.35)', background: 'rgba(124,58,237,0.1)', marginBottom: 24 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#7C3AED', display: 'inline-block' }} />
