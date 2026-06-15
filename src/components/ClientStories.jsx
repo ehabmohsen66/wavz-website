@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, TrendingUp, Shield, CheckCircle, Clock, Users, BarChart3, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, TrendingUp, Shield, CheckCircle, Clock, Users, BarChart3, ChevronRight, Megaphone, BookOpen } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
+import { MediaHero } from './MediaHero.jsx';
 
 /* ─── Case Study Data (sourced from official 2-pager documents) ─── */
 const CASE_STUDIES = [
@@ -254,48 +255,24 @@ const StoryDetail = ({ story, ar, dir }) => {
   return (
     <div style={{ background: '#F8FAFC', minHeight: '100vh' }}>
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ background: story.bgGradient, minHeight: 360 }}>
-        <div className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }} />
-        <div className="absolute bottom-0 inset-x-0 h-24 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, transparent, #F8FAFC)' }} />
+      <MediaHero
+        eyebrow={ar ? story.industryAr : story.industry}
+        title={ar ? story.headlineAr : story.headline}
+        subtitle={ar ? story.summaryAr : story.summary}
+        breadcrumbs={[
+          { label: ar ? 'المركز الإعلامي' : 'Media Center', href: '#/news' },
+          { label: ar ? 'قصص العملاء' : 'Client Stories', href: '#/news/client-stories' },
+          { label: ar ? story.clientAr : story.client },
+        ]}
+        eyebrowColor={story.color}
+        dir={dir}
+        minHeight={360}
+      />
 
-        <div className="relative z-10 max-w-[1000px] mx-auto px-6 lg:px-12"
-          style={{ paddingTop: 'clamp(48px,8vw,88px)', paddingBottom: 'clamp(56px,8vw,88px)' }}>
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 mb-8 text-white/50" style={{ fontSize: 13, fontWeight: 600 }}>
-            <a href="#/news" className="hover:text-white/80 transition-colors" style={{ color: 'inherit', textDecoration: 'none' }}>
-              {ar ? 'المركز الإعلامي' : 'Media Center'}
-            </a>
-            <ChevronRight className="w-3.5 h-3.5" style={{ transform: dir === 'rtl' ? 'rotate(180deg)' : 'none' }} />
-            <a href="#/news/client-stories" className="hover:text-white/80 transition-colors" style={{ color: 'inherit', textDecoration: 'none' }}>
-              {ar ? 'قصص العملاء' : 'Client Stories'}
-            </a>
-            <ChevronRight className="w-3.5 h-3.5" style={{ transform: dir === 'rtl' ? 'rotate(180deg)' : 'none' }} />
-            <span className="text-white/80">{ar ? story.clientAr : story.client}</span>
-          </div>
-
-          {/* Industry tag */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md mb-5"
-            style={{ background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.2)' }}>
-            <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.14em', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
-              {ar ? story.industryAr : story.industry} &nbsp;·&nbsp; {ar ? story.regionAr : story.region}
-            </span>
-          </div>
-
-          <h1 className="font-extrabold text-white"
-            style={{ fontSize: 'clamp(1.7rem,4vw,3rem)', lineHeight: 1.1, marginBottom: 16, fontFamily: "'Outfit', system-ui, sans-serif" }}>
-            {ar ? story.headlineAr : story.headline}
-          </h1>
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, maxWidth: 640, margin: 0, fontFamily: "'Outfit', sans-serif" }}>
-            {ar ? story.summaryAr : story.summary}
-          </p>
-
-          {/* KPI strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+      {/* KPI strip sits directly below the hero */}
+      <div style={{ background: story.bgGradient, paddingBottom: 40 }}>
+        <div className="max-w-[1000px] mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {story.metrics.map((m, i) => (
               <MetricCard key={i} icon={m.icon} value={m.value} label={ar ? m.labelAr : m.label} color={m.color} />
             ))}
@@ -459,52 +436,32 @@ export const ClientStories = ({ route }) => {
 
   // Hub listing: #/news/client-stories
   return (
-    <div style={{ background: '#F8FAFC', minHeight: '100vh' }} dir={dir}>
+    <div style={{ background: '#F8FAFC', minHeight: '100vh' }}>
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ background: '#061E31', minHeight: 280 }}>
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }} />
-        <div className="absolute bottom-0 inset-x-0 h-20 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, transparent, #F8FAFC)' }} />
-
-        <div className="relative z-10 max-w-[1200px] mx-auto px-6 lg:px-12"
-          style={{ paddingTop: 'clamp(48px,8vw,88px)', paddingBottom: 'clamp(48px,7vw,80px)' }}>
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 mb-6" style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.45)' }}>
-            <a href="#/news" style={{ color: 'inherit', textDecoration: 'none' }}
-              className="hover:text-white/70 transition-colors">
-              {ar ? 'المركز الإعلامي' : 'Media Center'}
-            </a>
-            <ChevronRight className="w-3.5 h-3.5" style={{ transform: dir === 'rtl' ? 'rotate(180deg)' : 'none' }} />
-            <span style={{ color: 'rgba(255,255,255,0.75)' }}>{ar ? 'قصص العملاء' : 'Client Stories'}</span>
-          </div>
-
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-6"
-            style={{ borderColor: 'rgba(5,150,105,0.4)', background: 'rgba(5,150,105,0.08)' }}>
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#34d399', fontFamily: "'Outfit', sans-serif" }}>
-              {ar ? 'قصص العملاء' : 'Client Stories'}
-            </span>
-          </div>
-
-          <h1 className="font-extrabold text-white"
-            style={{ fontSize: 'clamp(1.8rem,4.5vw,3.5rem)', lineHeight: 1.07, marginBottom: 14, fontFamily: "'Outfit', system-ui, sans-serif" }}>
-            {ar ? 'كيف نُحوِّل عمليات عملائنا' : 'How We Transform'}{' '}
-            <span style={{ color: '#FFB814', fontStyle: 'italic' }}>
-              {ar ? '' : 'Our Clients'}
-            </span>
-          </h1>
-          <p style={{ fontSize: 'clamp(14px,1.4vw,17px)', color: 'rgba(145,196,245,0.72)', maxWidth: 520, lineHeight: 1.72, margin: 0, fontFamily: "'Outfit', sans-serif" }}>
-            {ar
-              ? 'دراسات حالة حقيقية مُصنَّفة حسب العميل والقطاع — تُظهر كيف تُحدث WAVZ فارقاً قابلاً للقياس.'
-              : 'Real-world use cases structured by client and industry — showing how WAVZ delivers measurable, lasting impact.'}
-          </p>
-        </div>
-      </div>
+      <MediaHero
+        eyebrow={ar ? 'قصص العملاء' : 'Client Stories'}
+        eyebrowIcon={BookOpen}
+        eyebrowColor="#34d399"
+        title={
+          ar
+            ? <>كيف نُحوِل <span style={{ color: '#FFB814', fontStyle: 'italic' }}>عمليات عملائنا</span></>
+            : <>How We <span style={{ color: '#FFB814', fontStyle: 'italic' }}>Transform</span> Our Clients</>
+        }
+        subtitle={
+          ar
+            ? 'دراسات حالة حقيقية مُصنَّفة حسب العميل والقطاع — تُظهِر كيف تُحدِث WAVZ فارقاً قابلاً للقياس.'
+            : 'Real-world use cases structured by client and industry — showing how WAVZ delivers measurable, lasting impact.'
+        }
+        breadcrumbs={[
+          { label: ar ? 'المركز الإعلامي' : 'Media Center', href: '#/news' },
+          { label: ar ? 'قصص العملاء' : 'Client Stories' },
+        ]}
+        dir={dir}
+        minHeight={280}
+      />
 
       {/* Cards grid */}
+
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-14 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           {CASE_STUDIES.map((story, i) => (

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Calendar, Clock, ArrowLeft, ArrowRight, BookOpen, Lightbulb, CalendarDays, Share2, Linkedin, Twitter, Instagram } from 'lucide-react';
+import { Search, Calendar, Clock, ArrowLeft, ArrowRight, BookOpen, Lightbulb, CalendarDays, Share2, Megaphone, Newspaper } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal, useNews } from '../hooks/index.js';
 import { SearchBar } from './SearchBar.jsx';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { MediaHub } from './MediaHub.jsx';
 import { ClientStories } from './ClientStories.jsx';
+import { MediaHero } from './MediaHero.jsx';
 
 const mapDbArticleToArticle = (dbArt, ar) => {
   const dateObj = new Date(dbArt.date || dbArt.published_at || dbArt.created_at);
@@ -87,22 +88,19 @@ const GridBeam = ({ children }) => (
 /* ─── Sub-section placeholder (Insights, Events) ─── */
 const SubSectionPlaceholder = ({ icon: Icon, color, label, desc, ar, dir }) => (
   <div style={{ background: '#F8FAFC', minHeight: '100vh' }} dir={dir}>
-    <div style={{ background: '#061E31', padding: 'clamp(64px,10vw,120px) clamp(24px,6vw,80px) clamp(56px,8vw,96px)' }}>
-      <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28 }}>
-          <a href="#/news" style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
-            {ar ? 'المركز الإعلامي' : 'Media Center'}
-          </a>
-          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 13 }}>{'›'}</span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.75)' }}>{label}</span>
-        </div>
-        <div style={{ width: 56, height: 56, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', background: `${color}22`, marginBottom: 20 }}>
-          <Icon style={{ width: 28, height: 28, color }} />
-        </div>
-        <h1 style={{ fontSize: 'clamp(2rem,5vw,3.5rem)', fontWeight: 900, color: '#fff', lineHeight: 1.07, marginBottom: 16, fontFamily: "'Outfit', sans-serif" }}>{label}</h1>
-        <p style={{ fontSize: 17, color: 'rgba(145,196,245,0.7)', lineHeight: 1.72, margin: 0, maxWidth: 500, fontFamily: "'Outfit', sans-serif" }}>{desc}</p>
-      </div>
-    </div>
+    <MediaHero
+      eyebrow={ar ? 'المركز الإعلامي' : 'Media Center'}
+      eyebrowIcon={Newspaper}
+      title={label}
+      subtitle={desc}
+      breadcrumbs={[
+        { label: ar ? 'المركز الإعلامي' : 'Media Center', href: '#/news' },
+        { label },
+      ]}
+      eyebrowColor={color}
+      dir={dir}
+      minHeight={280}
+    />
     <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(48px,7vw,80px) clamp(24px,6vw,80px)', textAlign: 'center' }}>
       <div style={{ width: 80, height: 80, borderRadius: '50%', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
         <Icon style={{ width: 36, height: 36, color, opacity: 0.7 }} />
@@ -130,23 +128,20 @@ const SocialMediaPage = ({ ar, dir }) => {
 
   return (
     <div style={{ background: '#F8FAFC', minHeight: '100vh' }} dir={dir}>
-      <div style={{ background: '#061E31', padding: 'clamp(64px,10vw,120px) clamp(24px,6vw,80px) clamp(56px,8vw,96px)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28 }}>
-            <a href="#/news" style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
-              {ar ? 'المركز الإعلامي' : 'Media Center'}
-            </a>
-            <span style={{ color: 'rgba(255,255,255,0.25)' }}>›</span>
-            <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.75)' }}>{ar ? 'وسائل التواصل' : 'Social Media'}</span>
-          </div>
-          <h1 style={{ fontSize: 'clamp(2rem,5vw,3.5rem)', fontWeight: 900, color: '#fff', lineHeight: 1.07, marginBottom: 14, fontFamily: "'Outfit', sans-serif" }}>
-            {ar ? 'تابعنا على وسائل التواصل الاجتماعي' : 'Follow WAVZ Online'}
-          </h1>
-          <p style={{ fontSize: 17, color: 'rgba(145,196,245,0.7)', lineHeight: 1.72, margin: 0, fontFamily: "'Outfit', sans-serif" }}>
-            {ar ? 'ابق على اطلاع بآخر أخبار WAVZ وأنشطتها الرقمية.' : 'Stay up to date with the latest WAVZ news and digital activity.'}
-          </p>
-        </div>
-      </div>
+      <MediaHero
+        eyebrow={ar ? 'وسائل التواصل' : 'Social Media'}
+        eyebrowIcon={Share2}
+        eyebrowColor="#0EA5E9"
+        title={ar ? 'تابعنا على وسائل التواصل' : 'Follow WAVZ Online'}
+        subtitle={ar ? 'ابق على اطلاع بآخر أخبار WAVZ وأنشطتها الرقمية.' : 'Stay up to date with the latest WAVZ news and digital activity.'}
+        breadcrumbs={[
+          { label: ar ? 'المركز الإعلامي' : 'Media Center', href: '#/news' },
+          { label: ar ? 'وسائل التواصل' : 'Social Media' },
+        ]}
+        dir={dir}
+        minHeight={280}
+      />
+
       <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(48px,7vw,80px) clamp(24px,6vw,80px)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px,1fr))', gap: 24 }}>
           {CHANNELS.map((ch, i) => (
@@ -528,82 +523,25 @@ export const News = ({ route }) => {
     return (
       <div className="w-full" style={{ background: '#F8FAFC', minHeight: '100vh', color: '#082D4A' }}>
 
-        {/* ══ SOLID NAVY HERO ══ */}
-        <div style={{ position: 'relative', overflow: 'hidden', background: '#061E31' }}>
-          {/* Bottom fade gradient masking */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
-            background: 'linear-gradient(to top, #F8FAFC 0%, rgba(248, 250, 252, 0) 100%)',
-            pointerEvents: 'none', zIndex: 1,
-          }} />
 
-          <div style={{
-            position: 'relative', zIndex: 2,
-            padding: 'clamp(120px,15vw,180px) clamp(24px,6vw,80px) clamp(64px,8vw,96px)',
-          }}>
-            <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-
-              {/* Eyebrow */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  padding: '5px 14px', borderRadius: 100,
-                  border: '1px solid rgba(255,184,20,0.3)',
-                  background: 'rgba(255,184,20,0.08)',
-                  marginBottom: 28,
-                }}
-              >
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FFB814', display: 'inline-block' }} />
-                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#FFB814', fontFamily: "'Outfit', sans-serif" }}>
-                  {lang === 'ar' ? 'غرفة الأخبار' : 'Press Room'}
-                </span>
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="text-4xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.05] mb-8 text-white"
-                style={{
-                  fontFamily: "'Outfit', system-ui, sans-serif",
-                }}
-              >
-                WAVZ{' '}
-                <span style={{ color: '#F0F4F8', fontStyle: 'italic' }}>
-                  {lang === 'ar' ? 'الأخبار' : 'Press Room'}
-                </span>
-                {' '}&amp;{' '}
-                <span style={{ color: '#FFB814' }}>
-                  {lang === 'ar' ? 'المدونة' : 'News'}
-                </span>
-              </motion.h1>
+        <MediaHero
+          eyebrow={lang === 'ar' ? 'البيانات الصحفية' : 'Press Releases'}
+          eyebrowIcon={Megaphone}
+          title={
+            lang === 'ar'
+              ? <>WAVZ <span style={{ color: '#FFB814', fontStyle: 'italic' }}>الأخبار</span> والبيانات</>
+              : <>WAVZ <span style={{ color: '#FFB814', fontStyle: 'italic' }}>Press</span> Room &amp; News</>
+          }
+          subtitle={newsData.lede}
+          breadcrumbs={[
+            { label: lang === 'ar' ? 'المركز الإعلامي' : 'Media Center', href: '#/news' },
+            { label: lang === 'ar' ? 'البيانات الصحفية' : 'Press Releases' },
+          ]}
+          dir={dir}
+          minHeight={300}
+        />
 
 
-              {/* Sub row: lede + article count */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}
-              >
-                <p style={{
-                  fontSize: 'clamp(15px,1.6vw,18px)', lineHeight: 1.7, maxWidth: 520, margin: 0,
-                  color: 'rgba(145,196,245,0.72)',
-                  fontFamily: lang === 'ar' ? "'Tajawal', sans-serif" : "'Outfit', sans-serif",
-                }}>
-                  {newsData.lede}
-                </p>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Blue accent line at the base */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: 2,
-            background: 'linear-gradient(90deg, transparent 0%, rgba(17,115,189,0.18) 30%, rgba(17,115,189,0.18) 70%, transparent 100%)',
-            zIndex: 10, opacity: 0.55,
-          }} />
-        </div>
 
         {/* ── Content area ── */}
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '52px clamp(24px,6vw,80px)' }}>

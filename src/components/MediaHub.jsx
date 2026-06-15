@@ -1,10 +1,9 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { MeshGradient } from '@paper-design/shaders-react';
 import {
   Megaphone, BookOpen, Lightbulb, CalendarDays, Share2, ArrowRight, ArrowLeft, Newspaper
 } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
+import { MediaHero } from './MediaHero.jsx';
 
 const HUB_SECTIONS = [
   {
@@ -73,58 +72,22 @@ export const MediaHub = () => {
   return (
     <div className="relative w-full overflow-hidden" dir={dir} style={{ background: '#F8FAFC', minHeight: '100vh' }}>
 
-      {/* ── Hero Banner ── */}
-      <div className="relative overflow-hidden" style={{ background: '#061E31', minHeight: 320 }}>
-        <MeshGradient
-          className="absolute inset-0 w-full h-full opacity-40"
-          colors={['#000d1a', '#082D4A', '#1173BD', '#0d3a6e', '#FFB814']}
-          speed={0.2}
-          backgroundColor="#061E31"
-        />
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 inset-x-0 h-32 pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to bottom, transparent, #F8FAFC)' }} />
-
-        <div className="relative z-20 max-w-[1200px] mx-auto px-6 lg:px-12"
-          style={{ paddingTop: 'clamp(56px,9vw,100px)', paddingBottom: 'clamp(60px,8vw,100px)' }}>
-
-          {/* Eyebrow pill */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border mb-7"
-            style={{ borderColor: 'rgba(255,184,20,0.3)', background: 'rgba(255,184,20,0.08)' }}
-          >
-            <Newspaper className="w-3.5 h-3.5" style={{ color: '#FFB814' }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#FFB814', fontFamily: "'Outfit', sans-serif" }}>
-              {ar ? 'المركز الإعلامي' : 'Media Center'}
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-extrabold tracking-tight text-white"
-            style={{ fontSize: 'clamp(2rem,5vw,4rem)', lineHeight: 1.05, marginBottom: 18, fontFamily: "'Outfit', system-ui, sans-serif" }}
-          >
-            {ar ? (
-              <>أخبار <span style={{ color: '#FFB814', fontStyle: 'italic' }}>ورؤى</span> WAVZ</>
-            ) : (
-              <>WAVZ{' '}<span style={{ color: '#FFB814', fontStyle: 'italic' }}>News</span>{' '}&amp; Insights</>
-            )}
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            style={{ fontSize: 'clamp(15px,1.4vw,17px)', color: 'rgba(145,196,245,0.75)', maxWidth: 520, lineHeight: 1.72, fontFamily: "'Outfit', sans-serif", margin: 0 }}
-          >
-            {ar
-              ? 'استكشف آخر الأخبار والشراكات وقصص العملاء والرؤى من WAVZ للتحول الرقمي.'
-              : 'Explore the latest announcements, partnerships, client stories, and expert perspectives from WAVZ for Digital Transformation.'}
-          </motion.p>
-        </div>
-      </div>
+      <MediaHero
+        eyebrow={ar ? 'المركز الإعلامي' : 'Media Center'}
+        eyebrowIcon={Newspaper}
+        title={
+          ar
+            ? <>أخبار <span style={{ color: '#FFB814', fontStyle: 'italic' }}>ورؤى</span> WAVZ</>
+            : <>WAVZ <span style={{ color: '#FFB814', fontStyle: 'italic' }}>News</span> &amp; Insights</>
+        }
+        subtitle={
+          ar
+            ? 'استكشف آخر الأخبار والشراكات وقصص العملاء والرؤى من WAVZ للتحول الرقمي.'
+            : 'Explore the latest announcements, partnerships, client stories, and expert perspectives from WAVZ for Digital Transformation.'
+        }
+        dir={dir}
+        minHeight={320}
+      />
 
       {/* ── Hub Layout: Left panel + Right section links ── */}
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-14 lg:py-20">
