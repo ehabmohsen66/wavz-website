@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Calendar, Clock, ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
+import { Search, Calendar, Clock, ArrowLeft, ArrowRight, BookOpen, Lightbulb, CalendarDays, Share2, Linkedin, Twitter, Instagram } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal, useNews } from '../hooks/index.js';
 import { SearchBar } from './SearchBar.jsx';
 import { MeshGradient } from '@paper-design/shaders-react';
+import { MediaHub } from './MediaHub.jsx';
+import { ClientStories } from './ClientStories.jsx';
 
 const mapDbArticleToArticle = (dbArt, ar) => {
   const dateObj = new Date(dbArt.date || dbArt.published_at || dbArt.created_at);
@@ -82,8 +84,97 @@ const GridBeam = ({ children }) => (
   </div>
 );
 
+/* ─── Sub-section placeholder (Insights, Events) ─── */
+const SubSectionPlaceholder = ({ icon: Icon, color, label, desc, ar, dir }) => (
+  <div style={{ background: '#F8FAFC', minHeight: '100vh' }} dir={dir}>
+    <div style={{ background: '#061E31', padding: 'clamp(64px,10vw,120px) clamp(24px,6vw,80px) clamp(56px,8vw,96px)' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28 }}>
+          <a href="#/news" style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
+            {ar ? 'المركز الإعلامي' : 'Media Center'}
+          </a>
+          <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 13 }}>{'›'}</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.75)' }}>{label}</span>
+        </div>
+        <div style={{ width: 56, height: 56, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', background: `${color}22`, marginBottom: 20 }}>
+          <Icon style={{ width: 28, height: 28, color }} />
+        </div>
+        <h1 style={{ fontSize: 'clamp(2rem,5vw,3.5rem)', fontWeight: 900, color: '#fff', lineHeight: 1.07, marginBottom: 16, fontFamily: "'Outfit', sans-serif" }}>{label}</h1>
+        <p style={{ fontSize: 17, color: 'rgba(145,196,245,0.7)', lineHeight: 1.72, margin: 0, maxWidth: 500, fontFamily: "'Outfit', sans-serif" }}>{desc}</p>
+      </div>
+    </div>
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(48px,7vw,80px) clamp(24px,6vw,80px)', textAlign: 'center' }}>
+      <div style={{ width: 80, height: 80, borderRadius: '50%', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+        <Icon style={{ width: 36, height: 36, color, opacity: 0.7 }} />
+      </div>
+      <h2 style={{ fontSize: 22, fontWeight: 800, color: '#082D4A', marginBottom: 10, fontFamily: "'Outfit', sans-serif" }}>
+        {ar ? 'قادم قريباً' : 'Coming Soon'}
+      </h2>
+      <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.7, maxWidth: 420, margin: '0 auto 28px' }}>
+        {ar ? 'نعمل على بناء هذا القسم. تابعنا قريباً.' : "We're building out this section. Stay tuned for updates."}
+      </p>
+      <a href="#/news" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 100, background: '#082D4A', color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+        {ar ? 'العودة إلى المركز الإعلامي' : '← Back to Media Center'}
+      </a>
+    </div>
+  </div>
+);
+
+/* ─── Social Media page ─── */
+const SocialMediaPage = ({ ar, dir }) => {
+  const CHANNELS = [
+    { name: 'LinkedIn', color: '#0077b5', handle: 'wavz-digital-transformation', url: 'https://www.linkedin.com/company/wavz-digital-transformation/', icon: 'in', desc: ar ? 'تابعنا على لينكد إن لآخر الأخبار والفرص المهنية.' : 'Follow us for the latest news, insights, and career opportunities.' },
+    { name: 'Facebook', color: '#1877f2', handle: 'WAVZDigital', url: 'https://www.facebook.com/', icon: 'f', desc: ar ? 'تواصل معنا عبر فيسبوك للأخبار والتحديثات.' : 'Connect with us on Facebook for news and updates.' },
+    { name: 'X / Twitter', color: '#000', handle: '@WAVZDigital', url: 'https://twitter.com/', icon: 'X', desc: ar ? 'تابع آخر تغريداتنا ورؤانا على منصة إكس.' : 'Follow our latest tweets and digital insights on X.' },
+  ];
+  return (
+    <div style={{ background: '#F8FAFC', minHeight: '100vh' }} dir={dir}>
+      <div style={{ background: '#061E31', padding: 'clamp(64px,10vw,120px) clamp(24px,6vw,80px) clamp(56px,8vw,96px)' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28 }}>
+            <a href="#/news" style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
+              {ar ? 'المركز الإعلامي' : 'Media Center'}
+            </a>
+            <span style={{ color: 'rgba(255,255,255,0.25)' }}>›</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.75)' }}>{ar ? 'وسائل التواصل' : 'Social Media'}</span>
+          </div>
+          <h1 style={{ fontSize: 'clamp(2rem,5vw,3.5rem)', fontWeight: 900, color: '#fff', lineHeight: 1.07, marginBottom: 14, fontFamily: "'Outfit', sans-serif" }}>
+            {ar ? 'تابعنا على وسائل التواصل الاجتماعي' : 'Follow WAVZ Online'}
+          </h1>
+          <p style={{ fontSize: 17, color: 'rgba(145,196,245,0.7)', lineHeight: 1.72, margin: 0, fontFamily: "'Outfit', sans-serif" }}>
+            {ar ? 'ابق على اطلاع بآخر أخبار WAVZ وأنشطتها الرقمية.' : 'Stay up to date with the latest WAVZ news and digital activity.'}
+          </p>
+        </div>
+      </div>
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(48px,7vw,80px) clamp(24px,6vw,80px)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px,1fr))', gap: 24 }}>
+          {CHANNELS.map((ch, i) => (
+            <a key={i} href={ch.url} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'block', background: '#fff', borderRadius: 20, padding: 28, border: '1px solid rgba(8,45,74,0.09)', textDecoration: 'none', boxShadow: '0 2px 12px rgba(8,45,74,0.04)', transition: 'box-shadow 0.2s ease' }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(8,45,74,0.10)'; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(8,45,74,0.04)'; }}
+            >
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: ch.color, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, color: '#fff', fontWeight: 900, fontSize: 18 }}>{ch.icon}</div>
+              <div style={{ fontWeight: 800, fontSize: 17, color: '#082D4A', marginBottom: 4, fontFamily: "'Outfit', sans-serif" }}>{ch.name}</div>
+              <div style={{ fontSize: 12.5, color: ch.color, fontWeight: 600, marginBottom: 10 }}>{ch.handle}</div>
+              <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.65, margin: 0 }}>{ch.desc}</p>
+            </a>
+          ))}
+        </div>
+        <div style={{ marginTop: 48, paddingTop: 24, borderTop: '1px solid rgba(8,45,74,0.08)' }}>
+          <a href="#/news" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 600, color: '#1173BD', textDecoration: 'none' }}>
+            ← {ar ? 'العودة إلى المركز الإعلامي' : 'Back to Media Center'}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 export const News = ({ route }) => {
   const { t, lang, dir } = useLang();
+
   const ar = lang === 'ar';
   const [revealRef, visible] = useReveal();
   const [searchQuery, setSearchQuery] = useState('');
@@ -140,8 +231,15 @@ export const News = ({ route }) => {
   const landingArticles = mappedArticles.slice(0, 3);
 
   // Router resolution
-  const isNewsroomRoute = route === '#/news';
-  const isArticleRoute = route.startsWith('#/news/');
+  const isNewsroomRoute      = route === '#/news';
+  const isPressReleasesRoute = route === '#/news/press-releases';
+  const isClientStoriesRoute = route === '#/news/client-stories' || route.startsWith('#/news/client-stories/');
+  const isInsightsRoute      = route === '#/news/insights';
+  const isEventsRoute        = route === '#/news/events';
+  const isSocialRoute        = route === '#/news/social';
+  const isArticleRoute       = route.startsWith('#/news/') &&
+    !isClientStoriesRoute && !isPressReleasesRoute &&
+    !isInsightsRoute && !isEventsRoute && !isSocialRoute;
 
   if (isArticleRoute) {
     // ── Dedicated Article Inner Page View ──
@@ -398,8 +496,34 @@ export const News = ({ route }) => {
     );
   }
 
+  // ── Hub Landing ──
   if (isNewsroomRoute) {
-    // ── Dedicated Newsroom List Page View ──
+    return <MediaHub />;
+  }
+
+  // ── Client Stories ──
+  if (isClientStoriesRoute) {
+    return <ClientStories route={route} />;
+  }
+
+  // ── Insights placeholder ──
+  if (isInsightsRoute) {
+    return <SubSectionPlaceholder icon={Lightbulb} color="#FFB814" label={ar ? 'رؤى وقيادة فكرية' : 'Insights & Thought Leadership'} desc={ar ? 'مقالات وأوراق بحثية قادمة قريباً.' : 'Articles, whitepapers, and expert perspectives — coming soon.'} ar={ar} dir={dir} />;
+  }
+
+  // ── Events placeholder ──
+  if (isEventsRoute) {
+    return <SubSectionPlaceholder icon={CalendarDays} color="#7C3AED" label={ar ? 'الفعاليات' : 'Events'} desc={ar ? 'المؤتمرات والندوات القادمة — قريباً.' : 'Upcoming conferences, webinars, and past event highlights — coming soon.'} ar={ar} dir={dir} />;
+  }
+
+  // ── Social placeholder ──
+  if (isSocialRoute) {
+    return <SocialMediaPage ar={ar} dir={dir} />;
+  }
+
+  if (isPressReleasesRoute) {
+    // ── Dedicated Press Releases List Page View ──
+
     return (
       <div className="w-full" style={{ background: '#F8FAFC', minHeight: '100vh', color: '#082D4A' }}>
 

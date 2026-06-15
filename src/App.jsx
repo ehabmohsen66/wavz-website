@@ -76,8 +76,13 @@ export default function App() {
   const isKnownRoute = [
     '#/', '#/about', '#/journey', '#/board', '#/team', '#/partners', '#/news',
     '#/managed-services', '#/financial-services', '#/payment-services',
-    '#/sap-services', '#/digital-transformation', '#/contact', '#/blog', '#/savings-calculator'
-  ].some(r => currentRoute === r || currentRoute.startsWith('#/news/') || currentRoute.startsWith('#/blog/'));
+    '#/sap-services', '#/digital-transformation', '#/contact', '#/blog', '#/savings-calculator',
+    '#/news/press-releases', '#/news/client-stories', '#/news/insights', '#/news/events', '#/news/social'
+  ].some(r =>
+    currentRoute === r ||
+    currentRoute.startsWith('#/news/') ||
+    currentRoute.startsWith('#/blog/')
+  );
 
   // If on the dedicated about inner page
   if (isAboutRoute) {

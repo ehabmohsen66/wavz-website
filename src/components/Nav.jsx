@@ -94,8 +94,13 @@ export const Nav = () => {
   ];
 
   const mediaItems = [
-    { href: '#/news', label: isAr ? 'غرفة الأخبار' : 'Press Room & News' },
-    { href: '#/blog', label: isAr ? 'المدونة' : 'Blog' },
+    { href: '#/news',                  label: isAr ? 'المركز الإعلامي' : 'Media Center' },
+    { href: '#/news/press-releases',   label: isAr ? 'البيانات الصحفية' : 'Press Releases' },
+    { href: '#/news/client-stories',   label: isAr ? 'قصص العملاء' : 'Client Stories' },
+    { href: '#/news/insights',         label: isAr ? 'رؤى وقيادة فكرية' : 'Insights' },
+    { href: '#/news/events',           label: isAr ? 'الفعاليات' : 'Events' },
+    { href: '#/news/social',           label: isAr ? 'وسائل التواصل' : 'Social Media' },
+    { href: '#/blog',                  label: isAr ? 'المدونة' : 'Blog' },
   ];
 
 
