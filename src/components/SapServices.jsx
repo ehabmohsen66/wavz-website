@@ -534,8 +534,9 @@ export const SapServices = () => {
       <section style={{
         position: 'relative',
         width: '100%',
-        height: '100vh',
-        minHeight: 600,
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'flex-end',
         overflow: 'hidden',
         background: T.navy,
       }}>
@@ -559,14 +560,16 @@ export const SapServices = () => {
           pointerEvents: 'none',
         }} />
 
-        {/* Content pinned to bottom */}
+        {/* Content pinned to bottom with top safety padding and horizontal centering */}
         <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
+          position: 'relative',
           zIndex: 20,
           display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
           textAlign: 'start',
-          padding: '0 clamp(24px,6vw,80px) clamp(48px,5vw,72px)',
+          padding: '130px clamp(24px,6vw,80px) clamp(48px,5vw,72px)',
           maxWidth: 1200,
+          width: '100%',
+          margin: '0 auto',
         }}>
           {/* SAP SVG Logo */}
           <motion.div 
