@@ -123,10 +123,11 @@ const SubSectionPlaceholder = ({ icon: Icon, color, label, desc, ar, dir }) => (
 /* ─── Social Media page ─── */
 const SocialMediaPage = ({ ar, dir }) => {
   const CHANNELS = [
-    { name: 'LinkedIn', color: '#0077b5', handle: 'wavz-digital-transformation', url: 'https://www.linkedin.com/company/wavz-digital-transformation/', icon: 'in', desc: ar ? 'تابعنا على لينكد إن لآخر الأخبار والفرص المهنية.' : 'Follow us for the latest news, insights, and career opportunities.' },
-    { name: 'Facebook', color: '#1877f2', handle: 'WAVZDigital', url: 'https://www.facebook.com/', icon: 'f', desc: ar ? 'تواصل معنا عبر فيسبوك للأخبار والتحديثات.' : 'Connect with us on Facebook for news and updates.' },
-    { name: 'X / Twitter', color: '#000', handle: '@WAVZDigital', url: 'https://twitter.com/', icon: 'X', desc: ar ? 'تابع آخر تغريداتنا ورؤانا على منصة إكس.' : 'Follow our latest tweets and digital insights on X.' },
+    { name: 'LinkedIn', color: '#0077b5', handle: 'wavzfordigitaltransformation', url: 'https://www.linkedin.com/company/wavzfordigitaltransformation/', icon: 'in', desc: ar ? 'تابعنا على لينكد إن لآخر الأخبار والفرص المهنية.' : 'Follow us for the latest news, insights, and career opportunities.' },
+    { name: 'Facebook', color: '#1877f2', handle: 'WAVZfordigitaltransformation', url: 'https://www.facebook.com/WAVZfordigitaltransformation', icon: 'f', desc: ar ? 'تواصل معنا عبر فيسبوك للأخبار والتحديثات.' : 'Connect with us on Facebook for news and updates.' },
+    { name: 'Instagram', color: '#E1306C', handle: '@wavzfordigitaltransformation', url: 'https://www.instagram.com/wavzfordigitaltransformation/', icon: '✦', desc: ar ? 'تابعنا على إنستغرام لأحدث صورنا وأنشطتنا.' : 'Follow us on Instagram for the latest visuals and activities.' },
   ];
+
   return (
     <div style={{ background: '#F8FAFC', minHeight: '100vh' }} dir={dir}>
       <div style={{ background: '#061E31', padding: 'clamp(64px,10vw,120px) clamp(24px,6vw,80px) clamp(56px,8vw,96px)' }}>
