@@ -280,7 +280,7 @@ export const DataAI = () => {
           {/* Robot SVG Logo */}
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
             style={{ marginBottom: 28 }}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style={{ height: 48, width: 'auto' }} aria-label="Robot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style={{ height: 48, width: 48, display: 'block' }} aria-label="Robot">
               <defs>
                 <linearGradient id="robot-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" stopColor="#A78BFA" />
