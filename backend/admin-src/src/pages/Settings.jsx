@@ -3,6 +3,7 @@ import { api } from '../api.js';
 
 const GROUPS = {
   seo:     { label: '🔍 SEO & Meta',       desc: 'Search engine meta tags' },
+  analytics: { label: '📊 Analytics',        desc: 'Google Analytics & Meta Pixel' },
   hero:    { label: '🏠 Hero Section',      desc: 'Homepage hero text and CTAs' },
   contact: { label: '📞 Contact Info',      desc: 'Phone, email, address' },
   footer:  { label: '🔻 Footer',            desc: 'Copyright and footer text' },

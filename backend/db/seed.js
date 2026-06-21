@@ -37,6 +37,8 @@ async function seed() {
     { key: 'social_linkedin',   value_en: 'https://linkedin.com/company/wavz', value_ar: 'https://linkedin.com/company/wavz', group_name: 'social', label: 'LinkedIn URL' },
     { key: 'social_facebook',   value_en: '', value_ar: '', group_name: 'social', label: 'Facebook URL' },
     { key: 'social_instagram',  value_en: '', value_ar: '', group_name: 'social', label: 'Instagram URL' },
+    { key: 'google_analytics_id', value_en: '', value_ar: '', group_name: 'analytics', label: 'Google Analytics Measurement ID (G-XXXXXX)' },
+    { key: 'meta_pixel_id',       value_en: '', value_ar: '', group_name: 'analytics', label: 'Meta Pixel ID' },
   ];
 
   const insertSetting = db.prepare(`
