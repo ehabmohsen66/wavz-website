@@ -162,6 +162,8 @@ export const PartnerTestimonials = () => {
                                             className="h-6 w-fit opacity-70 object-contain"
                                             src={test.logo}
                                             alt={`${test.company} Logo`}
+                                            loading="lazy"
+                                            decoding="async"
                                             height="24"
                                             width="auto"
                                         />

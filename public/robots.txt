@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow internal/utility routes
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /dist/
+
+# Sitemap
+Sitemap: https://www.wavz.com/sitemap.xml

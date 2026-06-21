@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSEO } from './hooks/useSEO.js';
 import { LangProvider } from './i18n/LangContext.jsx';
 import { Nav } from './components/Nav.jsx';
 import { Hero } from './components/Hero.jsx';
@@ -35,6 +36,9 @@ import { SavingsCalculator } from './components/SavingsCalculator.jsx';
 export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [currentRoute, setCurrentRoute] = useState(window.location.hash || '#/');
+
+  // SEO: update meta tags on every route change
+  useSEO(currentRoute);
 
   // Listen to browser hash changes for routing
   useEffect(() => {

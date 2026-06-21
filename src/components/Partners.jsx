@@ -264,6 +264,8 @@ export const Partners = () => {
                   <img 
                     src={logo.src} 
                     alt={logo.name} 
+                    loading="lazy"
+                    decoding="async"
                     style={{ maxWidth: '100%', maxHeight: 64, objectFit: 'contain', display: 'block' }} 
                   />
                 </div>
@@ -287,6 +289,8 @@ export const Partners = () => {
                   <img 
                     src={logo.src} 
                     alt={logo.name} 
+                    loading="lazy"
+                    decoding="async"
                     style={{ maxWidth: '100%', maxHeight: 64, objectFit: 'contain', display: 'block' }} 
                   />
                 </div>
@@ -491,6 +495,8 @@ export const Partners = () => {
               <img
                 src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=900&q=85&auto=format&fit=crop"
                 alt="WAVZ Partnership"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
                 style={{ minHeight: '420px' }}
               />
