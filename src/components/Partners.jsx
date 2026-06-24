@@ -144,7 +144,7 @@ export const Partners = () => {
       `}</style>
 
       {/* ══ PARTNERS WORLD MAP HERO ══════════════════ */}
-      <section className="relative w-full bg-[#061E31] text-white overflow-hidden flex flex-col justify-start pt-32 pb-20 lg:pt-40 lg:pb-28">
+      <section className="relative w-full bg-[#061E31] text-white overflow-hidden flex flex-col justify-start pt-16 pb-16 lg:pt-24 lg:pb-20">
         {/* World Map floating absolute in the background - shifted right on larger screens to clear left-aligned text */}
         <div className="absolute inset-y-0 right-0 w-full lg:w-[55%] xl:w-[50%] z-0 pointer-events-none flex items-center justify-center opacity-40 lg:opacity-80 lg:translate-x-[20%] lg:translate-y-[15%] transition-all duration-700">
           <WorldMap />
@@ -155,7 +155,7 @@ export const Partners = () => {
           style={{ background:'linear-gradient(to top, #F8FAFC 0%, rgba(248, 250, 252, 0) 100%)' }} />
 
         {/* Hero content */}
-        <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 lg:px-12 flex flex-col justify-start gap-8 lg:gap-10">
+        <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 lg:px-12 flex flex-col justify-start gap-6 lg:gap-8">
           {/* Top row: back nav */}
           <div>
             <a href="#/" className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-[13.5px] font-semibold transition-colors duration-200">
