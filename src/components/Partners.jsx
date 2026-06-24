@@ -146,7 +146,7 @@ export const Partners = () => {
       {/* ══ PARTNERS WORLD MAP HERO ══════════════════ */}
       <section className="relative w-full min-h-screen bg-[#061E31] text-white overflow-hidden flex flex-col justify-center py-20 lg:py-28">
         {/* World Map floating absolute in the background - shifted right on larger screens to clear left-aligned text */}
-        <div className="absolute inset-y-0 right-0 w-full lg:w-[70%] xl:w-[65%] z-0 pointer-events-none flex items-center justify-center opacity-40 lg:opacity-80 lg:translate-x-[25%] lg:translate-y-[35%] transition-all duration-700">
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[55%] xl:w-[50%] z-0 pointer-events-none flex items-center justify-center opacity-40 lg:opacity-80 lg:translate-x-[20%] lg:translate-y-[15%] transition-all duration-700">
           <WorldMap />
         </div>
 
