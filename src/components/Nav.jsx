@@ -88,7 +88,6 @@ export const Nav = () => {
   /* ── Dropdown item definitions ── */
   const aboutItems = [
     { href: '#/about',   label: isAr ? 'عن الشركة'       : 'About Us' },
-    { href: '#/journey', label: isAr ? 'رحلتنا'           : 'Our Journey' },
     { href: '#/board',   label: isAr ? 'مجلس الإدارة'     : 'Board of Directors' },
     { href: '#/team',    label: isAr ? 'فريقنا التنفيذي'  : 'Our Executive Team' },
   ];
