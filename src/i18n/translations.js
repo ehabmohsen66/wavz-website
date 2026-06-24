@@ -262,7 +262,7 @@ export const translations = {
       storyTitle: 'Our Story',
       storySubtitle: 'From a bold idea to a regional technology leader — this is the WAVZ journey.',
       storyMilestones: [
-        { year: '2015', title: 'WAVZ Founded', desc: 'WAVZ for Digital Transformation was established with a vision to deliver world-class technology solutions to the MEA region.' },
+        { year: '2008', title: 'WAVZ Founded', desc: 'WAVZ was established with a dynamic mission to revolutionize modern technology and solutions, kicking off with the introduction of SAP ERP.' },
         { year: '2017', title: 'SAP Partnership', desc: 'Became a certified SAP partner, enabling us to deliver enterprise-grade ERP solutions to banks, governments, and enterprises.' },
         { year: '2019', title: 'Expansion to Gulf', desc: 'Extended operations into the Gulf region, establishing a presence in Saudi Arabia and UAE to serve growing demand.' },
         { year: '2021', title: 'Fintech & Payments', desc: 'Launched dedicated fintech and payment platform services, partnering with Tietoevry and other global leaders.' },
@@ -286,7 +286,7 @@ export const translations = {
     journey: {
       tagline: 'From a bold startup to a regional technology leader — explore the milestones that shaped WAVZ.',
       steps: [
-        { year: '2015', title: 'WAVZ is Founded', items: ['Company established in Cairo, Egypt', 'Initial focus on SAP consulting and implementation', 'First 50 team members hired'] },
+        { year: '2008', title: 'WAVZ is Founded', items: ['Company established in Cairo, Egypt', 'Initial focus on SAP consulting and implementation', 'First 50 team members hired'] },
         { year: '2017', title: 'SAP Certified Partner', items: ['Achieved SAP Gold Partner status', 'Delivered first major banking ERP project', 'Team grows to 200+ experts'] },
         { year: '2019', title: 'Gulf Region Expansion', items: ['Opened offices in Saudi Arabia and UAE', 'Launched managed services practice', 'First government transformation project'] },
         { year: '2021', title: 'Fintech & Payments Launch', items: ['Strategic partnership with Tietoevry', 'Launched open banking solutions platform', 'First payment infrastructure project for Egyptian banks'] },
@@ -1614,7 +1614,7 @@ WAVZ هي شركة تقدم خدمات متعددة التقنيات ومتعد�
       storyTitle: 'قصتنا',
       storySubtitle: 'من فكرة جريئة إلى رائد تكنولوجي إقليمي — هذه رحلة WAVZ.',
       storyMilestones: [
-        { year: '2015', title: 'تأسيس WAVZ', desc: 'تأسست WAVZ للتحول الرقمي برؤية تقديم حلول تكنولوجيا عالمية المستوى لمنطقة الشرق الأوسط وأفريقيا.' },
+        { year: '2008', title: 'تأسيس WAVZ', desc: 'تأسست WAVZ بمهمة ديناميكية لإحداث ثورة في التكنولوجيا والحلول الحديثة، حيث بدأت رحلتنا بتقديم نظام SAP ERP.' },
         { year: '2017', title: 'شراكة SAP', desc: 'أصبحنا شريكاً معتمداً من SAP، مما مكّننا من تقديم حلول ERP على مستوى المؤسسات للبنوك والحكومات.' },
         { year: '2019', title: 'التوسع في دول الخليج', desc: 'مددنا عملياتنا إلى منطقة الخليج، وأسسنا حضوراً في المملكة العربية السعودية والإمارات.' },
         { year: '2021', title: 'تكنولوجيا مالية ومدفوعات', desc: 'أطلقنا خدمات التكنولوجيا المالية ومنصات الدفع المتخصصة، بالشراكة مع Tietoevry وقادة عالميين آخرين.' },
@@ -1638,7 +1638,7 @@ WAVZ هي شركة تقدم خدمات متعددة التقنيات ومتعد�
     journey: {
       tagline: 'من شركة ناشئة جريئة إلى رائد تكنولوجي إقليمي — استكشف المحطات التي شكّلت WAVZ.',
       steps: [
-        { year: '2015', title: 'تأسيس WAVZ', items: ['تأسست الشركة في القاهرة، مصر', 'التركيز الأولي على استشارات وتطبيق SAP', 'تعيين أول 50 عضواً في الفريق'] },
+        { year: '2008', title: 'تأسيس WAVZ', items: ['تأسست الشركة في القاهرة، مصر', 'التركيز الأولي على استشارات وتطبيق SAP', 'تعيين أول 50 عضواً في الفريق'] },
         { year: '2017', title: 'شريك SAP المعتمد', items: ['حصلنا على مرتبة Gold Partner من SAP', 'تسليم أول مشروع ERP مصرفي كبير', 'الفريق ينمو إلى أكثر من 200 خبير'] },
         { year: '2019', title: 'التوسع في الخليج', items: ['افتتاح مكاتب في السعودية والإمارات', 'إطلاق ممارسة الخدمات المُدارة', 'أول مشروع تحول حكومي'] },
         { year: '2021', title: 'إطلاق التكنولوجيا المالية والمدفوعات', items: ['شراكة استراتيجية مع Tietoevry', 'إطلاق منصة حلول البنوك المفتوحة', 'أول مشروع بنية تحتية للمدفوعات للبنوك المصرية'] },
