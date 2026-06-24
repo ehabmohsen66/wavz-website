@@ -155,7 +155,7 @@ export const Partners = () => {
           style={{ background:'linear-gradient(to top, #F8FAFC 0%, rgba(248, 250, 252, 0) 100%)' }} />
 
         {/* Hero content */}
-        <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 lg:px-12 flex flex-col justify-between min-h-[75vh]">
+        <div className="relative z-20 w-full max-w-[1200px] mx-auto px-6 lg:px-12 flex flex-col justify-center gap-10 lg:gap-16 min-h-[65vh]">
           {/* Top row: back nav */}
           <div>
             <a href="#/" className="inline-flex items-center gap-1.5 text-white/60 hover:text-white text-[13.5px] font-semibold transition-colors duration-200">
@@ -165,7 +165,7 @@ export const Partners = () => {
           </div>
 
           {/* Centre: main headline */}
-          <div className="max-w-4xl mt-10 mb-10">
+          <div className="max-w-4xl">
             {/* Eyebrow pill */}
             <div style={{
               display:'inline-flex', alignItems:'center', gap:8,
