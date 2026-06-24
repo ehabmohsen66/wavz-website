@@ -62,7 +62,7 @@ export const DataCenterDiagram = () => {
         LIVE
       </div>
 
-      <svg viewBox="0 0 500 460" xmlns="http://www.w3.org/2000/svg" className="relative w-full h-auto">
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" className="relative w-full h-auto">
         <defs>
           {/* Orchestrator spheres */}
           <radialGradient id="wl-sphere" cx="38%" cy="32%" r="75%">
@@ -217,14 +217,6 @@ export const DataCenterDiagram = () => {
         <IsometricRack x={50} y={300} label={t.hero.diagramRack1} isDark={isDark} />
         <IsometricRack x={175} y={365} label={t.hero.diagramRack2} delay={1} isDark={isDark} />
         <IsometricRack x={300} y={300} label={t.hero.diagramRack3} delay={2} isDark={isDark} />
-
-        {/* Source label */}
-        <g>
-          <rect x="5" y="430" width="120" height="22" rx="6" fill={isDark ? "rgba(15, 23, 42, 0.8)" : "#082D4A"} stroke={isDark ? "rgba(255, 255, 255, 0.1)" : "none"} strokeWidth="1" />
-          <text x="65" y="445" textAnchor="middle" fill="white" fontSize="10" fontWeight="600" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-            {t.hero.diagramSource}
-          </text>
-        </g>
 
         {/* Animated packets */}
         <DataPacket pathId="path-r1-orch" color={colors.packetColorSecondary} begin="0s" isDark={isDark} />
