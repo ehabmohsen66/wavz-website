@@ -218,6 +218,50 @@ export const About = () => {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
 
 
+        {/* ── Section 4: Strategic Statement (Our "WHY") ── */}
+        <section className="mb-24 lg:mb-32 relative overflow-hidden rounded-3xl bg-[#061E31] text-white p-8 lg:p-14 shadow-xl border border-white/5">
+          {/* Subtle glowing mesh */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1173BD]/20 to-transparent pointer-events-none" />
+          <div className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#1173BD]/5 blur-[80px] pointer-events-none" />
+
+          <div className="relative z-10 max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start">
+            <div className="flex-shrink-0 flex flex-col items-center md:items-start gap-5">
+              <div className="bg-[#FFB814] text-[#082D4A] text-[12px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg text-center shadow-md">
+                {lang === 'ar' ? 'هدفنا ومهمتنا' : 'OUR MISSION'}
+              </div>
+              {/* Beautiful squiggle-clipped tree image under the badge */}
+              <div 
+                className="w-32 h-44 md:w-36 md:h-48 relative overflow-hidden group hover:scale-105 transition-all duration-500 ease-out shadow-lg cursor-pointer"
+                style={{ clipPath: 'url(#clip-squiggle)' }}
+              >
+                <div className="absolute inset-0 bg-[#1173BD]/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-700 ease-out group-hover:scale-110"
+                >
+                  <source src="https://videos.pexels.com/video-files/7710243/7710243-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+            
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-[#FFB814] mb-5">
+                {data.whyTitle}
+              </h2>
+              
+              <blockquote 
+                className="text-[17px] lg:text-[20px] text-slate-200 font-medium leading-[1.7] italic border-s-2 border-[#FFB814] ps-5"
+                style={{ fontFamily: lang === 'ar' ? 'Tajawal, sans-serif' : 'inherit' }}
+              >
+                {data.whyText}
+              </blockquote>
+            </div>
+          </div>
+        </section>
+
         <section className="mb-24 lg:mb-32">
           <div className="mb-14">
             <h2 className="text-3xl lg:text-5xl font-bold text-[#082D4A] tracking-tight leading-tight">
@@ -317,49 +361,7 @@ export const About = () => {
         {/* ── Section 3b: Solutions Portfolio Diagram ── */}
         <SolutionsPortfolio />
 
-        {/* ── Section 4: Strategic Statement (Our "WHY") ── */}
-        <section className="mb-24 lg:mb-32 relative overflow-hidden rounded-3xl bg-[#061E31] text-white p-8 lg:p-14 shadow-xl border border-white/5">
-          {/* Subtle glowing mesh */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1173BD]/20 to-transparent pointer-events-none" />
-          <div className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#1173BD]/5 blur-[80px] pointer-events-none" />
-
-          <div className="relative z-10 max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start">
-            <div className="flex-shrink-0 flex flex-col items-center md:items-start gap-5">
-              <div className="bg-[#FFB814] text-[#082D4A] text-[12px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg text-center shadow-md">
-                {lang === 'ar' ? 'هدفنا ومهمتنا' : 'OUR MISSION'}
-              </div>
-              {/* Beautiful squiggle-clipped tree image under the badge */}
-              <div 
-                className="w-32 h-44 md:w-36 md:h-48 relative overflow-hidden group hover:scale-105 transition-all duration-500 ease-out shadow-lg cursor-pointer"
-                style={{ clipPath: 'url(#clip-squiggle)' }}
-              >
-                <div className="absolute inset-0 bg-[#1173BD]/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover select-none pointer-events-none transition-transform duration-700 ease-out group-hover:scale-110"
-                >
-                  <source src="https://videos.pexels.com/video-files/7710243/7710243-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-                </video>
-              </div>
-            </div>
-            
-            <div>
-              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-[#FFB814] mb-5">
-                {data.whyTitle}
-              </h2>
-              
-              <blockquote 
-                className="text-[17px] lg:text-[20px] text-slate-200 font-medium leading-[1.7] italic border-s-2 border-[#FFB814] ps-5"
-                style={{ fontFamily: lang === 'ar' ? 'Tajawal, sans-serif' : 'inherit' }}
-              >
-                {data.whyText}
-              </blockquote>
-            </div>
-          </div>
-        </section>
+        
 
         {/* ── Section 5: Core Values ── */}
         <section className="mb-12">
