@@ -130,15 +130,6 @@ const TEAM_EN = [
     bio: 'Youssef brings 25+ years of experience in IT including IT strategic planning, business development, system integration, and applications development in various prominent IT organizations including IBM, IDSC, and WAVZ. He plays a pivotal role in managing WAVZ\'s relationship with the postal sector in Egypt, Middle East, and Africa. Youssef joined WAVZ in 2019 and holds an MBA from Aspen University, USA.',
   },
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Dalia-Mahmoud-LR.jpg.webp',
-    name: 'Dalia Mahmoud',
-    role: 'SAP Practice Director',
-    department: 'SAP',
-    years: '17+',
-    highlight: 'SAP · ERP Implementation · Digital Transformation · 17+ Years',
-    bio: 'Dalia brings 17+ years of experience in the IT industry, including a prominent 10+ years focus on ERP implementation with a proven track record of successful ERP implementations, digital transformation strategic planning and execution, and IT management. Dalia joined WAVZ in September 2019 as SAP Practice Director and has since been playing a pivotal role in developing the SAP Solutions business unit. She is praised for her team-building abilities and exceptional alignment with the organization\'s vision and mission.',
-  },
-  {
     photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Doaa-Sayed-LR.jpg.webp',
     name: 'Doaa Sayed',
     role: 'Partnerships & Alliances Manager',
@@ -239,15 +230,6 @@ const TEAM_AR = [
     years: '+25',
     highlight: 'IBM · IDSC · القطاع البريدي · MBA أسبن · +25 عامًا',
     bio: 'يُحضر يوسف أكثر من 25 عامًا من الخبرة في تكنولوجيا المعلومات شملت التخطيط الاستراتيجي وتطوير الأعمال وتكامل الأنظمة في منظمات بارزة منها IBM وIDSC وWAVZ. انضم إلى WAVZ عام 2019 ويحمل درجة الماجستير في إدارة الأعمال من جامعة أسبن.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Dalia-Mahmoud-LR.jpg.webp',
-    name: 'داليا محمود',
-    role: 'مديرة ممارسة SAP',
-    department: 'SAP',
-    years: '+17',
-    highlight: 'SAP · تطبيق ERP · التحول الرقمي · +17 عامًا',
-    bio: 'تُحضر داليا أكثر من 17 عامًا من الخبرة في صناعة تقنية المعلومات، منها أكثر من 10 سنوات تركيز على تطبيق ERP. انضمت إلى WAVZ في سبتمبر 2019 وتضطلع بدور محوري في تطوير وحدة أعمال حلول SAP. تُشاد بقدراتها في بناء الفرق وتوافقها الاستثنائي مع رؤية المنظمة.',
   },
   {
     photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Doaa-Sayed-LR.jpg.webp',
