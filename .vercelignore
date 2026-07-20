@@ -1,12 +1,11 @@
-backend/
-cms-admin/
-api/
-scraper/
-v2/
-v3/
-case studies/
-services/
-network-share-svgrepo-com.svg
-swap.py
-unify_heroes.py
-vercel.json
+/backend/
+/cms-admin/
+/api/
+/scraper/
+/v2/
+/v3/
+/case studies/
+/services/
+/network-share-svgrepo-com.svg
+/swap.py
+/unify_heroes.py
