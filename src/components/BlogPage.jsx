@@ -460,6 +460,7 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
     <div dir={ar ? 'rtl' : 'ltr'} style={{ background: '#F8FAFC', color: '#334155', fontFamily: font }}>
       <div style={{
         position: 'relative', width: '100%',
+        background: '#061E31',
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)',
         backgroundSize: '40px 40px',
         
