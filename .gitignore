@@ -42,3 +42,4 @@ backend/db/wavz.db-shm
 backend/db/wavz.db-wal
 backend/uploads/
 backend/admin-src/node_modules/
+.vercel
