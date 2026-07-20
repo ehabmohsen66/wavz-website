@@ -272,7 +272,7 @@ const StoryDetail = ({ story, ar, dir }) => {
       {/* KPI strip sits directly below the hero */}
       <div style={{ background: story.bgGradient, paddingTop: 20, paddingBottom: 'clamp(64px,8vw,96px)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'clamp(24px,6vw,80px)', paddingRight: 'clamp(24px,6vw,80px)' }}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full" style={{ width: '100%' }}>
             {story.metrics.map((m, i) => (
               <MetricCard key={i} icon={m.icon} value={m.value} label={ar ? m.labelAr : m.label} color={m.color} />
             ))}
@@ -362,7 +362,7 @@ const StoryDetail = ({ story, ar, dir }) => {
           <h2 className="font-bold mb-6" style={{ fontSize: 22, color: '#082D4A', fontFamily: "'Outfit', sans-serif" }}>
             {ar ? 'لماذا WAVZ؟' : 'Why WAVZ?'}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full" style={{ width: '100%' }}>
             {story.keyDiffs.map((d, i) => (
               <div key={i} className="rounded-2xl p-6 border" style={{ background: '#fff', borderColor: 'rgba(8,45,74,0.08)', boxShadow: '0 2px 8px rgba(8,45,74,0.04)' }}>
                 <div className="font-black text-2xl mb-3" style={{ color: story.color }}>{d.icon}</div>
@@ -463,7 +463,7 @@ export const ClientStories = ({ route }) => {
       {/* Cards grid */}
 
       <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'clamp(24px,6vw,80px)', paddingRight: 'clamp(24px,6vw,80px)' }} className="py-14 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 w-full" style={{ width: '100%' }}>
           {CASE_STUDIES.map((story, i) => (
             <StoryCard key={story.id} story={story} ar={ar} dir={dir} i={i} />
           ))}
