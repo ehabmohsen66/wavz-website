@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const BASE_URL = 'https://www.wavz.com';
+const BASE_URL = typeof window !== 'undefined' ? window.location.origin : 'https://www.wavz.com';
 const DEFAULT_IMAGE = `${BASE_URL}/WavzIcon.png`;
 
 const SEO_MAP = {
