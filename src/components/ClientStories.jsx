@@ -271,7 +271,7 @@ const StoryDetail = ({ story, ar, dir }) => {
 
       {/* KPI strip sits directly below the hero */}
       <div style={{ background: story.bgGradient, paddingBottom: 40 }}>
-        <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
+        <div style={{ maxWidth: 1200, margin: '0 auto' }} className="px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {story.metrics.map((m, i) => (
               <MetricCard key={i} icon={m.icon} value={m.value} label={ar ? m.labelAr : m.label} color={m.color} />
@@ -281,7 +281,7 @@ const StoryDetail = ({ story, ar, dir }) => {
       </div>
 
       {/* Body content */}
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-14 lg:py-20 space-y-14">
+      <div style={{ maxWidth: 1200, margin: '0 auto' }} className="px-6 lg:px-12 py-14 lg:py-20 space-y-14">
 
         {/* Challenge */}
         <section>
@@ -462,7 +462,7 @@ export const ClientStories = ({ route }) => {
 
       {/* Cards grid */}
 
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-14 lg:py-20">
+      <div style={{ maxWidth: 1200, margin: '0 auto' }} className="px-6 lg:px-12 py-14 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           {CASE_STUDIES.map((story, i) => (
             <StoryCard key={story.id} story={story} ar={ar} dir={dir} i={i} />
