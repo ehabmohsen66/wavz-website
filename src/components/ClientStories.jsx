@@ -270,7 +270,7 @@ const StoryDetail = ({ story, ar, dir }) => {
       />
 
       {/* KPI strip sits directly below the hero */}
-      <div style={{ background: story.bgGradient, paddingTop: 20, paddingBottom: 'clamp(64px,8vw,96px)' }}>
+      <div style={{ background: story.bgGradient, paddingTop: 'clamp(40px,5vw,64px)', paddingBottom: 'clamp(40px,5vw,64px)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', paddingLeft: 'clamp(24px,6vw,80px)', paddingRight: 'clamp(24px,6vw,80px)' }}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full" style={{ width: '100%' }}>
             {story.metrics.map((m, i) => (
