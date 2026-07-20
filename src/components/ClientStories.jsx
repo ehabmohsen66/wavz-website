@@ -271,7 +271,7 @@ const StoryDetail = ({ story, ar, dir }) => {
 
       {/* KPI strip sits directly below the hero */}
       <div style={{ background: story.bgGradient, paddingBottom: 40 }}>
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-12">
+        <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {story.metrics.map((m, i) => (
               <MetricCard key={i} icon={m.icon} value={m.value} label={ar ? m.labelAr : m.label} color={m.color} />
@@ -281,7 +281,7 @@ const StoryDetail = ({ story, ar, dir }) => {
       </div>
 
       {/* Body content */}
-      <div className="max-w-[1000px] mx-auto px-6 lg:px-12 py-14 lg:py-20 space-y-14">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-14 lg:py-20 space-y-14">
 
         {/* Challenge */}
         <section>
