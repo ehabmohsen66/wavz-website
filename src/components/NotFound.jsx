@@ -147,7 +147,7 @@ export const NotFound = () => {
 
           {/* Secondary — Contact */}
           <a
-            href="#contact"
+            href="#/contact"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[14px] cursor-pointer transition-all duration-200"
             style={{
               background: '#fff',

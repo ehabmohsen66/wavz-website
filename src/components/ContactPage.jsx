@@ -55,18 +55,18 @@ const FadeIn = ({ children, delay = 0, style = {} }) => {
 const SERVICES = {
   en: [
     'Managed Services',
-    'Financial Services',
-    'Payment Services',
-    'SAP Services',
-    'Digital Transformation',
+    'Oracle Technology Solutions',
+    'SAP Solutions & Services',
+    'Data & AI Solutions',
+    'Digital Transformation & Financial Services',
     'Other / General Enquiry',
   ],
   ar: [
     'الخدمات المُدارة',
-    'الخدمات المالية',
-    'خدمات الدفع',
-    'خدمات SAP',
-    'التحول الرقمي',
+    'حلول تقنيات Oracle',
+    'حلول وخدمات SAP',
+    'حلول البيانات والذكاء الاصطناعي',
+    'التحول الرقمي والخدمات المالية',
     'أخرى / استفسار عام',
   ],
 };

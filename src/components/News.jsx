@@ -521,8 +521,12 @@ export const News = ({ route }) => {
     return <MediaHub />;
   }
 
-  // ── Client Stories ──
+  // ── Client Stories (hidden until ready) ──
+  const ENABLE_CUSTOMER_STORIES = false;
   if (isClientStoriesRoute) {
+    if (!ENABLE_CUSTOMER_STORIES) {
+      return <MediaHub />;
+    }
     return <ClientStories route={route} />;
   }
 

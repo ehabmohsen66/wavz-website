@@ -296,7 +296,7 @@ export const Journey = () => {
                 : 'We continue our journey of innovation and expansion, serving our clients with the highest quality standards across the Middle East, Africa, and beyond.'}
             </p>
             <a
-              href="#contact"
+              href="#/contact"
               className="inline-flex items-center gap-2 bg-[#FFB814] text-[#082D4A] px-7 py-3.5 rounded-xl font-bold text-[15px] shadow-lg shadow-[#FFB814]/20 hover:bg-[#F5A800] transition-colors duration-200"
             >
               {lang === 'ar' ? 'احجز استشارة' : 'Book a Consultation'}

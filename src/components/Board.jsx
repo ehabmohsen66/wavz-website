@@ -888,7 +888,7 @@ export const Board = () => {
               </p>
 
               <a
-                href="#contact"
+                href="#/contact"
                 className="inline-flex items-center gap-2 bg-[#FFB814] text-[#082D4A] px-7 py-3.5 rounded-xl font-bold text-[15px] shadow-lg shadow-[#FFB814]/20 hover:bg-[#F5A800] transition-colors duration-200"
               >
                 {isAr ? 'احجز استشارة' : 'Book a Consultation'}

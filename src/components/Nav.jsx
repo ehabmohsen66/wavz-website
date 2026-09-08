@@ -77,6 +77,7 @@ export const Nav = () => {
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false);
   const [mobileMediaOpen, setMobileMediaOpen] = useState(false);
   const isAr = lang === 'ar';
 
@@ -92,10 +93,12 @@ export const Nav = () => {
     { href: '#/team',    label: isAr ? 'فريقنا التنفيذي'  : 'Our Executive Team' },
   ];
 
+  const ENABLE_CUSTOMER_STORIES = false;
+
   const mediaItems = [
     { href: '#/news',                  label: isAr ? 'المركز الإعلامي' : 'Media Center' },
     { href: '#/news/press-releases',   label: isAr ? 'البيانات الصحفية' : 'Press Releases' },
-    { href: '#/news/client-stories',   label: isAr ? 'قصص العملاء' : 'Client Stories' },
+    ...(ENABLE_CUSTOMER_STORIES ? [{ href: '#/news/client-stories', label: isAr ? 'قصص العملاء' : 'Client Stories' }] : []),
     { href: '#/news/insights',         label: isAr ? 'رؤى وقيادة فكرية' : 'Insights' },
     { href: '#/news/events',           label: isAr ? 'الفعاليات' : 'Events' },
     { href: '#/news/social',           label: isAr ? 'وسائل التواصل' : 'Social Media' },
@@ -282,16 +285,16 @@ export const Nav = () => {
           {/* Solutions & Services accordion */}
           <div>
             <button
-              onClick={() => setMobileAboutOpen((v) => !v)}
+              onClick={() => setMobileSolutionsOpen((v) => !v)}
               className="w-full flex items-center justify-between text-[15px] text-[#082D4A] py-2.5 px-3 rounded-lg hover:bg-slate-50 transition-colors font-medium cursor-pointer"
             >
               <span>{isAr ? 'الحلول والخدمات' : 'Solutions & Services'}</span>
               <ChevronDown
                 className="w-4 h-4 text-slate-400 transition-transform duration-200"
-                style={{ transform: mobileAboutOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                style={{ transform: mobileSolutionsOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
               />
             </button>
-            {mobileAboutOpen && (
+            {mobileSolutionsOpen && (
               <div className="ps-4 pb-1 space-y-0.5">
                 {solutionsItems.map((item, i) => (
                   <a
@@ -353,7 +356,7 @@ export const Nav = () => {
               {lang === 'en' ? 'عربي ←' : '→ English'}
             </button>
             <a
-              href="#contact"
+              href="#/contact"
               onClick={closeMenu}
               className="press-scale bg-[#FFB814] text-[#082D4A] text-[13px] font-bold px-4 py-2 rounded-md"
             >

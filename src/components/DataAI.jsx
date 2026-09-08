@@ -2,6 +2,11 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
 import { useLang } from '../i18n/LangContext.jsx';
+import {
+  Database, Brain, Sparkles, BarChart3, Bot, Network, ShieldCheck,
+  CheckCircle2, ChevronRight, ArrowRight, ArrowLeft, Building2,
+  Landmark, Radio, Briefcase, Award, Globe, Compass, Layers, Repeat
+} from 'lucide-react';
 
 const T = {
   navy:    '#061E31',
@@ -9,21 +14,22 @@ const T = {
   navy3:   '#0d3a5e',
   gold:    '#FFB814',
   goldD:   '#F5A800',
-  blue:    '#1173BD',
-  blueL:   '#4BA3E3',
-  violet:  '#7C3AED',
+  purple:  '#8B5CF6',
+  purpleL: '#A78BFA',
+  purpleD: '#6D28D9',
   cyan:    '#06B6D4',
+  cyanL:   '#67E8F9',
   white:   '#F0F4F8',
-  muted:   'rgba(145,196,245,0.62)',
-  dim:     'rgba(145,196,245,0.22)',
-  border:  'rgba(255,255,255,0.07)',
-  borderG: 'rgba(255,184,20,0.22)',
+  muted:   'rgba(145,196,245,0.68)',
+  dim:     'rgba(139,92,246,0.15)',
+  border:  'rgba(255,255,255,0.08)',
+  borderP: 'rgba(139,92,246,0.3)',
 };
 
 const FONT    = "'Outfit', system-ui, sans-serif";
-const FONT_AR = "'Tajawal', sans-serif";
+const FONT_AR = "'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif";
 
-/* ── Three.js Generative Scene (AI / neural feel) ── */
+/* ── Three.js Generative AI Neural Scene ── */
 const GenerativeArtScene = () => {
   const mountRef = useRef(null);
   useEffect(() => {
@@ -36,9 +42,13 @@ const GenerativeArtScene = () => {
     renderer.setSize(el.clientWidth, el.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     el.appendChild(renderer.domElement);
+
     const geometry = new THREE.IcosahedronGeometry(1.2, 64);
     const material = new THREE.ShaderMaterial({
-      uniforms: { time: { value: 0 }, color: { value: new THREE.Color('#7C3AED') } },
+      uniforms: {
+        time: { value: 0 },
+        color: { value: new THREE.Color('#8B5CF6') },
+      },
       vertexShader: `
         uniform float time;
         varying vec3 vNormal;
@@ -68,11 +78,24 @@ const GenerativeArtScene = () => {
           vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);m=m*m;
           return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
         }
-        void main(){vNormal=normal;vPosition=position;float d=snoise(position*2.+time*.35)*.25;vec3 np=position+normal*d;gl_Position=projectionMatrix*modelViewMatrix*vec4(np,1.);}
+        void main(){
+          vNormal=normal;
+          vPosition=position;
+          float d=snoise(position*2.2+time*.35)*.24;
+          vec3 np=position+normal*d;
+          gl_Position=projectionMatrix*modelViewMatrix*vec4(np,1.);
+        }
       `,
       fragmentShader: `
         uniform vec3 color;varying vec3 vNormal;varying vec3 vPosition;
-        void main(){vec3 n=normalize(vNormal);vec3 ld=normalize(vec3(0.,0.,5.)-vPosition);float diff=max(dot(n,ld),0.);float fresnel=pow(1.-dot(n,vec3(0.,0.,1.)),2.);vec3 fc=color*diff+color*fresnel*.5;gl_FragColor=vec4(fc,1.);}
+        void main(){
+          vec3 n=normalize(vNormal);
+          vec3 ld=normalize(vec3(0.,0.,5.)-vPosition);
+          float diff=max(dot(n,ld),0.);
+          float fresnel=pow(1.-dot(n,vec3(0.,0.,1.)),2.);
+          vec3 fc=color*diff+color*fresnel*.6;
+          gl_FragColor=vec4(fc,1.);
+        }
       `,
       wireframe: true,
     });
@@ -103,368 +126,648 @@ const GenerativeArtScene = () => {
   return <div ref={mountRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }} />;
 };
 
-/* ── Capability Data ── */
-const CAPABILITIES = [
+/* ── Strategic Partners ── */
+const PARTNERS = [
+  'Teradata',
+  'Microsoft',
+  'Informatica',
+  'Qlik',
+  'Erwin by Quest',
+  'UiPath'
+];
+
+/* ── 3 Interconnected Domains ── */
+const DOMAINS = [
   {
-    code: 'DFG',
+    num: '01',
+    code: 'FND',
+    icon: Database,
     color: '#06B6D4',
     en: {
-      title: 'Data Foundation & Governance',
-      desc: 'Modern data architecture, data warehouse modernization, master data management, data quality frameworks, and enterprise data governance. The bedrock of every AI initiative.',
-      tags: ['Data Architecture', 'MDM', 'Data Quality', 'Governance'],
-      partners: 'Teradata · Informatica · Erwin by Quest',
+      title: 'Data Foundation',
+      subtitle: 'The trusted base everything else is built on',
+      desc: 'Data management, governance, quality, integration, and migration — the essential bedrock required before meaningful AI can take place.',
+      tags: ['Data Management', 'Enterprise Governance', 'Data Quality', 'Integration & ETL', 'Cloud Migration'],
+      partners: 'Teradata · Informatica · Erwin by Quest'
     },
     ar: {
-      title: 'أساس البيانات والحوكمة',
-      desc: 'بنية بيانات حديثة، تحديث مستودع البيانات، إدارة البيانات الرئيسية، وأطر حوكمة البيانات على مستوى المؤسسات. الأساس لكل مبادرة ذكاء اصطناعي.',
-      tags: ['بنية البيانات', 'MDM', 'جودة البيانات', 'الحوكمة'],
-      partners: 'Teradata · Informatica · Erwin by Quest',
-    },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="currentColor" strokeWidth="1.5"/>
-      </svg>
-    ),
+      title: 'أساس البيانات',
+      subtitle: 'الأساس الموثوق الذي يُبنى عليه كل شيء',
+      desc: 'إدارة البيانات، والحوكمة المؤسسية، وجودة البيانات، والتكامل، والترحيل السحابي — البنية التحتية الأساسية التي تسبق أي تطبيق ذكاء اصطناعي ناجح.',
+      tags: ['إدارة البيانات', 'الحوكمة المؤسسية', 'جودة البيانات', 'التكامل والربط', 'الترحيل السحابي'],
+      partners: 'Teradata · Informatica · Erwin by Quest'
+    }
   },
   {
-    code: 'ABI',
-    color: '#0EA5E9',
+    num: '02',
+    code: 'ANL',
+    icon: BarChart3,
+    color: '#8B5CF6',
     en: {
-      title: 'Modern Analytics & BI',
-      desc: 'Self-service analytics platforms, enterprise reporting dashboards, and AI-assisted insights. Transforming raw data into clear, actionable business intelligence across every layer of the organization.',
-      tags: ['Self-Service', 'Dashboards', 'AI Insights', 'Reporting'],
-      partners: 'Qlik · Microsoft Power BI · Teradata',
+      title: 'Modern Analytics',
+      subtitle: 'Turn complex data into decisive action',
+      desc: 'Data warehousing, business intelligence, and advanced analytics platforms that empower business leaders to make rapid, high-confidence decisions.',
+      tags: ['Data Warehousing', 'Self-Service BI', 'Executive Dashboards', 'Predictive Modeling', 'Data Pipelines'],
+      partners: 'Qlik · Microsoft Power BI · Teradata'
     },
     ar: {
-      title: 'التحليلات الحديثة والذكاء التجاري',
-      desc: 'منصات تحليل الخدمة الذاتية ولوحات إعداد التقارير وإسهامات الذكاء الاصطناعي. تحويل البيانات الخام إلى رؤى عمل واضحة وقابلة للتنفيذ.',
-      tags: ['الخدمة الذاتية', 'لوحات المعلومات', 'رؤى AI', 'إعداد التقارير'],
-      partners: 'Qlik · Microsoft Power BI · Teradata',
-    },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <path d="M18 20V10M12 20V4M6 20v-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
+      title: 'التحليلات الحديثة',
+      subtitle: 'تحويل البيانات المعقدة إلى قرارات حاسمة',
+      desc: 'مستودعات البيانات العصرية، ذكاء الأعمال، ومنصات التحليلات المتقدمة التي تمكّن قادة الأعمال من اتخاذ قرارات سريعة ومبنية على حقائق دقيقة.',
+      tags: ['مستودعات البيانات', 'ذكاء الأعمال الذاتي', 'لوحات قيادة تنفيذية', 'نماذج تنبؤية', 'معالجة التدفقات'],
+      partners: 'Qlik · Microsoft Power BI · Teradata'
+    }
   },
   {
-    code: 'GEN',
-    color: '#7C3AED',
+    num: '03',
+    code: 'AUT',
+    icon: Bot,
+    color: '#FFB814',
     en: {
-      title: 'Generative AI & LLM Integration',
-      desc: 'Enterprise GenAI strategy, LLM deployment, Retrieval-Augmented Generation (RAG) pipelines, and AI-powered applications tailored to regulated industries across the MEA region.',
-      tags: ['GenAI', 'LLM', 'RAG Pipelines', 'AI Apps'],
-      partners: 'Microsoft Azure AI · OpenAI',
+      title: 'AI & Automation',
+      subtitle: 'Remove real work from your teams’ plates',
+      desc: 'Generative AI, agentic AI systems, and intelligent process automation that orchestrate workflows and eliminate operational friction across your enterprise.',
+      tags: ['Generative AI', 'Agentic Workflows', 'Robotic Process Automation', 'Intelligent Chat & RAG', 'Process Orchestration'],
+      partners: 'UiPath · Microsoft Azure AI · OpenAI'
     },
     ar: {
-      title: 'الذكاء الاصطناعي التوليدي ودمج نماذج اللغة',
-      desc: 'استراتيجية GenAI للمؤسسات، نشر نماذج اللغة الكبيرة، مسارات RAG، وتطبيقات AI مخصصة للقطاعات المنظمة في منطقة الشرق الأوسط وأفريقيا.',
-      tags: ['GenAI', 'نماذج LLM', 'مسارات RAG', 'تطبيقات AI'],
-      partners: 'Microsoft Azure AI · OpenAI',
-    },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2z" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M12 12v10M8 18l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    code: 'AGT',
-    color: '#F59E0B',
-    en: {
-      title: 'Agentic Automation',
-      desc: 'Intelligent process automation combining AI decision-making with robotic process automation (RPA) for fully orchestrated, end-to-end workflow execution with minimal human intervention.',
-      tags: ['Agentic AI', 'RPA', 'Workflow Orchestration', 'Automation'],
-      partners: 'UiPath · Microsoft Power Automate',
-    },
-    ar: {
-      title: 'الأتمتة الوكيلة',
-      desc: 'أتمتة العمليات الذكية التي تجمع بين صنع القرار بالذكاء الاصطناعي وأتمتة العمليات الآلية لتنفيذ سير العمل من البداية للنهاية بأدنى تدخل بشري.',
-      tags: ['AI وكيل', 'RPA', 'تنسيق سير العمل', 'الأتمتة'],
-      partners: 'UiPath · Microsoft Power Automate',
-    },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-        <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-        <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M17.5 17.5h.01M14 20.5h7M20.5 14v7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-  },
-  {
-    code: 'IWF',
-    color: '#10B981',
-    en: {
-      title: 'Intelligent Workflows',
-      desc: 'AI-augmented business process redesign — moving from rigid, rule-based automation to adaptive, context-aware workflows across finance, operations, HR, and customer service functions.',
-      tags: ['Process Redesign', 'Adaptive Automation', 'Context-Aware', 'Cross-Function'],
-      partners: 'Microsoft · UiPath',
-    },
-    ar: {
-      title: 'سير العمل الذكي',
-      desc: 'إعادة تصميم العمليات التجارية بالذكاء الاصطناعي — الانتقال من الأتمتة القائمة على القواعد الصارمة إلى سير عمل تكيفي يدرك السياق عبر المالية والعمليات وخدمة العملاء.',
-      tags: ['إعادة تصميم العمليات', 'أتمتة تكيفية', 'إدراك السياق', 'متعدد الوظائف'],
-      partners: 'Microsoft · UiPath',
-    },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    code: 'FIN',
-    color: '#EC4899',
-    en: {
-      title: 'Financial Technology & Banking AI',
-      desc: 'Specialized data and AI solutions for core banking transformation, risk analytics, regulatory reporting (CBE, SAMA, NFIS), and customer intelligence platforms for financial institutions.',
-      tags: ['Core Banking', 'Risk Analytics', 'RegTech', 'Customer AI'],
-      partners: 'Temenos · Microsoft',
-    },
-    ar: {
-      title: 'تقنية المالية والذكاء الاصطناعي المصرفي',
-      desc: 'حلول بيانات وذكاء اصطناعي متخصصة لتحويل البنوك الأساسية وتحليلات المخاطر والإبلاغ التنظيمي (البنك المركزي المصري، SAMA، NFIS) ومنصات ذكاء العملاء.',
-      tags: ['البنوك الأساسية', 'تحليلات المخاطر', 'RegTech', 'ذكاء العملاء'],
-      partners: 'Temenos · Microsoft',
-    },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
+      title: 'الذكاء الاصطناعي والأتمتة',
+      subtitle: 'رفع الأعباء الروتينية الفعلية عن فرق عملك',
+      desc: 'الذكاء الاصطناعي التوليدي، أنظمة الذكاء الاصطناعي الوكيلة (Agentic AI)، وأتمتة العمليات الذكية التي تنسّق مسارات العمل وتزيل العقبات التشغيلية.',
+      tags: ['الذكاء الاصطناعي التوليدي', 'سير العمل الوكيل (Agentic)', 'أتمتة العمليات RPA', 'استرجاع السياق RAG', 'تنسيق العمليات'],
+      partners: 'UiPath · Microsoft Azure AI · OpenAI'
+    }
+  }
 ];
 
-const PARTNERS = ['Teradata', 'Microsoft', 'Informatica', 'Temenos', 'Qlik', 'UiPath', 'Erwin by Quest'];
-
-const INDUSTRIES = [
-  { en: 'Banking & Financial Services', ar: 'البنوك والخدمات المالية' },
-  { en: 'Government & Public Sector', ar: 'الحكومة والقطاع العام' },
-  { en: 'Telecommunications', ar: 'الاتصالات' },
-  { en: 'Oil & Gas', ar: 'النفط والغاز' },
-  { en: 'Manufacturing', ar: 'التصنيع' },
+/* ── 4-Phase Delivery Methodology ── */
+const METHODOLOGY = [
+  {
+    num: '01',
+    en: {
+      title: 'Assess',
+      desc: 'Evaluate the current state, identify risks, and uncover opportunities specific to your environment.'
+    },
+    ar: {
+      title: 'التقييم والتحليل',
+      desc: 'تقييم الوضع الحالي للبيانات والأنظمة، وتحديد المخاطر الفنية، واكتشاف الفرص الواعدة المخصصة لبيئة عملك.'
+    }
+  },
+  {
+    num: '02',
+    en: {
+      title: 'Roadmap',
+      desc: 'Prioritize initiatives and define a strategic, sequenced path to your desired outcomes.'
+    },
+    ar: {
+      title: 'خارطة الطريق',
+      desc: 'ترتيب أولويات المبادرات وتحديد مسار استراتيجي متسلسل ومنطقي لتحقيق العائد المستهدف من الاستثمار.'
+    }
+  },
+  {
+    num: '03',
+    en: {
+      title: 'Implement',
+      desc: 'Deliver with strict governance, rigorous QA standards, and seamless integration into your broader IT environment.'
+    },
+    ar: {
+      title: 'التنفيذ والتكامل',
+      desc: 'التنفيذ في ظل حوكمة صارمة ومعايير جودة دقيقة، مع التكامل السلس مع بيئة تكنولوجيا المعلومات المؤسسية.'
+    }
+  },
+  {
+    num: '04',
+    en: {
+      title: 'Run & Operate',
+      desc: 'Transition into managed services with guaranteed SLAs and continuous optimization.'
+    },
+    ar: {
+      title: 'التشغيل والتحسين',
+      desc: 'الانتقال الموثوق إلى مرحلة الخدمات المُدارة مع اتفاقيات مستوى خدمة (SLAs) مضمونة وتطوير مستمر.'
+    }
+  }
 ];
 
-const WHY = [
-  { en: 'Technology-Agnostic Advisory', ar: 'استشارات محايدة تقنياً', icon: '⊕' },
-  { en: 'Certified Partner Ecosystem', ar: 'نظام شركاء معتمدين', icon: '✓' },
-  { en: 'End-to-End — Strategy to Production', ar: 'من الاستراتيجية حتى الإنتاج', icon: '↻' },
-  { en: 'Deep Regional Experience', ar: 'خبرة إقليمية عميقة', icon: '◉' },
+/* ── 5 WAVZ Differentiators ── */
+const DIFFERENTIATORS = [
+  {
+    icon: Compass,
+    en: {
+      title: 'Seasoned Expertise',
+      desc: 'Multidisciplinary teams with hands-on experience turning data into decisions across banking, telecom, and government.'
+    },
+    ar: {
+      title: 'خبرة متمرسة وعميقة',
+      desc: 'فرق عمل متعددة التخصصات تتمتع بخبرة عملية مثبتة في تحويل البيانات إلى قرارات حاسمة في البنوك والاتصالات والقطاع الحكومي.'
+    }
+  },
+  {
+    icon: Network,
+    en: {
+      title: 'Technology Independence',
+      desc: 'We design data and AI solutions around your outcomes, drawing on a broad partner ecosystem rather than a single vendor’s stack.'
+    },
+    ar: {
+      title: 'حيادية واستقلالية تقنية',
+      desc: 'نصمم حلول البيانات والذكاء الاصطناعي بما يخدم أهدافك حصراً، مستفيدين من نظام بيئي واسع من الشركاء دون الارتهان لمنصة واحدة.'
+    }
+  },
+  {
+    icon: Award,
+    en: {
+      title: 'World-Class Partnerships',
+      desc: 'Strategic alliances with Teradata, Microsoft, Informatica, Qlik, Quest, UiPath, and others bring certified, enterprise-grade capability to every engagement.'
+    },
+    ar: {
+      title: 'شراكات عالمية المستوى',
+      desc: 'تحالفات استراتيجية مع Teradata وMicrosoft وInformatica وQlik وQuest وUiPath تمنح كل مشروع قدرات معتمدة على أعلى المعايير.'
+    }
+  },
+  {
+    icon: ShieldCheck,
+    en: {
+      title: 'Proven Track Record',
+      desc: 'Over 15 years of reliable, high-quality delivery across the region’s most complex transformation programs.'
+    },
+    ar: {
+      title: 'سجل حافل بالنجاحات',
+      desc: 'أكثر من 15 عاماً من الإنجاز الموثوق عالي الجودة عبر أكثر برامج التحول الرقمي تعقيداً وأهمية في المنطقة.'
+    }
+  },
+  {
+    icon: Globe,
+    en: {
+      title: 'Regional Depth, Global Standards',
+      desc: 'On-the-ground teams in Cairo and Riyadh, delivering with international governance and local market knowledge.'
+    },
+    ar: {
+      title: 'عمق إقليمي بمعايير عالمية',
+      desc: 'فرق عمل متواجدة على الأرض في القاهرة والرياض، تجمع بين الحوكمة العالمية الدقيقة والدراية العميقة بمتطلبات السوق الإقليمي.'
+    }
+  }
+];
+
+/* ── 4 Regulated Mission-Critical Sectors ── */
+const SECTORS = [
+  {
+    code: 'GOV',
+    icon: Landmark,
+    en: {
+      title: 'Government & Public Sector',
+      desc: 'Supporting national digital transformation and data-driven governance programs.'
+    },
+    ar: {
+      title: 'الحكومة والقطاع العام',
+      desc: 'دعم برامج التحول الرقمي الوطنية ومبادرات الحوكمة القائمة على البيانات واستمرارية الخدمات.'
+    }
+  },
+  {
+    code: 'BFS',
+    icon: Building2,
+    en: {
+      title: 'Banking & Financial Services',
+      desc: 'Mission-critical systems where uptime and data integrity are paramount.'
+    },
+    ar: {
+      title: 'البنوك والخدمات المالية',
+      desc: 'أنظمة حيوية فائقة الأهمية لا تقبل المساومة في جاهزية التشغيل وسلامة ونزاهة البيانات.'
+    }
+  },
+  {
+    code: 'TEL',
+    icon: Radio,
+    en: {
+      title: 'Telecommunications',
+      desc: 'Optimizing IT landscapes and integrating complex operator systems.'
+    },
+    ar: {
+      title: 'قطاع الاتصالات',
+      desc: 'تحسين البيئات التقنية المعقدة ودمج أنظمة المشغلين الضخمة لتعزيز سرعة وكفاءة العمليات.'
+    }
+  },
+  {
+    code: 'ENT',
+    icon: Briefcase,
+    en: {
+      title: 'Large Enterprise',
+      desc: 'Enterprise applications and managed operations that scale with business growth.'
+    },
+    ar: {
+      title: 'الشركات الكبرى والمؤسسات',
+      desc: 'تطبيقات مؤسسية وعمليات تقنية مُدارة تتوسع بمرونة مع نمو الأعمال المتسارع.'
+    }
+  }
 ];
 
 export const DataAI = () => {
   const { lang, dir } = useLang();
   const ar = lang === 'ar';
   const font = ar ? FONT_AR : FONT;
-  const [activeIdx, setActiveIdx] = useState(0);
-  const active = CAPABILITIES[activeIdx];
-  const accentColor = active.color;
+  const [activeDomainIdx, setActiveDomainIdx] = useState(0);
 
   return (
     <div style={{ background: T.navy, minHeight: '100vh', color: T.white, fontFamily: font }} dir={dir}>
 
-      {/* ── Hero ── */}
-      <section style={{ position: 'relative', overflow: 'hidden', minHeight: 560, display: 'flex', alignItems: 'center' }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.16 }}>
+      {/* ── 1. Hero Section ── */}
+      <section style={{ position: 'relative', overflow: 'hidden', minHeight: 640, display: 'flex', alignItems: 'center' }}>
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.18 }}>
           <GenerativeArtScene />
         </div>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 60% 40%, rgba(124,58,237,0.14) 0%, transparent 70%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 75% 65% at 65% 45%, rgba(139,92,246,0.16) 0%, transparent 70%)' }} />
         <div style={{ position: 'absolute', bottom: 0, inset: 'auto 0 0 0', height: 120, background: `linear-gradient(to bottom, transparent, ${T.navy})` }} />
 
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: '135px clamp(24px,6vw,80px) 75px', width: '100%' }}>
-          {/* Robot SVG Logo */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
-            style={{ marginBottom: 28 }}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style={{ height: 48, width: 48, display: 'block' }} aria-label="Robot">
-              <defs>
-                <linearGradient id="robot-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#A78BFA" />
-                  <stop offset="100%" stopColor="#7C3AED" />
-                </linearGradient>
-              </defs>
-              {/* Antenna stem */}
-              <rect x="47.5" y="18" width="5" height="15" rx="2.5" fill="url(#robot-gradient)" />
-              {/* Antenna top */}
-              <circle cx="50" cy="14" r="6.5" fill="url(#robot-gradient)" />
-              {/* Head */}
-              <rect x="10" y="38" width="80" height="42" rx="12" fill="url(#robot-gradient)" />
-              {/* Left Eye */}
-              <circle cx="34" cy="59" r="7.5" fill="#061E31" />
-              {/* Right Eye */}
-              <circle cx="66" cy="59" r="7.5" fill="#061E31" />
-              {/* Bottom line 1 */}
-              <rect x="22" y="86" width="56" height="5" rx="2.5" fill="url(#robot-gradient)" />
-              {/* Bottom line 2 */}
-              <rect x="34" y="95" width="32" height="5" rx="2.5" fill="url(#robot-gradient)" />
-            </svg>
-          </motion.div>
-
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: '140px clamp(24px,6vw,80px) 80px', width: '100%' }}>
+          
+          {/* Eyebrow Pill */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.16,1,0.3,1] }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px', borderRadius: 100, border: '1px solid rgba(124,58,237,0.35)', background: 'rgba(124,58,237,0.1)', marginBottom: 24 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#7C3AED', display: 'inline-block' }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#A78BFA', fontFamily: font }}>
-              {ar ? 'حلول البيانات والذكاء الاصطناعي' : 'Data & AI Solutions'}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 100, border: `1px solid ${T.borderP}`, background: T.dim, marginBottom: 28, backdropFilter: 'blur(8px)' }}>
+            <Sparkles size={14} color={T.purpleL} />
+            <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: T.purpleL, fontFamily: font }}>
+              {ar ? 'حلول البيانات والذكاء الاصطناعي' : 'DATA & AI SOLUTIONS'}
             </span>
           </motion.div>
 
+          {/* Main H1 */}
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.08, ease: [0.16,1,0.3,1] }}
-            style={{ fontSize: 'clamp(2.2rem,5vw,4rem)', fontWeight: 900, lineHeight: 1.06, letterSpacing: '-0.025em', marginBottom: 20, fontFamily: font }}>
+            style={{ fontSize: 'clamp(2.4rem,5.5vw,4.4rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: 24, maxWidth: 950, fontFamily: font }}>
             {ar ? (
-              <>حلول <span style={{ color: '#A78BFA' }}>البيانات</span> و<span style={{ color: T.gold }}>الذكاء الاصطناعي</span></>
+              <>من أساس البيانات إلى <span style={{ color: T.purpleL }}>الذكاء الاصطناعي التوليدي</span> — منظومة متكاملة تعمل بانسجام.</>
             ) : (
-              <><span style={{ color: '#A78BFA' }}>Data</span> & <span style={{ color: T.gold }}>AI</span> Solutions</>
+              <>From data foundation to <span style={{ color: T.purpleL }}>generative AI</span> — built to work together.</>
             )}
           </motion.h1>
 
+          {/* Subheading */}
           <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.18, ease: [0.16,1,0.3,1] }}
-            style={{ fontSize: 'clamp(15px,1.4vw,17px)', color: T.muted, lineHeight: 1.72, maxWidth: 580, margin: '0 0 28px' }}>
+            style={{ fontSize: 'clamp(16px,1.5vw,19px)', color: T.muted, lineHeight: 1.75, maxWidth: 760, margin: '0 0 36px' }}>
             {ar
-              ? 'من أساس البيانات والحوكمة إلى التحليلات الحديثة والذكاء الاصطناعي التوليدي والأتمتة الوكيلة وسير العمل الذكي — شركاؤنا: Teradata وMicrosoft وInformatica وTemenos وQlik وUiPath.'
-              : 'From data foundation and governance through modern analytics to Generative AI, agentic automation, and intelligent workflows. Powered by Teradata · Microsoft · Informatica · Temenos · Qlik · UiPath.'}
+              ? 'تُساعد WAVZ المؤسسات على تحويل البيانات الخام إلى أصل استراتيجي قيّم — من خلال تأسيس بنية بيانات متينة، وتطبيق تحليلات عصرية متقدمة، وأتمتة ذكية مدعومة بالذكاء الاصطناعي التوليدي وسير العمل الوكيل.'
+              : 'WAVZ helps organizations turn raw data into a strategic asset — establishing strong data foundations, modern analytics, and intelligent automation powered by Generative AI and agentic workflows.'}
           </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.28 }}
+            style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+            <a href="#/contact"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 32px', borderRadius: 8, background: `linear-gradient(135deg, ${T.purpleD}, ${T.purple})`, color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 20px rgba(139,92,246,0.35)', transition: 'transform 0.2s, box-shadow 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 26px rgba(139,92,246,0.5)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(139,92,246,0.35)'; }}>
+              {ar ? 'تحدث إلى أخصائي البيانات والذكاء الاصطناعي' : 'Talk to a Data & AI Specialist'}
+              {ar ? <ArrowLeft size={16} /> : <ArrowRight size={16} />}
+            </a>
+            <a href="#domains"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: `1px solid ${T.border}`, color: T.white, fontWeight: 600, fontSize: 15, textDecoration: 'none', transition: 'all 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}>
+              {ar ? 'استكشف المجالات الثلاثة' : 'Explore the 3 Domains'}
+            </a>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── Partner Strip ── */}
-      <div style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: '18px clamp(24px,6vw,80px)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: T.muted, flexShrink: 0 }}>
-            {ar ? 'شركاؤنا' : 'Partners'}
-          </span>
-          {PARTNERS.map((p, i) => (
-            <span key={i} style={{ fontSize: 13, fontWeight: 700, color: T.white, opacity: 0.65 }}>{p}</span>
-          ))}
+      {/* ── Strategic Partners Strip ── */}
+      <div style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: '22px clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: T.purpleL }} />
+            <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: T.muted }}>
+              {ar ? 'منظومة الشركاء العالميين' : 'GLOBAL PARTNER ECOSYSTEM'}
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(18px,3vw,36px)', flexWrap: 'wrap' }}>
+            {PARTNERS.map((p, i) => (
+              <span key={i} style={{ fontSize: 13.5, fontWeight: 700, color: T.white, opacity: 0.8, letterSpacing: '0.02em' }}>
+                {p}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* ── Capabilities ── */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(56px,7vw,88px) clamp(24px,6vw,80px)' }}>
-        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-          style={{ marginBottom: 40 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#A78BFA', marginBottom: 8 }}>
-            {ar ? 'قدراتنا' : 'Capabilities'}
-          </p>
-          <h2 style={{ fontSize: 'clamp(1.6rem,3vw,2.5rem)', fontWeight: 800, color: T.white, margin: 0 }}>
-            {ar ? 'مجالات خبرتنا في البيانات والذكاء الاصطناعي' : 'Our Data & AI Practice Areas'}
-          </h2>
-        </motion.div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
-          {CAPABILITIES.map((cap, i) => (
-            <motion.div key={cap.code}
-              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.07 }}
-              onClick={() => setActiveIdx(i)}
-              style={{
-                background: activeIdx === i ? `${cap.color}14` : T.navy2,
-                border: `1.5px solid ${activeIdx === i ? `${cap.color}66` : T.border}`,
-                borderRadius: 16, padding: '24px 22px', cursor: 'pointer',
-                transition: 'all 0.25s ease',
-                boxShadow: activeIdx === i ? `0 8px 32px ${cap.color}20` : 'none',
-                position: 'relative', overflow: 'hidden',
-              }}>
-              {activeIdx === i && (
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 2, background: cap.color }} />
-              )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                <div style={{ color: activeIdx === i ? cap.color : T.blueL }}>{cap.icon}</div>
-                <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.12em', padding: '3px 8px', borderRadius: 4, background: activeIdx === i ? `${cap.color}22` : 'rgba(145,196,245,0.08)', color: activeIdx === i ? cap.color : T.muted }}>
-                  {cap.code}
-                </span>
-              </div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: T.white, marginBottom: 8, lineHeight: 1.3 }}>
-                {ar ? cap.ar.title : cap.en.title}
-              </h3>
-              <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, margin: '0 0 14px' }}>
-                {ar ? cap.ar.desc : cap.en.desc}
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
-                {(ar ? cap.ar.tags : cap.en.tags).map((tag, j) => (
-                  <span key={j} style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 100, background: T.dim, color: T.blueL }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div style={{ fontSize: 11.5, color: T.muted, fontStyle: 'italic' }}>
-                {cap.en.partners}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Industries ── */}
-      <section style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(48px,6vw,72px) clamp(24px,6vw,80px)' }}>
-          <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}
-            style={{ marginBottom: 36 }}>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#A78BFA', marginBottom: 8 }}>
-              {ar ? 'القطاعات' : 'Industries'}
-            </p>
-            <h2 style={{ fontSize: 'clamp(1.5rem,2.8vw,2.2rem)', fontWeight: 800, color: T.white, margin: 0 }}>
-              {ar ? 'القطاعات التي نخدمها' : 'Sectors We Serve'}
+      {/* ── 2. Why Data & AI, Why WAVZ ── */}
+      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(70px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: 48, alignItems: 'center' }}>
+          <div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+              <div style={{ width: 24, height: 2, background: T.gold }} />
+              <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+                {ar ? 'الرؤية والمنهجية' : 'STRATEGIC FOUNDATION'}
+              </span>
+            </div>
+            <h2 style={{ fontSize: 'clamp(2rem,3.4vw,2.8rem)', fontWeight: 800, color: T.white, lineHeight: 1.2, margin: '0 0 24px', letterSpacing: '-0.02em', fontFamily: font }}>
+              {ar ? 'لماذا البيانات والذكاء الاصطناعي، ولماذا WAVZ؟' : 'Why Data & AI, Why WAVZ'}
             </h2>
-          </motion.div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
-            {INDUSTRIES.map((ind, i) => (
-              <motion.div key={i}
-                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.06 }}
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 18px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: `1px solid ${T.border}` }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#7C3AED', flexShrink: 0 }} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: T.white }}>{ar ? ind.ar : ind.en}</span>
-              </motion.div>
-            ))}
+            <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.85, margin: '0 0 20px' }}>
+              {ar
+                ? 'تُحوّل ممارسة البيانات والذكاء الاصطناعي في WAVZ البيانات المؤسسية الخام إلى أصل استراتيجي فعّال — من خلال بناء الأساس المتين، وطبقة الذكاء التحليلي، وقدرات الأتمتة المتقدمة التي تتطلبها المؤسسات الحديثة.'
+                : "WAVZ's Data and AI practice transforms raw organizational data into a strategic asset — building the foundation, the intelligence layer, and the automation capabilities that modern enterprises require."}
+            </p>
+            <p style={{ fontSize: 15.5, color: T.muted, lineHeight: 1.85, margin: 0 }}>
+              {ar
+                ? 'وكما هو الحال في جميع ممارسات WAVZ، تتميز هذه الحلول بالحيادية التقنية والاستقلالية الكاملة، مع شراكات استراتيجية رائدة تشمل Teradata وMicrosoft وInformatica وQlik وQuest وUiPath ونخبة من قادة التكنولوجيا حول العالم.'
+                : 'As with all WAVZ practices, this offering is technology-agnostic, with partnerships spanning Teradata, Microsoft, Informatica, Qlik, Quest, UiPath, and other global leaders.'}
+            </p>
+          </div>
+
+          {/* The Callout Card */}
+          <div style={{
+            background: 'linear-gradient(145deg, rgba(139,92,246,0.08) 0%, rgba(8,45,74,0.6) 100%)',
+            border: `1.5px solid ${T.borderP}`,
+            borderRadius: 20,
+            padding: 'clamp(28px,4vw,40px)',
+            position: 'relative',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.25)'
+          }}>
+            <div style={{ position: 'absolute', top: -14, left: ar ? 'auto' : 32, right: ar ? 32 : 'auto', background: T.purpleD, padding: '4px 14px', borderRadius: 100, fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff' }}>
+              {ar ? 'حقيقة جوهرية' : 'CORE PRINCIPLE'}
+            </div>
+            <p style={{ fontSize: 'clamp(18px,2vw,22px)', fontWeight: 700, color: T.white, lineHeight: 1.5, margin: '14px 0 18px', fontFamily: font }}>
+              {ar
+                ? '"الذكاء الاصطناعي بجودة البيانات التي تغذيه. تتعثر العديد من مبادرات الذكاء الاصطناعي لأن أساس البيانات التحتية لم يُبنَ أصلاً ليدعمها."'
+                : '"AI is only as good as the data behind it. Too many AI initiatives stall because the underlying data foundation was never built to support them."'}
+            </p>
+            <div style={{ width: 40, height: 2, background: T.gold, marginBottom: 18 }} />
+            <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, margin: 0 }}>
+              {ar
+                ? 'نحن نضمن أن كل مرحلة في رحلتك الذكية مدعومة بحوكمة موثوقة، وجودة بيانات لا تشوبها شائبة، وتكامل تشغيلي يحقق نتائج ملموسة وعائداً مستداماً.'
+                : 'We ensure that every step of your AI journey is anchored in trusted governance, immaculate data hygiene, and seamless operational integration.'}
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ── Why WAVZ ── */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(56px,7vw,88px) clamp(24px,6vw,80px)' }}>
-        <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}
-          style={{ marginBottom: 40 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#A78BFA', marginBottom: 8 }}>
-            {ar ? 'لماذا WAVZ' : 'Why WAVZ'}
-          </p>
-          <h2 style={{ fontSize: 'clamp(1.5rem,2.8vw,2.2rem)', fontWeight: 800, color: T.white, margin: 0 }}>
-            {ar ? 'شريكك في البيانات والذكاء الاصطناعي' : 'Your Data & AI Partner'}
+      {/* ── 3. Three Interconnected Domains ── */}
+      <section id="domains" style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: 'clamp(70px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          
+          <div style={{ textAlign: 'center', maxWidth: 780, margin: '0 auto 56px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <div style={{ width: 20, height: 2, background: T.purpleL }} />
+              <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.purpleL, fontFamily: font }}>
+                {ar ? 'الركائز الثلاث' : 'OUR PRACTICE AREAS'}
+              </span>
+              <div style={{ width: 20, height: 2, background: T.purpleL }} />
+            </div>
+            <h2 style={{ fontSize: 'clamp(2rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 16px', letterSpacing: '-0.02em', fontFamily: font }}>
+              {ar ? 'ثلاثة مجالات مترابطة ومتكاملة' : 'Three Interconnected Domains'}
+            </h2>
+            <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.75, margin: 0 }}>
+              {ar
+                ? 'تمتد محفظة البيانات والذكاء الاصطناعي لدينا عبر ثلاثة مجالات متكاملة — من البنية التحتية الموثوقة للبيانات إلى الأتمتة بالذكاء الاصطناعي التي ترفع العمل الفعلي عن كاهل فرقك.'
+                : 'Our Data & AI portfolio spans three connected domains — from trusted data infrastructure to AI-driven automation that removes real work from your teams’ plates.'}
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: 24 }}>
+            {DOMAINS.map((domain, i) => {
+              const Icon = domain.icon;
+              const isSelected = activeDomainIdx === i;
+              return (
+                <div
+                  key={domain.num}
+                  onClick={() => setActiveDomainIdx(i)}
+                  style={{
+                    background: isSelected ? 'rgba(139,92,246,0.1)' : 'rgba(255,255,255,0.02)',
+                    border: `1.5px solid ${isSelected ? domain.color : T.border}`,
+                    borderRadius: 18,
+                    padding: '32px 28px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                    boxShadow: isSelected ? `0 10px 30px ${domain.color}25` : 'none'
+                  }}>
+                  {/* Top Num & Icon */}
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                      <span style={{ fontSize: 24, fontWeight: 900, color: domain.color, opacity: 0.9, letterSpacing: '-0.03em' }}>
+                        {domain.num}
+                      </span>
+                      <div style={{ width: 44, height: 44, borderRadius: 12, background: `${domain.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: domain.color }}>
+                        <Icon size={22} />
+                      </div>
+                    </div>
+
+                    <h3 style={{ fontSize: 22, fontWeight: 800, color: T.white, margin: '0 0 8px', fontFamily: font }}>
+                      {ar ? domain.ar.title : domain.en.title}
+                    </h3>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: domain.color, marginBottom: 14 }}>
+                      {ar ? domain.ar.subtitle : domain.en.subtitle}
+                    </div>
+                    <p style={{ fontSize: 14.5, color: T.muted, lineHeight: 1.7, margin: '0 0 24px' }}>
+                      {ar ? domain.ar.desc : domain.en.desc}
+                    </p>
+
+                    {/* Capability Tags */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 24 }}>
+                      {(ar ? domain.ar.tags : domain.en.tags).map((tag, j) => (
+                        <span key={j} style={{ fontSize: 11.5, fontWeight: 600, padding: '4px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.05)', color: T.white, border: '1px solid rgba(255,255,255,0.06)' }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Partner Footer */}
+                  <div style={{ paddingTop: 16, borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12, color: T.muted }}>
+                    <span>{ar ? 'المنظومة:' : 'Stack:'} <strong style={{ color: T.white }}>{domain.en.partners}</strong></span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ── 4. A Structured Path from Vision to Results (4-Phase Methodology) ── */}
+      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(70px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto 56px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 20, height: 2, background: T.gold }} />
+            <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+              {ar ? 'منهجية العمل' : 'DELIVERY METHODOLOGY'}
+            </span>
+            <div style={{ width: 20, height: 2, background: T.gold }} />
+          </div>
+          <h2 style={{ fontSize: 'clamp(2rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 16px', letterSpacing: '-0.02em', fontFamily: font }}>
+            {ar ? 'مسار منظم من الرؤية إلى النتائج التشغيلية' : 'A Structured Path from Vision to Results'}
           </h2>
-        </motion.div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
-          {WHY.map((w, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}
-              style={{ padding: '24px 22px', borderRadius: 16, background: T.navy2, border: `1px solid ${T.border}` }}>
-              <div style={{ fontSize: 22, color: '#7C3AED', marginBottom: 12 }}>{w.icon}</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: T.white }}>{ar ? w.ar : w.en}</div>
-            </motion.div>
+          <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.75, margin: 0 }}>
+            {ar
+              ? 'يتبع كل مشروع مع WAVZ منهجيتنا المجربة ذات المراحل الأربع — والمصممة لتعظيم القيمة المضافة وتقليل تعطيل الأعمال، مع إدماج التحسين المستمر في كل مرحلة.'
+              : 'Every WAVZ engagement follows our proven four-phase delivery methodology — designed to maximize value and minimize disruption, with continuous improvement built in at every stage.'}
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: 20 }}>
+          {METHODOLOGY.map((step, i) => (
+            <div key={step.num} style={{
+              background: T.navy2,
+              border: `1px solid ${T.border}`,
+              borderRadius: 16,
+              padding: '28px 24px',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              <div style={{ fontSize: 32, fontWeight: 900, color: T.gold, opacity: 0.85, letterSpacing: '-0.03em', marginBottom: 16 }}>
+                {step.num}
+              </div>
+              <h3 style={{ fontSize: 19, fontWeight: 800, color: T.white, margin: '0 0 12px', fontFamily: font }}>
+                {ar ? step.ar.title : step.en.title}
+              </h3>
+              <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, margin: 0 }}>
+                {ar ? step.ar.desc : step.en.desc}
+              </p>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section style={{ background: 'linear-gradient(135deg, #0d1f2d 0%, #1e0a42 100%)', borderTop: `1px solid ${T.border}` }}>
-        <div style={{ maxWidth: 800, margin: '0 auto', padding: 'clamp(56px,8vw,96px) clamp(24px,6vw,80px)', textAlign: 'center' }}>
-          <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-            style={{ fontSize: 'clamp(1.6rem,3vw,2.6rem)', fontWeight: 900, color: T.white, marginBottom: 16 }}>
-            {ar ? 'أطلق قوة بياناتك' : 'Unlock the Power of Your Data'}
-          </motion.h2>
-          <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: 0.1 }}
-            style={{ fontSize: 16, color: T.muted, lineHeight: 1.7, marginBottom: 32 }}>
+      {/* ── 5. WAVZ Difference ── */}
+      <section style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: 'clamp(70px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          
+          <div style={{ maxWidth: 780, margin: '0 auto 56px', textAlign: 'center' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <div style={{ width: 20, height: 2, background: T.purpleL }} />
+              <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.purpleL, fontFamily: font }}>
+                {ar ? 'القيمة التنافسية' : 'THE WAVZ ADVANTAGE'}
+              </span>
+              <div style={{ width: 20, height: 2, background: T.purpleL }} />
+            </div>
+            <h2 style={{ fontSize: 'clamp(2rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 16px', letterSpacing: '-0.02em', fontFamily: font }}>
+              {ar ? 'ما يميّز WAVZ في البيانات والذكاء الاصطناعي' : 'The WAVZ Difference'}
+            </h2>
+            <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.75, margin: 0 }}>
+              {ar
+                ? 'نجمع بين الخبرة العميقة والحيادية التقنية والشراكات المعتمدة لنمنحك حلولاً قابلة للتنفيذ والاستدامة.'
+                : 'Combining seasoned regional expertise, certified world-class alliances, and technology-agnostic delivery.'}
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 20 }}>
+            {DIFFERENTIATORS.map((diff, i) => {
+              const Icon = diff.icon;
+              return (
+                <div key={i} style={{
+                  background: 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${T.border}`,
+                  borderRadius: 16,
+                  padding: '28px 24px',
+                  display: 'flex',
+                  gap: 16,
+                  alignItems: 'flex-start'
+                }}>
+                  <div style={{ width: 42, height: 42, borderRadius: 10, background: T.dim, color: T.purpleL, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon size={20} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: 17, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
+                      {ar ? diff.ar.title : diff.en.title}
+                    </h3>
+                    <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, margin: 0 }}>
+                      {ar ? diff.ar.desc : diff.en.desc}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ── 6. Built for Sectors Where It Has to Work ── */}
+      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(70px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 780, margin: '0 auto 56px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 20, height: 2, background: T.gold }} />
+            <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.gold, fontFamily: font }}>
+              {ar ? 'القطاعات المستهدفة' : 'INDUSTRY FOOTPRINT'}
+            </span>
+            <div style={{ width: 20, height: 2, background: T.gold }} />
+          </div>
+          <h2 style={{ fontSize: 'clamp(2rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 16px', letterSpacing: '-0.02em', fontFamily: font }}>
+            {ar ? 'مُصمم للقطاعات الحيوية التي لا تحتمل الخطأ' : 'Built for Sectors Where It Has to Work'}
+          </h2>
+          <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.75, margin: 0 }}>
             {ar
-              ? 'سواء كنت تبني أساس بياناتك أو تنشر الذكاء الاصطناعي في الإنتاج — فريق WAVZ من الخبراء المعتمدين جاهز لإرشادك.'
-              : 'Whether you\'re building your data foundation or deploying AI in production — our certified experts are ready to guide you.'}
-          </motion.p>
-          <motion.a href="#/contact" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 32px', borderRadius: 100, background: 'linear-gradient(135deg, #7C3AED, #4BA3E3)', color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', transition: 'opacity 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}>
-            {ar ? 'تواصل معنا' : 'Talk to Our Data & AI Team'}
-            <span style={{ transform: ar ? 'rotate(180deg)' : 'none', display: 'inline-block' }}>→</span>
-          </motion.a>
+              ? 'بنت WAVZ سجلها الحافل في البيانات والذكاء الاصطناعي عبر أكثر قطاعات الاقتصاد الإقليمي تنظيماً وتطلباً وحساسية للأمان.'
+              : 'WAVZ has built its Data & AI track record across the most demanding, regulated, and mission-critical sectors of the regional economy.'}
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: 20 }}>
+          {SECTORS.map((sec) => {
+            const Icon = sec.icon;
+            return (
+              <div key={sec.code} style={{
+                background: T.navy2,
+                border: `1px solid ${T.border}`,
+                borderRadius: 16,
+                padding: '28px 24px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(255,184,20,0.1)', color: T.gold, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon size={20} />
+                  </div>
+                  <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', padding: '3px 8px', borderRadius: 4, background: 'rgba(255,255,255,0.06)', color: T.muted }}>
+                    {sec.code}
+                  </span>
+                </div>
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
+                  {ar ? sec.ar.title : sec.en.title}
+                </h3>
+                <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, margin: 0 }}>
+                  {ar ? sec.ar.desc : sec.en.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── 7. CTA Banner ── */}
+      <section style={{ background: 'linear-gradient(135deg, #061E31 0%, #170C3A 50%, #082D4A 100%)', borderTop: `1px solid ${T.borderP}`, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 860, margin: '0 auto', padding: 'clamp(80px,10vw,110px) clamp(24px,6vw,80px)', textAlign: 'center', position: 'relative', zIndex: 10 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 100, background: T.dim, border: `1px solid ${T.borderP}`, marginBottom: 24 }}>
+            <Sparkles size={14} color={T.purpleL} />
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: T.purpleL, fontFamily: font }}>
+              {ar ? 'ابدأ رحلتك الآن' : 'START YOUR DATA & AI JOURNEY'}
+            </span>
+          </div>
+
+          <h2 style={{ fontSize: 'clamp(2.2rem,4vw,3.2rem)', fontWeight: 900, color: T.white, margin: '0 0 20px', letterSpacing: '-0.025em', fontFamily: font }}>
+            {ar ? 'هل أنت مستعد لتحويل البيانات إلى ميزتك التنافسية؟' : 'Ready to Turn Data Into Your Strategic Advantage?'}
+          </h2>
+
+          <p style={{ fontSize: 'clamp(15px,1.4vw,17px)', color: T.muted, lineHeight: 1.8, maxWidth: 680, margin: '0 auto 36px' }}>
+            {ar
+              ? 'سواء كنت تبني أساس بياناتك من الصفر، أو تُحدّث منصات التحليلات، أو تُطلق أولى حالات استخدام الذكاء الاصطناعي الوكيل، فإن WAVZ توفر الشراكات العالمية والانضباط التشغيلي لتحويلها إلى واقع ملموس.'
+              : 'Whether you’re building a data foundation from scratch, modernizing analytics, or piloting your first agentic AI use case, WAVZ brings the partnerships and delivery discipline to make it real.'}
+          </p>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 40 }}>
+            <a href="#/contact"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '15px 36px', borderRadius: 8, background: `linear-gradient(135deg, ${T.purpleD}, ${T.purple})`, color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 20px rgba(139,92,246,0.4)', transition: 'transform 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}>
+              {ar ? 'تواصل معنا' : 'Get in Touch'}
+              {ar ? <ArrowLeft size={16} /> : <ArrowRight size={16} />}
+            </a>
+          </div>
+
+          {/* Contact Details */}
+          <div style={{ paddingTop: 28, borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, flexWrap: 'wrap', fontSize: 13, color: T.muted }}>
+            <a href="mailto:info@wavz.com.eg" style={{ color: T.purpleL, textDecoration: 'none', fontWeight: 600 }}>info@wavz.com.eg</a>
+            <span>·</span>
+            <span style={{ color: T.white }}>wavz.com.eg</span>
+            <span>·</span>
+            <span style={{ color: T.muted }}>{ar ? 'مجمع التكنولوجيا بالمعادي، مبنى B2، القاهرة' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt'}</span>
+          </div>
         </div>
       </section>
 

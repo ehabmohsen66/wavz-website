@@ -1,7 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useLang } from '../i18n/LangContext.jsx';
+import { 
+  Server, Database, Cloud, Layers, ShieldCheck, Activity, 
+  Settings, CheckCircle2, ChevronRight, ArrowRight, ArrowLeft,
+  Building2, Landmark, Radio, Briefcase
+} from 'lucide-react';
 
 const T = {
   navy:    '#061E31',
@@ -11,16 +16,16 @@ const T = {
   goldD:   '#F5A800',
   blue:    '#1173BD',
   blueL:   '#4BA3E3',
-  red:     '#FF4B2B',
+  red:     '#C74634',
   white:   '#F0F4F8',
-  muted:   'rgba(145,196,245,0.62)',
-  dim:     'rgba(145,196,245,0.22)',
-  border:  'rgba(255,255,255,0.07)',
-  borderG: 'rgba(255,184,20,0.22)',
+  muted:   'rgba(145,196,245,0.68)',
+  dim:     'rgba(145,196,245,0.18)',
+  border:  'rgba(255,255,255,0.08)',
+  borderR: 'rgba(199,70,52,0.3)',
 };
 
 const FONT    = "'Outfit', system-ui, sans-serif";
-const FONT_AR = "'Tajawal', sans-serif";
+const FONT_AR = "'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif";
 
 /* ── Three.js Generative Scene ── */
 const GenerativeArtScene = () => {
@@ -102,288 +107,608 @@ const GenerativeArtScene = () => {
   return <div ref={mountRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }} />;
 };
 
-/* ── Data ── */
-const CAPABILITIES = [
+/* ── Full-Stack Oracle Coverage Data ── */
+const COVERAGE_ITEMS = [
   {
     code: 'OCI',
-    en: { title: 'Oracle Cloud Infrastructure', desc: 'Cloud-native IaaS with autonomous services, high availability, and enterprise-grade security. Optimized for Oracle workload migration and greenfield deployment on OCI.', tags: ['Compute', 'Storage', 'Networking', 'Autonomous DB'] },
-    ar: { title: 'البنية التحتية السحابية من Oracle', desc: 'بنية تحتية سحابية متكاملة مع خدمات مستقلة وتوافر عالٍ وأمان على مستوى المؤسسات. مُحسَّنة لترحيل أعباء العمل وعمليات النشر الجديدة على OCI.', tags: ['الحوسبة', 'التخزين', 'الشبكات', 'قاعدة بيانات مستقلة'] },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
+    icon: Cloud,
+    en: {
+      name: 'Oracle Cloud Infrastructure',
+      desc: 'Cloud infrastructure design, migration, and management built for performance and scale.',
+      tags: ['Compute', 'Storage', 'Networking', 'Autonomous DB']
+    },
+    ar: {
+      name: 'البنية التحتية السحابية (OCI)',
+      desc: 'تصميم البنية التحتية السحابية وترحيلها وإدارتها بكفاءة عالية وقابلية فائقة للتوسع.',
+      tags: ['حوسبة سحابية', 'تخزين', 'شبكات', 'قواعد بيانات ذاتية']
+    }
   },
   {
     code: 'EXA',
-    en: { title: 'Oracle Exadata', desc: 'High-performance database platform for OLTP and analytics workloads. Maximum throughput, compression, and in-memory processing for mission-critical databases with predictable SLAs.', tags: ['OLTP', 'Analytics', 'In-Memory', 'Mission-Critical'] },
-    ar: { title: 'Oracle Exadata', desc: 'منصة قواعد بيانات عالية الأداء لأعباء عمل OLTP والتحليلات. أقصى قدر من الإنتاجية والضغط والمعالجة في الذاكرة لقواعد البيانات الحيوية.', tags: ['OLTP', 'التحليلات', 'المعالجة في الذاكرة', 'الأعمال الحيوية'] },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <rect x="2" y="2" width="20" height="8" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-        <rect x="2" y="14" width="20" height="8" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M6 6h.01M6 18h.01M10 6h.01M10 18h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-    ),
+    icon: Server,
+    en: {
+      name: 'Exadata',
+      desc: 'High-performance database infrastructure, tuned and managed for mission-critical workloads.',
+      tags: ['Extreme Performance', 'In-Memory', 'OLTP & Analytics', 'Resilience']
+    },
+    ar: {
+      name: 'منصة Exadata',
+      desc: 'بنية تحتية فائقة الأداء لقواعد البيانات، مُهيأة ومُدارة لأعباء العمل الحيوية.',
+      tags: ['أداء فائق', 'معالجة في الذاكرة', 'معاملات وتحليلات', 'استمرارية']
+    }
   },
   {
-    code: 'FCE',
-    en: { title: 'Oracle Fusion Cloud ERP', desc: 'Full-suite cloud ERP covering Finance, HR, SCM, and CX. Configured and integrated for regional regulatory requirements across Egypt and KSA, with localized compliance built in.', tags: ['Finance', 'HR', 'SCM', 'CX', 'Cloud ERP'] },
-    ar: { title: 'Oracle Fusion Cloud ERP', desc: 'نظام ERP سحابي متكامل يغطي المالية والموارد البشرية وسلسلة التوريد وتجربة العملاء. مُهيَّأ للمتطلبات التنظيمية الإقليمية في مصر والمملكة العربية السعودية.', tags: ['المالية', 'الموارد البشرية', 'سلسلة التوريد', 'تجربة العملاء'] },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" strokeWidth="1.5"/>
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" strokeWidth="1.5"/>
-        <line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" strokeWidth="1.5"/>
-      </svg>
-    ),
+    code: 'FSN',
+    icon: Layers,
+    en: {
+      name: 'Fusion Cloud',
+      desc: "Implementation and support for Oracle's cloud applications suite across finance, HR, and supply chain.",
+      tags: ['Cloud ERP', 'HCM', 'SCM', 'CX']
+    },
+    ar: {
+      name: 'تطبيقات Fusion Cloud',
+      desc: 'تنفيذ ودعم حزمة تطبيقات Oracle السحابية عبر الإدارة المالية والموارد البشرية وسلاسل الإمداد.',
+      tags: ['ERP سحابي', 'موارد بشرية', 'سلاسل الإمداد', 'تجربة العملاء']
+    }
   },
   {
     code: 'EBS',
-    en: { title: 'Oracle E-Business Suite', desc: 'On-premise and hybrid Oracle EBS implementation, upgrade, and managed support. Sustain existing investments while building a structured migration path to the cloud.', tags: ['On-Premise', 'Hybrid', 'Upgrade', 'Managed Support'] },
-    ar: { title: 'Oracle E-Business Suite', desc: 'تنفيذ وترقية ودعم مُدار لـ Oracle EBS على البنية المحلية والهجينة. الحفاظ على الاستثمارات القائمة مع بناء مسار ترحيل منظم نحو السحابة.', tags: ['محلي', 'هجين', 'ترقية', 'دعم مُدار'] },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="currentColor" strokeWidth="1.5"/>
-      </svg>
-    ),
+    icon: Database,
+    en: {
+      name: 'E-Business Suite',
+      desc: 'Ongoing support, upgrades, and optimization for established EBS environments.',
+      tags: ['Lifecycle Management', 'Upgrades', 'Hybrid Extension', 'Performance Tuning']
+    },
+    ar: {
+      name: 'حزمة E-Business Suite',
+      desc: 'دعم مستمر وترقيات وتحسين أداء شامل لبيئات EBS القائمة وتمديد قيمتها الاستثمارية.',
+      tags: ['إدارة دورة الحياة', 'ترقيات', 'تكامل هجين', 'تحسين الأداء']
+    }
   },
   {
-    code: 'APX',
-    en: { title: 'Oracle APEX', desc: 'Low-code application development platform on Oracle Database. Rapid delivery of enterprise-grade business applications with native database integration and minimal infrastructure overhead.', tags: ['Low-Code', 'Rapid Dev', 'Oracle DB', 'Enterprise Apps'] },
-    ar: { title: 'Oracle APEX', desc: 'منصة تطوير تطبيقات منخفضة الكود على قاعدة بيانات Oracle. تسليم سريع لتطبيقات الأعمال على مستوى المؤسسات مع تكامل أصلي مع قاعدة البيانات.', tags: ['كود منخفض', 'تطوير سريع', 'Oracle DB', 'تطبيقات المؤسسات'] },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <polyline points="16 18 22 12 16 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <polyline points="8 6 2 12 8 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
+    code: 'SBL',
+    icon: Activity,
+    en: {
+      name: 'Siebel',
+      desc: 'Specialist support and enhancement for Siebel CRM environments.',
+      tags: ['CRM Maintenance', 'Workflows', 'Integration', 'System Health']
+    },
+    ar: {
+      name: 'نظام Siebel CRM',
+      desc: 'دعم متخصص وتطوير مستمر لبيئات إدارة علاقات العملاء Siebel CRM.',
+      tags: ['صيانة CRM', 'مسارات العمل', 'التكامل', 'كفاءة النظام']
+    }
   },
   {
-    code: 'FIN',
-    en: { title: 'FinOps & AI-Enabled Operations', desc: 'Managed Oracle environments with continuous cost optimization, vector and AI-enabled database capabilities, and 24/7 monitoring aligned to enterprise SLA commitments.', tags: ['FinOps', 'AI/Vector DB', '24/7 Monitoring', 'SLA Management'] },
-    ar: { title: 'عمليات FinOps والذكاء الاصطناعي', desc: 'بيئات Oracle مُدارة مع تحسين مستمر للتكاليف وإمكانيات قواعد البيانات المدعومة بالذكاء الاصطناعي ومراقبة 24/7 وفق اتفاقيات مستوى الخدمة.', tags: ['FinOps', 'الذكاء الاصطناعي', 'مراقبة 24/7', 'إدارة SLA'] },
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
-        <path d="M12 20V10M18 20V4M6 20v-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <circle cx="12" cy="7" r="1.5" fill="currentColor"/>
-      </svg>
-    ),
+    code: 'JDE',
+    icon: Settings,
+    en: {
+      name: 'JD Edwards',
+      desc: 'Implementation and managed support for JD Edwards EnterpriseOne landscapes.',
+      tags: ['EnterpriseOne', 'Manufacturing', 'Supply Chain', 'Operations']
+    },
+    ar: {
+      name: 'نظام JD Edwards',
+      desc: 'تنفيذ ودعم مُدار لبيئات عمل JD Edwards EnterpriseOne المؤسسية.',
+      tags: ['EnterpriseOne', 'تصنيع', 'سلاسل الإمداد', 'عمليات مؤسسية']
+    }
+  },
+  {
+    code: 'APEX',
+    icon: CheckCircle2,
+    en: {
+      name: 'Oracle APEX',
+      desc: 'Rapid, low-code application development built natively on the Oracle platform.',
+      tags: ['Low-Code', 'Rapid Apps', 'Native Oracle DB', 'Responsive UI']
+    },
+    ar: {
+      name: 'منصة Oracle APEX',
+      desc: 'تطوير سريع للتطبيقات منخفضة الكود مبني بشكل أصيل على منصة وقواعد بيانات Oracle.',
+      tags: ['كود منخفض', 'تطوير سريع', 'تكامل أصيل', 'واجهات تفاعلية']
+    }
   },
 ];
 
-const INDUSTRIES = [
-  { en: 'Banking & Financial Services', ar: 'البنوك والخدمات المالية' },
-  { en: 'Government & Public Sector', ar: 'الحكومة والقطاع العام' },
-  { en: 'Telecommunications', ar: 'الاتصالات' },
-  { en: 'Oil & Gas', ar: 'النفط والغاز' },
-  { en: 'Manufacturing', ar: 'التصنيع' },
-  { en: 'Healthcare', ar: 'الرعاية الصحية' },
+/* ── SLA Support Pillars ── */
+const SLA_PILLARS = [
+  {
+    code: 'SYS',
+    titleEn: 'Oracle Systems',
+    titleAr: 'أنظمة Oracle (Systems)',
+    descEn: 'Support and management of infrastructure and engineered systems, including OCI and Exadata.',
+    descAr: 'دعم وإدارة البنية التحتية والأنظمة المهندسة، بما في ذلك سحابة OCI ومنصات Exadata.',
+  },
+  {
+    code: 'TECH',
+    titleEn: 'Oracle Technology',
+    titleAr: 'تقنيات Oracle (Technology)',
+    descEn: 'Ongoing administration, monitoring, and performance management for Oracle Database and Middleware (FMW).',
+    descAr: 'إدارة مستمرة ومراقبة متقدمة وتحسين أداء لقواعد بيانات Oracle والبرمجيات الوسيطة (FMW).',
+  },
+  {
+    code: 'APPS',
+    titleEn: 'Oracle Applications',
+    titleAr: 'تطبيقات Oracle (Applications)',
+    descEn: 'Continued support and enhancement for Fusion Cloud, E-Business Suite, Siebel, and other Oracle application suites.',
+    descAr: 'دعم وتطوير متواصل لحزم Fusion Cloud و E-Business Suite و Siebel ومختلف تطبيقات Oracle المؤسسية.',
+  },
 ];
 
-const WHY = [
-  { en: 'Certified Oracle Partner', ar: 'شريك Oracle معتمد', icon: '✓' },
-  { en: 'Regional Presence — Egypt & KSA', ar: 'تواجد إقليمي — مصر والمملكة', icon: '◉' },
-  { en: 'End-to-End Accountability', ar: 'مسؤولية شاملة من البداية للنهاية', icon: '↻' },
-  { en: 'Technology-Agnostic Advisory', ar: 'استشارات محايدة تقنياً', icon: '⊕' },
+/* ── SLA Inclusions ── */
+const SLA_INCLUSIONS = [
+  {
+    titleEn: 'Response & Resolution',
+    titleAr: 'الاستجابة والحل',
+    descEn: 'Defined response times and resolution targets by incident severity.',
+    descAr: 'أوقات استجابة محددة ومستهدفات حل دقيقة مصنفة حسب درجة أهمية الحادث.',
+  },
+  {
+    titleEn: 'Monitoring & Escalation',
+    titleAr: 'المراقبة والتصعيد',
+    descEn: '24x7 or business-hours monitoring, backed by formal escalation management.',
+    descAr: 'مراقبة على مدار الساعة 24×7 أو ساعات العمل الرسمية، مدعومة بإدارة تصعيد ممنهجة.',
+  },
+  {
+    titleEn: 'Reporting & Governance',
+    titleAr: 'التقارير والحوكمة',
+    descEn: 'Regular service reviews and SLA compliance reporting.',
+    descAr: 'مراجعات دورية لجودة الخدمة وتقارير منتظمة للامتثال لاتفاقيات مستوى الخدمة.',
+  },
+  {
+    titleEn: 'Change Management',
+    titleAr: 'إدارة التغيير',
+    descEn: 'Governed planning and execution of patches, upgrades, and maintenance.',
+    descAr: 'تخطيط وتنفيذ محكوم ومدروس للتحديثات والترقيات وأعمال الصيانة الدورية.',
+  },
+  {
+    titleEn: 'Dedicated Resources',
+    titleAr: 'موارد وفرق متخصصة',
+    descEn: 'Named specialists or service teams aligned to your environment.',
+    descAr: 'خبراء متخصصون بالاسم أو فرق خدمة مخصصة ومطلعة بالكامل على بيئة عملك.',
+  },
+];
+
+/* ── WAVZ Difference ── */
+const WAVZ_DIFFERENCE = [
+  {
+    titleEn: 'Seasoned Expertise',
+    titleAr: 'خبرة راسخة ومتمرسة',
+    descEn: 'Certified Oracle specialists with hands-on experience across banking, telecom, and government.',
+    descAr: 'خبراء معتمدون من Oracle بخبرات عملية وميدانية في البنوك والاتصالات والقطاع الحكومي.',
+  },
+  {
+    titleEn: 'Technology Independence',
+    titleAr: 'استقلالية وحيادية تقنية',
+    descEn: "We recommend what's right for your business, not what benefits our commercial interests.",
+    descAr: 'نوصي بما يخدم أهداف عملك الحقيقية، دون أي تحيز تجاري لأي نموذج محدد.',
+  },
+  {
+    titleEn: 'End-to-End Accountability',
+    titleAr: 'مسؤولية شاملة من البداية للنهاية',
+    descEn: 'One partner across strategy, migration, implementation, and long-term operations.',
+    descAr: 'شريك واحد مسؤول عبر مراحل الاستراتيجية، والترحيل، والتنفيذ، والتشغيل طويل الأجل.',
+  },
+  {
+    titleEn: 'Proven Track Record',
+    titleAr: 'سجل إنجاز موثوق',
+    descEn: "Over 15 years of reliable, high-quality delivery across the region's most complex transformation programs.",
+    descAr: 'أكثر من 15 عاماً من التنفيذ الموثوق وعالي الجودة في أعقد برامج التحول الرقمي بالمنطقة.',
+  },
+  {
+    titleEn: 'Regional Depth, Global Standards',
+    titleAr: 'عمق إقليمي بمعايير عالمية',
+    descEn: 'On-the-ground teams in Cairo and Riyadh, delivering with international governance and local market knowledge.',
+    descAr: 'فرق عمل متواجدة في القاهرة والرياض، تجمع بين الحوكمة العالمية والفهم العميق لمتطلبات السوق المحلي.',
+  },
+];
+
+/* ── Sectors ── */
+const SECTORS = [
+  {
+    code: 'GOV',
+    icon: Building2,
+    nameEn: 'Government & Public Sector',
+    nameAr: 'الحكومة والقطاع العام',
+    descEn: 'Supporting national digital transformation and data-driven governance programs.',
+    descAr: 'دعم برامج التحول الرقمي الوطنية والحوكمة المعتمدة على البيانات والبنى التحتية السيادية.',
+  },
+  {
+    code: 'BFS',
+    icon: Landmark,
+    nameEn: 'Banking & Financial Services',
+    nameAr: 'البنوك والخدمات المالية',
+    descEn: 'Mission-critical systems where uptime and data integrity are paramount.',
+    descAr: 'أنظمة حيوية بالغة الحساسية تتطلب أعلى معايير الجاهزية وسلامة البيانات والامتثال المالي.',
+  },
+  {
+    code: 'TEL',
+    icon: Radio,
+    nameEn: 'Telecommunications',
+    nameAr: 'الاتصالات',
+    descEn: 'Optimizing IT landscapes and integrating complex operator systems.',
+    descAr: 'تحسين بيئات تقنية المعلومات وتكامل الأنظمة المعقدة لمشغلي شبكات الاتصالات.',
+  },
+  {
+    code: 'ENT',
+    icon: Briefcase,
+    nameEn: 'Large Enterprise',
+    nameAr: 'المؤسسات الكبرى',
+    descEn: 'Enterprise applications and managed operations that scale with business growth.',
+    descAr: 'تطبيقات مؤسسية وعمليات مُدارة قابلة للتوسع بسلاسة بالتوازي مع نمو الأعمال.',
+  },
 ];
 
 export const OracleSolutions = () => {
   const { lang, dir } = useLang();
   const ar = lang === 'ar';
   const font = ar ? FONT_AR : FONT;
-  const [activeIdx, setActiveIdx] = useState(0);
-
-  const active = CAPABILITIES[activeIdx];
+  const [activeCoverage, setActiveCoverage] = useState(0);
 
   return (
     <div style={{ background: T.navy, minHeight: '100vh', color: T.white, fontFamily: font }} dir={dir}>
 
-      {/* ── Hero ── */}
-      <section style={{ position: 'relative', overflow: 'hidden', minHeight: 560, display: 'flex', alignItems: 'center' }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.18 }}>
+      {/* ── 1. HERO SECTION ── */}
+      <section style={{ position: 'relative', overflow: 'hidden', minHeight: 600, display: 'flex', alignItems: 'center' }}>
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.2 }}>
           <GenerativeArtScene />
         </div>
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse 80% 60% at 60% 40%, rgba(199,70,52,0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 80% 60% at 60% 40%, rgba(199,70,52,0.14) 0%, transparent 70%)',
         }} />
         <div style={{ position: 'absolute', bottom: 0, inset: 'auto 0 0 0', height: 120, background: `linear-gradient(to bottom, transparent, ${T.navy})` }} />
 
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1200, margin: '0 auto', padding: '135px clamp(24px,6vw,80px) 75px', width: '100%' }}>
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1240, margin: '0 auto', padding: '140px clamp(24px,6vw,80px) 75px', width: '100%' }}>
 
-          {/* Oracle SVG Logo */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
-            style={{ marginBottom: 28 }}>
-            {/* Real Oracle wordmark SVG */}
+          {/* Oracle Wordmark SVG */}
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} style={{ marginBottom: 26 }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 231 30" preserveAspectRatio="xMinYMid" style={{ height: 38, width: 'auto' }} aria-label="Oracle">
               <path d="M99.61,19.52h15.24l-8.05-13L92,30H85.27l18-28.17a4.29,4.29,0,0,1,7-.05L128.32,30h-6.73l-3.17-5.25H103l-3.36-5.23m69.93,5.23V0.28h-5.72V27.16a2.76,2.76,0,0,0,.85,2,2.89,2.89,0,0,0,2.08.87h26l3.39-5.25H169.54M75,20.38A10,10,0,0,0,75,.28H50V30h5.71V5.54H74.65a4.81,4.81,0,0,1,0,9.62H58.54L75.6,30h8.29L72.43,20.38H75M14.88,30H32.15a14.86,14.86,0,0,0,0-29.71H14.88a14.86,14.86,0,1,0,0,29.71m16.88-5.23H15.26a9.62,9.62,0,0,1,0-19.23h16.5a9.62,9.62,0,1,1,0,19.23M140.25,30h17.63l3.34-5.23H140.64a9.62,9.62,0,1,1,0-19.23h16.75l3.38-5.25H140.25a14.86,14.86,0,1,0,0,29.71m69.87-5.23a9.62,9.62,0,0,1-9.26-7h24.42l3.36-5.24H200.86a9.61,9.61,0,0,1,9.26-7h16.76l3.35-5.25h-20.5a14.86,14.86,0,0,0,0,29.71h17.63l3.35-5.23h-20.6" transform="translate(-0.02 0)" fill="#C74634"/>
             </svg>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.05, ease: [0.16,1,0.3,1] }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '5px 14px', borderRadius: 100, border: '1px solid rgba(199,70,52,0.35)', background: 'rgba(199,70,52,0.1)', marginBottom: 24 }}>
+          {/* Eyebrow Pill */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.05 }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 14px', borderRadius: 100, border: `1px solid ${T.borderR}`, background: 'rgba(199,70,52,0.12)', marginBottom: 20 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C74634', display: 'inline-block' }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C74634', fontFamily: font }}>
-              {ar ? 'حلول Oracle التقنية' : 'Oracle Technology Solutions'}
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#FF7B68', fontFamily: font }}>
+              {ar ? 'حلول Oracle التقنية' : 'ORACLE TECHNOLOGY SOLUTIONS'}
             </span>
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.08, ease: [0.16,1,0.3,1] }}
-            style={{ fontSize: 'clamp(2.2rem,5vw,4rem)', fontWeight: 900, lineHeight: 1.06, letterSpacing: '-0.025em', marginBottom: 20, fontFamily: font }}>
+          {/* Headline */}
+          <motion.h1 initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.08 }}
+            style={{ fontSize: 'clamp(2.2rem,5vw,4.2rem)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-0.025em', marginBottom: 22, maxWidth: 880, fontFamily: font }}>
             {ar ? (
-              <>حلول <span style={{ color: '#C74634' }}>Oracle</span> التقنية الشاملة</>
+              <>تنفيذ شامل لحلول <span style={{ color: '#FF7B68' }}>Oracle</span>، مُصمَّم للواقع الهجين.</>
             ) : (
-              <>Full-Stack <span style={{ color: '#C74634' }}>Oracle</span> Delivery</>
+              <>Full-stack <span style={{ color: '#FF7B68' }}>Oracle</span> delivery, built for hybrid reality.</>
             )}
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.18, ease: [0.16,1,0.3,1] }}
-            style={{ fontSize: 'clamp(15px,1.4vw,17px)', color: T.muted, lineHeight: 1.72, maxWidth: 540, margin: '0 0 28px' }}>
+          {/* Subtitle */}
+          <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.16 }}
+            style={{ fontSize: 'clamp(16px,1.4vw,18.5px)', color: T.muted, lineHeight: 1.75, maxWidth: 720, margin: '0 0 32px' }}>
             {ar
-              ? 'تسليم شامل عبر OCI و Exadata و Fusion Cloud وEBS وAPEX. جاهز للنشر الهجين والسحابي مع عمليات FinOps ومزايا الذكاء الاصطناعي في قواعد البيانات.'
-              : 'OCI · Exadata · Fusion Cloud ERP · Oracle EBS · Oracle APEX. Hybrid-ready with FinOps-managed operations and vector/AI-enabled database capabilities.'}
+              ? 'من OCI إلى Exadata، ومن Fusion Cloud إلى EBS و APEX — تُقدِّم WAVZ وتدير بيئات Oracle لتعمل بسلاسة بين الأنظمة المحلية والسحابية، مع انضباط FinOps المالي وقدرات قواعد بيانات جاهزة للذكاء الاصطناعي.'
+              : 'From OCI to Exadata, Fusion Cloud to EBS and APEX — WAVZ delivers and manages Oracle environments that work seamlessly across on-premise and cloud, with FinOps discipline and AI-ready database capabilities.'}
           </motion.p>
 
-          {/* Oracle product suite badges */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.28, ease: [0.16,1,0.3,1] }}
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {['OCI', 'Exadata', 'Fusion Cloud ERP', 'Oracle EBS', 'Oracle APEX', 'FinOps'].map((prod, i) => (
-              <span key={i} style={{
-                fontSize: 12, fontWeight: 600, padding: '5px 13px', borderRadius: 6,
-                background: 'rgba(199,70,52,0.08)',
-                border: '1px solid rgba(199,70,52,0.28)',
-                color: '#C74634',
-                fontFamily: font,
-              }}>{prod}</span>
-            ))}
+          {/* CTA Row */}
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.24 }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center' }}>
+            <a
+              href="#/contact"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 10,
+                padding: '14px 28px', borderRadius: 100,
+                background: '#C74634', color: '#FFFFFF', fontWeight: 700, fontSize: 14.5,
+                textDecoration: 'none', transition: 'all 0.2s ease',
+                boxShadow: '0 4px 20px rgba(199,70,52,0.35)',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.background = '#d94f3c'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = '#C74634'; }}
+            >
+              <span>{ar ? 'تحدث مع متخصص في Oracle' : 'Talk to an Oracle Specialist'}</span>
+              <span style={{ transform: ar ? 'rotate(180deg)' : 'none', display: 'inline-block' }}>→</span>
+            </a>
           </motion.div>
 
         </div>
       </section>
 
-      {/* ── Capabilities ── */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(56px,7vw,88px) clamp(24px,6vw,80px)' }}>
+      {/* ── 2. WHY ORACLE, WHY WAVZ ── */}
+      <section style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: 'clamp(56px,7vw,88px) clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 40, alignItems: 'center' }}>
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#FF7B68', marginBottom: 10 }}>
+                {ar ? 'الرؤية والشراكة' : 'WHY ORACLE, WHY WAVZ'}
+              </p>
+              <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.7rem)', fontWeight: 800, color: T.white, lineHeight: 1.2, margin: '0 0 20px', fontFamily: font }}>
+                {ar ? 'بيئات Oracle المعاصرة تتطلب تكاملاً هجيناً حقيقياً' : 'Oracle environments rarely live in one place anymore.'}
+              </h2>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18, color: T.muted, fontSize: 15.5, lineHeight: 1.8 }}>
+              <p>
+                {ar
+                  ? 'تعمل أنظمة E-Business Suite التقليدية جنباً إلى جنب مع أعباء عمل OCI السحابية الأصيلة، بينما يدير Fusion Cloud العمليات المالية والموارد البشرية وسلاسل الإمداد — وغالباً ما يحدث كل ذلك معاً داخل المؤسسة نفسها.'
+                  : 'Legacy E-Business Suite systems run alongside cloud-native OCI workloads, while Fusion Cloud handles core finance, HR, and supply chain processes — often all at once, inside the same organization.'}
+              </p>
+              <p>
+                {ar
+                  ? 'تُقدِّم WAVZ خبرة شاملة في كامل طبقات Oracle عبر هذا الواقع الهجين، مدعومة بأكثر من 15 عاماً من خبرة التنفيذ في أكثر قطاعات المنطقة تنظيماً وتطلباً. نلتزم بالحياد التقني فلسفةً، وباعتماد Oracle ممارسةً — فكل توصية نقدمها تستند فقط إلى ما يحقق مصلحة أعمالك.'
+                  : "WAVZ brings full-stack Oracle expertise across this hybrid reality, backed by 15+ years of delivery experience in the region's most demanding, regulated sectors. We are technology-agnostic by philosophy, but Oracle-certified by practice — every recommendation is based on what's right for your business."}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. FULL-STACK ORACLE COVERAGE ── */}
+      <section style={{ maxWidth: 1240, margin: '0 auto', padding: 'clamp(64px,8vw,100px) clamp(24px,6vw,80px)' }}>
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-          style={{ marginBottom: 40 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C74634', marginBottom: 8 }}>
-            {ar ? 'قدراتنا' : 'Capabilities'}
+          style={{ marginBottom: 44 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#FF7B68', marginBottom: 10 }}>
+            {ar ? 'تغطية شاملة للمنظومة' : 'FULL-STACK ORACLE COVERAGE'}
           </p>
-          <h2 style={{ fontSize: 'clamp(1.6rem,3vw,2.5rem)', fontWeight: 800, color: T.white, margin: 0 }}>
-            {ar ? 'تخصصاتنا في Oracle' : 'Our Oracle Practice Areas'}
+          <h2 style={{ fontSize: 'clamp(1.8rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 14px', fontFamily: font }}>
+            {ar ? 'تغطية شاملة لكامل حزمة Oracle' : 'Full-Stack Oracle Coverage'}
           </h2>
+          <p style={{ fontSize: 15.5, color: T.muted, maxWidth: 680, margin: 0 }}>
+            {ar
+              ? 'نُصمِّم، ونُرَحِّل، ونُنَفِّذ، ونُدير كامل طبقات تقنيات Oracle — البنية التحتية، التطبيقات، والسحابة — بما يتوافق مع استراتيجية تقنية المعلومات ومتطلبات أعمالك.'
+              : 'We design, migrate, implement, and manage across the full Oracle technology stack — hardware, applications, and cloud — matched to your infrastructure strategy and business requirements.'}
+          </p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
-          {CAPABILITIES.map((cap, i) => (
-            <motion.div key={cap.code}
-              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.07 }}
-              onClick={() => setActiveIdx(i)}
-              style={{
-                background: activeIdx === i ? 'rgba(199,70,52,0.1)' : T.navy2,
-                border: `1.5px solid ${activeIdx === i ? 'rgba(199,70,52,0.45)' : T.border}`,
-                borderRadius: 16, padding: '24px 22px', cursor: 'pointer',
-                transition: 'all 0.25s ease',
-                boxShadow: activeIdx === i ? '0 8px 32px rgba(199,70,52,0.12)' : 'none',
-                position: 'relative', overflow: 'hidden',
-              }}>
-              {activeIdx === i && (
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 2, background: '#C74634' }} />
-              )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                <div style={{ color: activeIdx === i ? '#C74634' : T.blueL }}>{cap.icon}</div>
-                <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.12em', padding: '3px 8px', borderRadius: 4, background: activeIdx === i ? 'rgba(199,70,52,0.15)' : 'rgba(145,196,245,0.08)', color: activeIdx === i ? '#C74634' : T.muted }}>
-                  {cap.code}
-                </span>
-              </div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: T.white, marginBottom: 8, lineHeight: 1.3 }}>
-                {ar ? cap.ar.title : cap.en.title}
-              </h3>
-              <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, marginBottom: 14, margin: '0 0 14px' }}>
-                {ar ? cap.ar.desc : cap.en.desc}
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {(ar ? cap.ar.tags : cap.en.tags).map((tag, j) => (
-                  <span key={j} style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 100, background: T.dim, color: T.blueL }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+        {/* Coverage Cards Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+          {COVERAGE_ITEMS.map((item, idx) => {
+            const Icon = item.icon;
+            const isSelected = activeCoverage === idx;
+            return (
+              <motion.div
+                key={item.code}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                onClick={() => setActiveCoverage(idx)}
+                style={{
+                  background: isSelected ? 'rgba(199,70,52,0.12)' : T.navy2,
+                  border: `1.5px solid ${isSelected ? '#C74634' : T.border}`,
+                  borderRadius: 16, padding: '24px 22px',
+                  cursor: 'pointer', transition: 'all 0.25s ease',
+                  position: 'relative', overflow: 'hidden',
+                  display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+                }}
+                onMouseEnter={e => { if (!isSelected) e.currentTarget.style.borderColor = 'rgba(199,70,52,0.4)'; }}
+                onMouseLeave={e => { if (!isSelected) e.currentTarget.style.borderColor = T.border; }}
+              >
+                {isSelected && (
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: '#C74634' }} />
+                )}
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                    <div style={{ width: 42, height: 42, borderRadius: 10, background: 'rgba(199,70,52,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FF7B68' }}>
+                      <Icon size={22} />
+                    </div>
+                    <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', padding: '4px 10px', borderRadius: 6, background: 'rgba(255,255,255,0.06)', color: '#FF7B68', fontFamily: 'monospace' }}>
+                      {item.code}
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: 17, fontWeight: 700, color: T.white, marginBottom: 8, fontFamily: font }}>
+                    {ar ? item.ar.name : item.en.name}
+                  </h3>
+                  <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, marginBottom: 16 }}>
+                    {ar ? item.ar.desc : item.en.desc}
+                  </p>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {(ar ? item.ar.tags : item.en.tags).map((tag, tIdx) => (
+                    <span key={tIdx} style={{ fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6, background: T.dim, color: T.blueL }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 
-      {/* ── Industries ── */}
-      <section style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(48px,6vw,72px) clamp(24px,6vw,80px)' }}>
-          <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}
-            style={{ marginBottom: 36 }}>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C74634', marginBottom: 8 }}>
-              {ar ? 'القطاعات' : 'Industries'}
+      {/* ── 4. ASSESS, IMPLEMENT, RUN ── */}
+      <section style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: 'clamp(56px,7vw,88px) clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
+          <div style={{ maxWidth: 840 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#FF7B68', marginBottom: 10 }}>
+              {ar ? 'منهجية التنفيذ' : 'DELIVERY METHODOLOGY'}
             </p>
-            <h2 style={{ fontSize: 'clamp(1.5rem,2.8vw,2.2rem)', fontWeight: 800, color: T.white, margin: 0 }}>
-              {ar ? 'القطاعات التي نخدمها' : 'Sectors We Serve'}
+            <h2 style={{ fontSize: 'clamp(1.8rem,3vw,2.6rem)', fontWeight: 800, color: T.white, margin: '0 0 18px', fontFamily: font }}>
+              {ar ? 'التقييم، التنفيذ، والتشغيل — على طريقة Oracle' : 'Assess, Implement, Run — the Oracle Way'}
             </h2>
-          </motion.div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
-            {INDUSTRIES.map((ind, i) => (
-              <motion.div key={i}
-                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.06 }}
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 18px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: `1px solid ${T.border}` }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#C74634', flexShrink: 0 }} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: T.white }}>{ar ? ind.ar : ind.en}</span>
-              </motion.div>
+            <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.8, marginBottom: 20 }}>
+              {ar
+                ? 'تتبع مشاريع Oracle ثلاث مراحل تسليم مركزة: التقييم وتخطيط الاستراتيجية والهندسة المعمارية المستهدفة؛ التنفيذ عبر الترحيل والبناء والتكامل؛ والتشغيل والتحسين من خلال عمليات مُدارة قائمة على اتفاقيات مستوى الخدمة وحوكمة مالية (FinOps).'
+                : 'Oracle engagements follow three focused delivery phases: assessing and planning the strategy and target architecture; implementing through migration, build, and integration; and running and optimizing through SLA-driven managed operations and financial governance (FinOps).'}
+            </p>
+            <div style={{ padding: '20px 24px', borderRadius: 14, background: 'rgba(199,70,52,0.08)', border: `1px solid ${T.borderR}` }}>
+              <p style={{ fontSize: 14.5, color: T.white, lineHeight: 1.75, margin: 0 }}>
+                {ar
+                  ? 'يضمن التسليم الجاهز للبيئات الهجينة عبر OCI Dedicated Region و Cloud at Customer الامتثال لقوانين توطين البيانات، بينما تمنح خبرتنا المتكاملة عبر الأجهزة والتطبيقات والسحابة عملاءنا قدرة متكاملة وفريدة — إلى جانب قدرات قواعد البيانات المُمكّنة بالذكاء الاصطناعي والنواقل للحفاظ على جاهزية استثمارك في Oracle للمستقبل.'
+                  : 'Hybrid-ready delivery across OCI Dedicated Region and Cloud at Customer environments ensures data residency compliance, while full-stack expertise across hardware, applications, and cloud layers gives clients a uniquely integrated capability — plus vector/AI-enabled database capabilities to keep your Oracle investment future-ready.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. SLA & MANAGED SUPPORT SERVICES ── */}
+      <section style={{ maxWidth: 1240, margin: '0 auto', padding: 'clamp(64px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
+          style={{ marginBottom: 36 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#FF7B68', marginBottom: 10 }}>
+            {ar ? 'الخدمات والدعم المُدار' : 'SLA & MANAGED SUPPORT SERVICES'}
+          </p>
+          <h2 style={{ fontSize: 'clamp(1.8rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 14px', fontFamily: font }}>
+            {ar ? 'اتفاقيات مستوى الخدمة والدعم المُدار' : 'SLA & Managed Support Services'}
+          </h2>
+          <p style={{ fontSize: 15.5, color: T.muted, maxWidth: 840, lineHeight: 1.75, margin: 0 }}>
+            {ar
+              ? 'إلى جانب تسليم المشاريع، تُقدِّم WAVZ خدمات دعم وصيانة وتطوير مستمرة قائمة على اتفاقيات مستوى الخدمة لبيئات Oracle القائمة — وتغطي أنظمة Oracle، وتقنيات Oracle، وتطبيقات Oracle. تُصمَّم الارتباطات وفق احتياجاتك التشغيلية، بنماذج تغطية 24×7 أو 8×5 وتخصيص مرن لأيام العمل حسب الاستهلاك.'
+              : 'Beyond project delivery, WAVZ provides ongoing SLA-based support, maintenance, and enhancement services for existing Oracle environments — spanning Oracle Systems, Oracle Technology, and Oracle Applications. Engagements are structured around your operational needs, with 24x7 or 8x5 coverage models and flexible, pay-as-you-go man-day allocations.'}
+          </p>
+        </motion.div>
+
+        {/* 3 Pillars: SYS, TECH, APPS */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 48 }}>
+          {SLA_PILLARS.map((p) => (
+            <div key={p.code} style={{ background: T.navy2, border: `1px solid ${T.border}`, borderRadius: 16, padding: '26px 24px' }}>
+              <div style={{ display: 'inline-block', fontSize: 12, fontWeight: 800, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 6, background: 'rgba(199,70,52,0.18)', color: '#FF7B68', marginBottom: 14 }}>
+                {p.code}
+              </div>
+              <h3 style={{ fontSize: 18, fontWeight: 700, color: T.white, marginBottom: 10, fontFamily: font }}>
+                {ar ? p.titleAr : p.titleEn}
+              </h3>
+              <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, margin: 0 }}>
+                {ar ? p.descAr : p.descEn}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* SLA Inclusions Title & Grid */}
+        <div style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${T.border}`, borderRadius: 20, padding: '36px 30px' }}>
+          <h3 style={{ fontSize: 17, fontWeight: 700, color: T.white, marginBottom: 20, fontFamily: font }}>
+            {ar
+              ? 'تتحدد كل اتفاقية مستوى خدمة وفق الحزمة التقنية، ونطاق التغطية، ومستويات الخدمة الأكثر أهمية لأعمالك، وتشمل عادةً:'
+              : 'Each SLA is scoped to the technology stack, coverage window, and service levels that matter most to your business, and typically includes:'}
+          </h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
+            {SLA_INCLUSIONS.map((inc, i) => (
+              <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <CheckCircle2 size={18} style={{ color: '#FF7B68', flexShrink: 0, marginTop: 3 }} />
+                <div>
+                  <h4 style={{ fontSize: 14.5, fontWeight: 700, color: T.white, marginBottom: 4, fontFamily: font }}>
+                    {ar ? inc.titleAr : inc.titleEn}
+                  </h4>
+                  <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, margin: 0 }}>
+                    {ar ? inc.descAr : inc.descEn}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Why WAVZ ── */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(56px,7vw,88px) clamp(24px,6vw,80px)' }}>
-        <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}
-          style={{ marginBottom: 40 }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C74634', marginBottom: 8 }}>
-            {ar ? 'لماذا WAVZ' : 'Why WAVZ'}
-          </p>
-          <h2 style={{ fontSize: 'clamp(1.5rem,2.8vw,2.2rem)', fontWeight: 800, color: T.white, margin: 0 }}>
-            {ar ? 'شريكك الموثوق لـ Oracle' : 'Your Trusted Oracle Partner'}
-          </h2>
-        </motion.div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
-          {WHY.map((w, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}
-              style={{ padding: '24px 22px', borderRadius: 16, background: T.navy2, border: `1px solid ${T.border}` }}>
-              <div style={{ fontSize: 22, color: '#C74634', marginBottom: 12 }}>{w.icon}</div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: T.white }}>{ar ? w.ar : w.en}</div>
-            </motion.div>
-          ))}
+      {/* ── 6. WAVZ DIFFERENCE ── */}
+      <section style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: 'clamp(64px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <div style={{ maxWidth: 1240, margin: '0 auto' }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
+            style={{ marginBottom: 40 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#FF7B68', marginBottom: 10 }}>
+              {ar ? 'القيمة المميزة' : 'WHY WAVZ'}
+            </p>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: 0, fontFamily: font }}>
+              {ar ? 'ما يميز WAVZ' : 'WAVZ Difference'}
+            </h2>
+          </motion.div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+            {WAVZ_DIFFERENCE.map((diff, i) => (
+              <div key={i} style={{ background: T.navy, border: `1px solid ${T.border}`, borderRadius: 16, padding: '26px 22px' }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF7B68', marginBottom: 14 }} />
+                <h3 style={{ fontSize: 16.5, fontWeight: 700, color: T.white, marginBottom: 8, fontFamily: font }}>
+                  {ar ? diff.titleAr : diff.titleEn}
+                </h3>
+                <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.7, margin: 0 }}>
+                  {ar ? diff.descAr : diff.descEn}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section style={{ background: 'linear-gradient(135deg, #0d1f2d 0%, #0d3a5e 100%)', borderTop: `1px solid ${T.border}` }}>
-        <div style={{ maxWidth: 800, margin: '0 auto', padding: 'clamp(56px,8vw,96px) clamp(24px,6vw,80px)', textAlign: 'center' }}>
-          <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-            style={{ fontSize: 'clamp(1.6rem,3vw,2.6rem)', fontWeight: 900, color: T.white, marginBottom: 16 }}>
-            {ar ? 'ابدأ رحلتك مع Oracle' : 'Start Your Oracle Journey'}
-          </motion.h2>
-          <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: 0.1 }}
-            style={{ fontSize: 16, color: T.muted, lineHeight: 1.7, marginBottom: 32 }}>
+      {/* ── 7. BUILT FOR SECTORS WHERE IT HAS TO WORK ── */}
+      <section style={{ maxWidth: 1240, margin: '0 auto', padding: 'clamp(64px,8vw,100px) clamp(24px,6vw,80px)' }}>
+        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
+          style={{ marginBottom: 40 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#FF7B68', marginBottom: 10 }}>
+            {ar ? 'القطاعات المستهدفة' : 'MISSION-CRITICAL SECTORS'}
+          </p>
+          <h2 style={{ fontSize: 'clamp(1.8rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 12px', fontFamily: font }}>
+            {ar ? 'مُصمَّم لقطاعات لا تقبل الخطأ' : 'Built for Sectors Where It Has to Work'}
+          </h2>
+          <p style={{ fontSize: 15.5, color: T.muted, margin: 0 }}>
             {ar
-              ? 'سواء كنت تُرحِّل من EBS، أو تبني على OCI، أو تحتاج إلى دعم مُدار لـ Oracle — فريق WAVZ المعتمد جاهز للمساعدة.'
-              : 'Whether you\'re migrating from EBS, building on OCI, or need managed Oracle support — our certified team is ready.'}
-          </motion.p>
-          <motion.a href="#/contact" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 32px', borderRadius: 100, background: '#C74634', color: '#fff', fontWeight: 700, fontSize: 15, textDecoration: 'none', transition: 'opacity 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '0.9'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}>
-            {ar ? 'تواصل معنا' : 'Talk to Our Oracle Team'}
+              ? 'بنت WAVZ سجلها الحافل في Oracle عبر أكثر القطاعات تطلباً وتنظيماً وحساسية في الاقتصاد الإقليمي.'
+              : 'WAVZ has built its Oracle track record across the most demanding, regulated, and mission-critical sectors of the regional economy.'}
+          </p>
+        </motion.div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
+          {SECTORS.map((sec) => {
+            const Icon = sec.icon;
+            return (
+              <div key={sec.code} style={{ background: T.navy2, border: `1px solid ${T.border}`, borderRadius: 16, padding: '28px 24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(199,70,52,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FF7B68' }}>
+                    <Icon size={22} />
+                  </div>
+                  <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', color: T.muted }}>
+                    {sec.code}
+                  </span>
+                </div>
+                <h3 style={{ fontSize: 17, fontWeight: 700, color: T.white, marginBottom: 8, fontFamily: font }}>
+                  {ar ? sec.nameAr : sec.nameEn}
+                </h3>
+                <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, margin: 0 }}>
+                  {ar ? sec.descAr : sec.descEn}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── 8. READY TO MODERNIZE YOUR ORACLE ESTATE? (CTA) ── */}
+      <section style={{ background: 'linear-gradient(135deg, #061E31 0%, #152b42 100%)', borderTop: `1px solid ${T.border}` }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(64px,8vw,96px) clamp(24px,6vw,80px)', textAlign: 'center' }}>
+          <h2 style={{ fontSize: 'clamp(2rem,3.5vw,3rem)', fontWeight: 900, color: T.white, marginBottom: 16, fontFamily: font }}>
+            {ar ? 'هل أنت مستعد لتحديث بيئة Oracle لديك؟' : 'Ready to Modernize Your Oracle Estate?'}
+          </h2>
+          <p style={{ fontSize: 16.5, color: T.muted, lineHeight: 1.8, marginBottom: 36 }}>
+            {ar
+              ? 'سواء كنت تخطط للترحيل إلى OCI، أو دمج بيئة هجينة، أو تمديد عمر استثمارك في EBS، تضع WAVZ بين يديك خبرات معتمدة ومسؤولية كاملة في كل خطوة.'
+              : "Whether you're migrating to OCI, consolidating a hybrid landscape, or extending the life of an EBS investment, WAVZ brings certified expertise and end-to-end accountability to every engagement."}
+          </p>
+          <a
+            href="#/contact"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '16px 36px', borderRadius: 100,
+              background: '#C74634', color: '#FFFFFF', fontWeight: 700, fontSize: 15,
+              textDecoration: 'none', transition: 'all 0.2s ease',
+              boxShadow: '0 6px 24px rgba(199,70,52,0.4)',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.background = '#d94f3c'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = '#C74634'; }}
+          >
+            <span>{ar ? 'تواصل معنا' : 'Get in Touch'}</span>
             <span style={{ transform: ar ? 'rotate(180deg)' : 'none', display: 'inline-block' }}>→</span>
-          </motion.a>
+          </a>
+
+          {/* Contact Bar Info */}
+          <div style={{ marginTop: 44, paddingTop: 28, borderTop: `1px solid ${T.border}`, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 24px', fontSize: 13, color: T.muted }}>
+            <span dir="ltr">info@wavz.com.eg</span>
+            <span>·</span>
+            <span dir="ltr">wavz.com.eg</span>
+            <span>·</span>
+            <span>{ar ? 'حديقة المعادي التكنولوجية، مبنى B2، بلوك MB3، القاهرة، مصر' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt'}</span>
+          </div>
         </div>
       </section>
 

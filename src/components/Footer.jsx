@@ -10,10 +10,12 @@ const getLinkHref = (name) => {
   const n = name.trim().toLowerCase();
   
   // Solutions / الحلول
+  if (n.includes('oracle') || n.includes('أوراكل') || n.includes('اوراكل')) return '#/oracle-solutions';
+  if (n.includes('data') || n.includes('ai') || n.includes('بيانات') || n.includes('ذكاء')) return '#/data-ai';
   if (n.includes('sap')) return '#/sap-services';
+  if (n.includes('managed') || n.includes('مُدارة') || n.includes('ادارة') || n.includes('مدارة')) return '#/managed-services';
   if (n.includes('financial') || n.includes('مالية')) return '#/financial-services';
   if (n.includes('payment') || n.includes('مدفوعات') || n.includes('دفع')) return '#/payment-services';
-  if (n.includes('managed') || n.includes('مُدارة') || n.includes('ادارة')) return '#/managed-services';
   if (n.includes('digital') || n.includes('تحول') || n.includes('التحول')) return '#/digital-transformation';
   
   // Company / الشركة
@@ -173,7 +175,8 @@ export const FooterBackgroundGradient = () => {
 };
 
 export const Footer = () => {
-  const { t } = useLang();
+  const { lang, t } = useLang();
+  const isAr = lang === 'ar';
 
   return (
     <footer className="relative bg-[#061E31] overflow-hidden">
@@ -201,20 +204,41 @@ export const Footer = () => {
               <WavzWordmark />
             </div>
             <p className="mt-5 text-[13.5px] text-white/45 leading-[1.7] max-w-xs min-h-[50px]">
-              The turn-key platform for{' '}
-              <TextRotate
-                texts={[
-                  'enterprise digital transformation',
-                  'banking systems modernization',
-                  'heterogeneous stack orchestration',
-                  'incident MTTR optimization',
-                  'SLA-driven AMS operations',
-                ]}
-                mainClassName="inline-flex text-[#FFB814] font-semibold"
-                rotationInterval={3000}
-                splitBy="characters"
-              />{' '}
-              across MEA.
+              {isAr ? (
+                <>
+                  المنصة المتكاملة في الشرق الأوسط وأفريقيا لـ{' '}
+                  <TextRotate
+                    texts={[
+                      'التحول الرقمي المؤسسي',
+                      'تحديث الأنظمة البنكية الحيوية',
+                      'إدارة البيئات التقنية المختلطة',
+                      'عمليات AMS المدارة باتفاقيات الخدمة',
+                      'تقليص زمن الاستجابة للحوادث',
+                    ]}
+                    mainClassName="inline-flex text-[#FFB814] font-semibold"
+                    rotationInterval={3000}
+                    splitBy="words"
+                  />
+                  .
+                </>
+              ) : (
+                <>
+                  The turn-key platform for{' '}
+                  <TextRotate
+                    texts={[
+                      'enterprise digital transformation',
+                      'banking systems modernization',
+                      'heterogeneous stack orchestration',
+                      'incident MTTR optimization',
+                      'SLA-driven AMS operations',
+                    ]}
+                    mainClassName="inline-flex text-[#FFB814] font-semibold"
+                    rotationInterval={3000}
+                    splitBy="characters"
+                  />{' '}
+                  across MEA.
+                </>
+              )}
             </p>
 
             {/* Social Media Icons */}

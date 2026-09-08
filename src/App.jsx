@@ -163,7 +163,7 @@ export default function App() {
       <LangProvider>
         <ErrorBoundary>
           <Nav />
-          <div style={{ paddingTop: '72px', minHeight: '100vh', background: '#061E31' }}>
+          <div style={{ paddingTop: '0', minHeight: '100vh', background: '#061E31' }}>
             <ManagedServices />
           </div>
           <Footer />

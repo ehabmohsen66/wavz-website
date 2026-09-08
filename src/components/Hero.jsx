@@ -81,7 +81,7 @@ export const Hero = () => {
             style={{ animationDelay: '0.25s' }}
           >
             <a
-              href="#contact"
+              href="#/contact"
               className="press-scale group inline-flex items-center gap-2 bg-[#FFB814] text-[#082D4A] px-6 py-3.5 rounded-md text-[14px] font-bold shadow-lg shadow-[#FFB814]/25 cursor-pointer"
               style={{ transition: 'transform 120ms cubic-bezier(0.23,1,0.32,1), background-color 150ms ease, box-shadow 150ms ease' }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5A800'; e.currentTarget.style.boxShadow = '0 8px 30px rgb(255 184 20 / 0.4)'; }}

@@ -7,7 +7,9 @@ import {
 import { useLang } from '../i18n/LangContext.jsx';
 import { MediaHero } from './MediaHero.jsx';
 
-const HUB_SECTIONS = [
+const ENABLE_CUSTOMER_STORIES = false;
+
+const ALL_HUB_SECTIONS = [
   {
     id: 'press-releases',
     href: '#/news/press-releases',
@@ -19,7 +21,7 @@ const HUB_SECTIONS = [
     desc: 'Official announcements, strategic partnerships, and company milestones.',
     descAr: 'الإعلانات الرسمية والشراكات الاستراتيجية وأبرز إنجازات الشركة.',
   },
-  {
+  ...(ENABLE_CUSTOMER_STORIES ? [{
     id: 'client-stories',
     href: '#/news/client-stories',
     icon: BookOpen,
@@ -31,7 +33,7 @@ const HUB_SECTIONS = [
     descAr: 'قصص نجاح حقيقية ودراسات حالة مُصنَّفة حسب العميل والقطاع.',
     badge: 'New',
     badgeAr: 'جديد',
-  },
+  }] : []),
   {
     id: 'insights',
     href: '#/news/insights',
@@ -67,6 +69,8 @@ const HUB_SECTIONS = [
   },
 ];
 
+const HUB_SECTIONS = ALL_HUB_SECTIONS;
+
 export const MediaHub = () => {
   const { lang, dir } = useLang();
   const ar = lang === 'ar';
@@ -84,8 +88,12 @@ export const MediaHub = () => {
         }
         subtitle={
           ar
-            ? 'استكشف آخر الأخبار والشراكات وقصص العملاء والرؤى من WAVZ للتحول الرقمي.'
-            : 'Explore the latest announcements, partnerships, client stories, and expert perspectives from WAVZ for Digital Transformation.'
+            ? (ENABLE_CUSTOMER_STORIES
+                ? 'استكشف آخر الأخبار والشراكات وقصص العملاء والرؤى من WAVZ للتحول الرقمي.'
+                : 'استكشف آخر الأخبار والشراكات والرؤى الاستراتيجية من WAVZ للتحول الرقمي.')
+            : (ENABLE_CUSTOMER_STORIES
+                ? 'Explore the latest announcements, partnerships, client stories, and expert perspectives from WAVZ for Digital Transformation.'
+                : 'Explore the latest announcements, partnerships, and expert perspectives from WAVZ for Digital Transformation.')
         }
         dir={dir}
         minHeight={320}
