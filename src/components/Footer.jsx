@@ -199,9 +199,9 @@ export const Footer = () => {
 
           {/* Brand column */}
           <div className="col-span-12 lg:col-span-4">
-            {/* Logo — inverted to show white on dark */}
-            <div className="brightness-0 invert opacity-90">
-              <WavzWordmark />
+            {/* Logo — white typography with vibrant wave mark */}
+            <div className="flex items-center">
+              <WavzWordmark variant="white" className="h-9 sm:h-10 w-auto opacity-95" />
             </div>
             <p className="mt-5 text-[13.5px] text-white/45 leading-[1.7] max-w-xs min-h-[50px]">
               {isAr ? (

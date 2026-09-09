@@ -42,7 +42,7 @@ export const Architecture = () => {
             <div className="relative px-7 py-4 rounded-2xl bg-[#082D4A] text-white border border-[#082D4A] flex items-center gap-4 shadow-xl shadow-[#082D4A]/20">
               {/* Glow pulse */}
               <div className="absolute inset-0 rounded-2xl bg-[#1173BD]/20 animate-pulse pointer-events-none" />
-              <img src="/Logo.png" alt="WAVZ" className="h-8 w-auto object-contain relative brightness-0 invert" />
+              <img src="/Logo-white.png" alt="WAVZ" className="h-8 w-auto object-contain relative" />
               <div className="relative">
                 <div className="text-[10.5px] uppercase tracking-widest text-[#FFB814] font-bold">
                   {t.architecture.step2}

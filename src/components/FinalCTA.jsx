@@ -32,8 +32,8 @@ export const FinalCTA = () => {
         }`}
       >
         {/* WAVZ logo */}
-        <div className="flex justify-center mb-10 sm:mb-12 mx-auto -translate-x-2 sm:-translate-x-4 -translate-y-2 sm:-translate-y-4">
-          <WavzWordmark className="brightness-0 invert opacity-90 scale-150 sm:scale-[2] origin-center" />
+        <div className="flex justify-center mb-10 sm:mb-12 mx-auto">
+          <WavzWordmark variant="white" className="h-12 sm:h-14 w-auto opacity-95" />
         </div>
 
         <h2 className="text-3xl sm:text-4xl lg:text-[3.5rem] lg:leading-[1.2] font-black text-white tracking-[-0.03em] max-w-4xl mx-auto">

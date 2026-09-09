@@ -1,22 +1,24 @@
 /**
  * WAVZ Brand Assets
- * Uses the official Logo.png from /public/Logo.png
+ * Uses official vector-extracted assets from logo.pdf
+ * - /public/Logo.png (navy text + cyan/blue wave mark for light backgrounds)
+ * - /public/Logo-white.png (white text + cyan/blue wave mark for dark backgrounds)
+ * - /public/WavzIcon.png (standalone gradient wave mark)
  */
 
-export const WavzLogo = ({ className = '' }) => (
+export const WavzLogo = ({ className = '', variant = 'default', alt = 'WAVZ' }) => (
   <img
-    src="/Logo.png"
-    alt="WAVZ"
+    src={variant === 'white' ? '/Logo-white.png' : '/Logo.png'}
+    alt={alt}
     className={`object-contain ${className}`}
   />
 );
 
-export const WavzWordmark = ({ className = '' }) => (
-  <div className={`relative flex items-center justify-center w-[130px] lg:w-[150px] h-10 ${className}`}>
-    <img
-      src="/Logo.png"
-      alt="WAVZ"
-      className="absolute max-w-none w-[170px] lg:w-[200px] pointer-events-none object-contain"
-    />
-  </div>
+export const WavzWordmark = ({ className = '', variant = 'default', alt = 'WAVZ' }) => (
+  <img
+    src={variant === 'white' ? '/Logo-white.png' : '/Logo.png'}
+    alt={alt}
+    className={`h-8 sm:h-9 w-auto object-contain select-none ${className}`}
+  />
 );
+
