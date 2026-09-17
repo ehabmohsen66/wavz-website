@@ -218,7 +218,60 @@ export const About = () => {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
 
 
-        {/* ── Section 4: Strategic Statement (Our "WHY") ── */}
+        {/* ── Section 2: Vision & Mission (Brand Identity) ── */}
+        <section className="mb-20 lg:mb-28">
+          <div className="max-w-4xl mx-auto space-y-8">
+            {/* Vision Block */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 
+                className={`text-[#FFB814] text-[13px] sm:text-[14px] uppercase mb-3 ${
+                  lang === 'ar' ? 'font-bold tracking-normal' : 'font-black tracking-[0.25em]'
+                }`}
+              >
+                {data.visionTitle}
+              </h3>
+              <div className="bg-[#061E31] rounded-2xl p-6 sm:p-8 md:px-10 md:py-8 shadow-xl border border-white/10">
+                <p 
+                  className="text-white font-semibold italic text-[17px] sm:text-[19px] lg:text-[21px] leading-relaxed"
+                  style={{ fontFamily: lang === 'ar' ? 'Tajawal, sans-serif' : 'inherit' }}
+                >
+                  {data.visionText}
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Mission Block */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+            >
+              <h3 
+                className={`text-[#FFB814] text-[13px] sm:text-[14px] uppercase mb-3 ${
+                  lang === 'ar' ? 'font-bold tracking-normal' : 'font-black tracking-[0.25em]'
+                }`}
+              >
+                {data.missionTitle}
+              </h3>
+              <div className="bg-[#EBF3FA] rounded-2xl p-6 sm:p-8 md:px-10 md:py-8 shadow-md border border-[#D6E6F4]">
+                <p 
+                  className="text-[#082D4A] font-semibold text-[16.5px] sm:text-[18.5px] lg:text-[20px] leading-relaxed"
+                  style={{ fontFamily: lang === 'ar' ? 'Tajawal, sans-serif' : 'inherit' }}
+                >
+                  {data.missionText}
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── Section: Strategic Statement (Our "WHY") ── */}
         <section className="mb-24 lg:mb-32 relative overflow-hidden rounded-3xl bg-[#061E31] text-white p-8 lg:p-14 shadow-xl border border-white/5">
           {/* Subtle glowing mesh */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#1173BD]/20 to-transparent pointer-events-none" />
@@ -227,7 +280,7 @@ export const About = () => {
           <div className="relative z-10 max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start">
             <div className="flex-shrink-0 flex flex-col items-center md:items-start gap-5">
               <div className="bg-[#FFB814] text-[#082D4A] text-[12px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg text-center shadow-md">
-                {lang === 'ar' ? 'هدفنا ومهمتنا' : 'OUR MISSION'}
+                {data.purposeBadge || (lang === 'ar' ? 'هدفنا' : 'OUR PURPOSE')}
               </div>
               {/* Beautiful squiggle-clipped tree image under the badge */}
               <div 

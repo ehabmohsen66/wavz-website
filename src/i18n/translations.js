@@ -249,6 +249,11 @@ export const translations = {
       tagline: 'We are a technology transformation company built to solve the hardest enterprise challenges — across sectors, across borders, across platforms.',
       introLine1: 'WAVZ for Digital Transformation is a leading technology company delivering SAP, fintech, payment platforms, cybersecurity, and managed services across the Middle East and Africa.',
       introLine2: 'Founded with a mission to bridge the gap between world-class technology and regional market expertise, WAVZ has grown to serve governments, banks, and enterprises across the MEA region.',
+      visionTitle: 'VISION',
+      visionText: 'To become the region’s trusted visionary partner, enabling organizations to grow, innovate, and evolve with confidence.',
+      missionTitle: 'MISSION',
+      missionText: 'We empower organizations with an innovative portfolio of advisory and operational services, combining delivery excellence and partnerships to ensure resilient and sustainable growth.',
+      purposeBadge: 'OUR PURPOSE',
       strategyTitle: 'Our Strategy',
       strategySubtitle: 'Six pillars that define how we think, work, and deliver value for our clients.',
       strategyPillars: [
@@ -1602,6 +1607,11 @@ WAVZ هي شركة تقدم خدمات متعددة التقنيات ومتعد�
       tagline: 'شركة تحول تكنولوجي بُنيت لحل أصعب تحديات المؤسسات — عبر القطاعات والحدود والمنصات.',
       introLine1: 'WAVZ للتحول الرقمي شركة تكنولوجيا رائدة تقدم حلول SAP وتكنولوجيا مالية ومنصات دفع وأمن سيبراني وخدمات مُدارة عبر الشرق الأوسط وأفريقيا.',
       introLine2: 'تأسست WAVZ بمهمة سد الفجوة بين التكنولوجيا العالمية المتقدمة وخبرة الأسواق الإقليمية، لتخدم الحكومات والبنوك والمؤسسات في منطقة الشرق الأوسط وأفريقيا.',
+      visionTitle: 'الرؤية',
+      visionText: 'أن نكون الشريك الريادي الموثوق في المنطقة، لتمكين المؤسسات من النمو والابتكار والتطور بثقة.',
+      missionTitle: 'الرسالة',
+      missionText: 'نُمكّن المؤسسات عبر محفظة مبتكرة من الخدمات الاستشارية والتشغيلية، تجمع بين التميز في التنفيذ والشراكات لضمان نمو مرن ومستدام.',
+      purposeBadge: 'هدفنا',
       strategyTitle: 'استراتيجيتنا',
       strategySubtitle: 'ستة ركائز تُحدد كيف نفكر ونعمل ونُقدِّم القيمة لعملائنا.',
       strategyPillars: [
