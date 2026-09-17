@@ -485,6 +485,76 @@ try {
     }
     echo "[OK] Blog posts imported successfully ($count posts).\n";
 
+    // ----------------------------------------------------
+    // 9. Ensure Contact Submissions Table Exists
+    // ----------------------------------------------------
+    echo "\n--- Setting Up Inquiries & Contact Submissions ---\n";
+    $db->exec("
+        CREATE TABLE IF NOT EXISTS contact_submissions (
+          id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          name         VARCHAR(150) NOT NULL,
+          email        VARCHAR(255) NOT NULL,
+          phone        VARCHAR(50) DEFAULT NULL,
+          company      VARCHAR(150) DEFAULT NULL,
+          service      VARCHAR(150) DEFAULT NULL,
+          message      TEXT NOT NULL,
+          status       ENUM('unread','read','replied','archived') NOT NULL DEFAULT 'unread',
+          ip_address   VARCHAR(45) DEFAULT NULL,
+          created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          INDEX idx_status (status),
+          INDEX idx_created (created_at),
+          INDEX idx_email (email)
+        ) ENGINE=InnoDB;
+    ");
+    echo "[OK] contact_submissions table verified.\n";
+
+    // ----------------------------------------------------
+    // 10. Seed Advanced Analytics, SMTP & System Settings
+    // ----------------------------------------------------
+    echo "\n--- Setting Up Marketing, SMTP & System Settings ---\n";
+    $additionalSettings = [
+        ['analytics', 'google_analytics_id', '', null, 'text'],
+        ['analytics', 'google_tag_manager_id', '', null, 'text'],
+        ['analytics', 'meta_pixel_id', '', null, 'text'],
+        ['analytics', 'linkedin_partner_id', '', null, 'text'],
+        ['analytics', 'custom_head_code', '', null, 'code'],
+        ['analytics', 'custom_body_code', '', null, 'code'],
+        ['analytics', 'custom_footer_code', '', null, 'code'],
+        ['analytics', 'cookie_consent_enabled', '0', '0', 'text'],
+        ['smtp', 'notification_email', 'Salma.Hegazy@wavz.com.eg, info@wavz.com.eg', null, 'email'],
+        ['smtp', 'smtp_host', 'mail.wavz.com.eg', null, 'text'],
+        ['smtp', 'smtp_port', '465', null, 'text'],
+        ['smtp', 'smtp_user', 'info@wavz.com.eg', null, 'text'],
+        ['smtp', 'smtp_pass', 'Wavz@2008', null, 'text'],
+        ['smtp', 'smtp_encryption', 'ssl', null, 'text'],
+        ['smtp', 'smtp_from_name', 'WAVZ Website Inquiries', null, 'text'],
+        ['system', 'maintenance_mode', '0', '0', 'text'],
+        ['system', 'maintenance_message_en', 'We are currently performing scheduled system updates. We will be back shortly.', null, 'textarea'],
+        ['system', 'maintenance_message_ar', 'نقوم حالياً بإجراء تحديثات مجدولة للنظام. سنعود للعمل قريباً.', null, 'textarea'],
+        ['system', 'robots_txt_custom', "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: https://wavz.com.eg/api/sitemap.xml", null, 'code'],
+    ];
+
+    $checkStmt = $db->prepare("SELECT COUNT(*) FROM settings WHERE `key` = :key");
+    $insertSettingStmt = $db->prepare("
+        INSERT INTO settings (`group`, `key`, value_en, value_ar, field_type)
+        VALUES (:group, :key, :value_en, :value_ar, :field_type)
+    ");
+
+    foreach ($additionalSettings as $item) {
+        $checkStmt->execute([':key' => $item[1]]);
+        if ((int)$checkStmt->fetchColumn() === 0) {
+            $insertSettingStmt->execute([
+                ':group'      => $item[0],
+                ':key'        => $item[1],
+                ':value_en'   => $item[2],
+                ':value_ar'   => $item[3],
+                ':field_type' => $item[4],
+            ]);
+        }
+    }
+    echo "[OK] Advanced settings verified.\n";
+
     echo "\n====================================================\n";
     echo "WAVZ CMS — Content Migration Completed Successfully!\n";
     echo "====================================================\n";

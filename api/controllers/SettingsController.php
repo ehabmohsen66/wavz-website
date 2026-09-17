@@ -19,6 +19,21 @@ class SettingsController
         }
 
         $settings = Setting::getAll($filters);
+
+        // If not authenticated admin/editor, mask sensitive credentials
+        $user = Auth::tryAuth();
+        $isAuth = $user && in_array($user['role'], ['admin', 'editor'], true);
+
+        if (!$isAuth) {
+            $settings = array_map(function($s) {
+                if (in_array($s['key'], ['smtp_pass'], true)) {
+                    $s['value_en'] = '********';
+                    $s['value_ar'] = '********';
+                }
+                return $s;
+            }, $settings);
+        }
+
         Response::success($settings);
     }
 

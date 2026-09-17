@@ -261,7 +261,7 @@ const StoryDetail = ({ story, ar, dir }) => {
         subtitle={ar ? story.summaryAr : story.summary}
         breadcrumbs={[
           { label: ar ? 'المركز الإعلامي' : 'Media Center', href: '#/news' },
-          { label: ar ? 'قصص العملاء' : 'Client Stories', href: '#/news/client-stories' },
+          { label: ar ? 'قصص النجاح' : 'Success Stories', href: '#/news/client-stories' },
           { label: ar ? story.clientAr : story.client },
         ]}
         eyebrowColor={story.color}
@@ -395,7 +395,7 @@ const StoryDetail = ({ story, ar, dir }) => {
             className="inline-flex items-center gap-1.5 font-semibold hover:underline"
             style={{ fontSize: 14, color: '#1173BD', textDecoration: 'none' }}>
             {dir === 'rtl' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-            {ar ? 'جميع قصص العملاء' : 'All Client Stories'}
+            {ar ? 'جميع قصص النجاح' : 'All Success Stories'}
           </a>
           <span className="text-slate-300">|</span>
           <a href="#/news"
@@ -426,7 +426,7 @@ export const ClientStories = ({ route }) => {
         <div className="max-w-[800px] mx-auto px-6 py-24 text-center">
           <h2 style={{ fontSize: 22, fontWeight: 700, color: '#082D4A' }}>Case study not found</h2>
           <a href="#/news/client-stories" style={{ color: '#1173BD', textDecoration: 'none', fontWeight: 600, marginTop: 12, display: 'inline-block' }}>
-            ← Back to Client Stories
+            ← Back to Success Stories
           </a>
         </div>
       );
@@ -439,7 +439,7 @@ export const ClientStories = ({ route }) => {
     <div style={{ background: '#F8FAFC', minHeight: '100vh' }}>
       {/* Hero */}
       <MediaHero
-        eyebrow={ar ? 'قصص العملاء' : 'Client Stories'}
+        eyebrow={ar ? 'قصص النجاح' : 'Success Stories'}
         eyebrowIcon={BookOpen}
         eyebrowColor="#34d399"
         title={
@@ -454,7 +454,7 @@ export const ClientStories = ({ route }) => {
         }
         breadcrumbs={[
           { label: ar ? 'المركز الإعلامي' : 'Media Center', href: '#/news' },
-          { label: ar ? 'قصص العملاء' : 'Client Stories' },
+          { label: ar ? 'قصص النجاح' : 'Success Stories' },
         ]}
         dir={dir}
         minHeight={280}

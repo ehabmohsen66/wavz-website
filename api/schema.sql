@@ -65,7 +65,26 @@ INSERT INTO settings (`group`, `key`, value_en, value_ar, field_type) VALUES
 ('seo',      'meta_keywords_en',   'WAVZ, digital transformation, SAP, managed services, fintech, Egypt', NULL, 'text'),
 ('seo',      'meta_keywords_ar',   NULL,                                 'WAVZ, التحول الرقمي, SAP, الخدمات المدارة, التكنولوجيا المالية, مصر', 'text'),
 ('hero',     'hero_tagline',       'Technology. Reimagined.',             'التكنولوجيا. مُعاد تصوُّرها.',    'text'),
-('hero',     'hero_description',   'We deliver end-to-end IT solutions across MEA.',  'نقدم حلول تكنولوجيا المعلومات المتكاملة في منطقة الشرق الأوسط وأفريقيا.', 'textarea');
+('hero',     'hero_description',   'We deliver end-to-end IT solutions across MEA.',  'نقدم حلول تكنولوجيا المعلومات المتكاملة في منطقة الشرق الأوسط وأفريقيا.', 'textarea'),
+('analytics','google_analytics_id', '',                                  NULL,                            'text'),
+('analytics','google_tag_manager_id', '',                                NULL,                            'text'),
+('analytics','meta_pixel_id',      '',                                   NULL,                            'text'),
+('analytics','linkedin_partner_id','',                                   NULL,                            'text'),
+('analytics','custom_head_code',   '',                                   NULL,                            'code'),
+('analytics','custom_body_code',   '',                                   NULL,                            'code'),
+('analytics','custom_footer_code', '',                                   NULL,                            'code'),
+('analytics','cookie_consent_enabled', '0',                              '0',                             'text'),
+('smtp',     'notification_email', 'Salma.Hegazy@wavz.com.eg, info@wavz.com.eg', NULL,                   'email'),
+('smtp',     'smtp_host',          'mail.wavz.com.eg',                   NULL,                            'text'),
+('smtp',     'smtp_port',          '465',                                NULL,                            'text'),
+('smtp',     'smtp_user',          'info@wavz.com.eg',                   NULL,                            'text'),
+('smtp',     'smtp_pass',          'Wavz@2008',                          NULL,                            'text'),
+('smtp',     'smtp_encryption',    'ssl',                                NULL,                            'text'),
+('smtp',     'smtp_from_name',     'WAVZ Website Inquiries',             NULL,                            'text'),
+('system',   'maintenance_mode',   '0',                                  '0',                             'text'),
+('system',   'maintenance_message_en', 'We are currently performing scheduled system updates. We will be back shortly.', NULL, 'textarea'),
+('system',   'maintenance_message_ar', 'نقوم حالياً بإجراء تحديثات مجدولة للنظام. سنعود للعمل قريباً.', NULL, 'textarea'),
+('system',   'robots_txt_custom',  'User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: https://wavz.com.eg/api/sitemap.xml', NULL, 'code');
 
 -- ============================================================
 -- 3. MEDIA — Uploaded files library
@@ -359,4 +378,24 @@ CREATE TABLE IF NOT EXISTS activity_log (
   INDEX idx_entity (entity_type, entity_id),
   INDEX idx_created (created_at),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+-- ============================================================
+-- 17. CONTACT SUBMISSIONS — Lead & Inquiry CRM Inbox
+-- ============================================================
+CREATE TABLE IF NOT EXISTS contact_submissions (
+  id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name         VARCHAR(150) NOT NULL,
+  email        VARCHAR(255) NOT NULL,
+  phone        VARCHAR(50) DEFAULT NULL,
+  company      VARCHAR(150) DEFAULT NULL,
+  service      VARCHAR(150) DEFAULT NULL,
+  message      TEXT NOT NULL,
+  status       ENUM('unread','read','replied','archived') NOT NULL DEFAULT 'unread',
+  ip_address   VARCHAR(45) DEFAULT NULL,
+  created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_status (status),
+  INDEX idx_created (created_at),
+  INDEX idx_email (email)
 ) ENGINE=InnoDB;

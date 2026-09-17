@@ -112,6 +112,21 @@ export default function Dashboard() {
             <span style={{ color: 'var(--text-muted)' }}>Images & documents library</span>
           </div>
         </div>
+
+        <div className="stats-card">
+          <div className="stats-card-header">
+            <span className="stats-card-title">Inquiries & Leads</span>
+            <div className="stats-card-icon" style={{ background: stats.inquiries?.unread > 0 ? '#fef3c7' : undefined, color: stats.inquiries?.unread > 0 ? '#b45309' : undefined }}>
+              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            </div>
+          </div>
+          <div className="stats-card-value">{stats.inquiries?.total ?? 0}</div>
+          <div className="stats-card-footer">
+            <Link to="/inquiries" style={{ textDecoration: 'none', color: stats.inquiries?.unread > 0 ? '#d97706' : 'var(--blue)', fontWeight: 600 }}>
+              {stats.inquiries?.unread > 0 ? `${stats.inquiries.unread} new unread inquiries` : 'View inquiries inbox'}
+            </Link>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-2" style={{ marginTop: 32 }}>

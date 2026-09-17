@@ -98,7 +98,7 @@ export const Nav = () => {
   const mediaItems = [
     { href: '#/news',                  label: isAr ? 'المركز الإعلامي' : 'Media Center' },
     { href: '#/news/press-releases',   label: isAr ? 'البيانات الصحفية' : 'Press Releases' },
-    ...(ENABLE_CUSTOMER_STORIES ? [{ href: '#/news/client-stories', label: isAr ? 'قصص العملاء' : 'Client Stories' }] : []),
+    ...(ENABLE_CUSTOMER_STORIES ? [{ href: '#/news/client-stories', label: isAr ? 'قصص النجاح' : 'Success Stories' }] : []),
     { href: '#/news/insights',         label: isAr ? 'رؤى وقيادة فكرية' : 'Insights' },
     { href: '#/news/events',           label: isAr ? 'الفعاليات' : 'Events' },
     { href: '#/news/social',           label: isAr ? 'وسائل التواصل' : 'Social Media' },
@@ -181,33 +181,27 @@ export const Nav = () => {
         </nav>
 
         <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
-            className="hidden sm:flex items-center gap-2 text-[13px] px-3 py-1.5 rounded-full border border-slate-200 text-[#082D4A] hover:border-[#1173BD] hover:text-[#1173BD] transition-all duration-200 cursor-pointer"
-          >
-            {lang === 'en' ? (
-              <svg width="15" height="11" viewBox="0 0 3 2" style={{ borderRadius: 1.5, display: 'inline-block', flexShrink: 0, boxShadow: '0 0 1px rgba(0,0,0,0.2)' }}>
+          <div className="relative group hidden sm:block">
+            <button
+              type="button"
+              disabled
+              aria-label="قريباً"
+              className="flex items-center gap-2 text-[13px] px-3 py-1.5 rounded-full border border-slate-200 text-slate-400 bg-slate-50/80 cursor-not-allowed select-none opacity-80"
+            >
+              <svg width="15" height="11" viewBox="0 0 3 2" style={{ borderRadius: 1.5, display: 'inline-block', flexShrink: 0, boxShadow: '0 0 1px rgba(0,0,0,0.2)', opacity: 0.7 }}>
                 <rect width="3" height="2" fill="#fff" />
                 <rect width="3" height="0.67" fill="#C11B17" />
                 <rect y="1.33" width="3" height="0.67" fill="#000" />
                 <polygon points="1.4,0.9 1.6,0.9 1.5,1.1" fill="#C29B38" />
               </svg>
-            ) : (
-              <svg width="15" height="11" viewBox="0 0 60 30" style={{ borderRadius: 1.5, display: 'inline-block', flexShrink: 0, boxShadow: '0 0 1px rgba(0,0,0,0.2)' }}>
-                <clipPath id="uk-clip">
-                  <rect width="60" height="30" />
-                </clipPath>
-                <g clipPath="url(#uk-clip)">
-                  <rect width="60" height="30" fill="#012169" />
-                  <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
-                  <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" strokeWidth="4" />
-                  <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
-                  <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6" />
-                </g>
-              </svg>
-            )}
-            <span style={{ fontWeight: 600 }}>{lang === 'en' ? 'عربي' : 'EN'}</span>
-          </button>
+              <span style={{ fontWeight: 600 }}>عربي</span>
+            </button>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-1.5 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-y-1 group-hover:translate-y-0 z-50 whitespace-nowrap">
+              <div className="bg-[#082D4A] text-white text-[11.5px] font-medium px-2.5 py-1 rounded-md shadow-md flex items-center gap-1">
+                <span>قريباً</span>
+              </div>
+            </div>
+          </div>
 
           {/* CTA */}
           <a
@@ -349,12 +343,12 @@ export const Nav = () => {
 
           {/* Bottom row — lang + CTA */}
           <div className="pt-4 mt-1 border-t border-slate-100 flex items-center justify-between gap-3">
-            <button
-              onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
-              className="text-[#1173BD] text-sm font-medium cursor-pointer"
-            >
-              {lang === 'en' ? 'عربي ←' : '→ English'}
-            </button>
+            <div className="flex items-center gap-1.5 text-slate-400 text-sm font-medium cursor-not-allowed select-none">
+              <span>عربي</span>
+              <span className="text-[11px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-normal">
+                (قريباً)
+              </span>
+            </div>
             <a
               href="#/contact"
               onClick={closeMenu}

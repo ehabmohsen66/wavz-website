@@ -10,6 +10,7 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/helpers/Response.php';
 require_once __DIR__ . '/helpers/JWT.php';
 require_once __DIR__ . '/helpers/ImageProcessor.php';
+require_once __DIR__ . '/helpers/Mailer.php';
 require_once __DIR__ . '/middleware/Auth.php';
 require_once __DIR__ . '/middleware/Validator.php';
 
@@ -30,6 +31,7 @@ require_once __DIR__ . '/models/BlogPost.php';
 require_once __DIR__ . '/models/TimelineEvent.php';
 require_once __DIR__ . '/models/Testimonial.php';
 require_once __DIR__ . '/models/ActivityLog.php';
+require_once __DIR__ . '/models/ContactSubmission.php';
 
 // Controllers
 require_once __DIR__ . '/controllers/AuthController.php';
@@ -47,6 +49,9 @@ require_once __DIR__ . '/controllers/TestimonialsController.php';
 require_once __DIR__ . '/controllers/DashboardController.php';
 require_once __DIR__ . '/controllers/ActivityController.php';
 require_once __DIR__ . '/controllers/UsersController.php';
+require_once __DIR__ . '/controllers/ContactsController.php';
+require_once __DIR__ . '/controllers/BackupController.php';
+require_once __DIR__ . '/controllers/SitemapController.php';
 
 // ---- CORS ----
 header('Content-Type: application/json; charset=utf-8');
@@ -107,6 +112,23 @@ try {
 
     if ($requestUri === '/auth/me' && $method === 'GET') {
         AuthController::me();
+        exit;
+    }
+
+    // Public SEO & Feed routes
+    if ($requestUri === '/sitemap.xml' && $method === 'GET') {
+        SitemapController::sitemap();
+        exit;
+    }
+
+    if ($requestUri === '/robots.txt' && $method === 'GET') {
+        SitemapController::robots();
+        exit;
+    }
+
+    // Public Contact Form Submission
+    if ($requestUri === '/contacts' && $method === 'POST') {
+        ContactsController::submit($input);
         exit;
     }
 
@@ -321,6 +343,42 @@ try {
     }
     if (preg_match('#^/users/(\d+)$#', $requestUri, $m) && $method === 'DELETE') {
         UsersController::delete((int)$m[1]);
+        exit;
+    }
+
+    // Contacts & Inquiries (Protected)
+    if ($requestUri === '/contacts/unread-count' && $method === 'GET') {
+        ContactsController::unreadCount();
+        exit;
+    }
+    if ($requestUri === '/contacts/export' && $method === 'GET') {
+        ContactsController::export();
+        exit;
+    }
+    if ($requestUri === '/contacts/test-email' && $method === 'POST') {
+        ContactsController::testEmail($input);
+        exit;
+    }
+    if ($requestUri === '/contacts' && $method === 'GET') {
+        ContactsController::index();
+        exit;
+    }
+    if (preg_match('#^/contacts/(\d+)$#', $requestUri, $m) && $method === 'GET') {
+        ContactsController::show((int)$m[1]);
+        exit;
+    }
+    if (preg_match('#^/contacts/(\d+)/status$#', $requestUri, $m) && $method === 'PUT') {
+        ContactsController::updateStatus((int)$m[1], $input);
+        exit;
+    }
+    if (preg_match('#^/contacts/(\d+)$#', $requestUri, $m) && $method === 'DELETE') {
+        ContactsController::delete((int)$m[1]);
+        exit;
+    }
+
+    // Database Backup (Admin only)
+    if ($requestUri === '/backup' && $method === 'GET') {
+        BackupController::download();
         exit;
     }
 

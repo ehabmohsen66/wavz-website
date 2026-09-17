@@ -5,6 +5,9 @@ import { useLang } from '../i18n/LangContext.jsx';
 import { ErrorBoundary } from './ErrorBoundary.jsx';
 
 export const SupportChat = () => {
+  // WAVZ AI Assistant hidden for now
+  return null;
+
   const { lang, dir } = useLang();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');

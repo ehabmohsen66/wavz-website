@@ -5,6 +5,8 @@ import { useReveal } from '../hooks/index.js';
 const partners = [
   { name: 'SAP', domain: 'sap.com' },
   { name: 'Temenos', domain: 'temenos.com' },
+  { name: 'Backbase', domain: 'backbase.com', localSrc: '/backbase.png' },
+  { name: 'Qlik', domain: 'qlik.com', localSrc: '/qlik.png' },
   { name: 'Tietoevry', domain: 'tietoevry.com', localSrc: '/8b56ffb305d960f5_org.png' },
   { name: 'Teradata', domain: 'teradata.com', localSrc: '/Teradata_logo_(2024).svg.png' },
   { name: 'Nevis', domain: 'nevis.net', localSrc: '/nevis_logo.png' },

@@ -42,6 +42,10 @@ class DashboardController
                 ],
                 'services' => [
                     'total' => (int)$db->query('SELECT COUNT(*) FROM services')->fetchColumn(),
+                ],
+                'inquiries' => [
+                    'total' => (int)$db->query('SELECT COUNT(*) FROM contact_submissions')->fetchColumn(),
+                    'unread' => (int)$db->query("SELECT COUNT(*) FROM contact_submissions WHERE status = 'unread'")->fetchColumn(),
                 ]
             ];
 

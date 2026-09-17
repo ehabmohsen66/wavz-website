@@ -125,6 +125,107 @@ export const useSettings = () => {
           }
         }
 
+        // Apply Google Tag Manager if configured
+        const gtmId = settingsDict['google_tag_manager_id']?.en || settingsDict['google_tag_manager_id']?.ar;
+        if (gtmId && gtmId.trim() !== '') {
+          if (!document.getElementById('gtm-script')) {
+            const gtmScript = document.createElement('script');
+            gtmScript.id = 'gtm-script';
+            gtmScript.innerHTML = `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${gtmId}');
+            `;
+            document.head.appendChild(gtmScript);
+
+            if (!document.getElementById('gtm-noscript')) {
+              const gtmNoScript = document.createElement('noscript');
+              gtmNoScript.id = 'gtm-noscript';
+              gtmNoScript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
+              document.body.insertBefore(gtmNoScript, document.body.firstChild);
+            }
+          }
+        }
+
+        // Apply LinkedIn Insight Tag if configured
+        const linkedinId = settingsDict['linkedin_partner_id']?.en || settingsDict['linkedin_partner_id']?.ar;
+        if (linkedinId && linkedinId.trim() !== '') {
+          if (!document.getElementById('linkedin-insight-script')) {
+            const liScript = document.createElement('script');
+            liScript.id = 'linkedin-insight-script';
+            liScript.innerHTML = `
+              _linkedin_partner_id = "${linkedinId}";
+              window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+              window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+              (function(l) {
+                if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+                window.lintrk.q=[]}
+                var s = document.getElementsByTagName("script")[0];
+                var b = document.createElement("script");
+                b.type = "text/javascript";b.async = true;
+                b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+                s.parentNode.insertBefore(b, s);
+              })(window.lintrk);
+            `;
+            document.head.appendChild(liScript);
+          }
+        }
+
+        // Apply Custom Head Code if configured
+        const customHead = settingsDict['custom_head_code']?.en || settingsDict['custom_head_code']?.ar;
+        if (customHead && customHead.trim() !== '' && !document.getElementById('cms-custom-head')) {
+          const container = document.createElement('div');
+          container.id = 'cms-custom-head';
+          container.style.display = 'none';
+          container.innerHTML = customHead;
+          Array.from(container.getElementsByTagName('script')).forEach(oldScript => {
+            const newScript = document.createElement('script');
+            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+          });
+          document.head.appendChild(container);
+        }
+
+        // Apply Custom Body Code if configured
+        const customBody = settingsDict['custom_body_code']?.en || settingsDict['custom_body_code']?.ar;
+        if (customBody && customBody.trim() !== '' && !document.getElementById('cms-custom-body')) {
+          const container = document.createElement('div');
+          container.id = 'cms-custom-body';
+          container.innerHTML = customBody;
+          Array.from(container.getElementsByTagName('script')).forEach(oldScript => {
+            const newScript = document.createElement('script');
+            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+          });
+          document.body.appendChild(container);
+        }
+
+        // Handle Maintenance Mode
+        const maintenance = settingsDict['maintenance_mode']?.en === '1';
+        if (maintenance && !localStorage.getItem('wavz_cms_token')) {
+          const msg = settingsDict[`maintenance_message_${currentLang}`]?.[currentLang] || settingsDict['maintenance_message_en']?.en || 'Scheduled system maintenance in progress. We will be back shortly.';
+          if (!document.getElementById('maintenance-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.id = 'maintenance-overlay';
+            overlay.style.cssText = 'position:fixed;inset:0;background:#061E31;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ffffff;font-family:sans-serif;padding:24px;text-align:center;';
+            overlay.innerHTML = `
+              <img src="/Logo.png" alt="WAVZ" style="height:48px;margin-bottom:28px;" />
+              <div style="width:40px;height:40px;border:3px solid rgba(255,184,20,0.25);border-top-color:#FFB814;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:24px;"></div>
+              <h1 style="font-size:24px;color:#FFB814;margin:0 0 12px 0;">Under Maintenance</h1>
+              <p style="font-size:15px;color:#91c4f5;max-width:520px;line-height:1.6;margin:0;">${msg}</p>
+              <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+            `;
+            document.body.appendChild(overlay);
+          }
+        } else {
+          const overlay = document.getElementById('maintenance-overlay');
+          if (overlay) overlay.remove();
+        }
+
         document.title = titleVal;
 
         let metaDesc = document.querySelector('meta[name="description"]');

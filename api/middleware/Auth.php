@@ -102,6 +102,47 @@ class Auth
         exit; // Response::forbidden already exits, but just for static analysis
     }
 
+    public static function requireAuth(): array
+    {
+        return self::authenticate();
+    }
+
+    public static function requireAdmin(): array
+    {
+        return self::requireRole('admin');
+    }
+
+    public static function tryAuth(): ?array
+    {
+        if (self::$currentUser !== null) {
+            return self::$currentUser;
+        }
+
+        $token = JWT::extractFromHeader();
+        if ($token === null) {
+            return null;
+        }
+
+        try {
+            $payload = JWT::decode($token);
+            if (isset($payload['type']) && $payload['type'] === 'refresh') {
+                return null;
+            }
+            $db = getDB();
+            $stmt = $db->prepare('SELECT id, name, email, role, avatar, is_active FROM users WHERE id = :id LIMIT 1');
+            $stmt->execute([':id' => $payload['sub'] ?? 0]);
+            $user = $stmt->fetch();
+            if ($user && $user['is_active']) {
+                self::$currentUser = $user;
+                return $user;
+            }
+        } catch (Throwable $e) {
+            return null;
+        }
+
+        return null;
+    }
+
     /**
      * Get the currently authenticated user (or null if not authenticated).
      */

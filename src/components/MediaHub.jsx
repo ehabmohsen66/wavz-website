@@ -27,8 +27,8 @@ const ALL_HUB_SECTIONS = [
     icon: BookOpen,
     color: '#059669',
     bgColor: 'rgba(5,150,105,0.10)',
-    label: 'Client Stories',
-    labelAr: 'قصص العملاء',
+    label: 'Success Stories',
+    labelAr: 'قصص النجاح',
     desc: 'Real-world success stories and use cases structured by client and industry.',
     descAr: 'قصص نجاح حقيقية ودراسات حالة مُصنَّفة حسب العميل والقطاع.',
     badge: 'New',
@@ -89,10 +89,10 @@ export const MediaHub = () => {
         subtitle={
           ar
             ? (ENABLE_CUSTOMER_STORIES
-                ? 'استكشف آخر الأخبار والشراكات وقصص العملاء والرؤى من WAVZ للتحول الرقمي.'
+                ? 'استكشف آخر الأخبار والشراكات وقصص النجاح والرؤى من WAVZ للتحول الرقمي.'
                 : 'استكشف آخر الأخبار والشراكات والرؤى الاستراتيجية من WAVZ للتحول الرقمي.')
             : (ENABLE_CUSTOMER_STORIES
-                ? 'Explore the latest announcements, partnerships, client stories, and expert perspectives from WAVZ for Digital Transformation.'
+                ? 'Explore the latest announcements, partnerships, success stories, and expert perspectives from WAVZ for Digital Transformation.'
                 : 'Explore the latest announcements, partnerships, and expert perspectives from WAVZ for Digital Transformation.')
         }
         dir={dir}

@@ -56,7 +56,7 @@ const SEO_MAP = {
   '#/news': {
     title: 'Newsroom | WAVZ for Digital Transformation',
     description:
-      'Stay updated with WAVZ press releases, client stories, industry insights, events, and social media updates from across the MEA region.',
+      'Stay updated with WAVZ press releases, success stories, industry insights, events, and social media updates from across the MEA region.',
     keywords: 'WAVZ news, press releases, digital transformation news, IT news MEA, WAVZ events',
     image: DEFAULT_IMAGE,
     type: 'website',

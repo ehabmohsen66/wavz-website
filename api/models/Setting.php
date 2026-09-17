@@ -103,8 +103,8 @@ class Setting
 
     /**
      * Batch update settings by key.
-     *
-     * @param array $settings Array of ['key' => ..., 'value_en' => ..., 'value_ar' => ...]
+     * Supports both dictionary format: ['key' => ['value_en' => ..., 'value_ar' => ...]]
+     * and array format: [['key' => ..., 'value_en' => ..., 'value_ar' => ...]]
      */
     public static function updateBatch(array $settings): array
     {
@@ -116,11 +116,17 @@ class Setting
                 'UPDATE settings SET value_en = :value_en, value_ar = :value_ar WHERE `key` = :key'
             );
 
-            foreach ($settings as $setting) {
+            foreach ($settings as $k => $setting) {
+                $key = is_string($k) ? $k : ($setting['key'] ?? null);
+                if (!$key) continue;
+
+                $valEn = is_array($setting) ? ($setting['value_en'] ?? null) : (string)$setting;
+                $valAr = is_array($setting) ? ($setting['value_ar'] ?? null) : null;
+
                 $stmt->execute([
-                    ':key'      => $setting['key'],
-                    ':value_en' => $setting['value_en'] ?? null,
-                    ':value_ar' => $setting['value_ar'] ?? null,
+                    ':key'      => $key,
+                    ':value_en' => $valEn,
+                    ':value_ar' => $valAr,
                 ]);
             }
 
@@ -131,5 +137,15 @@ class Setting
         }
 
         return self::getAll();
+    }
+
+    public static function getAllGrouped(): array
+    {
+        $all = self::getAll();
+        $grouped = [];
+        foreach ($all as $item) {
+            $grouped[$item['group']][$item['key']] = $item;
+        }
+        return $grouped;
     }
 }

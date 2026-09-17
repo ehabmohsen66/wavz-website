@@ -66,8 +66,9 @@ const mapDbMemberToMember = (dbMem, ar) => {
 
 /* ── Team data ── */
 const TEAM_EN = [
+  // 1. Amany Zaki
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2025/11/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
+    photo: '/team/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
     name: 'Amany Zaki',
     role: 'CEO & Managing Director',
     department: 'Executive',
@@ -75,8 +76,9 @@ const TEAM_EN = [
     highlight: 'NCR · Teradata · WAVZ Board · 30+ Years',
     bio: 'A seasoned IT executive with over 30 years of experience in information technology, data warehouse, and analytics. Amany brings a wealth of experience from multinational and global companies such as NCR and Teradata, leading the most profitable overachieving GEO consulting services team in EMEA, as well as bringing strong expertise from key national institutions including Financial Regulatory Authority and e-Cards. She carries a proven track record in leading teams to achieve business goals by building a work environment that is fun, nurturing, and pursuing the highest levels of work ethics. Amany is also a member of the Board of Directors of WAVZ.',
   },
+  // 2. Hossini
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Mohamed-El-Hossini-LR.jpg.webp',
+    photo: '/team/Mohamed-El-Hossini-LR.jpg.webp',
     name: 'Mohamed El-Hossini',
     role: 'Chief Technology Officer',
     department: 'Technology',
@@ -84,71 +86,9 @@ const TEAM_EN = [
     highlight: 'Operations Management · IT Strategy · Managed Services · 40+ Years',
     bio: 'Mohamed brings a wealth of over 40 years of experience supported with vast success stories in the IT industry across regional and European markets. He carries a successful track record in operations management, sales, IT services management, IT strategy, and managed services in complex multi-technology environments. Mohamed joined WAVZ in January 2022 and plays a pivotal role in delivering world-class managed services to our clients.',
   },
+  // 3. Reem
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Mostafa-Riad-LR.jpg.webp',
-    name: 'Mostafa Riad',
-    role: 'Director of Finance',
-    department: 'Finance',
-    years: '22+',
-    highlight: 'Finance · Operations Management · ROI Strategy · 22+ Years',
-    bio: 'Mostafa brings a wealth of over 22 years of experience in finance and operations management within multinational and regional organizations. He carries a successful track record in streamlining financial strategies and business operations that drive and increase efficiency and ROI. Mostafa joined WAVZ in 2019 and plays a pivotal role in developing and implementing world-class standards of financial and operational processes and controls.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Amr-Sadek-LR.jpg.webp',
-    name: 'Amr Sadek',
-    role: 'Human Capital Director',
-    department: 'Human Capital',
-    years: '24+',
-    highlight: 'HR Strategy · Banking · Manpower Planning · 24+ Years',
-    bio: 'An experienced professional with over 24 years of experience in the banking industry, including a prominent 20+ years focus on human resources with a proven track record in HR strategy, budget management, manpower planning, and employee relations. A believer that human capital is the most important and valuable asset of the organization. Amr joined WAVZ in October 2022 and has since been playing a pivotal role in developing our human capital in alignment with the organization\'s vision and mission.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Mostafa-Youness-LR.jpg.webp',
-    name: 'Mostafa Younes',
-    role: 'Commercial Director',
-    department: 'Commercial',
-    years: '30+',
-    highlight: 'Marketing · Sales · Business Development · MEA & Oceania · 30+ Years',
-    bio: 'Mostafa joined WAVZ in March 2023, bringing over 30 years of experience in marketing, sales, business development and strategy. Prior to WAVZ, he worked in several multinational and regional organizations across international locations with diverse cultures. He has a significant track record of leading regional and multinational marketing and business development operations to achieve double-digit YoY growth, with extensive expertise in IT security services, cloud transformation, microfinancing, and outsourced IT services across the Middle East, Africa, and Oceania.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2024/03/Hesham-Fadel-WAVZ.webp',
-    name: 'Hesham Fadel',
-    role: 'Financial Services Director',
-    department: 'Financial Services',
-    years: '25+',
-    highlight: 'IT Sales · Banking · Oracle · Nottingham MSc · 25+ Years',
-    bio: 'Hesham joined WAVZ in February 2024, bringing 25 years of experience in IT sales and business development in the banking sector. Prior to WAVZ, he worked at Oracle as financial sector account manager handling large governmental banks in Egypt and Libya. Hesham holds a master\'s degree in Information Technology from Nottingham University. He is an AUC alumni and a graduate of the iTi. He leads the Financial Services team responsible for delivering best-of-breed solutions to banks and financial organizations in Egypt and the Middle East.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Youssef-Elsebaay-LR.jpg.webp',
-    name: 'Youssef El-Sebaay',
-    role: 'Business Development Director, Postal Solutions',
-    department: 'Business Development',
-    years: '25+',
-    highlight: 'IBM · IDSC · Postal Sector · MBA Aspen · 25+ Years',
-    bio: 'Youssef brings 25+ years of experience in IT including IT strategic planning, business development, system integration, and applications development in various prominent IT organizations including IBM, IDSC, and WAVZ. He plays a pivotal role in managing WAVZ\'s relationship with the postal sector in Egypt, Middle East, and Africa. Youssef joined WAVZ in 2019 and holds an MBA from Aspen University, USA.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Doaa-Sayed-LR.jpg.webp',
-    name: 'Doaa Sayed',
-    role: 'Partnerships & Alliances Manager',
-    department: 'Partnerships',
-    years: '14+',
-    highlight: 'Strategic Alliances · Emerging Tech · MBA Paris ESLSCA · 14+ Years',
-    bio: 'Doaa brings over 14 years of experience in the IT industry, playing a vital role in driving growth and innovation across various organizations. She is playing a pivotal role in developing and managing WAVZ\'s partnerships and strategic alliances. Doaa\'s comprehensive knowledge of emerging technologies and exceptional relationship-building skills have significantly contributed to WAVZ\'s success in securing valuable alliances and mutually beneficial initiatives. Doaa joined WAVZ in 2016 and holds an MBA in Digital Transformation from Paris ESLSCA Business School.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Wael-Saleh-LR.jpg.webp',
-    name: 'Wael Saleh',
-    role: 'Head of Legal Department',
-    department: 'Legal',
-    years: '15+',
-    highlight: 'Companies Law · Labour Law · Arbitration · Cairo University · 15+ Years',
-    bio: 'Wael joined WAVZ in 2016 bringing over 15 years of legal experience in prominent law firms and several legal consultancy roles with prestigious organizations in Egypt. He has vast experience in companies law, labour law, criminal law, and arbitration law. He graduated from the Faculty of Law, Cairo University in 1999.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2026/04/IMAGE-2.png',
+    photo: '/team/IMAGE-2.png',
     name: 'Reem El Dahshan',
     role: 'Director of Data & AI',
     department: 'Data & AI',
@@ -156,8 +96,9 @@ const TEAM_EN = [
     highlight: 'Teradata · NCR · MSP® · PMP® · AI & Analytics · 30+ Years',
     bio: 'Reem joined WAVZ with over 30 years of experience leading enterprise-wide transformation programs across digital, data, and AI domains. Prior to WAVZ, she held senior leadership roles at Teradata, Raya IT, and NCR, and led the transformation program at Integrated Diagnostics Holding Group across multiple industries in the MEA region. She holds globally recognized certifications as an MSP® Advanced Practitioner, PMP®, and PMI-RMP®, with deep expertise in system integration, data management, ML/AI, and advanced analytics.',
   },
+  // 4. Mubarak
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2026/04/IMAGE-1.png',
+    photo: '/team/IMAGE-1.png',
     name: 'Ahmed Mubarak',
     role: 'SAP Practice Director',
     department: 'SAP',
@@ -165,11 +106,82 @@ const TEAM_EN = [
     highlight: 'SAP S/4HANA · AMS · Solution Architecture · CoE · 20+ Years',
     bio: 'Ahmed brings 20+ years of experience in the IT industry, including a distinguished 13+ years of deep focus on SAP delivery, solution architecture, and ERP implementation across diverse industries. He has held progressive leadership roles spanning SAP consulting, solution architecture, and delivery management, with hands-on expertise in SAP MM, SD, S/4HANA migrations, Application Management Services (AMS), and SAP Center of Excellence (CoE) governance. Ahmed joined WAVZ in early 2026 as SAP Practice Director.',
   },
+  // 5. Hesham
+  {
+    photo: '/team/Hesham-Fadel-WAVZ.webp',
+    name: 'Hesham Fadel',
+    role: 'Financial Services Director',
+    department: 'Financial Services',
+    years: '25+',
+    highlight: 'IT Sales · Banking · Oracle · Nottingham MSc · 25+ Years',
+    bio: 'Hesham joined WAVZ in February 2024, bringing 25 years of experience in IT sales and business development in the banking sector. Prior to WAVZ, he worked at Oracle as financial sector account manager handling large governmental banks in Egypt and Libya. Hesham holds a master\'s degree in Information Technology from Nottingham University. He is an AUC alumni and a graduate of the iTi. He leads the Financial Services team responsible for delivering best-of-breed solutions to banks and financial organizations in Egypt and the Middle East.',
+  },
+  // 6. Youssef
+  {
+    photo: '/team/Youssef-Elsebaay-LR.jpg.webp',
+    name: 'Youssef El-Sebaay',
+    role: 'Business Development Director, Postal Solutions',
+    department: 'Business Development',
+    years: '25+',
+    highlight: 'IBM · IDSC · Postal Sector · MBA Aspen · 25+ Years',
+    bio: 'Youssef brings 25+ years of experience in IT including IT strategic planning, business development, system integration, and applications development in various prominent IT organizations including IBM, IDSC, and WAVZ. He plays a pivotal role in managing WAVZ\'s relationship with the postal sector in Egypt, Middle East, and Africa. Youssef joined WAVZ in 2019 and holds an MBA from Aspen University, USA.',
+  },
+  // 7. Mostafa Younes
+  {
+    photo: '/team/Mostafa-Youness-LR.jpg.webp',
+    name: 'Mostafa Younes',
+    role: 'Commercial Director',
+    department: 'Commercial',
+    years: '30+',
+    highlight: 'Marketing · Sales · Business Development · MEA & Oceania · 30+ Years',
+    bio: 'Mostafa joined WAVZ in March 2023, bringing over 30 years of experience in marketing, sales, business development and strategy. Prior to WAVZ, he worked in several multinational and regional organizations across international locations with diverse cultures. He has a significant track record of leading regional and multinational marketing and business development operations to achieve double-digit YoY growth, with extensive expertise in IT security services, cloud transformation, microfinancing, and outsourced IT services across the Middle East, Africa, and Oceania.',
+  },
+  // 8. Amr Sadek
+  {
+    photo: '/team/Amr-Sadek-LR.jpg.webp',
+    name: 'Amr Sadek',
+    role: 'Human Capital Director',
+    department: 'Human Capital',
+    years: '24+',
+    highlight: 'HR Strategy · Banking · Manpower Planning · 24+ Years',
+    bio: 'An experienced professional with over 24 years of experience in the banking industry, including a prominent 20+ years focus on human resources with a proven track record in HR strategy, budget management, manpower planning, and employee relations. A believer that human capital is the most important and valuable asset of the organization. Amr joined WAVZ in October 2022 and has since been playing a pivotal role in developing our human capital in alignment with the organization\'s vision and mission.',
+  },
+  // 9. Mostafa Riad
+  {
+    photo: '/team/Mostafa-Riad-LR.jpg.webp',
+    name: 'Mostafa Riad',
+    role: 'Director of Finance',
+    department: 'Finance',
+    years: '22+',
+    highlight: 'Finance · Operations Management · ROI Strategy · 22+ Years',
+    bio: 'Mostafa brings a wealth of over 22 years of experience in finance and operations management within multinational and regional organizations. He carries a successful track record in streamlining financial strategies and business operations that drive and increase efficiency and ROI. Mostafa joined WAVZ in 2019 and plays a pivotal role in developing and implementing world-class standards of financial and operational processes and controls.',
+  },
+  // 10. Wael Saleh
+  {
+    photo: '/team/Wael-Saleh-LR.jpg.webp',
+    name: 'Wael Saleh',
+    role: 'Head of Legal Department',
+    department: 'Legal',
+    years: '15+',
+    highlight: 'Companies Law · Labour Law · Arbitration · Cairo University · 15+ Years',
+    bio: 'Wael joined WAVZ in 2016 bringing over 15 years of legal experience in prominent law firms and several legal consultancy roles with prestigious organizations in Egypt. He has vast experience in companies law, labour law, criminal law, and arbitration law. He graduated from the Faculty of Law, Cairo University in 1999.',
+  },
+  // 11. Doaa Sayed
+  {
+    photo: '/team/Doaa-Sayed-LR.jpg.webp',
+    name: 'Doaa Sayed',
+    role: 'Partnerships & Alliances Manager',
+    department: 'Partnerships',
+    years: '14+',
+    highlight: 'Strategic Alliances · Emerging Tech · MBA Paris ESLSCA · 14+ Years',
+    bio: 'Doaa brings over 14 years of experience in the IT industry, playing a vital role in driving growth and innovation across various organizations. She is playing a pivotal role in developing and managing WAVZ\'s partnerships and strategic alliances. Doaa\'s comprehensive knowledge of emerging technologies and exceptional relationship-building skills have significantly contributed to WAVZ\'s success in securing valuable alliances and mutually beneficial initiatives. Doaa joined WAVZ in 2016 and holds an MBA in Digital Transformation from Paris ESLSCA Business School.',
+  },
 ];
 
 const TEAM_AR = [
+  // 1. Amany Zaki
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2025/11/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
+    photo: '/team/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
     name: 'أماني زكي',
     role: 'الرئيس التنفيذي والمدير العام',
     department: 'التنفيذية',
@@ -177,8 +189,9 @@ const TEAM_AR = [
     highlight: 'NCR · Teradata · عضو مجلس الإدارة · +30 عامًا',
     bio: 'مديرة تنفيذية متمرسة تمتلك أكثر من 30 عامًا من الخبرة في تقنية المعلومات ومستودعات البيانات والتحليلات. قادت أكثر الفرق الاستشارية ربحيةً في منطقة EMEA لدى شركات NCR وTeradata. تتمتع بخبرة واسعة في المؤسسات الوطنية الكبرى، وهي عضو في مجلس إدارة WAVZ.',
   },
+  // 2. Hossini
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Mohamed-El-Hossini-LR.jpg.webp',
+    photo: '/team/Mohamed-El-Hossini-LR.jpg.webp',
     name: 'محمد الحسيني',
     role: 'المدير التقني التنفيذي',
     department: 'التكنولوجيا',
@@ -186,35 +199,29 @@ const TEAM_AR = [
     highlight: 'إدارة العمليات · استراتيجية تقنية المعلومات · الخدمات المُدارة · +40 عامًا',
     bio: 'يُحضر محمد ثروة من الخبرات تمتد لأكثر من 40 عامًا في صناعة تكنولوجيا المعلومات عبر الأسواق الإقليمية والأوروبية. انضم إلى WAVZ في يناير 2022 ويضطلع بدور محوري في تقديم خدمات مُدارة بمستوى عالمي لعملائنا.',
   },
+  // 3. Reem
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Mostafa-Riad-LR.jpg.webp',
-    name: 'مصطفى رياض',
-    role: 'مدير المالية',
-    department: 'المالية',
-    years: '+22',
-    highlight: 'المالية · إدارة العمليات · استراتيجية العائد على الاستثمار · +22 عامًا',
-    bio: 'يُحضر مصطفى أكثر من 22 عامًا من الخبرة في إدارة المالية والعمليات داخل المنظمات متعددة الجنسيات والإقليمية. انضم إلى WAVZ عام 2019 ويضطلع بدور محوري في تطوير وتطبيق معايير عالمية للعمليات والضوابط المالية.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Amr-Sadek-LR.jpg.webp',
-    name: 'عمرو صادق',
-    role: 'مدير رأس المال البشري',
-    department: 'رأس المال البشري',
-    years: '+24',
-    highlight: 'استراتيجية الموارد البشرية · القطاع المصرفي · +24 عامًا',
-    bio: 'يمتلك أكثر من 24 عامًا من الخبرة في القطاع المصرفي، منها أكثر من 20 عامًا في مجال الموارد البشرية. انضم إلى WAVZ في أكتوبر 2022 ويضطلع بدور محوري في تطوير رأس المال البشري بما يتوافق مع رؤية المنظمة ورسالتها.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Mostafa-Youness-LR.jpg.webp',
-    name: 'مصطفى يونس',
-    role: 'المدير التجاري',
-    department: 'التجارية',
+    photo: '/team/IMAGE-2.png',
+    name: 'ريم الدهشان',
+    role: 'مديرة قطاع البيانات والذكاء الاصطناعي',
+    department: 'البيانات والذكاء الاصطناعي',
     years: '+30',
-    highlight: 'التسويق · المبيعات · تطوير الأعمال · الشرق الأوسط وأفريقيا · +30 عامًا',
-    bio: 'انضم مصطفى إلى WAVZ في مارس 2023، وهو يمتلك أكثر من 30 عامًا من الخبرة في التسويق والمبيعات وتطوير الأعمال. يمتلك سجلاً حافلاً في قيادة عمليات التسويق وتطوير الأعمال لتحقيق نمو سنوي بأرقام مزدوجة.',
+    highlight: 'Teradata · NCR · MSP® · PMP® · الذكاء الاصطناعي · +30 عامًا',
+    bio: 'تمتلك أكثر من 30 عامًا من الخبرة في قيادة برامج التحول المؤسسي في مجالات الرقمنة والبيانات والذكاء الاصطناعي. شغلت مناصب قيادية في Teradata وRaya IT وNCR. تحمل شهادات عالمية في إدارة البرامج والمخاطر.',
   },
+  // 4. Mubarak
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2024/03/Hesham-Fadel-WAVZ.webp',
+    photo: '/team/IMAGE-1.png',
+    name: 'أحمد مبارك',
+    role: 'مدير ممارسة وتطبيقات SAP',
+    department: 'SAP',
+    years: '+20',
+    highlight: 'SAP S/4HANA · AMS · هندسة الحلول · CoE · +20 عامًا',
+    bio: 'يمتلك أكثر من 20 عامًا من الخبرة في قطاع تقنية المعلومات منها 13+ عامًا في تسليم حلول SAP وهندسة المشاريع عبر صناعات متعددة. انضم إلى WAVZ مطلع عام 2026 كمدير لممارسة وتطبيقات SAP.',
+  },
+  // 5. Hesham
+  {
+    photo: '/team/Hesham-Fadel-WAVZ.webp',
     name: 'هشام فاضل',
     role: 'مدير الخدمات المالية',
     department: 'الخدمات المالية',
@@ -222,8 +229,9 @@ const TEAM_AR = [
     highlight: 'Oracle · القطاع المصرفي · ماجستير نوتنغهام · +25 عامًا',
     bio: 'انضم هشام إلى WAVZ في فبراير 2024، وهو يمتلك 25 عامًا من الخبرة في مبيعات تكنولوجيا المعلومات وتطوير الأعمال في القطاع المصرفي. حاصل على ماجستير في تقنية المعلومات من جامعة نوتنغهام. يقود فريق الخدمات المالية المسؤول عن تقديم حلول متميزة للبنوك والمؤسسات المالية.',
   },
+  // 6. Youssef
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Youssef-Elsebaay-LR.jpg.webp',
+    photo: '/team/Youssef-Elsebaay-LR.jpg.webp',
     name: 'يوسف السباعي',
     role: 'مدير تطوير الأعمال، حلول البريد',
     department: 'تطوير الأعمال',
@@ -231,17 +239,39 @@ const TEAM_AR = [
     highlight: 'IBM · IDSC · القطاع البريدي · MBA أسبن · +25 عامًا',
     bio: 'يُحضر يوسف أكثر من 25 عامًا من الخبرة في تكنولوجيا المعلومات شملت التخطيط الاستراتيجي وتطوير الأعمال وتكامل الأنظمة في منظمات بارزة منها IBM وIDSC وWAVZ. انضم إلى WAVZ عام 2019 ويحمل درجة الماجستير في إدارة الأعمال من جامعة أسبن.',
   },
+  // 7. Mostafa Younes
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Doaa-Sayed-LR.jpg.webp',
-    name: 'دعاء سيد',
-    role: 'مديرة الشراكات والتحالفات',
-    department: 'الشراكات',
-    years: '+14',
-    highlight: 'التحالفات الاستراتيجية · التقنيات الناشئة · MBA ESLSCA · +14 عامًا',
-    bio: 'تُحضر دعاء أكثر من 14 عامًا من الخبرة في صناعة تقنية المعلومات. تضطلع بدور محوري في تطوير وإدارة شراكات WAVZ والتحالفات الاستراتيجية. انضمت إلى WAVZ عام 2016 وتحمل ماجستير في التحول الرقمي من كلية ESLSCA للأعمال في باريس.',
+    photo: '/team/Mostafa-Youness-LR.jpg.webp',
+    name: 'مصطفى يونس',
+    role: 'المدير التجاري',
+    department: 'التجارية',
+    years: '+30',
+    highlight: 'التسويق · المبيعات · تطوير الأعمال · الشرق الأوسط وأفريقيا · +30 عامًا',
+    bio: 'انضم مصطفى إلى WAVZ في مارس 2023، وهو يمتلك أكثر من 30 عامًا من الخبرة في التسويق والمبيعات وتطوير الأعمال. يمتلك سجلاً حافلاً في قيادة عمليات التسويق وتطوير الأعمال لتحقيق نمو سنوي بأرقام مزدوجة.',
   },
+  // 8. Amr Sadek
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Wael-Saleh-LR.jpg.webp',
+    photo: '/team/Amr-Sadek-LR.jpg.webp',
+    name: 'عمرو صادق',
+    role: 'مدير رأس المال البشري',
+    department: 'رأس المال البشري',
+    years: '+24',
+    highlight: 'استراتيجية الموارد البشرية · القطاع المصرفي · +24 عامًا',
+    bio: 'يمتلك أكثر من 24 عامًا من الخبرة في القطاع المصرفي، منها أكثر من 20 عامًا في مجال الموارد البشرية. انضم إلى WAVZ في أكتوبر 2022 ويضطلع بدور محوري في تطوير رأس المال البشري بما يتوافق مع رؤية المنظمة ورسالتها.',
+  },
+  // 9. Mostafa Riad
+  {
+    photo: '/team/Mostafa-Riad-LR.jpg.webp',
+    name: 'مصطفى رياض',
+    role: 'مدير المالية',
+    department: 'المالية',
+    years: '+22',
+    highlight: 'المالية · إدارة العمليات · استراتيجية العائد على الاستثمار · +22 عامًا',
+    bio: 'يُحضر مصطفى أكثر من 22 عامًا من الخبرة في إدارة المالية والعمليات داخل المنظمات متعددة الجنسيات والإقليمية. انضم إلى WAVZ عام 2019 ويضطلع بدور محوري في تطوير وتطبيق معايير عالمية للعمليات والضوابط المالية.',
+  },
+  // 10. Wael Saleh
+  {
+    photo: '/team/Wael-Saleh-LR.jpg.webp',
     name: 'وائل صالح',
     role: 'رئيس الإدارة القانونية',
     department: 'القانونية',
@@ -249,23 +279,15 @@ const TEAM_AR = [
     highlight: 'قانون الشركات · قانون العمل · التحكيم · جامعة القاهرة · +15 عامًا',
     bio: 'انضم وائل إلى WAVZ عام 2016 وهو يمتلك أكثر من 15 عامًا من الخبرة القانونية في مكاتب محاماة بارزة وأدوار استشارية قانونية مع مؤسسات مرموقة في مصر. خبير في قانون الشركات وقانون العمل والقانون الجنائي وقانون التحكيم.',
   },
+  // 11. Doaa Sayed
   {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2026/04/IMAGE-2.png',
-    name: 'ريم الدحشان',
-    role: 'مديرة البيانات والذكاء الاصطناعي',
-    department: 'البيانات والذكاء الاصطناعي',
-    years: '+30',
-    highlight: 'Teradata · NCR · MSP® · PMP® · البيانات والذكاء الاصطناعي · +30 عامًا',
-    bio: 'انضمت ريم إلى WAVZ بخبرة تجاوزت 30 عامًا في قيادة برامج التحول المؤسسي الشاملة عبر المجالات الرقمية والبيانات والذكاء الاصطناعي. شغلت مناصب قيادية في Teradata وRaya IT وNCR. تحمل شهادات MSP® وPMP® وPMI-RMP® مع خبرة عميقة في تكامل الأنظمة وإدارة البيانات.',
-  },
-  {
-    photo: 'https://wavz.com.eg/wp-content/uploads/2026/04/IMAGE-1.png',
-    name: 'أحمد مبارك',
-    role: 'مدير ممارسة SAP',
-    department: 'SAP',
-    years: '+20',
-    highlight: 'SAP S/4HANA · AMS · هندسة الحلول · CoE · +20 عامًا',
-    bio: 'يُحضر أحمد أكثر من 20 عامًا من الخبرة في صناعة تقنية المعلومات، منها 13+ عامًا متخصصة في تسليم SAP وهندسة الحلول وتطبيق ERP. انضم إلى WAVZ مطلع عام 2026 كمدير لممارسة SAP، وهو معروف بقدرته على محاذاة حلول SAP مع أهداف الأعمال وبناء فرق عالية الأداء.',
+    photo: '/team/Doaa-Sayed-LR.jpg.webp',
+    name: 'دعاء سيد',
+    role: 'مديرة الشراكات والتحالفات',
+    department: 'الشراكات',
+    years: '+14',
+    highlight: 'التحالفات الاستراتيجية · التقنيات الناشئة · MBA ESLSCA · +14 عامًا',
+    bio: 'تُحضر دعاء أكثر من 14 عامًا من الخبرة في صناعة تقنية المعلومات. تضطلع بدور محوري في تطوير وإدارة شراكات WAVZ والتحالفات الاستراتيجية. انضمت إلى WAVZ عام 2016 وتحمل ماجستير في التحول الرقمي من كلية ESLSCA للأعمال في باريس.',
   },
 ];
 
@@ -908,9 +930,40 @@ export const Team = () => {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {members.map((member, idx) => (
-                <TeamCard key={idx} member={member} idx={idx} lang={lang} />
+            {/* Featured CEO Card (Top Row as in Diagram) */}
+            {members[0] && (
+              <div className="mb-8 flex justify-center">
+                <div className="w-full max-w-[340px]">
+                  <TeamCard member={members[0]} idx={0} lang={lang} />
+                </div>
+              </div>
+            )}
+
+            {/* Row 2: Hossini, Reem, Mubarak (3 per row) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+              {members.slice(1, 4).map((member, idx) => (
+                <TeamCard key={idx + 1} member={member} idx={idx + 1} lang={lang} />
+              ))}
+            </div>
+
+            {/* Row 3: Hesham, Youssef, Mostafa Younes (3 per row) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+              {members.slice(4, 7).map((member, idx) => (
+                <TeamCard key={idx + 4} member={member} idx={idx + 4} lang={lang} />
+              ))}
+            </div>
+
+            {/* Row 4: Amr Sadek, Mostafa Riad (2 per row) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 max-w-[780px]">
+              {members.slice(7, 9).map((member, idx) => (
+                <TeamCard key={idx + 7} member={member} idx={idx + 7} lang={lang} />
+              ))}
+            </div>
+
+            {/* Row 5: Wael Saleh, Doaa Sayed (2 per row) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[780px]">
+              {members.slice(9, 11).map((member, idx) => (
+                <TeamCard key={idx + 9} member={member} idx={idx + 9} lang={lang} />
               ))}
             </div>
           </section>

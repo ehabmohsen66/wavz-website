@@ -154,29 +154,55 @@ export const ContactPage = () => {
     return e;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
     setStatus('loading');
-    
-    const mailtoSubject = encodeURIComponent(`WAVZ Contact Form: ${form.service} enquiry from ${form.name}`);
-    const mailtoBody = encodeURIComponent(
-      `WAVZ Website Contact Form Inquiry\n` +
-      `---------------------------------\n\n` +
-      `Name: ${form.name}\n` +
-      `Company: ${form.company}\n` +
-      `Email: ${form.email}\n` +
-      `Phone: ${form.phone}\n` +
-      `Service: ${form.service}\n\n` +
-      `Message:\n${form.message}\n`
-    );
 
-    // Trigger mailto client prefilled with inputs
-    window.location.href = `mailto:info@wavz.com.eg?subject=${mailtoSubject}&body=${mailtoBody}`;
-    
-    setTimeout(() => setStatus('success'), 1200);
+    try {
+      const payload = {
+        name: form.name,
+        company: form.company,
+        email: form.email,
+        phone: form.phone,
+        service: form.service,
+        message: form.message,
+        _gotcha: form._gotcha || '',
+      };
+
+      // 1. Try unified CMS API endpoint
+      let res = await fetch('/api/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }).catch(() => null);
+
+      // 2. Fallback to direct script if API returned error or was unavailable
+      if (!res || !res.ok) {
+        res = await fetch('/send-mail.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      if (!res.ok) {
+        throw new Error('Server error');
+      }
+
+      setStatus('success');
+    } catch (error) {
+      console.error('Contact submission error:', error);
+      setStatus('error');
+    }
   };
 
   const field = (id, label, el) => (
@@ -385,6 +411,17 @@ export const ContactPage = () => {
               </div>
 
               <form onSubmit={handleSubmit} noValidate aria-label={ar ? 'نموذج التواصل' : 'Contact form'} style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: 20, flex: 1 }}>
+                {/* Anti-spam honeypot */}
+                <input
+                  type="text"
+                  name="_gotcha"
+                  value={form._gotcha || ''}
+                  onChange={e => setForm(p => ({ ...p, _gotcha: e.target.value }))}
+                  style={{ display: 'none' }}
+                  tabIndex="-1"
+                  autoComplete="off"
+                />
+
                 {/* Row 1: Name + Company */}
                 <div className="contact-field-row" style={{ display: 'grid', gap: 16 }}>
                   {field('name', ar ? 'الاسم الكامل *' : 'Full Name *',

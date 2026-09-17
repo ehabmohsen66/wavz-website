@@ -70,7 +70,7 @@ const POSTS = [
     excerpt: 'Artificial Intelligence is reshaping industries, and customer service is no exception. With AI-powered chatbots, predictive analytics, and natural language processing, businesses are revolutionizing how they engage with customers.',
     excerptAr: '\u064a\u064f\u0639\u064a\u062f \u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u062a\u0634\u0643\u064a\u0644 \u0627\u0644\u0635\u0646\u0627\u0639\u0627\u062a\u060c \u0648\u062e\u062f\u0645\u0629 \u0627\u0644\u0639\u0645\u0644\u0627\u0621 \u0644\u064a\u0633\u062a \u0627\u0633\u062a\u062b\u0646\u0627\u0621\u064b.',
     url: 'https://wavz.com.eg/ai-customer-service-ethical-dilemmas/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/12/Ai1-400x250.png',
+    image: '/blog-images/Ai1-400x250.png',
     accent: T.gold, tag: 'AI',
   },
   {
@@ -83,7 +83,7 @@ const POSTS = [
     excerpt: "In today's hyperconnected world, cyber threats have escalated from sporadic nuisances to relentless, sophisticated campaigns targeting organizations of all sizes. A robust Security Operations Center is no longer a luxury.",
     excerptAr: '\u0641\u064a \u0639\u0627\u0644\u0645\u0646\u0627 \u0627\u0644\u0645\u062a\u0631\u0627\u0628\u0637 \u0627\u0644\u064a\u0648\u0645\u060c \u062a\u0635\u0627\u0639\u062f\u062a \u0627\u0644\u062a\u0647\u062f\u064a\u062f\u0627\u062a \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629 \u0645\u0646 \u0645\u062c\u0631\u062f \u0625\u0632\u0639\u0627\u062c \u0625\u0644\u0649 \u062d\u0645\u0644\u0627\u062a \u0645\u062a\u0637\u0648\u0631\u0629.',
     url: 'https://wavz.com.eg/mastering-soc-strategies-in-2025-emerging-trends-to-fortify-your-cyber-resilience/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/12/SC1-400x250.png',
+    image: '/blog-images/SC1-400x250.png',
     accent: '#EF4444', tag: 'SOC',
   },
   {
@@ -96,7 +96,7 @@ const POSTS = [
     excerpt: 'SAP ERP has become synonymous with streamlined operations and intelligent decision-making. As businesses prepare for 2025, the evolution of SAP ERP is setting the stage for a transformative era.',
     excerptAr: '\u0623\u0635\u0628\u062d SAP ERP \u0645\u0631\u0627\u062f\u0641\u0627\u064b \u0644\u0644\u0639\u0645\u0644\u064a\u0627\u062a \u0627\u0644\u0645\u0628\u0633\u0637\u0629 \u0648\u0635\u0646\u0639 \u0627\u0644\u0642\u0631\u0627\u0631 \u0627\u0644\u0630\u0643\u064a.',
     url: 'https://wavz.com.eg/the-future-of-sap-erp-trends-shaping-enterprise-resource-planning-in-2025/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/12/al1-400x250.png',
+    image: '/blog-images/al1-400x250.png',
     accent: T.blue, tag: 'SAP',
   },
   {
@@ -109,7 +109,7 @@ const POSTS = [
     excerpt: 'Digital transformation continues to redefine how businesses operate, innovate, and compete. In 2025, staying ahead in this ever-evolving landscape requires proactive engagement with emerging trends.',
     excerptAr: '\u064a\u0648\u0627\u0635\u0644 \u0627\u0644\u062a\u062d\u0648\u0644 \u0627\u0644\u0631\u0642\u0645\u064a \u0625\u0639\u0627\u062f\u0629 \u062a\u0639\u0631\u064a\u0641 \u0643\u064a\u0641\u064a\u0629 \u0639\u0645\u0644 \u0627\u0644\u0634\u0631\u0643\u0627\u062a \u0648\u0627\u0628\u062a\u0643\u0627\u0631\u0647\u0627.',
     url: 'https://wavz.com.eg/top-5-digital-transformation-trends-every-business-must-embrace-in-2025/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/12/20251-400x250.png',
+    image: '/blog-images/20251-400x250.png',
     accent: '#22C55E', tag: 'DX',
   },
   {
@@ -122,7 +122,7 @@ const POSTS = [
     excerpt: 'Artificial Intelligence has evolved from an experimental technology to a transformative tool, revolutionizing industries worldwide. For managed services, AI offers a new way to enhance efficiency and improve decision-making.',
     excerptAr: '\u062a\u0637\u0648\u0631 \u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u0645\u0646 \u062a\u0642\u0646\u064a\u0629 \u062a\u062c\u0631\u064a\u0628\u064a\u0629 \u0625\u0644\u0649 \u0623\u062f\u0627\u0629 \u062a\u062d\u0648\u064a\u0644\u064a\u0629.',
     url: 'https://wavz.com.eg/ai-and-the-future-of-managed-services-a-look-ahead/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/11/aii1-400x250.png',
+    image: '/blog-images/aii1-400x250.png',
     accent: T.gold, tag: 'AI',
   },
   {
@@ -135,7 +135,7 @@ const POSTS = [
     excerpt: "In Egypt's rapidly evolving financial landscape, the demand for agile and innovative banking solutions has reached new heights. Banks and institutions seek ways to enhance operational efficiency and meet regulatory requirements.",
     excerptAr: '\u0641\u064a \u0627\u0644\u0645\u0634\u0647\u062f \u0627\u0644\u0645\u0627\u0644\u064a \u0627\u0644\u0645\u062a\u0637\u0648\u0631 \u0628\u0633\u0631\u0639\u0629 \u0641\u064a \u0645\u0635\u0631\u060c \u0628\u0644\u063a \u0627\u0644\u0637\u0644\u0628 \u0639\u0644\u0649 \u062d\u0644\u0648\u0644 \u0645\u0635\u0631\u0641\u064a\u0629 \u0645\u0631\u0646\u0629 \u0648\u0645\u0628\u062a\u0643\u0631\u0629 \u0622\u0641\u0627\u0642\u0627\u064b \u062c\u062f\u064a\u062f\u0629.',
     url: 'https://wavz.com.eg/t24-the-future-of-banking-in-egypt/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/11/T24-400x250.png',
+    image: '/blog-images/T24-400x250.png',
     accent: T.blue, tag: 'FinTech',
   },
   {
@@ -148,7 +148,7 @@ const POSTS = [
     excerpt: 'Cloud computing continues to evolve at a rapid pace, transforming how organizations store, process, and access data. The trends shaping cloud infrastructure today will define the digital economy of tomorrow.',
     excerptAr: '\u062a\u062a\u0637\u0648\u0631 \u0627\u0644\u062d\u0648\u0633\u0628\u0629 \u0627\u0644\u0633\u062d\u0627\u0628\u064a\u0629 \u0628\u0648\u062a\u064a\u0631\u0629 \u0633\u0631\u064a\u0639\u0629\u060c \u0645\u064f\u062d\u0648\u0650\u0651\u0644\u0629\u064b \u0637\u0631\u064a\u0642\u0629 \u062a\u062e\u0632\u064a\u0646 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0648\u0645\u0639\u0627\u0644\u062c\u062a\u0647\u0627.',
     url: 'https://wavz.com.eg/the-future-of-cloud-computing-trends-and-predictions-for-2024-and-beyond/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/11/Cloud1-400x250.png',
+    image: '/blog-images/Cloud1-400x250.png',
     accent: '#A855F7', tag: 'Cloud',
   },
   {
@@ -161,7 +161,7 @@ const POSTS = [
     excerpt: 'Augmented Reality is rapidly emerging as a game-changer in the fintech sector, offering innovative ways to enhance customer experience, improve financial literacy, and streamline complex financial processes.',
     excerptAr: '\u064a\u0628\u0631\u0632 \u0627\u0644\u0648\u0627\u0642\u0639 \u0627\u0644\u0645\u0639\u0632\u0632 \u0628\u0633\u0631\u0639\u0629 \u0628\u0648\u0635\u0641\u0647 \u0645\u062d\u0631\u0643\u0627\u064b \u0644\u0644\u062a\u063a\u064a\u064a\u0631 \u0641\u064a \u0642\u0637\u0627\u0639 \u0627\u0644\u062a\u0643\u0646\u0648\u0644\u0648\u062c\u064a\u0627 \u0627\u0644\u0645\u0627\u0644\u064a\u0629.',
     url: 'https://wavz.com.eg/how-augmented-reality-is-revolutionizing-customer-experience-in-fintech/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/11/AR1-400x250.png',
+    image: '/blog-images/AR1-400x250.png',
     accent: '#F97316', tag: 'AR',
   },
   {
@@ -174,7 +174,7 @@ const POSTS = [
     excerpt: 'Reliable IT systems are the backbone of modern business. Comprehensive testing services ensure your systems perform flawlessly, scale efficiently, and remain secure in the face of evolving threats.',
     excerptAr: '\u0623\u0646\u0638\u0645\u0629 \u062a\u0643\u0646\u0648\u0644\u0648\u062c\u064a\u0627 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0645\u0648\u062b\u0648\u0642\u0629 \u0647\u064a \u0627\u0644\u0639\u0645\u0648\u062f \u0627\u0644\u0641\u0642\u0631\u064a \u0644\u0639\u0645\u0644\u064a\u0627\u062a \u0627\u0644\u0623\u0639\u0645\u0627\u0644.',
     url: 'https://wavz.com.eg/comprehensive-it-testing-services-for-reliable-business-systems/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/10/IT1-400x250.png',
+    image: '/blog-images/IT1-400x250.png',
     accent: '#22C55E', tag: 'Testing',
   },
   {
@@ -187,7 +187,7 @@ const POSTS = [
     excerpt: "Egypt's digital economy is accelerating, and with it comes a growing demand for professional managed services. Managed service providers offer the expertise, scalability, and reliability organizations need.",
     excerptAr: '\u064a\u062a\u0633\u0627\u0631\u0639 \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f \u0627\u0644\u0631\u0642\u0645\u064a \u0641\u064a \u0645\u0635\u0631\u060c \u0648\u0645\u0639\u0647 \u064a\u062a\u0632\u0627\u064a\u062f \u0627\u0644\u0637\u0644\u0628 \u0639\u0644\u0649 \u0627\u0644\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0645\u064f\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u0647\u0646\u064a\u0629.',
     url: 'https://wavz.com.eg/the-rise-of-managed-services-solutions-in-egypt/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/10/MS1-400x250.png',
+    image: '/blog-images/MS1-400x250.png',
     accent: T.gold, tag: 'Egypt',
   },
   {
@@ -200,7 +200,7 @@ const POSTS = [
     excerpt: "As Egypt's digital economy grows, so do cybersecurity challenges. AI-powered security solutions are emerging as essential tools for detecting, preventing, and responding to sophisticated cyber threats.",
     excerptAr: '\u0645\u0639 \u0646\u0645\u0648 \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f \u0627\u0644\u0631\u0642\u0645\u064a \u0641\u064a \u0645\u0635\u0631\u060c \u062a\u062a\u0632\u0627\u064a\u062f \u0627\u0644\u062a\u062d\u062f\u064a\u0627\u062a \u0627\u0644\u0623\u0645\u0646\u064a\u0629 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629.',
     url: 'https://wavz.com.eg/ai-in-cybersecurity-protecting-egypts-digital-economy/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/10/Ai1-400x250.png',
+    image: '/blog-images/Ai1-400x250.png',
     accent: '#EF4444', tag: 'Security',
   },
   {
@@ -213,7 +213,7 @@ const POSTS = [
     excerpt: 'Open Banking is transforming financial services by enabling secure data sharing between banks and third-party providers through APIs, driving unprecedented levels of competition, collaboration, and customer-centric services.',
     excerptAr: '\u062a\u064f\u062d\u0648\u0651\u0644 \u0627\u0644\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0645\u0635\u0631\u0641\u064a\u0629 \u0627\u0644\u0645\u0641\u062a\u0648\u062d\u0629 \u0635\u0646\u0627\u0639\u0629 \u0627\u0644\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0645\u0627\u0644\u064a\u0629 \u0645\u0646 \u062e\u0644\u0627\u0644 \u062a\u0645\u0643\u064a\u0646 \u062a\u0628\u0627\u062f\u0644 \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0628\u0634\u0643\u0644 \u0622\u0645\u0646.',
     url: 'https://wavz.com.eg/the-role-of-apis-in-open-banking-driving-innovation/',
-    image: 'https://wavz.com.eg/wp-content/uploads/2024/10/Open1-400x250.png',
+    image: '/blog-images/Open1-400x250.png',
     accent: T.blue, tag: 'Open Banking',
   },
 ];

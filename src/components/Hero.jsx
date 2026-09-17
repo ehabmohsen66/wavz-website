@@ -77,19 +77,19 @@ export const Hero = () => {
 
           {/* CTAs */}
           <div
-            className="mt-10 flex flex-wrap gap-3 fade-slide-up"
+            className="mt-8 sm:mt-10 flex flex-row items-center gap-2.5 sm:gap-3 fade-slide-up"
             style={{ animationDelay: '0.25s' }}
           >
             <a
               href="#/contact"
-              className="press-scale group inline-flex items-center gap-2 bg-[#FFB814] text-[#082D4A] px-6 py-3.5 rounded-md text-[14px] font-bold shadow-lg shadow-[#FFB814]/25 cursor-pointer"
+              className="press-scale group flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-[#FFB814] text-[#082D4A] px-3.5 sm:px-6 py-3 sm:py-3.5 rounded-md text-[13px] sm:text-[14px] font-bold shadow-lg shadow-[#FFB814]/25 cursor-pointer whitespace-nowrap text-center"
               style={{ transition: 'transform 120ms cubic-bezier(0.23,1,0.32,1), background-color 150ms ease, box-shadow 150ms ease' }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F5A800'; e.currentTarget.style.boxShadow = '0 8px 30px rgb(255 184 20 / 0.4)'; }}
               onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFB814'; e.currentTarget.style.boxShadow = '0 4px 20px rgb(255 184 20 / 0.25)'; }}
             >
-              {t.hero.cta1}
+              <span>{t.hero.cta1}</span>
               <ArrowRight
-                className={`w-4 h-4 transition-transform group-hover:translate-x-1 ${
+                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform group-hover:translate-x-1 ${
                   dir === 'rtl'
                     ? 'rotate-180 group-hover:-translate-x-1 group-hover:translate-x-0'
                     : ''
@@ -98,12 +98,12 @@ export const Hero = () => {
             </a>
             <a
               href="#/savings-calculator"
-              className="press-scale inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-6 py-3.5 rounded-md text-[14px] font-medium cursor-pointer backdrop-blur-sm"
+              className="press-scale flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 bg-white/10 border border-white/20 text-white px-3.5 sm:px-6 py-3 sm:py-3.5 rounded-md text-[13px] sm:text-[14px] font-medium cursor-pointer backdrop-blur-sm whitespace-nowrap text-center"
               style={{ transition: 'transform 120ms cubic-bezier(0.23,1,0.32,1), background-color 150ms ease, border-color 150ms ease' }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.18)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'; }}
               onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.10)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.20)'; }}
             >
-              {t.hero.cta2}
+              <span>{t.hero.cta2}</span>
             </a>
           </div>
 

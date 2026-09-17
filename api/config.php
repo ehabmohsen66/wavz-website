@@ -18,12 +18,17 @@ if (APP_DEBUG) {
     ini_set('log_errors', '1');
 }
 
-// ---- Database ----
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'wavz_cms');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
+// ---- Load Local Configuration Override if present ----
+if (file_exists(__DIR__ . '/config.local.php')) {
+    require_once __DIR__ . '/config.local.php';
+}
+
+// ---- Database (Defaults or Env/Local overrides) ----
+if (!defined('DB_HOST')) define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+if (!defined('DB_NAME')) define('DB_NAME', getenv('DB_NAME') ?: 'wavz_cms');
+if (!defined('DB_USER')) define('DB_USER', getenv('DB_USER') ?: 'root');
+if (!defined('DB_PASS')) define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
+if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
 
 // ---- JWT ----
 define('JWT_SECRET', 'CHANGE_THIS_TO_A_RANDOM_64_CHAR_STRING');

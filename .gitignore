@@ -43,3 +43,7 @@ backend/db/wavz.db-wal
 backend/uploads/
 backend/admin-src/node_modules/
 .vercel
+api/config.local.php
+cms-admin/dist/
+cms-admin/node_modules/
+*.zip

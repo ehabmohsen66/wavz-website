@@ -3,5 +3,11 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/$USER/public_html/
     - npm install
-    - npm run build
+    - npm run build:all
     - cp -r dist/. $DEPLOYPATH
+    - mkdir -p $DEPLOYPATH/admin
+    - cp -r cms-admin/dist/. $DEPLOYPATH/admin/
+    - mkdir -p $DEPLOYPATH/api
+    - cp -r api/. $DEPLOYPATH/api/
+    - mkdir -p $DEPLOYPATH/api/uploads/thumbnails
+    - chmod -R 755 $DEPLOYPATH/api/uploads

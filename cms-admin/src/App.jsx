@@ -21,6 +21,9 @@ import NavigationEditor from './pages/NavigationEditor';
 import Settings from './pages/Settings';
 import UsersManager from './pages/UsersManager';
 import Profile from './pages/Profile';
+import InquiriesManager from './pages/InquiriesManager';
+import AnalyticsSettings from './pages/AnalyticsSettings';
+import SiteTools from './pages/SiteTools';
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { isAuthenticated, loading, user } = useAuth();
@@ -72,12 +75,15 @@ function MainRoutes() {
         <Route path="services" element={<ServiceManager />} />
         <Route path="services/:pageSlug" element={<ServiceEditor />} />
         
+        <Route path="inquiries" element={<InquiriesManager />} />
         <Route path="team" element={<TeamManager />} />
         <Route path="partners" element={<PartnerManager />} />
         <Route path="timeline" element={<TimelineManager />} />
         <Route path="testimonials" element={<TestimonialsManager />} />
         <Route path="media" element={<MediaLibrary />} />
         <Route path="navigation" element={<NavigationEditor />} />
+        <Route path="analytics" element={<AnalyticsSettings />} />
+        <Route path="tools" element={<SiteTools />} />
         <Route path="settings" element={<Settings />} />
         <Route path="profile" element={<Profile />} />
         

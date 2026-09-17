@@ -12,21 +12,23 @@ import { Terminal } from './ui/Terminal.jsx';
 
 /* ── Partner data ── */
 const PARTNERS = [
-  { name: 'SAP',               logo: 'https://wavz.com.eg/wp-content/uploads/2023/08/SAP.jpg.webp',                    category: 'ERP & Enterprise',      categoryAr: 'تخطيط موارد المنشأة',             tagline: 'Enterprise Resource Planning',       taglineAr: 'تخطيط موارد الشركات' },
-  { name: 'Oracle',            logo: 'https://wavz.com.eg/wp-content/uploads/2023/08/Oracle.jpg.webp',                 category: 'Database & Cloud',       categoryAr: 'قواعد البيانات والسحابة',          tagline: 'Database & Cloud Technology',        taglineAr: 'تكنولوجيا قواعد البيانات والسحابة' },
-  { name: 'Microsoft',         logo: 'https://wavz.com.eg/wp-content/uploads/2023/08/Microsoft-logo.jpg.webp',         category: 'Cloud & Productivity',   categoryAr: 'السحابة والإنتاجية',               tagline: 'Cloud, AI & Productivity Solutions', taglineAr: 'حلول السحابة والذكاء الاصطناعي' },
-  { name: 'Temenos',           logo: 'https://wavz.com.eg/wp-content/uploads/2023/08/Temenos.jpg.webp',                category: 'Financial Services',     categoryAr: 'الخدمات المالية',                  tagline: 'Core Banking Solutions',             taglineAr: 'حلول الصيرفة الأساسية' },
-  { name: 'Tietoevry',         logo: 'https://wavz.com.eg/wp-content/uploads/2023/08/Tietoevry-logo.jpg.webp',        category: 'Payment Services',       categoryAr: 'خدمات الدفع',                     tagline: 'Payment & Banking Technology',       taglineAr: 'تكنولوجيا الدفع والمصرفية' },
-  { name: 'Cisco',             logo: 'https://wavz.com.eg/wp-content/uploads/2023/08/Cisco.jpg.webp',                  category: 'Networking & Security',  categoryAr: 'الشبكات والأمن',                  tagline: 'Networking & Cybersecurity',         taglineAr: 'الشبكات والأمن السيبراني' },
-  { name: 'Huawei',            logo: 'https://wavz.com.eg/wp-content/uploads/2023/08/Huawei.jpg.webp',                 category: 'ICT Infrastructure',     categoryAr: 'البنية التحتية لتقنية المعلومات', tagline: 'ICT Infrastructure & Cloud',        taglineAr: 'البنية التحتية لتقنية المعلومات' },
-  { name: 'Dell Technologies', logo: 'https://wavz.com.eg/wp-content/uploads/2023/11/Dell-Logo-Web.jpg.webp',          category: 'Hardware & Storage',     categoryAr: 'الأجهزة والتخزين',                tagline: 'Servers, Storage & Infrastructure',  taglineAr: 'الخوادم والتخزين والبنية التحتية' },
-  { name: 'Palo Alto Networks',logo: 'https://wavz.com.eg/wp-content/uploads/2023/10/Palo-Alto-logo.png.webp',        category: 'Cybersecurity',          categoryAr: 'الأمن السيبراني',                  tagline: 'Next-Generation Cybersecurity',      taglineAr: 'الأمن السيبراني من الجيل التالي' },
-  { name: 'Teradata',          logo: 'https://wavz.com.eg/wp-content/uploads/2025/06/Teradata_Logo.png',              category: 'Data & Analytics',       categoryAr: 'البيانات والتحليلات',              tagline: 'Data Analytics & Cloud',             taglineAr: 'تحليل البيانات والسحابة' },
-  { name: 'Informatica',       logo: 'https://wavz.com.eg/wp-content/uploads/2025/06/informatica-vector-logo.png',    category: 'Data Management',        categoryAr: 'إدارة البيانات',                   tagline: 'Data Integration & Management',      taglineAr: 'تكامل وإدارة البيانات' },
-  { name: 'BlackBerry',        logo: 'https://wavz.com.eg/wp-content/uploads/2023/10/blackberry-logo.png.webp',       category: 'Cybersecurity',          categoryAr: 'الأمن السيبراني',                  tagline: 'Enterprise Security Solutions',      taglineAr: 'حلول أمن المؤسسات' },
-  { name: 'Nevis',             logo: 'https://wavz.com.eg/wp-content/uploads/2023/12/Nevis-Logo-web.jpg.webp',        category: 'Authentication',         categoryAr: 'المصادقة',                         tagline: 'Identity & Access Security',         taglineAr: 'أمن الهوية والوصول' },
-  { name: 'Promon',            logo: 'https://wavz.com.eg/wp-content/uploads/2025/06/Promon-Logo.png',                category: 'App Security',           categoryAr: 'أمن التطبيقات',                   tagline: 'Mobile App Security',                taglineAr: 'أمن تطبيقات الهاتف المحمول' },
-  { name: 'erwin by Quest',    logo: 'https://wavz.com.eg/wp-content/uploads/2025/06/erwin-logo.png',                 category: 'Data Modeling',          categoryAr: 'نمذجة البيانات',                   tagline: 'Data Intelligence & Modeling',       taglineAr: 'ذكاء البيانات والنمذجة' },
+  { name: 'SAP',               logo: '/partners-logos/SAP.jpg.webp',                    category: 'ERP & Enterprise',      categoryAr: 'تخطيط موارد المنشأة',             tagline: 'Enterprise Resource Planning',       taglineAr: 'تخطيط موارد الشركات' },
+  { name: 'Oracle',            logo: '/partners-logos/Oracle.jpg.webp',                 category: 'Database & Cloud',       categoryAr: 'قواعد البيانات والسحابة',          tagline: 'Database & Cloud Technology',        taglineAr: 'تكنولوجيا قواعد البيانات والسحابة' },
+  { name: 'Microsoft',         logo: '/partners-logos/Microsoft-logo.jpg.webp',         category: 'Cloud & Productivity',   categoryAr: 'السحابة والإنتاجية',               tagline: 'Cloud, AI & Productivity Solutions', taglineAr: 'حلول السحابة والذكاء الاصطناعي' },
+  { name: 'Temenos',           logo: '/partners-logos/Temenos.jpg.webp',                category: 'Financial Services',     categoryAr: 'الخدمات المالية',                  tagline: 'Core Banking Solutions',             taglineAr: 'حلول الصيرفة الأساسية' },
+  { name: 'Tietoevry',         logo: '/partners-logos/Tietoevry-logo.jpg.webp',        category: 'Payment Services',       categoryAr: 'خدمات الدفع',                     tagline: 'Payment & Banking Technology',       taglineAr: 'تكنولوجيا الدفع والمصرفية' },
+  { name: 'Cisco',             logo: '/partners-logos/Cisco.jpg.webp',                  category: 'Networking & Security',  categoryAr: 'الشبكات والأمن',                  tagline: 'Networking & Cybersecurity',         taglineAr: 'الشبكات والأمن السيبراني' },
+  { name: 'Huawei',            logo: '/partners-logos/Huawei.jpg.webp',                 category: 'ICT Infrastructure',     categoryAr: 'البنية التحتية لتقنية المعلومات', tagline: 'ICT Infrastructure & Cloud',        taglineAr: 'البنية التحتية لتقنية المعلومات' },
+  { name: 'Dell Technologies', logo: '/partners-logos/Dell-Logo-Web.jpg.webp',          category: 'Hardware & Storage',     categoryAr: 'الأجهزة والتخزين',                tagline: 'Servers, Storage & Infrastructure',  taglineAr: 'الخوادم والتخزين والبنية التحتية' },
+  { name: 'Palo Alto Networks',logo: '/partners-logos/Palo-Alto-logo.png.webp',        category: 'Cybersecurity',          categoryAr: 'الأمن السيبراني',                  tagline: 'Next-Generation Cybersecurity',      taglineAr: 'الأمن السيبراني من الجيل التالي' },
+  { name: 'Teradata',          logo: '/partners-logos/Teradata_Logo.png',              category: 'Data & Analytics',       categoryAr: 'البيانات والتحليلات',              tagline: 'Data Analytics & Cloud',             taglineAr: 'تحليل البيانات والسحابة' },
+  { name: 'Informatica',       logo: '/partners-logos/informatica-vector-logo.png',    category: 'Data Management',        categoryAr: 'إدارة البيانات',                   tagline: 'Data Integration & Management',      taglineAr: 'تكامل وإدارة البيانات' },
+  { name: 'BlackBerry',        logo: '/partners-logos/blackberry-logo.png.webp',       category: 'Cybersecurity',          categoryAr: 'الأمن السيبراني',                  tagline: 'Enterprise Security Solutions',      taglineAr: 'حلول أمن المؤسسات' },
+  { name: 'Nevis',             logo: '/partners-logos/Nevis-Logo-web.jpg.webp',        category: 'Authentication',         categoryAr: 'المصادقة',                         tagline: 'Identity & Access Security',         taglineAr: 'أمن الهوية والوصول' },
+  { name: 'Promon',            logo: '/partners-logos/Promon-Logo.png',                category: 'App Security',           categoryAr: 'أمن التطبيقات',                   tagline: 'Mobile App Security',                taglineAr: 'أمن تطبيقات الهاتف المحمول' },
+  { name: 'erwin by Quest',    logo: '/partners-logos/erwin-logo.png',                 category: 'Data Modeling',          categoryAr: 'نمذجة البيانات',                   tagline: 'Data Intelligence & Modeling',       taglineAr: 'ذكاء البيانات والنمذجة' },
+  { name: 'Backbase',          logo: '/partners-logos/backbase.png',                   category: 'Engagement Banking',     categoryAr: 'الخدمات المصرفية الرقمية',         tagline: 'Engagement Banking Platform',        taglineAr: 'منصة تفاعل مصرفية رائدة' },
+  { name: 'Qlik',              logo: '/partners-logos/qlik.png',                       category: 'Data & Analytics',       categoryAr: 'البيانات والتحليلات',              tagline: 'Analytics & Data Integration',       taglineAr: 'تكامل وتحليل البيانات الذكية' },
 ];
 
 const CAT_COLOR = {
@@ -34,7 +36,7 @@ const CAT_COLOR = {
   'Financial Services':'#0e9f6e','Payment Services':'#059669','Networking & Security':'#dc2626',
   'ICT Infrastructure':'#d97706','Hardware & Storage':'#64748b','Cybersecurity':'#dc2626',
   'Data & Analytics':'#7c3aed','Data Management':'#7c3aed','Authentication':'#db2777',
-  'App Security':'#ea580c','Data Modeling':'#0891b2',
+  'App Security':'#ea580c','Data Modeling':'#0891b2','Engagement Banking':'#0284c7',
 };
 
 const WHY_PARTNER_EN = [
@@ -210,7 +212,7 @@ export const Partners = () => {
             {/* Stats row */}
             <div style={{ display:'flex', flexWrap:'wrap', gap:'clamp(16px, 5vw, 40px)' }}>
               {[
-                { num:'16+', label: isAr ? 'شريكًا تقنيًا'     : 'Technology Partners' },
+                { num:'18+', label: isAr ? 'شريكًا تقنيًا'     : 'Technology Partners' },
                 { num:'10+', label: isAr ? 'سنوات من الشراكات' : 'Years of Alliances'  },
                 { num:'5',   label: isAr ? 'قطاعات تخصص'       : 'Domains of Expertise'},
               ].map((s,i) => (

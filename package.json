@@ -7,6 +7,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:admin": "cd cms-admin && npm install && npm run build",
+    "build:all": "vite build && cd cms-admin && npm install && npm run build",
+    "package": "npm run build:all && python3 build_cpanel_zip.py",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
