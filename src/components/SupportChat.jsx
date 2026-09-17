@@ -282,7 +282,7 @@ export const SupportChat = () => {
         setLeadData({ name: '', email: '', company: '' });
         botReply = lang === 'ar'
           ? `ممتاز يا ${finalLead.name}! لقد قمت بتسجيل استفسارك بنجاح. سيتواصل معك أحد مهندسي التحول الرقمي لدينا عبر البريد الإلكتروني (${finalLead.email}) في غضون 24 ساعة. شكراً لك!`
-          : `Excellent, ${finalLead.name}! I have successfully recorded your details. A WAVZ digital transformation architect will reach out to you at ${finalLead.email} within 24 hours to schedule a session. Thank you!`;
+          : `Excellent, ${finalLead.name}! I have successfully recorded your details. A WAVZ for Digital Transformation architect will reach out to you at ${finalLead.email} within 24 hours to schedule a session. Thank you!`;
       } 
       else {
         // Normal smart search logic

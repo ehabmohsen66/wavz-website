@@ -61,7 +61,7 @@ export const SolutionsPortfolio = () => {
       {/* Section heading */}
       <div className="mb-12 text-center">
         <h2 className="text-2xl lg:text-4xl font-bold text-[#082D4A] tracking-tight leading-tight">
-          {ar ? 'محفظة حلول WAVZ للتحول الرقمي' : 'WAVZ Digital Transformation Solutions Portfolio'}
+          {ar ? 'محفظة حلول WAVZ للتحول الرقمي' : 'WAVZ for Digital Transformation Solutions Portfolio'}
         </h2>
       </div>
 

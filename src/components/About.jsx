@@ -167,7 +167,7 @@ export const About = () => {
               {lang === 'ar' ? (
                 <span className="text-white">عن شركة <span className="text-[#FFB814] italic font-serif">WAVZ</span> للتحول الرقمي</span>
               ) : (
-                <span className="text-white">About <span className="text-[#FFB814] italic font-serif">WAVZ</span> Digital Transformation</span>
+                <span className="text-white">About <span className="text-[#FFB814] italic font-serif">WAVZ</span> for Digital Transformation</span>
               )}
             </motion.h1>
 

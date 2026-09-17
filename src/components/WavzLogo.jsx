@@ -6,7 +6,7 @@
  * - /public/WavzIcon.png (standalone gradient wave mark)
  */
 
-export const WavzLogo = ({ className = '', variant = 'default', alt = 'WAVZ' }) => (
+export const WavzLogo = ({ className = '', variant = 'default', alt = 'WAVZ for Digital Transformation' }) => (
   <img
     src={variant === 'white' ? '/Logo-white.png' : '/Logo.png'}
     alt={alt}
@@ -14,7 +14,7 @@ export const WavzLogo = ({ className = '', variant = 'default', alt = 'WAVZ' }) 
   />
 );
 
-export const WavzWordmark = ({ className = '', variant = 'default', alt = 'WAVZ' }) => (
+export const WavzWordmark = ({ className = '', variant = 'default', alt = 'WAVZ for Digital Transformation' }) => (
   <img
     src={variant === 'white' ? '/Logo-white.png' : '/Logo.png'}
     alt={alt}

@@ -14,9 +14,9 @@ const SEO_MAP = {
     type: 'website',
   },
   '#/about': {
-    title: 'About WAVZ | Our Mission, Vision & Values',
+    title: 'About WAVZ for Digital Transformation | Our Mission, Vision & Values',
     description:
-      'Learn about WAVZ — a leading digital transformation company delivering multi-industry, multi-service, multi-geography IT solutions across MEA.',
+      'Learn about WAVZ for Digital Transformation — a leading technology company delivering multi-industry, multi-service, multi-geography IT solutions across MEA.',
     keywords: 'about WAVZ, digital transformation company, IT company Egypt, MEA technology',
     image: DEFAULT_IMAGE,
     type: 'website',
@@ -88,7 +88,7 @@ const SEO_MAP = {
     type: 'website',
   },
   '#/payment-services': {
-    title: 'Payment Services & Fintech Solutions | WAVZ',
+    title: 'Payment Services & Fintech Solutions | WAVZ for Digital Transformation',
     description:
       'End-to-end payment infrastructure, switching, card management, and fintech solutions by WAVZ for banks, telcos, and fintechs in the MEA region.',
     keywords:
@@ -106,7 +106,7 @@ const SEO_MAP = {
     type: 'website',
   },
   '#/digital-transformation': {
-    title: 'Digital Transformation Services | WAVZ',
+    title: 'Digital Transformation Services | WAVZ for Digital Transformation',
     description:
       'WAVZ accelerates enterprise digital transformation through cloud adoption, automation, AI, and platform modernisation across MEA industries.',
     keywords:
@@ -141,7 +141,7 @@ const SEO_MAP = {
     type: 'website',
   },
   '#/savings-calculator': {
-    title: 'IT Savings Calculator | WAVZ Managed Services',
+    title: 'IT Savings Calculator | WAVZ for Digital Transformation',
     description:
       'Estimate how much your enterprise can save by moving to WAVZ Managed Services. Calculate ROI on IT outsourcing in minutes.',
     keywords:
