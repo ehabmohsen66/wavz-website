@@ -536,8 +536,8 @@ export const ContactPage = () => {
               boxShadow: '0 8px 30px rgba(8,45,74,0.06)',
               boxSizing: 'border-box'
             }}>
-              {/* Centered Title */}
-              <div style={{ textAlign: 'center' }}>
+              {/* Header with Title and "Open in Google Maps" link */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
                 <h2 style={{ 
                   fontFamily: font, 
                   fontSize: 20, 
@@ -549,6 +549,35 @@ export const ContactPage = () => {
                 }}>
                   {ar ? 'موقعنا' : 'Our Location'}
                 </h2>
+
+                <a
+                  href="https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#1173BD',
+                    textDecoration: 'none',
+                    padding: '5px 12px',
+                    borderRadius: 8,
+                    background: 'rgba(17,115,189,0.08)',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#1173BD'; e.currentTarget.style.color = '#ffffff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(17,115,189,0.08)'; e.currentTarget.style.color = '#1173BD'; }}
+                  title={ar ? 'فتح في خرائط Google' : 'Open directly in Google Maps'}
+                >
+                  <span>{ar ? 'فتح في خرائط Google' : 'Open in Google Maps'}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
               </div>
 
               {/* Map Iframe */}
@@ -588,7 +617,7 @@ export const ContactPage = () => {
                       </svg>
                     ),
                     value: ar ? 'منطقة التكنولوجيا بالمعادي، مربع MB3، مبنى B2، القاهرة، مصر.' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt.',
-                    href: null
+                    href: 'https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z'
                   },
                   {
                     icon: (
@@ -622,9 +651,23 @@ export const ContactPage = () => {
                   }
                 ].map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'rgba(17,115,189,0.08)', flexShrink: 0, marginTop: item.href ? 0 : 2 }}>
-                      {item.icon}
-                    </div>
+                    {item.href ? (
+                      <a 
+                        href={item.href} 
+                        target={item.href.startsWith('http') ? '_blank' : undefined} 
+                        rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined} 
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'rgba(17,115,189,0.08)', flexShrink: 0, textDecoration: 'none', transition: 'background 0.2s, transform 0.2s' }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(17,115,189,0.18)'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(17,115,189,0.08)'; e.currentTarget.style.transform = 'scale(1)'; }}
+                        aria-label={item.value}
+                      >
+                        {item.icon}
+                      </a>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: '50%', background: 'rgba(17,115,189,0.08)', flexShrink: 0, marginTop: item.href ? 0 : 2 }}>
+                        {item.icon}
+                      </div>
+                    )}
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 44 }}>
                       {item.href ? (
                         <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined} style={{ 

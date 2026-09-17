@@ -766,7 +766,17 @@ export const DataAI = () => {
             <span>·</span>
             <span style={{ color: T.white }}>wavz.com.eg</span>
             <span>·</span>
-            <span style={{ color: T.muted }}>{ar ? 'مجمع التكنولوجيا بالمعادي، مبنى B2، القاهرة' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt'}</span>
+            <a 
+              href="https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: T.muted, textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#FFB814'}
+              onMouseLeave={e => e.currentTarget.style.color = T.muted}
+              title={ar ? 'فتح في خرائط Google' : 'Open in Google Maps'}
+            >
+              {ar ? 'مجمع التكنولوجيا بالمعادي، مبنى B2، القاهرة' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt'}
+            </a>
           </div>
         </div>
       </section>

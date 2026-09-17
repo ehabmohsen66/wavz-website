@@ -707,7 +707,17 @@ export const OracleSolutions = () => {
             <span>·</span>
             <span dir="ltr">wavz.com.eg</span>
             <span>·</span>
-            <span>{ar ? 'حديقة المعادي التكنولوجية، مبنى B2، بلوك MB3، القاهرة، مصر' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt'}</span>
+            <a 
+              href="https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#FFB814'}
+              onMouseLeave={e => e.currentTarget.style.color = 'inherit'}
+              title={ar ? 'فتح في خرائط Google' : 'Open in Google Maps'}
+            >
+              {ar ? 'حديقة المعادي التكنولوجية، مبنى B2، بلوك MB3، القاهرة، مصر' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt'}
+            </a>
           </div>
         </div>
       </section>
