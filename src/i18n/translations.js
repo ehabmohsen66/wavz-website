@@ -897,7 +897,7 @@ For more information about WAVZ for Digital Transformation and our services, con
     },
     offering: {
       eyebrow: 'ما نقدمه',
-      title: 'محفظة حلولنا المتكاملة',
+      title: 'حلولنا المتكاملة',
       lede: 'الاستراتيجية تغذي التصميم المعماري. والتصميم المعماري يقود العمليات التشغيلية المنضبطة لضمان استمرارية الأداء يومياً.',
       learnMore: 'تعرف على المزيد',
       stats: {
