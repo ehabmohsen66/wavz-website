@@ -24,7 +24,23 @@ const LangContext = createContext({
 export const useLang = () => useContext(LangContext);
 
 export const LangProvider = ({ children }) => {
-  const [lang, setLang] = useState('en');
+  const [lang, setLangState] = useState(() => {
+    try {
+      const param = new URLSearchParams(window.location.search).get('lang');
+      if (param === 'ar' || param === 'en') return param;
+      const stored = localStorage.getItem('wavz_lang');
+      if (stored === 'ar' || stored === 'en') return stored;
+    } catch (e) {}
+    return 'en';
+  });
+
+  const setLang = (next) => {
+    setLangState(next);
+    try {
+      localStorage.setItem('wavz_lang', next);
+    } catch (e) {}
+  };
+
   const dir = lang === 'ar' ? 'rtl' : 'ltr';
   const { mergeSettings } = useSettings();
   const [t, setT] = useState(translations[lang]);
