@@ -1,7 +1,14 @@
 import { useLang } from '../i18n/LangContext.jsx';
 
 const logos = [
-  { name: 'Egypt Post', src: '/EGYPT POST logo .png' },
+  { name: 'Egypt Post', src: '/Picture8.png', imgClass: 'max-h-11 max-w-[150px] hover:scale-110' },
+  { name: 'AAIB', src: '/Picture5.png', imgClass: 'max-h-9 max-w-[155px] hover:scale-110' },
+  { name: 'Bank NXT', src: '/Picture6.png', imgClass: 'max-h-9 scale-110 hover:scale-125' },
+  { name: 'EBank', src: '/Picture7.png', imgClass: 'max-h-10 max-w-[150px] hover:scale-110' },
+  { name: 'Misr Insurance', src: '/Picture4.png', imgClass: 'max-h-12 hover:scale-110' },
+  { name: 'DEPI', src: '/Picture2.png', imgClass: 'max-h-12 hover:scale-110' },
+  { name: 'WASCO', src: '/Picture3.png', imgClass: 'max-h-12 hover:scale-110' },
+  { name: 'Go Bus', src: '/Picture1.png', imgClass: 'max-h-12 hover:scale-110' },
   { name: 'MCIT', src: '/MCIT-logos-Color-English-02-white-bg (1).png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
   { name: 'H&D Bank', src: '/Housing and Development Bank logo .png' },
   { name: 'Egypt Trust', src: '/Egypt trust.png' },
@@ -12,7 +19,6 @@ const logos = [
   { name: 'Baheya', src: '/Baheya logo.png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
   { name: 'Tietoevry', src: '/8b56ffb305d960f5_org.png' },
   { name: 'Teradata', src: '/Teradata_logo_(2024).svg.png' },
-  { name: 'Next Bank', src: '/nxt bank logo.jpg', imgClass: 'h-10 scale-[1.65] hover:scale-[1.8] mix-blend-multiply' },
   { name: 'PDC', src: '/PDC-Logo.png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
   { name: 'Detchland', src: '/detchland logo limited.png', imgClass: 'h-10 scale-[1.35] hover:scale-150 mix-blend-multiply' },
 ];

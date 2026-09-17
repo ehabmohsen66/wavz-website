@@ -14,10 +14,16 @@ const partners = [
 ];
 
 const clients = [
+  { name: 'Egypt Post', domain: 'egyptpost.org', localSrc: '/Picture8.png' },
+  { name: 'AAIB', localSrc: '/Picture5.png' },
+  { name: 'Bank NXT', localSrc: '/Picture6.png' },
+  { name: 'EBank', localSrc: '/Picture7.png' },
+  { name: 'Misr Insurance', localSrc: '/Picture4.png' },
+  { name: 'DEPI', localSrc: '/Picture2.png' },
+  { name: 'WASCO', localSrc: '/Picture3.png' },
+  { name: 'Go Bus', localSrc: '/Picture1.png' },
   { name: 'Detchland', localSrc: '/detchland logo limited.png', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' },
-  { name: 'Next Bank', localSrc: '/nxt bank logo.jpg', imgClass: 'max-h-16 scale-[1.65] hover:scale-[1.8] mix-blend-multiply' },
   { name: 'PDC', localSrc: '/PDC-Logo.png', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' },
-  { name: 'Egypt Post', domain: 'egyptpost.org', localSrc: '/EGYPT POST logo .png' },
   { name: 'MCIT', domain: 'mcit.gov.eg', localSrc: '/MCIT-logos-Color-English-02-white-bg (1).png', imgClass: 'max-h-16 scale-[1.35] hover:scale-150 mix-blend-multiply' },
   { name: 'H&D Bank', domain: 'hdb-egy.com', localSrc: '/Housing and Development Bank logo .png' },
   { name: 'SC Zone', domain: 'sczone.eg', localSrc: '/sc-zonelogo-header.png' },

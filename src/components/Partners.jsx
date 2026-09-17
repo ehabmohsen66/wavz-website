@@ -31,6 +31,27 @@ const PARTNERS = [
   { name: 'Qlik',              logo: '/partners-logos/qlik.png',                       category: 'Data & Analytics',       categoryAr: 'البيانات والتحليلات',              tagline: 'Analytics & Data Integration',       taglineAr: 'تكامل وتحليل البيانات الذكية' },
 ];
 
+const CLIENT_LOGOS = [
+  { name: 'Egypt Post', src: '/Picture8.png' },
+  { name: 'Arab African International Bank', src: '/Picture5.png' },
+  { name: 'Bank NXT', src: '/Picture6.png' },
+  { name: 'EBank', src: '/Picture7.png' },
+  { name: 'Misr Insurance', src: '/Picture4.png' },
+  { name: 'DEPI', src: '/Picture2.png' },
+  { name: 'WASCO', src: '/Picture3.png' },
+  { name: 'Go Bus', src: '/Picture1.png' },
+  { name: 'MCIT', src: '/MCIT-logos-Color-English-02-white-bg (1).png' },
+  { name: 'Housing and Development Bank', src: '/Housing and Development Bank logo .png' },
+  { name: 'Egypt Trust', src: '/Egypt trust.png' },
+  { name: 'Maridive', src: '/Maridive & Oil Services SAE Logo.png' },
+  { name: 'La Poste', src: '/Logo-groupe-la-poste-2021.png' },
+  { name: 'SC Zone', src: '/sc-zonelogo-header.png' },
+  { name: 'Prosecure', src: '/ps9.jpeg' },
+  { name: 'Baheya', src: '/Baheya logo.png' },
+  { name: 'PDC', src: '/PDC-Logo.png' },
+  { name: 'Detchland', src: '/detchland logo limited.png' },
+];
+
 const CAT_COLOR = {
   'ERP & Enterprise':'#4f46e5','Database & Cloud':'#0891b2','Cloud & Productivity':'#1173BD',
   'Financial Services':'#0e9f6e','Payment Services':'#059669','Networking & Security':'#dc2626',
@@ -132,6 +153,8 @@ export const Partners = () => {
   const logos = mappedPartners.map(p => ({ src: p.logo, name: p.name }));
   const row1  = logos.slice(0, Math.ceil(logos.length / 2));
   const row2  = logos.slice(Math.ceil(logos.length / 2) - 1);
+  const clientRow1 = CLIENT_LOGOS.slice(0, Math.ceil(CLIENT_LOGOS.length / 2));
+  const clientRow2 = CLIENT_LOGOS.slice(Math.ceil(CLIENT_LOGOS.length / 2));
   const rep   = arr => arr.length > 0 ? [...arr, ...arr, ...arr, ...arr] : [];
 
 
@@ -294,6 +317,78 @@ export const Partners = () => {
                     loading="lazy"
                     decoding="async"
                     style={{ maxWidth: '100%', maxHeight: 64, objectFit: 'contain', display: 'block' }} 
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="absolute left-0 top-0 h-full w-24 pointer-events-none" style={{ background: 'linear-gradient(to right,#F8FAFC,transparent)' }} />
+            <div className="absolute right-0 top-0 h-full w-24 pointer-events-none" style={{ background: 'linear-gradient(to left,#F8FAFC,transparent)' }} />
+          </div>
+        </section>
+
+        {/* ── Clients Section ── */}
+        <section id="clients-section" className="mb-20 lg:mb-28">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-8 rounded-lg bg-[#FFB814]/15 flex items-center justify-center flex-shrink-0">
+              <Building2 className="w-4 h-4 text-[#082D4A]" />
+            </div>
+            <div>
+              <h2 className="text-[22px] font-bold text-[#082D4A] leading-tight">
+                {isAr ? 'عملاؤنا' : 'Our Clients'}
+              </h2>
+              <p className="text-[13px] text-slate-500 mt-0.5">
+                {isAr ? 'موثوق به من قِبَل كبرى المؤسسات في مصر والمنطقة' : "Trusted by Egypt's leading institutions & global partners"}
+              </p>
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden" style={{ paddingBottom: 4 }}>
+            <div className="flex gap-4 whitespace-nowrap partners-row-left" style={{ width: 'max-content' }}>
+              {rep(clientRow1).map((logo, i) => (
+                <div 
+                  key={i} 
+                  className="flex-shrink-0 flex items-center justify-center" 
+                  style={{ 
+                    width: 185, 
+                    height: 95, 
+                    borderRadius: 14, 
+                    background: '#fff', 
+                    border: '1px solid rgba(17,115,189,0.1)', 
+                    boxShadow: '0 3px 12px rgba(8,45,74,0.06)', 
+                    padding: '12px 20px' 
+                  }}
+                >
+                  <img 
+                    src={logo.src} 
+                    alt={logo.name} 
+                    loading="lazy"
+                    decoding="async"
+                    style={{ maxWidth: '100%', maxHeight: 60, objectFit: 'contain', display: 'block' }} 
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-4 whitespace-nowrap partners-row-right mt-4" style={{ width: 'max-content' }}>
+              {rep(clientRow2).map((logo, i) => (
+                <div 
+                  key={i} 
+                  className="flex-shrink-0 flex items-center justify-center" 
+                  style={{ 
+                    width: 185, 
+                    height: 95, 
+                    borderRadius: 14, 
+                    background: '#fff', 
+                    border: '1px solid rgba(17,115,189,0.1)', 
+                    boxShadow: '0 3px 12px rgba(8,45,74,0.06)', 
+                    padding: '12px 20px' 
+                  }}
+                >
+                  <img 
+                    src={logo.src} 
+                    alt={logo.name} 
+                    loading="lazy"
+                    decoding="async"
+                    style={{ maxWidth: '100%', maxHeight: 60, objectFit: 'contain', display: 'block' }} 
                   />
                 </div>
               ))}
