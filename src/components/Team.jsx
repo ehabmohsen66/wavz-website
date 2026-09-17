@@ -18,6 +18,8 @@ const mapDbMemberToMember = (dbMem, ar) => {
   
   if (roleLower.includes('ceo') || roleLower.includes('managing') || roleLower.includes('مدير عام') || roleLower.includes('رئيس تنفيذي')) {
     department = ar ? 'التنفيذية' : 'Executive';
+  } else if (roleLower.includes('marketing') || roleLower.includes('تسويق')) {
+    department = ar ? 'التسويق' : 'Marketing';
   } else if (roleLower.includes('finance') || roleLower.includes('مالي')) {
     department = ar ? 'المالية' : 'Finance';
   } else if (roleLower.includes('human') || roleLower.includes('موارد')) {
@@ -110,11 +112,11 @@ const TEAM_EN = [
   {
     photo: '/team/Hesham-Fadel-WAVZ.webp',
     name: 'Hesham Fadel',
-    role: 'Financial Services Director',
-    department: 'Financial Services',
+    role: 'Commercial Director',
+    department: 'Commercial',
     years: '25+',
     highlight: 'IT Sales · Banking · Oracle · Nottingham MSc · 25+ Years',
-    bio: 'Hesham joined WAVZ in February 2024, bringing 25 years of experience in IT sales and business development in the banking sector. Prior to WAVZ, he worked at Oracle as financial sector account manager handling large governmental banks in Egypt and Libya. Hesham holds a master\'s degree in Information Technology from Nottingham University. He is an AUC alumni and a graduate of the iTi. He leads the Financial Services team responsible for delivering best-of-breed solutions to banks and financial organizations in Egypt and the Middle East.',
+    bio: 'Hesham joined WAVZ in February 2024, bringing 25 years of experience in IT sales and business development in the banking sector. Prior to WAVZ, he worked at Oracle as financial sector account manager handling large governmental banks in Egypt and Libya. Hesham holds a master\'s degree in Information Technology from Nottingham University. He is an AUC alumni and a graduate of the iTi. He leads the Commercial team responsible for delivering best-of-breed solutions to banks and financial organizations in Egypt and the Middle East.',
   },
   // 6. Youssef
   {
@@ -130,8 +132,8 @@ const TEAM_EN = [
   {
     photo: '/team/Mostafa-Youness-LR.jpg.webp',
     name: 'Mostafa Younes',
-    role: 'Commercial Director',
-    department: 'Commercial',
+    role: 'Marketing Director',
+    department: 'Marketing',
     years: '30+',
     highlight: 'Marketing · Sales · Business Development · MEA & Oceania · 30+ Years',
     bio: 'Mostafa joined WAVZ in March 2023, bringing over 30 years of experience in marketing, sales, business development and strategy. Prior to WAVZ, he worked in several multinational and regional organizations across international locations with diverse cultures. He has a significant track record of leading regional and multinational marketing and business development operations to achieve double-digit YoY growth, with extensive expertise in IT security services, cloud transformation, microfinancing, and outsourced IT services across the Middle East, Africa, and Oceania.',
@@ -223,11 +225,11 @@ const TEAM_AR = [
   {
     photo: '/team/Hesham-Fadel-WAVZ.webp',
     name: 'هشام فاضل',
-    role: 'مدير الخدمات المالية',
-    department: 'الخدمات المالية',
+    role: 'المدير التجاري',
+    department: 'التجارية',
     years: '+25',
     highlight: 'Oracle · القطاع المصرفي · ماجستير نوتنغهام · +25 عامًا',
-    bio: 'انضم هشام إلى WAVZ في فبراير 2024، وهو يمتلك 25 عامًا من الخبرة في مبيعات تكنولوجيا المعلومات وتطوير الأعمال في القطاع المصرفي. حاصل على ماجستير في تقنية المعلومات من جامعة نوتنغهام. يقود فريق الخدمات المالية المسؤول عن تقديم حلول متميزة للبنوك والمؤسسات المالية.',
+    bio: 'انضم هشام إلى WAVZ في فبراير 2024، وهو يمتلك 25 عامًا من الخبرة في مبيعات تكنولوجيا المعلومات وتطوير الأعمال في القطاع المصرفي. حاصل على ماجستير في تقنية المعلومات من جامعة نوتنغهام. يقود الفريق التجاري المسؤول عن تقديم حلول متميزة للبنوك والمؤسسات.',
   },
   // 6. Youssef
   {
@@ -243,8 +245,8 @@ const TEAM_AR = [
   {
     photo: '/team/Mostafa-Youness-LR.jpg.webp',
     name: 'مصطفى يونس',
-    role: 'المدير التجاري',
-    department: 'التجارية',
+    role: 'مدير التسويق',
+    department: 'التسويق',
     years: '+30',
     highlight: 'التسويق · المبيعات · تطوير الأعمال · الشرق الأوسط وأفريقيا · +30 عامًا',
     bio: 'انضم مصطفى إلى WAVZ في مارس 2023، وهو يمتلك أكثر من 30 عامًا من الخبرة في التسويق والمبيعات وتطوير الأعمال. يمتلك سجلاً حافلاً في قيادة عمليات التسويق وتطوير الأعمال لتحقيق نمو سنوي بأرقام مزدوجة.',
@@ -298,6 +300,7 @@ const DEPT_COLOR = {
   Finance: '#0e9f6e',
   'Human Capital': '#7c3aed',
   Commercial: '#e05d44',
+  Marketing: '#ea580c',
   Operations: '#0891b2',
   'Financial Services': '#1173BD',
   'Business Development': '#d97706',
@@ -312,6 +315,7 @@ const DEPT_COLOR = {
   'المالية': '#0e9f6e',
   'رأس المال البشري': '#7c3aed',
   'التجارية': '#e05d44',
+  'التسويق': '#ea580c',
   'العمليات': '#0891b2',
   'الخدمات المالية': '#1173BD',
   'تطوير الأعمال': '#d97706',
