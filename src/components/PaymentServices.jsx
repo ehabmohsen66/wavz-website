@@ -1161,13 +1161,33 @@ export const PaymentServices = () => {
               {ar ? 'معلومات التواصل' : 'Contact Information'}
             </div>
             {[
-              { label: ar ? 'المبيعات العامة' : 'General Sales', value: 'sales@wavz.com.eg' },
-              { label: ar ? 'الاستفسارات'   : 'Enquiries',       value: 'info@wavz.com.eg'  },
+              { label: ar ? 'المبيعات العامة' : 'General Sales', value: 'sales@wavz.com.eg', href: 'mailto:sales@wavz.com.eg' },
+              { label: ar ? 'الاستفسارات'   : 'Enquiries',       value: 'info@wavz.com.eg', href: 'mailto:info@wavz.com.eg'  },
+              { 
+                label: ar ? 'الموقع' : 'Location', 
+                value: ar ? 'حديقة المعادي التكنولوجية، مبنى B2، بلوك MB3، القاهرة، مصر' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt',
+                href: 'https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z'
+              },
             ].map((c, i) => (
-              <div key={i} style={{ marginBottom: i === 0 ? 20 : 0 }}>
+              <div key={i} style={{ marginBottom: i < 2 ? 18 : 0 }}>
                 <div style={{ fontSize: 11, color: T.muted, fontFamily: font, marginBottom: 4 }}>{c.label}</div>
-                <a href={`mailto:${c.value}`} style={{ fontSize: 14, fontWeight: 600, color: T.white, fontFamily: font, textDecoration: 'none' }}>
-                  {c.value}
+                <a 
+                  href={c.href} 
+                  target={c.href.startsWith('http') ? '_blank' : undefined}
+                  rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  style={{ 
+                    fontSize: 13.5, fontWeight: 600, color: T.white, fontFamily: font, 
+                    textDecoration: 'none', transition: 'color 0.2s',
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.color = T.gold}
+                  onMouseLeave={e => e.currentTarget.style.color = T.white}
+                  title={c.href.startsWith('http') ? (ar ? 'فتح في خرائط Google' : 'Open in Google Maps') : undefined}
+                >
+                  <span>{c.value}</span>
+                  {c.href.startsWith('http') && (
+                    <span style={{ fontSize: 11, color: T.gold, flexShrink: 0 }}>↗</span>
+                  )}
                 </a>
               </div>
             ))}

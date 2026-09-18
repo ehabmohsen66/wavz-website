@@ -584,7 +584,7 @@ export const ContactPage = () => {
               <div style={{ 
                 borderRadius: 8, 
                 overflow: 'hidden', 
-                border: '1px solid rgba(17,115,189,0.08)',
+                border: '1px solid rgba(17,115,189,0.12)',
                 flex: 1,
                 minHeight: 280,
                 width: '100%',
@@ -592,7 +592,7 @@ export const ContactPage = () => {
                 position: 'relative'
               }}>
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m26!1m12!1m3!1d2473.307220458826!2d30.977279279201973!3d30.001810199999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m11!3e6!4m3!3m2!1d30.0021138!2d30.978849999999998!4m5!1s0x145839c48ec3e323%3A0x7e89fae2af82ec!2sWAVZ%20for%20Digital%20Transformation%2C%20MB3%20Sector%2C%20Maadi%20Technology%20Park%20Building%20B2%2C%20Ezbet%20Fahmy%2C%20El%20Basatin%2C%20Cairo%20Governorate%204234104!3m2!1d29.9717661!2d31.2842986!5e1!3m2!1sen!2seg!4v1780070814200!5m2!1sen!2seg" 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.241372551469!2d31.2821099!3d29.9717661!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145839c48ec3e323%3A0x7e89fae2af82ec!2sWAVZ%20for%20Digital%20Transformation!5e0!3m2!1sen!2seg!4v1710000000000!5m2!1sen!2seg" 
                   width="100%" 
                   height="100%" 
                   style={{ 
@@ -604,6 +604,59 @@ export const ContactPage = () => {
                   referrerPolicy="no-referrer-when-downgrade"
                   title="WAVZ Office Map"
                 />
+
+                {/* Floating "Open in Google Maps" Badge on Map */}
+                <a
+                  href="https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    position: 'absolute',
+                    top: 14,
+                    ...(ar ? { left: 14 } : { right: 14 }),
+                    zIndex: 10,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 7,
+                    padding: '7px 13px',
+                    borderRadius: 20,
+                    background: 'rgba(8, 45, 74, 0.92)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    color: '#ffffff',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    fontFamily: font,
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 14px rgba(8,45,74,0.3)',
+                    border: '1px solid rgba(255,184,20,0.35)',
+                    transition: 'all 0.2s cubic-bezier(0.32,0.72,0,1)',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = '#FFB814';
+                    e.currentTarget.style.color = '#082D4A';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                    e.currentTarget.style.borderColor = '#FFB814';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = 'rgba(8, 45, 74, 0.92)';
+                    e.currentTarget.style.color = '#ffffff';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = 'rgba(255,184,20,0.35)';
+                  }}
+                  title={ar ? 'فتح موقع WAVZ مباشرة في خرائط Google' : 'Open WAVZ directly in Google Maps'}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span>{ar ? 'عرض في خرائط Google' : 'Open in Google Maps'}</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
               </div>
 
               {/* Location details list with elegant custom gold solid-looking icons */}
@@ -617,7 +670,8 @@ export const ContactPage = () => {
                       </svg>
                     ),
                     value: ar ? 'منطقة التكنولوجيا بالمعادي، مربع MB3، مبنى B2، القاهرة، مصر.' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt.',
-                    href: 'https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z'
+                    href: 'https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z',
+                    subtext: ar ? 'عرض في خرائط Google ↗' : 'Open in Google Maps ↗'
                   },
                   {
                     icon: (
@@ -683,6 +737,11 @@ export const ContactPage = () => {
                           onMouseLeave={e => e.currentTarget.style.color = '#082D4A'}
                         >
                           {item.value}
+                          {item.subtext && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 700, color: '#1173BD', marginTop: 4 }}>
+                              {item.subtext}
+                            </span>
+                          )}
                         </a>
                       ) : (
                         <span style={{ 

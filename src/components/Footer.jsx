@@ -278,11 +278,14 @@ export const Footer = () => {
                 href="https://www.google.com/maps/place/WAVZ+for+Digital+Transformation/@29.9717661,31.2842986,17z"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-start gap-2.5 text-[12.5px] text-white/55 hover:text-[#FFB814] transition-colors duration-200 leading-relaxed max-w-xs group"
-                title={isAr ? 'فتح موقع WAVZ في خرائط Google' : 'Open WAVZ location in Google Maps'}
+                className="inline-flex items-start gap-2.5 text-[12.5px] text-white/60 hover:text-[#FFB814] transition-all duration-200 leading-relaxed max-w-xs group cursor-pointer"
+                title={isAr ? 'فتح موقع WAVZ مباشرة في خرائط Google' : 'Open WAVZ location directly in Google Maps'}
               >
                 <MapPin className="w-4 h-4 text-[#FFB814] flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-200" />
-                <span>{t.footer?.address || (isAr ? 'حديقة المعادي التكنولوجية، مبنى B2، بلوك MB3، القاهرة، مصر' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt')}</span>
+                <span className="group-hover:underline underline-offset-4 decoration-[#FFB814]/40">
+                  {t.footer?.address || (isAr ? 'حديقة المعادي التكنولوجية، مبنى B2، بلوك MB3، القاهرة، مصر' : 'Maadi Technology Park, Block MB3, Building B2, Cairo, Egypt')}
+                </span>
+                <span className="text-[11px] text-[#FFB814] opacity-70 group-hover:opacity-100 transition-opacity mt-0.5 flex-shrink-0 font-bold">↗</span>
               </a>
             </div>
 
