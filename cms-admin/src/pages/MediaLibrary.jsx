@@ -20,7 +20,7 @@ export default function MediaLibrary() {
     setLoading(true);
     try {
       const res = await api.get('/media');
-      setMedia(res.media || res.items || res || []);
+      setMedia(res.data || res.media || res.items || (Array.isArray(res) ? res : []));
     } catch (err) {
       toast.error('Failed to load media assets: ' + err.message);
     } finally {

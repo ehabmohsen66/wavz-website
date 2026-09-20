@@ -19,9 +19,10 @@ export default function InquiriesManager() {
     try {
       const query = statusFilter !== 'all' ? `?status=${statusFilter}` : '';
       const res = await api.get(`/contacts${query}`);
-      const items = res.items || (Array.isArray(res) ? res : []);
+      const payload = (res && res.data) ? res.data : res;
+      const items = payload.items || (Array.isArray(payload) ? payload : (Array.isArray(res) ? res : []));
       setInquiries(items);
-      setUnreadCount(res.unread ?? items.filter(i => i.status === 'unread').length);
+      setUnreadCount(payload.unread ?? res.unread ?? items.filter(i => i.status === 'unread').length);
     } catch (err) {
       toast.error('Failed to load inquiries: ' + err.message);
     } finally {
