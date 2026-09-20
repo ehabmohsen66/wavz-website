@@ -11,6 +11,11 @@ require_once __DIR__ . '/config.php';
 // Disable timeout limits for large migrations
 set_time_limit(300);
 
+if (php_sapi_name() !== 'cli' && ($_GET['key'] ?? '') !== 'wavz2026_setup') {
+    http_response_code(403);
+    die("Access denied. A secret key is required to execute migration.");
+}
+
 echo "<pre>";
 echo "====================================================\n";
 echo "WAVZ CMS — Starting Database Content Migration\n";
@@ -369,7 +374,7 @@ try {
     // 7. Migrate Blog Posts with Blocks
     // ----------------------------------------------------
     echo "\n--- Migrating Blog Posts with Notion-style Blocks ---\n";
-    $db->exec("DELETE FROM blog_posts");
+    // Do not delete existing blog posts so user-created articles are preserved
 
     $blogJsonPath = __DIR__ . '/blog_contents_multilang.json';
     if (!file_exists($blogJsonPath)) {
@@ -556,6 +561,11 @@ try {
     $insertPost = $db->prepare("
         INSERT INTO blog_posts (slug, title_en, title_ar, excerpt_en, excerpt_ar, blocks_en, blocks_ar, image, category_en, category_ar, tags, read_time, accent_color, published_at, status, author_id)
         VALUES (:slug, :title_en, :title_ar, :excerpt_en, :excerpt_ar, :blocks_en, :blocks_ar, :image, :category_en, :category_ar, :tags, :read_time, :accent_color, :published_at, 'published', :author_id)
+        ON DUPLICATE KEY UPDATE
+            title_ar = VALUES(title_ar),
+            excerpt_ar = VALUES(excerpt_ar),
+            blocks_ar = VALUES(blocks_ar),
+            category_ar = VALUES(category_ar)
     ");
 
     $count = 0;

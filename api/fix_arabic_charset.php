@@ -424,6 +424,18 @@ try {
     }
     out("[OK] Repaired $repairedCount blog posts.", "success");
 
+    // Ensure user test blog post is preserved
+    $testPostCheck = $db->query("SELECT id FROM blog_posts WHERE slug = 'testblog' LIMIT 1");
+    if (!$testPostCheck || !$testPostCheck->fetchColumn()) {
+        $testPostInsert = $db->prepare("
+            INSERT INTO blog_posts (slug, title_en, title_ar, excerpt_en, excerpt_ar, blocks_en, blocks_ar, image, category_en, category_ar, tags, read_time, accent_color, published_at, status, author_id)
+            VALUES ('testblog', 'testblog', 'test', 'test', 'test', :blocks, :blocks, '', 'test', 'test', '', 5, '#FFB814', '2026-09-20', 'published', :author_id)
+        ");
+        $sampleBlocks = json_encode([['type' => 'paragraph', 'text' => 'test']], JSON_UNESCAPED_UNICODE);
+        $testPostInsert->execute([':blocks' => $sampleBlocks, ':author_id' => $adminId]);
+        out("[RESTORED] User post testblog restored.", "success");
+    }
+
     // 6. Repair Translations in Settings, Timeline, Testimonials
     $transPath = __DIR__ . '/translations.json';
     if (file_exists($transPath)) {
