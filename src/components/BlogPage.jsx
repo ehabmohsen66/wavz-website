@@ -884,30 +884,61 @@ export const BlogPage = ({ route }) => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
-        .blog-search:focus { border-color: #1173BD !important; outline: none; }
-        .blog-cat:hover  { border-color: rgba(17,115,189,0.3) !important; color: #1173BD !important; }
-        .blog-cat-active { background: rgba(255,184,20,0.12) !important; border-color: rgba(255,184,20,0.4) !important; color: #FFB814 !important; }
+        .blog-search:focus { border-color: #FFB814 !important; outline: none; }
         .blog-cats-container {
           display: flex;
-          flex-wrap: nowrap;
-          gap: 8px;
-          overflow-x: auto;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-          padding: 4px 10px;
+          flex-wrap: wrap;
+          gap: 10px 12px;
+          padding: 6px 0;
           width: 100%;
-          justify-content: flex-start;
+          justify-content: center;
+          align-items: center;
           box-sizing: border-box;
         }
-        .blog-cats-container::-webkit-scrollbar {
-          display: none;
+        .blog-cat-btn {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 8px 18px;
+          border-radius: 9999px;
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+          white-space: nowrap;
+          user-select: none;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          color: #E2E8F0;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
         }
-        @media (min-width: 1200px) {
-          .blog-cats-container {
-            justify-content: center;
-          }
+        .blog-cat-btn:hover {
+          background: rgba(255, 255, 255, 0.15) !important;
+          border-color: rgba(255, 184, 20, 0.5) !important;
+          color: #FFFFFF !important;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+        .blog-cat-btn:active {
+          transform: translateY(0);
+        }
+        .blog-cat-btn.active {
+          background: linear-gradient(135deg, #FFB814 0%, #F5A800 100%) !important;
+          border-color: #FFB814 !important;
+          color: #061E31 !important;
+          font-weight: 700 !important;
+          box-shadow: 0 4px 16px rgba(255, 184, 20, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+          transform: translateY(-1px);
+        }
+        .blog-cat-btn.active:hover {
+          background: linear-gradient(135deg, #FFC438 0%, #FFB814 100%) !important;
+          box-shadow: 0 6px 20px rgba(255, 184, 20, 0.5);
         }
         @media (max-width: 640px) {
+          .blog-cats-container { gap: 8px 8px; }
+          .blog-cat-btn { font-size: 12px; padding: 6px 14px; }
           .featured-grid { grid-template-columns: 1fr !important; }
           .featured-img  { min-height: 200px !important; aspect-ratio: 16/9; }
         }
@@ -979,15 +1010,32 @@ export const BlogPage = ({ route }) => {
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(48px,6vw,72px) clamp(24px,6vw,80px)' }}>
         {/* Toolbar containing Category Filters and SearchBar (Centered Column Layout) */}
         <div style={{
-          display: 'flex', flexDirection: 'column', gap: 24,
+          display: 'flex', flexDirection: 'column', gap: 22,
           alignItems: 'center', justifyContent: 'center',
           marginBottom: 48,
-          background: '#082D4A',
-          border: '1px solid rgba(17,115,189,0.2)',
-          boxShadow: '0 8px 24px rgba(8,45,74,0.12)',
-          borderRadius: 16, padding: '24px 28px',
+          background: 'linear-gradient(180deg, #093354 0%, #082D4A 100%)',
+          border: '1px solid rgba(17,115,189,0.25)',
+          boxShadow: '0 12px 36px -8px rgba(6,30,49,0.35), 0 0 0 1px rgba(255,255,255,0.05) inset',
+          borderRadius: 20, padding: '26px 22px',
+          width: '100%',
+          boxSizing: 'border-box',
         }}>
-          {/* Category filters */}
+          {/* Section topic eyebrow */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{
+              width: 7, height: 7, borderRadius: '50%',
+              background: '#FFB814', display: 'inline-block',
+              boxShadow: '0 0 10px #FFB814'
+            }} />
+            <span style={{
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.14em',
+              textTransform: 'uppercase', color: '#91C4F5', fontFamily: font
+            }}>
+              {ar ? 'أقسام ومواضيع المدونة' : 'Browse by Category'}
+            </span>
+          </div>
+
+          {/* Category filters (all fully visible, cleanly wrapped, zero clipping) */}
           <div className="blog-cats-container">
             {cats.map(cat => {
               const isAllCat = cat === 'All' || cat === 'الكل';
@@ -997,18 +1045,9 @@ export const BlogPage = ({ route }) => {
                 <button
                   key={cat}
                   onClick={() => setActiveCat(cat)}
-                  className={`blog-cat${isActive ? ' blog-cat-active' : ''}`}
-                  style={{
-                    fontFamily: font, fontSize: 12, fontWeight: isActive ? 700 : 500,
-                    padding: '6px 14px',
-                    border: `1px solid ${isActive ? 'rgba(255,184,20,0.4)' : 'rgba(255,255,255,0.1)'}`,
-                    borderRadius: 100,
-                    background: isActive ? 'rgba(255,184,20,0.12)' : 'rgba(255,255,255,0.04)',
-                    color: isActive ? T.gold : 'rgba(145,196,245,0.6)',
-                    cursor: 'pointer', transition: 'all 0.18s ease',
-                    flexShrink: 0,
-                    whiteSpace: 'nowrap',
-                  }}
+                  className={`blog-cat-btn${isActive ? ' active' : ''}`}
+                  style={{ fontFamily: font }}
+                  aria-pressed={isActive}
                 >
                   {cat}
                 </button>
@@ -1017,7 +1056,7 @@ export const BlogPage = ({ route }) => {
           </div>
 
           {/* SearchBar */}
-          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', maxWidth: 480 }}>
             <SearchBar
               placeholder={ar ? 'ابحث في المقالات...' : 'Search articles...'}
               searchQuery={search}
@@ -1030,9 +1069,32 @@ export const BlogPage = ({ route }) => {
         {filtered.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            style={{ textAlign: 'center', padding: '80px 0', color: '#64748b', fontFamily: font, fontSize: 15 }}
+            style={{ textAlign: 'center', padding: '60px 20px', color: '#64748b', fontFamily: font }}
           >
-            {ar ? 'لا توجد مقالات تطابق بحثك.' : 'No articles match your search.'}
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
+            <p style={{ fontSize: 16, fontWeight: 600, color: '#082D4A', marginBottom: 8 }}>
+              {ar ? 'لا توجد مقالات تطابق هذا الاختيار' : 'No articles match this selection'}
+            </p>
+            <p style={{ fontSize: 14, color: '#64748b', marginBottom: 20 }}>
+              {search
+                ? (ar ? `لم نجد نتائج للبحث عن "${search}"` : `No results found for "${search}"`)
+                : (ar ? 'لم يتم نشر مقالات في هذا القسم بعد.' : 'No articles have been published in this category yet.')}
+            </p>
+            <button
+              onClick={() => { setActiveCat('All'); setSearch(''); }}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '8px 20px', borderRadius: 100,
+                background: '#082D4A', color: '#fff',
+                border: 'none', cursor: 'pointer',
+                fontSize: 13, fontWeight: 600, fontFamily: font,
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#1173BD'}
+              onMouseLeave={e => e.currentTarget.style.background = '#082D4A'}
+            >
+              {ar ? 'عرض جميع المقالات' : 'View all articles'}
+            </button>
           </motion.div>
         ) : (
           <>
@@ -1041,7 +1103,9 @@ export const BlogPage = ({ route }) => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
                   <div style={{ width: 20, height: 2, background: '#1173BD' }} />
                   <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#082D4A', fontFamily: font }}>
-                    {ar ? 'المقال المميز' : 'Featured Article'}
+                    {activeCat && activeCat !== 'All' && activeCat !== 'الكل'
+                      ? (ar ? `قسم: ${activeCat}` : `Category: ${activeCat}`)
+                      : (ar ? 'المقال المميز' : 'Featured Article')}
                   </span>
                 </div>
                 <FeaturedCard post={featured} ar={ar} font={font} />
@@ -1053,7 +1117,9 @@ export const BlogPage = ({ route }) => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
                   <div style={{ width: 20, height: 2, background: '#1173BD' }} />
                   <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#082D4A', fontFamily: font }}>
-                    {ar ? 'جميع المقالات' : 'All Articles'}
+                    {activeCat && activeCat !== 'All' && activeCat !== 'الكل'
+                      ? (ar ? 'المزيد في هذا القسم' : 'More in this Category')
+                      : (ar ? 'جميع المقالات' : 'All Articles')}
                   </span>
                   <span style={{ fontFamily: font, fontSize: 11, color: '#64748b' }}>({rest.length})</span>
                 </div>
