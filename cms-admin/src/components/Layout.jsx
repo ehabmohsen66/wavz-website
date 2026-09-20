@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import logoWhite from '../assets/Logo-white.png';
 
@@ -73,6 +73,30 @@ export default function Layout({ children, title }) {
     ? [...navItems.slice(0, -1), ...adminOnlyItems, navItems[navItems.length - 1]]
     : navItems;
 
+  const getHeaderTitle = () => {
+    if (title) return title;
+    const path = location.pathname.replace(/^\/admin/, '') || '/';
+    if (path === '/' || path === '') return 'Dashboard';
+    const cleanPath = path.split('?')[0];
+    const match = [...navItems, ...adminOnlyItems].find(item => item.path === cleanPath);
+    if (match) return match.label;
+    if (cleanPath.startsWith('/blog')) return 'Blog Posts';
+    if (cleanPath.startsWith('/news')) return 'News Articles';
+    if (cleanPath.startsWith('/services')) return 'Services';
+    if (cleanPath.startsWith('/team')) return 'Team & Leadership';
+    if (cleanPath.startsWith('/partners')) return 'Strategic Partners';
+    if (cleanPath.startsWith('/timeline')) return 'Company Timeline';
+    if (cleanPath.startsWith('/testimonials')) return 'Client Testimonials';
+    if (cleanPath.startsWith('/media')) return 'Media Library';
+    if (cleanPath.startsWith('/inquiries')) return 'Inquiries Inbox';
+    if (cleanPath.startsWith('/analytics')) return 'Analytics & Tags';
+    if (cleanPath.startsWith('/tools')) return 'Site Tools';
+    if (cleanPath.startsWith('/users')) return 'User Management';
+    if (cleanPath.startsWith('/settings')) return 'System Settings';
+    if (cleanPath.startsWith('/profile')) return 'My Profile';
+    return 'Dashboard';
+  };
+
   return (
     <div className="admin-layout">
       <div className={`sidebar-overlay ${sidebarOpen ? 'visible' : ''}`} onClick={() => setSidebarOpen(false)} />
@@ -131,7 +155,7 @@ export default function Layout({ children, title }) {
                 <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
               </svg>
             </button>
-            <h1 className="admin-header-title">{title || 'Dashboard'}</h1>
+            <h1 className="admin-header-title">{getHeaderTitle()}</h1>
           </div>
           <div className="admin-header-right">
             <div
@@ -145,7 +169,7 @@ export default function Layout({ children, title }) {
         </header>
 
         <main className="admin-content">
-          {children}
+          {children || <Outlet />}
         </main>
       </div>
     </div>
