@@ -21,6 +21,33 @@ try {
     echo "[OK] Connected to database successfully.\n";
 
     // ----------------------------------------------------
+    // Enforce UTF-8mb4 Character Set on Database & Tables
+    // ----------------------------------------------------
+    echo "\n--- Enforcing UTF-8mb4 Character Set on Database & Tables ---\n";
+    $db->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
+    $db->exec("SET CHARACTER SET utf8mb4");
+
+    try {
+        $dbName = DB_NAME;
+        $db->exec("ALTER DATABASE `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        echo "[OK] Database default collation set to utf8mb4_unicode_ci.\n";
+    } catch (Throwable $e) {}
+
+    $allTables = [
+        'users', 'settings', 'media', 'pages', 'navigation',
+        'team_members', 'partners', 'services', 'service_stats',
+        'service_pipelines', 'service_bullets', 'news_articles',
+        'blog_posts', 'timeline_events', 'testimonials',
+        'activity_log', 'contact_submissions', 'clients'
+    ];
+    foreach ($allTables as $t) {
+        try {
+            $db->exec("ALTER TABLE `$t` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        } catch (Throwable $e) {}
+    }
+    echo "[OK] Initial table charset conversion to utf8mb4 applied.\n";
+
+    // ----------------------------------------------------
     // 0. Ensure Database Tables Exist from schema.sql
     // ----------------------------------------------------
     echo "\n--- Verifying & Creating Database Tables ---\n";
@@ -42,7 +69,14 @@ try {
             // Ignore non-fatal duplicates / already exists
         }
     }
-    echo "[OK] All database tables verified and ready.\n";
+
+    foreach ($allTables as $t) {
+        try {
+            $db->exec("ALTER TABLE `$t` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        } catch (Throwable $e) {}
+    }
+    echo "[OK] All database tables verified, created, and confirmed as utf8mb4_unicode_ci.\n";
+
 
     // ----------------------------------------------------
     // 1. Ensure Default Admin Account Exists
@@ -231,8 +265,8 @@ try {
             ':year'         => $year,
             ':title_en'     => $titleEn,
             ':title_ar'     => $titleAr,
-            ':items_en'     => json_encode($itemsEn),
-            ':items_ar'     => json_encode($itemsAr),
+            ':items_en'     => json_encode($itemsEn, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            ':items_ar'     => json_encode($itemsAr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             ':icon'         => $icon,
             ':color_scheme' => $color,
             ':sort_order'   => $idx
@@ -460,6 +494,62 @@ try {
             'accent' => '#F97316',
             'tags' => 'Augmented Reality, FinTech',
             'published_at' => '2024-11-05 00:00:00'
+        ],
+        [
+            'slug' => 'comprehensive-it-testing-services-for-reliable-business-systems',
+            'title_en' => 'Comprehensive IT Testing Services for Reliable Business Systems',
+            'title_ar' => 'خدمات اختبار IT الشاملة لأنظمة أعمال موثوقة',
+            'category_en' => 'IT Testing',
+            'category_ar' => 'اختبار IT',
+            'excerpt_en' => 'Reliable IT systems are the backbone of modern business. Comprehensive testing services ensure your systems perform flawlessly, scale efficiently, and remain secure in the face of evolving threats.',
+            'excerpt_ar' => 'أنظمة تكنولوجيا المعلومات الموثوقة هي العمود الفقري لعمليات الأعمال.',
+            'image' => 'https://wavz.com.eg/wp-content/uploads/2024/10/IT1-400x250.png',
+            'read_time' => 5,
+            'accent' => '#22C55E',
+            'tags' => 'Testing, IT',
+            'published_at' => '2024-10-29 00:00:00'
+        ],
+        [
+            'slug' => 'the-rise-of-managed-services-solutions-in-egypt',
+            'title_en' => 'The Rise of Managed Services Solutions in Egypt',
+            'title_ar' => 'صعود حلول الخدمات المُدارة في مصر',
+            'category_en' => 'Managed Services',
+            'category_ar' => 'الخدمات المُدارة',
+            'excerpt_en' => 'Egypt\'s digital economy is accelerating, and with it comes a growing demand for professional managed services. Managed service providers offer the expertise, scalability, and reliability organizations need.',
+            'excerpt_ar' => 'يتسارع الاقتصاد الرقمي في مصر، ومعه يتزايد الطلب على الخدمات المُدارة المهنية.',
+            'image' => 'https://wavz.com.eg/wp-content/uploads/2024/10/MS1-400x250.png',
+            'read_time' => 6,
+            'accent' => '#FFB814',
+            'tags' => 'Managed Services, Egypt',
+            'published_at' => '2024-10-22 00:00:00'
+        ],
+        [
+            'slug' => 'ai-in-cybersecurity-protecting-egypts-digital-economy',
+            'title_en' => 'AI in Cybersecurity: Protecting Egypt\'s Digital Economy',
+            'title_ar' => 'الذكاء الاصطناعي في الأمن الإلكتروني: حماية الاقتصاد الرقمي',
+            'category_en' => 'Cybersecurity',
+            'category_ar' => 'الأمن الإلكتروني',
+            'excerpt_en' => 'As Egypt\'s digital economy grows, so do cybersecurity challenges. AI-powered security solutions are emerging as essential tools for detecting, preventing, and responding to sophisticated cyber threats.',
+            'excerpt_ar' => 'مع نمو الاقتصاد الرقمي في مصر، تتزايد التحديات الأمنية الإلكترونية.',
+            'image' => 'https://wavz.com.eg/wp-content/uploads/2024/10/Ai1-400x250.png',
+            'read_time' => 7,
+            'accent' => '#EF4444',
+            'tags' => 'Cybersecurity, AI',
+            'published_at' => '2024-10-15 00:00:00'
+        ],
+        [
+            'slug' => 'the-role-of-apis-in-open-banking-driving-innovation',
+            'title_en' => 'The Role of APIs in Open Banking: Driving Innovation',
+            'title_ar' => 'دور API في الخدمات المصرفية المفتوحة: قيادة الابتكار',
+            'category_en' => 'Financial Services',
+            'category_ar' => 'الخدمات المالية',
+            'excerpt_en' => 'Open Banking is transforming financial services by enabling secure data sharing between banks and third-party providers through APIs, driving unprecedented levels of competition, collaboration, and customer-centric services.',
+            'excerpt_ar' => 'تُحوّل الخدمات المصرفية المفتوحة صناعة الخدمات المالية من خلال تمكين تبادل البيانات بشكل آمن.',
+            'image' => 'https://wavz.com.eg/wp-content/uploads/2024/10/Open1-400x250.png',
+            'read_time' => 5,
+            'accent' => '#1173BD',
+            'tags' => 'Open Banking, APIs',
+            'published_at' => '2024-10-08 00:00:00'
         ]
     ];
 
@@ -505,8 +595,8 @@ try {
             ':title_ar'      => $postData['title_ar'],
             ':excerpt_en'    => $postData['excerpt_en'],
             ':excerpt_ar'    => $postData['excerpt_ar'],
-            ':blocks_en'     => json_encode($blocksEn),
-            ':blocks_ar'     => json_encode($blocksAr),
+            ':blocks_en'     => json_encode($blocksEn, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            ':blocks_ar'     => json_encode($blocksAr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             ':image'         => $postData['image'],
             ':category_en'   => $postData['category_en'],
             ':category_ar'   => $postData['category_ar'],

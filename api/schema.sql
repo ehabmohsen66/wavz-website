@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_email (email),
   INDEX idx_role (role)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Default admin account (password: wavz@admin2026 — MUST change on first login)
 INSERT INTO users (name, email, password, role) VALUES
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS settings (
   updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_group (`group`),
   INDEX idx_key (`key`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Seed default settings
 INSERT INTO settings (`group`, `key`, value_en, value_ar, field_type) VALUES
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS media (
   INDEX idx_mime (mime_type),
   INDEX idx_created (created_at),
   FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 4. PAGES — Static page content (About, Hero sections, etc.)
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS pages (
   INDEX idx_slug (slug),
   INDEX idx_status (status),
   FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 5. NAVIGATION — Menu items (supports nesting)
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS navigation (
   INDEX idx_menu (menu_group),
   INDEX idx_sort (sort_order),
   FOREIGN KEY (parent_id) REFERENCES navigation(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 6. TEAM MEMBERS — Board of Directors + Executive Team
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS team_members (
   INDEX idx_type (type),
   INDEX idx_visible (is_visible),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 7. PARTNERS — Strategic alliances
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS partners (
   updated_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_category (category),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 8. SERVICES — Service units for each service page
@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS services (
   INDEX idx_page (page_slug),
   INDEX idx_code (code),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 9. SERVICE_STATS — Telemetry stats per service unit
@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS service_stats (
   FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
   INDEX idx_service (service_id),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 10. SERVICE_PIPELINES — Process flow steps per service unit
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS service_pipelines (
   FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
   INDEX idx_service (service_id),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 11. SERVICE_BULLETS — Operational specification bullets
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS service_bullets (
   FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
   INDEX idx_service (service_id),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 12. NEWS ARTICLES
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS news_articles (
   INDEX idx_published (published_at),
   INDEX idx_category (category_en),
   FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 13. BLOG POSTS — Structured block content
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   INDEX idx_published (published_at),
   INDEX idx_category (category_en),
   FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 14. TIMELINE EVENTS — Journey milestones
@@ -333,7 +333,7 @@ CREATE TABLE IF NOT EXISTS timeline_events (
   updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_year (year),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 15. TESTIMONIALS — Partner/client quotes
@@ -355,7 +355,7 @@ CREATE TABLE IF NOT EXISTS testimonials (
   updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_visible (is_visible),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 16. ACTIVITY LOG — Track admin actions
@@ -373,7 +373,7 @@ CREATE TABLE IF NOT EXISTS activity_log (
   INDEX idx_entity (entity_type, entity_id),
   INDEX idx_created (created_at),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 17. CONTACT SUBMISSIONS — Lead & Inquiry CRM Inbox
@@ -393,7 +393,7 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
   INDEX idx_status (status),
   INDEX idx_created (created_at),
   INDEX idx_email (email)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
 -- 18. CLIENTS — Brand Logos for Scrolling Strip (Marquee)
@@ -409,5 +409,5 @@ CREATE TABLE IF NOT EXISTS clients (
   updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_visible (is_visible),
   INDEX idx_sort (sort_order)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
