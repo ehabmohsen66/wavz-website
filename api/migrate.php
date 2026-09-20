@@ -611,6 +611,46 @@ try {
     echo "[OK] Blog posts imported successfully ($count posts).\n";
 
     // ----------------------------------------------------
+    // 8. Ensure Blog Categories Table & Defaults
+    // ----------------------------------------------------
+    echo "\n--- Setting Up Blog Categories ---\n";
+    $db->exec("
+        CREATE TABLE IF NOT EXISTS blog_categories (
+          id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          name_en     VARCHAR(100) NOT NULL UNIQUE,
+          name_ar     VARCHAR(100) NOT NULL,
+          slug        VARCHAR(100) NOT NULL UNIQUE,
+          sort_order  INT UNSIGNED NOT NULL DEFAULT 0,
+          created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          INDEX idx_slug (slug),
+          INDEX idx_sort (sort_order)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ");
+
+    $defaultCategories = [
+        ['name_en' => 'AI & Innovation', 'name_ar' => 'الذكاء الاصطناعي', 'slug' => 'ai-innovation', 'sort_order' => 1],
+        ['name_en' => 'Cybersecurity', 'name_ar' => 'الأمن الإلكتروني', 'slug' => 'cybersecurity', 'sort_order' => 2],
+        ['name_en' => 'SAP Services', 'name_ar' => 'خدمات SAP', 'slug' => 'sap-services', 'sort_order' => 3],
+        ['name_en' => 'Digital Transformation', 'name_ar' => 'التحول الرقمي', 'slug' => 'digital-transformation', 'sort_order' => 4],
+        ['name_en' => 'Managed Services', 'name_ar' => 'الخدمات المُدارة', 'slug' => 'managed-services', 'sort_order' => 5],
+        ['name_en' => 'Financial Services', 'name_ar' => 'الخدمات المالية', 'slug' => 'financial-services', 'sort_order' => 6],
+        ['name_en' => 'Cloud', 'name_ar' => 'السحابة الإلكترونية', 'slug' => 'cloud', 'sort_order' => 7],
+        ['name_en' => 'FinTech', 'name_ar' => 'التكنولوجيا المالية', 'slug' => 'fintech', 'sort_order' => 8],
+        ['name_en' => 'IT Testing', 'name_ar' => 'اختبار IT', 'slug' => 'it-testing', 'sort_order' => 9],
+    ];
+
+    $insertCat = $db->prepare("
+        INSERT INTO blog_categories (name_en, name_ar, slug, sort_order)
+        VALUES (:name_en, :name_ar, :slug, :sort_order)
+        ON DUPLICATE KEY UPDATE name_ar = VALUES(name_ar)
+    ");
+    foreach ($defaultCategories as $cat) {
+        $insertCat->execute($cat);
+    }
+    echo "[OK] Blog categories verified and seeded.\n";
+
+    // ----------------------------------------------------
     // 9. Ensure Contact Submissions Table Exists
     // ----------------------------------------------------
     echo "\n--- Setting Up Inquiries & Contact Submissions ---\n";

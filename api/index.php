@@ -29,6 +29,7 @@ require_once __DIR__ . '/models/ServicePipeline.php';
 require_once __DIR__ . '/models/ServiceBullet.php';
 require_once __DIR__ . '/models/NewsArticle.php';
 require_once __DIR__ . '/models/BlogPost.php';
+require_once __DIR__ . '/models/BlogCategory.php';
 require_once __DIR__ . '/models/TimelineEvent.php';
 require_once __DIR__ . '/models/Testimonial.php';
 require_once __DIR__ . '/models/ActivityLog.php';
@@ -46,6 +47,7 @@ require_once __DIR__ . '/controllers/ClientsController.php';
 require_once __DIR__ . '/controllers/ServicesController.php';
 require_once __DIR__ . '/controllers/NewsController.php';
 require_once __DIR__ . '/controllers/BlogController.php';
+require_once __DIR__ . '/controllers/BlogCategoriesController.php';
 require_once __DIR__ . '/controllers/TimelineController.php';
 require_once __DIR__ . '/controllers/TestimonialsController.php';
 require_once __DIR__ . '/controllers/DashboardController.php';
@@ -306,6 +308,24 @@ try {
         BlogController::delete((int)$m[1]);
         exit;
     }
+    // Blog Categories
+    if ($requestUri === '/blog/categories' && $method === 'GET') {
+        BlogCategoriesController::index();
+        exit;
+    }
+    if ($requestUri === '/blog/categories' && $method === 'POST') {
+        BlogCategoriesController::create($input);
+        exit;
+    }
+    if (preg_match('#^/blog/categories/(\d+)$#', $requestUri, $m) && $method === 'PUT') {
+        BlogCategoriesController::update((int)$m[1], $input);
+        exit;
+    }
+    if (preg_match('#^/blog/categories/(\d+)$#', $requestUri, $m) && $method === 'DELETE') {
+        BlogCategoriesController::delete((int)$m[1]);
+        exit;
+    }
+
     if (preg_match('#^/blog/([a-z0-9\-]+)$#', $requestUri, $m) && $method === 'GET') {
         BlogController::showBySlug($m[1]);
         exit;

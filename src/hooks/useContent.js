@@ -341,3 +341,31 @@ export const useClients = (fallback = []) => {
 
   return { data: (data && data.length > 0) ? data : fallback, loading, error };
 };
+
+export const useBlogCategories = (fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/blog/categories');
+        if (!active) return;
+        const rawItems = response?.data?.items || response?.data || (Array.isArray(response) ? response : []);
+        setData(Array.isArray(rawItems) ? rawItems : []);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchCategories();
+    return () => { active = false; };
+  }, []);
+
+  return { data: (data && Array.isArray(data) && data.length > 0) ? data : fallback, loading, error };
+};

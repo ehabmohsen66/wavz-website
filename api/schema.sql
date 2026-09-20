@@ -317,6 +317,33 @@ CREATE TABLE IF NOT EXISTS blog_posts (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
+-- 13b. BLOG CATEGORIES
+-- ============================================================
+CREATE TABLE IF NOT EXISTS blog_categories (
+  id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name_en     VARCHAR(100) NOT NULL UNIQUE,
+  name_ar     VARCHAR(100) NOT NULL,
+  slug        VARCHAR(100) NOT NULL UNIQUE,
+  sort_order  INT UNSIGNED NOT NULL DEFAULT 0,
+  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_slug (slug),
+  INDEX idx_sort (sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO blog_categories (name_en, name_ar, slug, sort_order) VALUES
+('AI & Innovation', 'الذكاء الاصطناعي', 'ai-innovation', 1),
+('Cybersecurity', 'الأمن الإلكتروني', 'cybersecurity', 2),
+('SAP Services', 'خدمات SAP', 'sap-services', 3),
+('Digital Transformation', 'التحول الرقمي', 'digital-transformation', 4),
+('Managed Services', 'الخدمات المُدارة', 'managed-services', 5),
+('Financial Services', 'الخدمات المالية', 'financial-services', 6),
+('Cloud', 'السحابة الإلكترونية', 'cloud', 7),
+('FinTech', 'التكنولوجيا المالية', 'fintech', 8),
+('IT Testing', 'اختبار IT', 'it-testing', 9)
+ON DUPLICATE KEY UPDATE name_ar = VALUES(name_ar);
+
+-- ============================================================
 -- 14. TIMELINE EVENTS — Journey milestones
 -- ============================================================
 CREATE TABLE IF NOT EXISTS timeline_events (

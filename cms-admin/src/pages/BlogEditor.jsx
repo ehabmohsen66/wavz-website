@@ -34,6 +34,84 @@ export default function BlogEditor() {
   const [blocksEn, setBlocksEn] = useState([]);
   const [blocksAr, setBlocksAr] = useState([]);
 
+  // Category management
+  const DEFAULT_CATEGORIES = [
+    { name_en: 'AI & Innovation', name_ar: 'الذكاء الاصطناعي' },
+    { name_en: 'Cybersecurity', name_ar: 'الأمن الإلكتروني' },
+    { name_en: 'SAP Services', name_ar: 'خدمات SAP' },
+    { name_en: 'Digital Transformation', name_ar: 'التحول الرقمي' },
+    { name_en: 'Managed Services', name_ar: 'الخدمات المُدارة' },
+    { name_en: 'Financial Services', name_ar: 'الخدمات المالية' },
+    { name_en: 'Cloud', name_ar: 'السحابة الإلكترونية' },
+    { name_en: 'FinTech', name_ar: 'التكنولوجيا المالية' },
+    { name_en: 'IT Testing', name_ar: 'اختبار IT' },
+  ];
+
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [showNewCatModal, setShowNewCatModal] = useState(false);
+  const [newCatEn, setNewCatEn] = useState('');
+  const [newCatAr, setNewCatAr] = useState('');
+  const [creatingCat, setCreatingCat] = useState(false);
+
+  // Fetch categories from API
+  const fetchCategories = useCallback(async () => {
+    try {
+      const res = await api.get('/blog/categories');
+      const items = Array.isArray(res) ? res : (res?.data || res?.items || []);
+      if (Array.isArray(items) && items.length > 0) {
+        setCategories(items);
+      }
+    } catch {
+      // Keep defaults
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  const handleCategorySelect = (selectedNameEn) => {
+    if (!selectedNameEn) {
+      setCategoryEn('');
+      setCategoryAr('');
+      return;
+    }
+    const found = categories.find(c => c.name_en === selectedNameEn);
+    if (found) {
+      setCategoryEn(found.name_en);
+      setCategoryAr(found.name_ar || found.name_en);
+    } else {
+      setCategoryEn(selectedNameEn);
+    }
+  };
+
+  const handleCreateCategory = async (e) => {
+    e?.preventDefault();
+    if (!newCatEn.trim()) {
+      toast.error('Category Name (English) is required');
+      return;
+    }
+    setCreatingCat(true);
+    try {
+      const res = await api.post('/blog/categories', {
+        name_en: newCatEn.trim(),
+        name_ar: newCatAr.trim() || newCatEn.trim()
+      });
+      const newCat = res?.data || res || { name_en: newCatEn.trim(), name_ar: newCatAr.trim() };
+      setCategories(prev => [...prev, newCat]);
+      setCategoryEn(newCat.name_en);
+      setCategoryAr(newCat.name_ar);
+      toast.success(`Category "${newCat.name_en}" added successfully!`);
+      setShowNewCatModal(false);
+      setNewCatEn('');
+      setNewCatAr('');
+    } catch (err) {
+      toast.error('Failed to create category: ' + err.message);
+    } finally {
+      setCreatingCat(false);
+    }
+  };
+
   // Auto-generate slug from English title
   useEffect(() => {
     if (!isEdit && titleEn) {
@@ -272,12 +350,42 @@ export default function BlogEditor() {
 
             {/* Classification */}
             <div className="card">
-              <div className="card-header">
+              <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h3 className="card-title">Category & Tags</h3>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  style={{ padding: '3px 10px', fontSize: 12 }}
+                  onClick={() => setShowNewCatModal(true)}
+                >
+                  + Add Category
+                </button>
               </div>
               <div className="card-body">
+                <div className="form-group" style={{ marginBottom: 16 }}>
+                  <label className="form-label" htmlFor="catSelect">
+                    Select Category <span style={{ color: '#ef4444' }}>*</span>
+                  </label>
+                  <select
+                    id="catSelect"
+                    className="form-input form-select"
+                    value={categoryEn}
+                    onChange={e => handleCategorySelect(e.target.value)}
+                  >
+                    <option value="">-- Choose Category --</option>
+                    {categories.map((c, idx) => (
+                      <option key={c.id || idx} value={c.name_en}>
+                        {c.name_en} {c.name_ar ? `(${c.name_ar})` : ''}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="form-help">
+                    Selecting automatically populates both English and Arabic category names.
+                  </div>
+                </div>
+
                 <BilingualEditor
-                  label="Category"
+                  label="Category Names (EN / AR)"
                   namePrefix="category"
                   valueEn={categoryEn}
                   valueAr={categoryAr}
@@ -286,6 +394,7 @@ export default function BlogEditor() {
                     if (vals.category_ar !== undefined) setCategoryAr(vals.category_ar);
                   }}
                 />
+
                 <div className="form-group" style={{ marginTop: 16 }}>
                   <label className="form-label" htmlFor="tags">Tags</label>
                   <input
@@ -368,6 +477,61 @@ export default function BlogEditor() {
           </div>
         </div>
       </form>
+
+      {/* Quick Add Category Modal */}
+      {showNewCatModal && (
+        <div className="modal-backdrop" style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 20
+        }}>
+          <div className="modal-content" style={{
+            background: 'var(--card-bg, #ffffff)', borderRadius: 12, padding: 24,
+            maxWidth: 480, width: '100%', boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+            border: '1px solid var(--border-color, #e2e8f0)'
+          }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: 18, fontWeight: 700 }}>Add New Blog Category</h3>
+            <div className="form-group" style={{ marginBottom: 14 }}>
+              <label className="form-label">Category Name (English) <span style={{ color: '#ef4444' }}>*</span></label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="e.g. Artificial Intelligence"
+                value={newCatEn}
+                onChange={e => setNewCatEn(e.target.value)}
+                autoFocus
+              />
+            </div>
+            <div className="form-group" style={{ marginBottom: 20 }}>
+              <label className="form-label">Category Name (Arabic)</label>
+              <input
+                type="text"
+                className="form-input"
+                dir="rtl"
+                placeholder="مثال: الذكاء الاصطناعي"
+                value={newCatAr}
+                onChange={e => setNewCatAr(e.target.value)}
+              />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => { setShowNewCatModal(false); setNewCatEn(''); setNewCatAr(''); }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                disabled={creatingCat}
+                onClick={handleCreateCategory}
+              >
+                {creatingCat ? 'Saving...' : 'Create Category'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

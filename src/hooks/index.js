@@ -51,6 +51,7 @@ export {
   usePartners, 
   useServices,
   usePages,
-  useClients
+  useClients,
+  useBlogCategories
 } from './useContent.js';
 

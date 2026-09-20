@@ -5,7 +5,7 @@ import { useLang } from '../i18n/LangContext.jsx';
 import blogData from './blog_contents_multilang.json';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { SearchBar } from './SearchBar.jsx';
-import { useBlog } from '../hooks/index.js';
+import { useBlog, useBlogCategories } from '../hooks/index.js';
 
 const mapDbPostToPost = (dbPost) => {
   const dateObj = new Date(dbPost.published_at || dbPost.created_at || Date.now());
@@ -744,6 +744,7 @@ export const BlogPage = ({ route }) => {
   const font = ar ? FONT_AR : FONT;
 
   const { data: dbPosts } = useBlog(null, POSTS);
+  const { data: dbCategories } = useBlogCategories([]);
 
   const rawList = (Array.isArray(dbPosts) && dbPosts.length > 0) ? dbPosts : POSTS;
   const postsList = rawList.map(p => {
@@ -764,6 +765,10 @@ export const BlogPage = ({ route }) => {
   const [activeCat, setActiveCat] = useState(ar ? 'الكل' : 'All');
 
   useEffect(() => {
+    setActiveCat(ar ? 'الكل' : 'All');
+  }, [ar]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [route]);
 
@@ -777,14 +782,43 @@ export const BlogPage = ({ route }) => {
 
   const baseCats = ar ? ALL_CATS_AR : ALL_CATS_EN;
   const allLabel = ar ? 'الكل' : 'All';
+
+  const dbCatList = Array.isArray(dbCategories) && dbCategories.length > 0
+    ? dbCategories.map(c => ar ? (c.name_ar || c.name_en) : (c.name_en || c.name_ar)).filter(Boolean)
+    : [];
+
   const postCategories = publishedList
     .map(p => ar ? (p.categoryAr || p.category) : (p.category || p.categoryAr))
     .filter(Boolean);
-  const cats = [allLabel, ...new Set([...baseCats.filter(c => c !== allLabel), ...postCategories])];
+
+  const activeBaseCats = dbCatList.length > 0 ? dbCatList : baseCats.filter(c => c !== allLabel);
+  const cats = [allLabel, ...new Set([...activeBaseCats, ...postCategories])];
 
   const filtered = publishedList.filter(p => {
-    const postCat = ar ? (p.categoryAr || p.category) : (p.category || p.categoryAr);
-    const catMatch = activeCat === allLabel || postCat === activeCat;
+    const isAllSelected = !activeCat || activeCat === 'All' || activeCat === 'الكل';
+    let catMatch = isAllSelected;
+
+    if (!catMatch) {
+      const pCatEn = (p.category || '').toLowerCase().trim();
+      const pCatAr = (p.categoryAr || '').toLowerCase().trim();
+      const activeLower = activeCat.toLowerCase().trim();
+
+      if (pCatEn === activeLower || pCatAr === activeLower) {
+        catMatch = true;
+      } else {
+        const matchedDbCat = (dbCategories || []).find(c =>
+          c.name_en?.toLowerCase().trim() === activeLower ||
+          c.name_ar?.toLowerCase().trim() === activeLower ||
+          c.slug?.toLowerCase().trim() === activeLower
+        );
+        if (matchedDbCat) {
+          const mEn = (matchedDbCat.name_en || '').toLowerCase().trim();
+          const mAr = (matchedDbCat.name_ar || '').toLowerCase().trim();
+          catMatch = (mEn && pCatEn === mEn) || (mAr && pCatAr === mAr);
+        }
+      }
+    }
+
     const q = (search || '').toLowerCase().trim();
     if (!q) return catMatch;
     const tEn = (p.title || '').toLowerCase();
@@ -909,7 +943,9 @@ export const BlogPage = ({ route }) => {
           {/* Category filters */}
           <div className="blog-cats-container">
             {cats.map(cat => {
-              const isActive = activeCat === cat;
+              const isAllCat = cat === 'All' || cat === 'الكل';
+              const isAllSelected = !activeCat || activeCat === 'All' || activeCat === 'الكل';
+              const isActive = (isAllCat && isAllSelected) || (!isAllCat && !isAllSelected && activeCat.toLowerCase().trim() === cat.toLowerCase().trim());
               return (
                 <button
                   key={cat}
