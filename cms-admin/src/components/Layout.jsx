@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import logoWhite from '../assets/Logo-white.png';
 
 const navItems = [
   { label: 'Dashboard', path: '/', icon: 'grid' },
@@ -78,10 +79,13 @@ export default function Layout({ children, title }) {
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-logo">
-          <div className="sidebar-logo-icon">W</div>
-          <div>
-            <div className="sidebar-logo-text">WAV<span>Z</span></div>
-          </div>
+          <Link to="/" className="sidebar-logo-link" title="WAVZ CMS Dashboard">
+            <img 
+              src={logoWhite} 
+              alt="WAVZ for Digital Transformation" 
+              className="sidebar-logo-img" 
+            />
+          </Link>
           <span className="sidebar-logo-badge">CMS</span>
         </div>
 

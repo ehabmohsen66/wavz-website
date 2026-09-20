@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
+import logoNavy from '../assets/Logo.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -32,8 +33,12 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-        <div className="login-logo-container">
-          <div className="login-logo-text">WAVZ</div>
+        <div className="login-logo">
+          <img 
+            src={logoNavy} 
+            alt="WAVZ for Digital Transformation" 
+            className="login-logo-img" 
+          />
           <div className="login-logo-sub">Content Management System</div>
         </div>
         <form onSubmit={handleSubmit} className="login-form">
