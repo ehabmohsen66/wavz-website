@@ -47,3 +47,6 @@ api/config.local.php
 cms-admin/dist/
 cms-admin/node_modules/
 *.zip
+wavz-*.md
+generate_codebase_md.py
+make_split_codebase.py

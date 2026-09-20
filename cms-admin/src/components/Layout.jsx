@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import logoWhite from '../assets/Logo-white.png';
+import ErrorBoundary from './ErrorBoundary';
 
 const navItems = [
   { label: 'Dashboard', path: '/', icon: 'grid' },
@@ -169,7 +170,9 @@ export default function Layout({ children, title }) {
         </header>
 
         <main className="admin-content">
-          {children || <Outlet />}
+          <ErrorBoundary>
+            {children || <Outlet />}
+          </ErrorBoundary>
         </main>
       </div>
     </div>

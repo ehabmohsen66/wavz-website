@@ -20,9 +20,12 @@ export default function MediaLibrary() {
     setLoading(true);
     try {
       const res = await api.get('/media');
-      setMedia(res.data || res.media || res.items || (Array.isArray(res) ? res : []));
+      const payload = res.data || res;
+      const items = Array.isArray(payload) ? payload : (payload?.items || res?.items || []);
+      setMedia(Array.isArray(items) ? items : []);
     } catch (err) {
       toast.error('Failed to load media assets: ' + err.message);
+      setMedia([]);
     } finally {
       setLoading(false);
     }
@@ -44,8 +47,8 @@ export default function MediaLibrary() {
     try {
       const res = await api.upload('/media', file);
       toast.success('Asset uploaded successfully');
-      const newItem = res.media || res;
-      setMedia(prev => [newItem, ...prev]);
+      const newItem = res.data || res.media || res;
+      setMedia(prev => [newItem, ...(Array.isArray(prev) ? prev : [])]);
       setSelectedItem(newItem);
     } catch (err) {
       toast.error('Upload failed: ' + err.message);
@@ -73,7 +76,7 @@ export default function MediaLibrary() {
     try {
       await api.delete(`/media/${deleteId}`);
       toast.success('Asset deleted successfully');
-      setMedia(prev => prev.filter(m => m.id !== deleteId));
+      setMedia(prev => (Array.isArray(prev) ? prev.filter(m => m.id !== deleteId) : []));
       if (selectedItem?.id === deleteId) {
         setSelectedItem(null);
       }
@@ -85,12 +88,15 @@ export default function MediaLibrary() {
   };
 
   const handleCopyLink = (item) => {
+    if (!item?.path) return;
     const url = item.path.startsWith('http') ? item.path : `${window.location.origin}${item.path}`;
     navigator.clipboard.writeText(url);
     toast.success('Asset link copied to clipboard!');
   };
 
-  const filtered = media.filter(item => {
+  const mediaList = Array.isArray(media) ? media : [];
+  const filtered = mediaList.filter(item => {
+    if (!item) return false;
     const matchesSearch = (item.original_name || item.filename || '').toLowerCase().includes(search.toLowerCase());
     const isImg = (item.mime_type || '').startsWith('image/');
     if (filterType === 'image') return matchesSearch && isImg;
@@ -251,7 +257,7 @@ export default function MediaLibrary() {
                     border: '1px solid var(--border)'
                   }}
                 >
-                  {selectedItem.mime_type.startsWith('image/') ? (
+                  {(selectedItem.mime_type || '').startsWith('image/') ? (
                     <img src={selectedItem.path} alt="" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
                   ) : (
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>

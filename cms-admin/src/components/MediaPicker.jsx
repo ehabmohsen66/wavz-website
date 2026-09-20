@@ -10,8 +10,10 @@ export default function MediaPicker({ isOpen, onClose, onSelect }) {
   const fetchMedia = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await api.get('/media');
-      setMedia(data.media || data || []);
+      const res = await api.get('/media');
+      const payload = (res && res.data) ? res.data : res;
+      const items = Array.isArray(payload) ? payload : (payload?.items || res?.items || []);
+      setMedia(Array.isArray(items) ? items : []);
     } catch {
       setMedia([]);
     } finally {
@@ -27,9 +29,10 @@ export default function MediaPicker({ isOpen, onClose, onSelect }) {
     }
   }, [isOpen, fetchMedia]);
 
+  const mediaList = Array.isArray(media) ? media : [];
   const filtered = search.trim()
-    ? media.filter(m => (m.filename || m.name || '').toLowerCase().includes(search.toLowerCase()))
-    : media;
+    ? mediaList.filter(m => (m?.filename || m?.name || m?.original_name || '').toLowerCase().includes(search.toLowerCase()))
+    : mediaList;
 
   const handleSelect = () => {
     if (selected) {
@@ -42,9 +45,9 @@ export default function MediaPicker({ isOpen, onClose, onSelect }) {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const data = await api.upload('/media', file);
-      const newItem = data.media || data;
-      setMedia(prev => [newItem, ...prev]);
+      const res = await api.upload('/media', file);
+      const newItem = res.data || res.media || res;
+      setMedia(prev => [newItem, ...(Array.isArray(prev) ? prev : [])]);
       setSelected(newItem);
     } catch {
       // handled silently
