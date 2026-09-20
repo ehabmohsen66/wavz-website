@@ -74,8 +74,9 @@ export const useSettings = () => {
         
         // Parse settings array into object dictionary
         const settingsDict = {};
-        if (Array.isArray(response)) {
-          response.forEach(item => {
+        const items = Array.isArray(response) ? response : (response?.data || response?.items || []);
+        if (Array.isArray(items)) {
+          items.forEach(item => {
             settingsDict[item.key] = {
               en: item.value_en,
               ar: item.value_ar,

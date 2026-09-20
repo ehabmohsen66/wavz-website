@@ -13,8 +13,9 @@ export const useTimeline = (fallback = []) => {
         const response = await api.get('/timeline');
         if (!active) return;
         
+        const rawItems = response?.data?.items || response?.data || (Array.isArray(response) ? response : []);
         // Parse items_en and items_ar if they are JSON strings
-        const formatted = (response || []).map(item => {
+        const formatted = (Array.isArray(rawItems) ? rawItems : []).map(item => {
           let items_en = item.items_en;
           let items_ar = item.items_ar;
           if (typeof items_en === 'string') {
@@ -39,7 +40,7 @@ export const useTimeline = (fallback = []) => {
     return () => { active = false; };
   }, []);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && data.length > 0) ? data : fallback, loading, error };
 };
 
 export const useTestimonials = (fallback = []) => {
@@ -53,7 +54,8 @@ export const useTestimonials = (fallback = []) => {
       try {
         const response = await api.get('/testimonials');
         if (!active) return;
-        setData(response);
+        const rawItems = response?.data?.items || response?.data || (Array.isArray(response) ? response : []);
+        setData(Array.isArray(rawItems) ? rawItems : []);
         setLoading(false);
       } catch (err) {
         if (active) {
@@ -66,7 +68,7 @@ export const useTestimonials = (fallback = []) => {
     return () => { active = false; };
   }, []);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && data.length > 0) ? data : fallback, loading, error };
 };
 
 export const useNavigation = (fallback = []) => {
@@ -80,7 +82,8 @@ export const useNavigation = (fallback = []) => {
       try {
         const response = await api.get('/navigation');
         if (!active) return;
-        setData(response);
+        const rawItems = response?.data?.items || response?.data || (Array.isArray(response) ? response : []);
+        setData(Array.isArray(rawItems) ? rawItems : []);
         setLoading(false);
       } catch (err) {
         if (active) {
@@ -93,7 +96,7 @@ export const useNavigation = (fallback = []) => {
     return () => { active = false; };
   }, []);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && data.length > 0) ? data : fallback, loading, error };
 };
 
 export const useBlog = (slug = null, fallback = []) => {
@@ -105,24 +108,29 @@ export const useBlog = (slug = null, fallback = []) => {
     let active = true;
     const fetchBlog = async () => {
       try {
-        const endpoint = slug ? `/blog/${slug}` : '/blog';
+        const endpoint = slug ? `/blog/${slug}` : '/blog?per_page=100';
         const response = await api.get(endpoint);
         if (!active) return;
 
         if (slug) {
           // Single post response, parse JSON content blocks
-          let blocks_en = response.blocks_en;
-          let blocks_ar = response.blocks_ar;
-          if (typeof blocks_en === 'string') {
-            try { blocks_en = JSON.parse(blocks_en); } catch (e) { blocks_en = []; }
+          const post = response?.data || response;
+          if (post) {
+            let blocks_en = post.blocks_en;
+            let blocks_ar = post.blocks_ar;
+            if (typeof blocks_en === 'string') {
+              try { blocks_en = JSON.parse(blocks_en); } catch (e) { blocks_en = []; }
+            }
+            if (typeof blocks_ar === 'string') {
+              try { blocks_ar = JSON.parse(blocks_ar); } catch (e) { blocks_ar = []; }
+            }
+            setData({ ...post, blocks_en, blocks_ar });
           }
-          if (typeof blocks_ar === 'string') {
-            try { blocks_ar = JSON.parse(blocks_ar); } catch (e) { blocks_ar = []; }
-          }
-          setData({ ...response, blocks_en, blocks_ar });
         } else {
-          // List of posts
-          const formatted = (response || []).map(post => {
+          // List of posts from API: { success: true, data: { items: [...], total: ... } }
+          const rawItems = response?.data?.items || response?.items || response?.data || (Array.isArray(response) ? response : []);
+          const items = Array.isArray(rawItems) ? rawItems : [];
+          const formatted = items.map(post => {
             let blocks_en = post.blocks_en;
             let blocks_ar = post.blocks_ar;
             if (typeof blocks_en === 'string') {
@@ -147,7 +155,7 @@ export const useBlog = (slug = null, fallback = []) => {
     return () => { active = false; };
   }, [slug]);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && Array.isArray(data) && data.length > 0) ? data : (data || fallback), loading, error };
 };
 
 export const useNews = (id = null, fallback = []) => {
@@ -159,10 +167,15 @@ export const useNews = (id = null, fallback = []) => {
     let active = true;
     const fetchNews = async () => {
       try {
-        const endpoint = id ? `/news/${id}` : '/news';
+        const endpoint = id ? `/news/${id}` : '/news?per_page=100';
         const response = await api.get(endpoint);
         if (!active) return;
-        setData(response);
+        if (id) {
+          setData(response?.data || response);
+        } else {
+          const rawItems = response?.data?.items || response?.items || response?.data || (Array.isArray(response) ? response : []);
+          setData(Array.isArray(rawItems) ? rawItems : []);
+        }
         setLoading(false);
       } catch (err) {
         if (active) {
@@ -175,7 +188,7 @@ export const useNews = (id = null, fallback = []) => {
     return () => { active = false; };
   }, [id]);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && Array.isArray(data) && data.length > 0) ? data : (data || fallback), loading, error };
 };
 
 export const useTeam = (fallback = []) => {
@@ -189,7 +202,8 @@ export const useTeam = (fallback = []) => {
       try {
         const response = await api.get('/team');
         if (!active) return;
-        setData(response);
+        const rawItems = response?.data?.items || response?.data || (Array.isArray(response) ? response : []);
+        setData(Array.isArray(rawItems) ? rawItems : []);
         setLoading(false);
       } catch (err) {
         if (active) {
@@ -202,7 +216,7 @@ export const useTeam = (fallback = []) => {
     return () => { active = false; };
   }, []);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && data.length > 0) ? data : fallback, loading, error };
 };
 
 export const usePartners = (fallback = []) => {
@@ -216,7 +230,8 @@ export const usePartners = (fallback = []) => {
       try {
         const response = await api.get('/partners');
         if (!active) return;
-        setData(response);
+        const rawItems = response?.data?.items || response?.data || (Array.isArray(response) ? response : []);
+        setData(Array.isArray(rawItems) ? rawItems : []);
         setLoading(false);
       } catch (err) {
         if (active) {
@@ -229,7 +244,7 @@ export const usePartners = (fallback = []) => {
     return () => { active = false; };
   }, []);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && data.length > 0) ? data : fallback, loading, error };
 };
 
 export const useServices = (pageSlug, fallback = []) => {
@@ -244,10 +259,8 @@ export const useServices = (pageSlug, fallback = []) => {
       try {
         const response = await api.get(`/services/${pageSlug}`);
         if (!active) return;
-        
-        // Parse dynamic stats, pipelines, and bullets inside services if needed, 
-        // since our backend controller retrieves them pre-structured
-        setData(response);
+        const rawItems = response?.data?.items || response?.data || (Array.isArray(response) ? response : []);
+        setData(Array.isArray(rawItems) ? rawItems : []);
         setLoading(false);
       } catch (err) {
         if (active) {
@@ -260,7 +273,7 @@ export const useServices = (pageSlug, fallback = []) => {
     return () => { active = false; };
   }, [pageSlug]);
 
-  return { data: data || fallback, loading, error };
+  return { data: (data && data.length > 0) ? data : fallback, loading, error };
 };
 
 export const usePages = (slug, fallback = {}) => {
