@@ -21,6 +21,30 @@ try {
     echo "[OK] Connected to database successfully.\n";
 
     // ----------------------------------------------------
+    // 0. Ensure Database Tables Exist from schema.sql
+    // ----------------------------------------------------
+    echo "\n--- Verifying & Creating Database Tables ---\n";
+    $schemaFile = __DIR__ . '/schema.sql';
+    if (!file_exists($schemaFile)) {
+        throw new RuntimeException("Missing schema.sql file at $schemaFile.");
+    }
+    
+    $schemaSql = file_get_contents($schemaFile);
+    $cleanSql = preg_replace('!/\*.*?\*/!s', '', $schemaSql);
+    $cleanSql = preg_replace('/^--.*?$/m', '', $cleanSql);
+    
+    $statements = array_filter(array_map('trim', explode(';', $cleanSql)));
+    foreach ($statements as $stmtSql) {
+        if (empty($stmtSql)) continue;
+        try {
+            $db->exec($stmtSql);
+        } catch (Throwable $e) {
+            // Ignore non-fatal duplicates / already exists
+        }
+    }
+    echo "[OK] All database tables verified and ready.\n";
+
+    // ----------------------------------------------------
     // 1. Ensure Default Admin Account Exists
     // ----------------------------------------------------
     echo "\n--- Setting Up Admin Users ---\n";

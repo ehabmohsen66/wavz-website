@@ -6,12 +6,6 @@
 SET NAMES utf8mb4;
 SET CHARACTER SET utf8mb4;
 
-CREATE DATABASE IF NOT EXISTS wavz_cms
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE wavz_cms;
-
 -- ============================================================
 -- 1. USERS — Admin accounts with role-based access
 -- ============================================================
