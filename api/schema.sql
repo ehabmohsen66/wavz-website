@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Default admin account (password: wavz@admin2026 — MUST change on first login)
 INSERT INTO users (name, email, password, role) VALUES
-('Super Admin', 'admin@wavz.com.eg', '$2y$12$placeholder_hash_replace_on_setup', 'admin');
+('Super Admin', 'admin@wavz.com.eg', '$2a$10$6G7FKqLkJyY2DNF0m8NqDOhN9cTWlOd.Z9rr7T4pS6aDKixQEXYta', 'admin');
 
 -- ============================================================
 -- 2. SETTINGS — Global site configuration (key-value store)

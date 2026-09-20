@@ -46,7 +46,18 @@ try {
         echo "      Email: admin@wavz.com.eg\n";
         echo "      Password: wavz@admin2026 (Please change on first login!)\n";
     } else {
-        echo "[SKIP] Admin account admin@wavz.com.eg already exists.\n";
+        // If password is placeholder, update it with default
+        $stmtCheck = $db->prepare("SELECT password FROM users WHERE email = 'admin@wavz.com.eg'");
+        $stmtCheck->execute();
+        $currentPass = (string)$stmtCheck->fetchColumn();
+        if (strpos($currentPass, 'placeholder') !== false) {
+            $hashedPassword = password_hash('wavz@admin2026', PASSWORD_BCRYPT);
+            $updatePass = $db->prepare("UPDATE users SET password = :password WHERE email = 'admin@wavz.com.eg'");
+            $updatePass->execute([':password' => $hashedPassword]);
+            echo "[UPDATED] Replaced placeholder password with wavz@admin2026 for admin@wavz.com.eg\n";
+        } else {
+            echo "[SKIP] Admin account admin@wavz.com.eg already exists.\n";
+        }
     }
 
     // Get Admin ID for author references
