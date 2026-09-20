@@ -1,6 +1,7 @@
 import { useLang } from '../i18n/LangContext.jsx';
+import { useClients } from '../hooks/index.js';
 
-const logos = [
+const fallbackLogos = [
   { name: 'Egypt Post', src: '/Picture8.png', imgClass: 'max-h-11 max-w-[150px] hover:scale-110' },
   { name: 'AAIB', src: '/Picture5.png', imgClass: 'max-h-9 max-w-[155px] hover:scale-110' },
   { name: 'Bank NXT', src: '/Picture6.png', imgClass: 'max-h-9 scale-110 hover:scale-125' },
@@ -25,6 +26,15 @@ const logos = [
 
 export const LogoStrip = () => {
   const { lang } = useLang();
+  const { data: dbClients } = useClients(fallbackLogos);
+  const activeLogos = (dbClients && dbClients.length > 0)
+    ? dbClients.map(c => ({
+        name: c.name,
+        src: c.logo || c.src,
+        imgClass: c.imgClass || 'max-h-12 hover:scale-110',
+        url: c.website_url
+      }))
+    : fallbackLogos;
 
   return (
     <section className="relative bg-[#F8FAFC] border-t border-b border-slate-200/70 py-14 overflow-hidden">
@@ -48,7 +58,7 @@ export const LogoStrip = () => {
 
       {/* Marquee */}
       <div className="flex gap-6 animate-marquee whitespace-nowrap">
-        {[...logos, ...logos].map((logo, i) => (
+        {[...activeLogos, ...activeLogos].map((logo, i) => (
           <div
             key={i}
             className="flex items-center justify-center p-3 rounded-xl border border-slate-200 bg-white cursor-default flex-shrink-0"

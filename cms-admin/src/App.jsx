@@ -24,6 +24,10 @@ import Profile from './pages/Profile';
 import InquiriesManager from './pages/InquiriesManager';
 import AnalyticsSettings from './pages/AnalyticsSettings';
 import SiteTools from './pages/SiteTools';
+import PagesEditor from './pages/PagesEditor';
+import HomepageEditor from './pages/HomepageEditor';
+import ClientsManager from './pages/ClientsManager';
+import CaseStudiesManager from './pages/CaseStudiesManager';
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { isAuthenticated, loading, user } = useAuth();
@@ -71,9 +75,14 @@ function MainRoutes() {
         <Route path="news" element={<NewsList />} />
         <Route path="news/new" element={<NewsEditor />} />
         <Route path="news/:id" element={<NewsEditor />} />
+        <Route path="case-studies" element={<CaseStudiesManager />} />
         
         <Route path="services" element={<ServiceManager />} />
         <Route path="services/:pageSlug" element={<ServiceEditor />} />
+        
+        <Route path="homepage" element={<HomepageEditor />} />
+        <Route path="pages" element={<PagesEditor />} />
+        <Route path="clients" element={<ClientsManager />} />
         
         <Route path="inquiries" element={<InquiriesManager />} />
         <Route path="team" element={<TeamManager />} />

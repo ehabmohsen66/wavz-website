@@ -262,3 +262,69 @@ export const useServices = (pageSlug, fallback = []) => {
 
   return { data: data || fallback, loading, error };
 };
+
+export const usePages = (slug, fallback = {}) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!slug) return;
+    let active = true;
+    const fetchPage = async () => {
+      try {
+        const response = await api.get(`/pages/${slug}`);
+        if (!active) return;
+        const pageData = response?.data || response;
+        if (!pageData) return;
+        let content_en = pageData.content_en;
+        let content_ar = pageData.content_ar;
+        if (typeof content_en === 'string') {
+          try { content_en = JSON.parse(content_en); } catch (e) {}
+        }
+        if (typeof content_ar === 'string') {
+          try { content_ar = JSON.parse(content_ar); } catch (e) {}
+        }
+        setData({ ...pageData, content_en, content_ar });
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchPage();
+    return () => { active = false; };
+  }, [slug]);
+
+  return { data: data || fallback, loading, error };
+};
+
+export const useClients = (fallback = []) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const fetchClients = async () => {
+      try {
+        const response = await api.get('/clients');
+        if (!active) return;
+        const items = Array.isArray(response) ? response : (response?.data || response?.items || []);
+        setData(items);
+        setLoading(false);
+      } catch (err) {
+        if (active) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    fetchClients();
+    return () => { active = false; };
+  }, []);
+
+  return { data: (data && data.length > 0) ? data : fallback, loading, error };
+};

@@ -22,6 +22,7 @@ require_once __DIR__ . '/models/Page.php';
 require_once __DIR__ . '/models/Navigation.php';
 require_once __DIR__ . '/models/TeamMember.php';
 require_once __DIR__ . '/models/Partner.php';
+require_once __DIR__ . '/models/Client.php';
 require_once __DIR__ . '/models/Service.php';
 require_once __DIR__ . '/models/ServiceStat.php';
 require_once __DIR__ . '/models/ServicePipeline.php';
@@ -41,6 +42,7 @@ require_once __DIR__ . '/controllers/PagesController.php';
 require_once __DIR__ . '/controllers/NavigationController.php';
 require_once __DIR__ . '/controllers/TeamController.php';
 require_once __DIR__ . '/controllers/PartnersController.php';
+require_once __DIR__ . '/controllers/ClientsController.php';
 require_once __DIR__ . '/controllers/ServicesController.php';
 require_once __DIR__ . '/controllers/NewsController.php';
 require_once __DIR__ . '/controllers/BlogController.php';
@@ -226,6 +228,24 @@ try {
     }
     if (preg_match('#^/partners/(\d+)$#', $requestUri, $m) && $method === 'DELETE') {
         PartnersController::delete((int)$m[1]);
+        exit;
+    }
+
+    // Clients (Logo Strip)
+    if ($requestUri === '/clients' && $method === 'GET') {
+        ClientsController::index();
+        exit;
+    }
+    if ($requestUri === '/clients' && $method === 'POST') {
+        ClientsController::create($input);
+        exit;
+    }
+    if (preg_match('#^/clients/(\d+)$#', $requestUri, $m) && $method === 'PUT') {
+        ClientsController::update((int)$m[1], $input);
+        exit;
+    }
+    if (preg_match('#^/clients/(\d+)$#', $requestUri, $m) && $method === 'DELETE') {
+        ClientsController::delete((int)$m[1]);
         exit;
     }
 

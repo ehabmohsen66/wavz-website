@@ -9,7 +9,12 @@ const navItems = [
   { section: 'Content' },
   { label: 'Blog Posts', path: '/blog', icon: 'edit' },
   { label: 'News Articles', path: '/news', icon: 'newspaper' },
+  { label: 'Case Studies', path: '/case-studies', icon: 'book-open' },
   { label: 'Services', path: '/services', icon: 'layers' },
+  { section: 'Website Pages' },
+  { label: 'Homepage Editor', path: '/homepage', icon: 'home' },
+  { label: 'Static Pages', path: '/pages', icon: 'file-text' },
+  { label: 'Clients (Logo Strip)', path: '/clients', icon: 'award' },
   { section: 'Inquiries & Leads' },
   { label: 'Inquiries Inbox', path: '/inquiries', icon: 'inbox' },
   { section: 'Data' },
@@ -34,6 +39,10 @@ function SvgIcon({ name }) {
     grid: <><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></>,
     edit: <><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></>,
     newspaper: <><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></>,
+    'book-open': <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>,
+    home: <><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>,
+    'file-text': <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>,
+    award: <><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></>,
     layers: <><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>,
     inbox: <><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></>,
     users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
@@ -83,7 +92,11 @@ export default function Layout({ children, title }) {
     if (match) return match.label;
     if (cleanPath.startsWith('/blog')) return 'Blog Posts';
     if (cleanPath.startsWith('/news')) return 'News Articles';
+    if (cleanPath.startsWith('/case-studies')) return 'Case Studies';
     if (cleanPath.startsWith('/services')) return 'Services';
+    if (cleanPath.startsWith('/homepage')) return 'Homepage Editor';
+    if (cleanPath.startsWith('/pages')) return 'Static Pages Content';
+    if (cleanPath.startsWith('/clients')) return 'Client Brands & Logo Strip';
     if (cleanPath.startsWith('/team')) return 'Team & Leadership';
     if (cleanPath.startsWith('/partners')) return 'Strategic Partners';
     if (cleanPath.startsWith('/timeline')) return 'Company Timeline';

@@ -49,6 +49,8 @@ export {
   useNews, 
   useTeam, 
   usePartners, 
-  useServices 
+  useServices,
+  usePages,
+  useClients
 } from './useContent.js';
 

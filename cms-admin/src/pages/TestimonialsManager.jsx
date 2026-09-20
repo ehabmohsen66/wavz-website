@@ -41,6 +41,7 @@ export default function TestimonialsManager() {
       quote_en: '',
       quote_ar: '',
       photo: '',
+      logo_url: '',
       is_visible: 1,
       sort_order: items.length
     });
@@ -222,6 +223,20 @@ export default function TestimonialsManager() {
                       onChange={url => setEditingItem(prev => ({ ...prev, photo: url }))}
                       label="Author Portrait Image"
                     />
+
+                    <div className="form-group">
+                      <label className="form-label">Company Brand Logo URL</label>
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder="e.g. /nevis_logo.png or https://..."
+                        value={editingItem.logo_url || ''}
+                        onChange={e => setEditingItem(prev => ({ ...prev, logo_url: e.target.value }))}
+                      />
+                      <small style={{ color: 'var(--text-muted)', fontSize: 11, marginTop: 4, display: 'block' }}>
+                        Used in Partner Testimonials cards
+                      </small>
+                    </div>
 
                     <div className="form-group">
                       <label className="form-label">Visibility Status</label>

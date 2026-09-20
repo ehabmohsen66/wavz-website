@@ -348,6 +348,7 @@ CREATE TABLE IF NOT EXISTS testimonials (
   quote_en     TEXT NOT NULL,
   quote_ar     TEXT DEFAULT NULL,
   photo        VARCHAR(500) DEFAULT NULL,
+  logo_url     VARCHAR(500) DEFAULT NULL,
   is_visible   TINYINT(1) NOT NULL DEFAULT 1,
   sort_order   INT UNSIGNED NOT NULL DEFAULT 0,
   created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -393,3 +394,20 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
   INDEX idx_created (created_at),
   INDEX idx_email (email)
 ) ENGINE=InnoDB;
+
+-- ============================================================
+-- 18. CLIENTS — Brand Logos for Scrolling Strip (Marquee)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS clients (
+  id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name         VARCHAR(150) NOT NULL,
+  logo         VARCHAR(500) DEFAULT NULL,
+  website_url  VARCHAR(500) DEFAULT NULL,
+  is_visible   TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order   INT UNSIGNED NOT NULL DEFAULT 0,
+  created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_visible (is_visible),
+  INDEX idx_sort (sort_order)
+) ENGINE=InnoDB;
+

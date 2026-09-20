@@ -19,7 +19,31 @@ const settingsKeyMap = {
   'hero_cta_savings': 'hero.cta2',
   'contact_phone': 'footer.phone',
   'contact_address': 'footer.address',
-  'footer_copy': 'footer.copy'
+  'footer_copy': 'footer.copy',
+  'stat_featured_value': 'results.featured.value',
+  'stat_featured_suffix': 'results.featured.suffix',
+  'stat_featured_title_en': 'results.featured.title',
+  'stat_featured_sub_en': 'results.featured.sub',
+  'stat_1_value': 'results.stats.0.value',
+  'stat_1_suffix': 'results.stats.0.suffix',
+  'stat_1_label_en': 'results.stats.0.label',
+  'stat_1_sub_en': 'results.stats.0.sub',
+  'stat_2_value': 'results.stats.1.value',
+  'stat_2_suffix': 'results.stats.1.suffix',
+  'stat_2_label_en': 'results.stats.1.label',
+  'stat_2_sub_en': 'results.stats.1.sub',
+  'stat_3_value': 'results.stats.2.value',
+  'stat_3_suffix': 'results.stats.2.suffix',
+  'stat_3_label_en': 'results.stats.2.label',
+  'stat_3_sub_en': 'results.stats.2.sub',
+  'stat_4_value': 'results.stats.3.value',
+  'stat_4_suffix': 'results.stats.3.suffix',
+  'stat_4_label_en': 'results.stats.3.label',
+  'stat_4_sub_en': 'results.stats.3.sub',
+  'stat_5_value': 'results.stats.4.value',
+  'stat_5_suffix': 'results.stats.4.suffix',
+  'stat_5_label_en': 'results.stats.4.label',
+  'stat_5_sub_en': 'results.stats.4.sub'
 };
 
 // Deep setter helper to modify nested object properties by path

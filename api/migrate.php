@@ -590,6 +590,139 @@ try {
     }
     echo "[OK] Advanced settings verified.\n";
 
+    // ----------------------------------------------------
+    // 11. Alter Testimonials Table: Add logo_url
+    // ----------------------------------------------------
+    echo "\n--- Verifying Testimonials Columns ---\n";
+    try {
+        $db->exec("ALTER TABLE testimonials ADD COLUMN logo_url VARCHAR(500) DEFAULT NULL AFTER photo");
+        echo "[OK] Added logo_url column to testimonials table.\n";
+    } catch (Throwable $e) {
+        echo "[INFO] Testimonials logo_url column already exists or verified.\n";
+    }
+
+    // ----------------------------------------------------
+    // 12. Create and Seed Clients Table (LogoStrip)
+    // ----------------------------------------------------
+    echo "\n--- Setting Up Clients Table & Logos ---\n";
+    $db->exec("
+        CREATE TABLE IF NOT EXISTS clients (
+          id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          name         VARCHAR(150) NOT NULL,
+          logo         VARCHAR(500) DEFAULT NULL,
+          website_url  VARCHAR(500) DEFAULT NULL,
+          is_visible   TINYINT(1) NOT NULL DEFAULT 1,
+          sort_order   INT UNSIGNED NOT NULL DEFAULT 0,
+          created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          updated_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          INDEX idx_visible (is_visible),
+          INDEX idx_sort (sort_order)
+        ) ENGINE=InnoDB;
+    ");
+    echo "[OK] clients table verified.\n";
+
+    $clientCount = (int)$db->query("SELECT COUNT(*) FROM clients")->fetchColumn();
+    if ($clientCount === 0) {
+        $clientLogos = [
+            ['Egypt Post', '/Picture8.png', 'https://www.egyptpost.org', 1, 0],
+            ['AAIB', '/Picture5.png', 'https://aaib.com', 1, 1],
+            ['Bank NXT', '/Picture6.png', 'https://banknxt.com', 1, 2],
+            ['EBank', '/Picture7.png', 'https://ebank.com.eg', 1, 3],
+            ['Misr Insurance', '/Picture4.png', 'https://misrins.com.eg', 1, 4],
+            ['DEPI', '/Picture2.png', null, 1, 5],
+            ['WASCO', '/Picture3.png', null, 1, 6],
+            ['Go Bus', '/Picture1.png', 'https://gobus.com.eg', 1, 7],
+            ['MCIT', '/MCIT-logos-Color-English-02-white-bg (1).png', 'https://mcit.gov.eg', 1, 8],
+            ['H&D Bank', '/Housing and Development Bank logo .png', 'https://hdb-egy.com', 1, 9],
+            ['Egypt Trust', '/Egypt trust.png', null, 1, 10],
+            ['Maridive', '/Maridive & Oil Services SAE Logo.png', 'https://maridivegroup.net', 1, 11],
+            ['La Poste', '/Logo-groupe-la-poste-2021.png', null, 1, 12],
+            ['SC Zone', '/sc-zonelogo-header.png', 'https://sczone.eg', 1, 13],
+            ['Prosecure', '/ps9.jpeg', null, 1, 14],
+            ['Baheya', '/Baheya logo.png', 'https://baheya.org', 1, 15],
+            ['Tietoevry', '/8b56ffb305d960f5_org.png', 'https://tietoevry.com', 1, 16],
+            ['Teradata', '/Teradata_logo_(2024).svg.png', 'https://teradata.com', 1, 17],
+            ['PDC', '/PDC-Logo.png', null, 1, 18],
+            ['Detchland', '/detchland logo limited.png', null, 1, 19],
+        ];
+
+        $insertClientStmt = $db->prepare("
+            INSERT INTO clients (name, logo, website_url, is_visible, sort_order)
+            VALUES (:name, :logo, :website_url, :is_visible, :sort_order)
+        ");
+
+        foreach ($clientLogos as $cl) {
+            $insertClientStmt->execute([
+                ':name'        => $cl[0],
+                ':logo'        => $cl[1],
+                ':website_url' => $cl[2],
+                ':is_visible'  => $cl[3],
+                ':sort_order'  => $cl[4],
+            ]);
+        }
+        echo "[OK] Seeded 20 client logos into clients table.\n";
+    }
+
+    // ----------------------------------------------------
+    // 13. Seed Complete Hero & Homepage Content Settings
+    // ----------------------------------------------------
+    echo "\n--- Setting Up Complete Hero & Homepage Settings ---\n";
+    $heroAndHomeSettings = [
+        ['hero', 'hero_tagline', 'The turn-key platform for enterprise digital transformation.', 'المنصة المتكاملة للتحول الرقمي للمؤسسات.', 'text'],
+        ['hero', 'hero_tagline2', 'Supports Multi-Industry, Multi-Service, Multi-Geography Delivery.', 'تنفيذ متعدد القطاعات، متعدد الخدمات، عبر مختلف مناطق الشرق الأوسط وأفريقيا.', 'text'],
+        ['hero', 'hero_title_1', 'IT Managed Services', 'خدمات وحلول تكنولوجيا المعلومات', 'text'],
+        ['hero', 'hero_title_accent', '& Solutions', 'المُدارة بالكامل', 'text'],
+        ['hero', 'hero_title_2', 'Revolutionize your enterprise operations, drive innovation, and achieve unprecedented success with', 'أحدث نقلة نوعية في عملياتك المؤسسية وحقق أعلى مستويات الكفاءة والموثوقية مع', 'textarea'],
+        ['hero', 'hero_brand', 'WAVZ for Digital Transformation', 'WAVZ للتحول الرقمي', 'text'],
+        ['hero', 'hero_lede1', 'SAP-grade ERP joins Temenos-grade banking, on YOUR infrastructure. ', 'تطبيقات SAP المؤسسية، مقترنة بأحدث الأنظمة البنكية والتقنية، على بنيتك التحتية. ', 'textarea'],
+        ['hero', 'hero_lede_accent1', 'Multi-Industry', 'تنفيذٌ متعدد القطاعات', 'text'],
+        ['hero', 'hero_lede2', ' delivery that scales every operation. ', ' يوسع كل عملية. ', 'textarea'],
+        ['hero', 'hero_lede_accent2', 'Multi-Service', 'تنسيقٌ متعدد الخدمات', 'text'],
+        ['hero', 'hero_lede3', ' orchestration past 99.9% SLA. ', ' بمعدل اتفاقية مستوى خدمة 99.9%. ', 'textarea'],
+        ['hero', 'hero_lede_accent3', 'Multi-Geography', 'تغطيةٌ إقليمية شاملة', 'text'],
+        ['hero', 'hero_lede4', ' coverage across MEA, one team, one accountable lead.', ' عبر المنطقة — فريق واحد، وقائد مسؤول واحد.', 'textarea'],
+        ['hero', 'hero_cta_consult', 'Get a Consultation', 'احجز استشارة', 'text'],
+        ['hero', 'hero_cta_savings', 'Calculate Your Savings', 'احسب وفوراتك', 'text'],
+        ['homepage', 'stat_featured_value', '99.9', '99.9', 'text'],
+        ['homepage', 'stat_featured_suffix', '%', '%', 'text'],
+        ['homepage', 'stat_featured_title_en', 'Guaranteed Production SLA Compliance', 'التزام موثوق باتفاقية مستوى الخدمة', 'text'],
+        ['homepage', 'stat_featured_sub_en', 'Average SLA attainment across all enterprise and tier-1 banking production tenants', 'متوسط تحقيق اتفاقيات مستوى الخدمة عبر كافة بيئات البنوك والمؤسسات الكبرى', 'textarea'],
+        ['homepage', 'stat_1_value', '450', '450', 'text'],
+        ['homepage', 'stat_1_suffix', '+', '+', 'text'],
+        ['homepage', 'stat_1_label_en', 'Certified Engineers', 'مهندس وخبير معتمد', 'text'],
+        ['homepage', 'stat_1_sub_en', 'SAP, Oracle, Temenos, and cloud security specialists', 'متخصصون في أنظمة SAP وOracle وTemenos وأمن السحابة', 'text'],
+        ['homepage', 'stat_2_value', '600', '600', 'text'],
+        ['homepage', 'stat_2_suffix', '+', '+', 'text'],
+        ['homepage', 'stat_2_label_en', 'Enterprise Deployments', 'مشروع وموقع تشغيلي', 'text'],
+        ['homepage', 'stat_2_sub_en', 'Core banking, ERP, and mission-critical workloads', 'أنظمة بنكية رئيسية وحلول تخطيط الموارد وسيرفرات حساسة', 'text'],
+        ['homepage', 'stat_3_value', '25', '25', 'text'],
+        ['homepage', 'stat_3_suffix', '+', '+', 'text'],
+        ['homepage', 'stat_3_label_en', 'Years of Heritage', 'عاماً من الخبرة والريادة', 'text'],
+        ['homepage', 'stat_3_sub_en', 'Deep regional domain expertise in regulated industries', 'خبرة إقليمية راسخة في القطاعات المصرفية والمالية والحكومية', 'text'],
+        ['homepage', 'stat_4_value', '18', '18', 'text'],
+        ['homepage', 'stat_4_suffix', '+', '+', 'text'],
+        ['homepage', 'stat_4_label_en', 'Strategic Alliances', 'شراكة استراتيجية عالمية', 'text'],
+        ['homepage', 'stat_4_sub_en', 'Tier-1 technology partnerships with global market leaders', 'شراكات مع كبرى الشركات التقنية الرائدة عالمياً', 'text'],
+        ['homepage', 'stat_5_value', '24/7', '24/7', 'text'],
+        ['homepage', 'stat_5_suffix', '', '', 'text'],
+        ['homepage', 'stat_5_label_en', 'Continuous Operations', 'عمليات ومراقبة مستمرة', 'text'],
+        ['homepage', 'stat_5_sub_en', 'Dual NOC + SOC facilities monitoring nationwide assets', 'مركزي عمليات NOC وSOC متقدمين لرصد ومراقبة الأنظمة', 'text'],
+    ];
+
+    foreach ($heroAndHomeSettings as $item) {
+        $checkStmt->execute([':key' => $item[1]]);
+        if ((int)$checkStmt->fetchColumn() === 0) {
+            $insertSettingStmt->execute([
+                ':group'      => $item[0],
+                ':key'        => $item[1],
+                ':value_en'   => $item[2],
+                ':value_ar'   => $item[3],
+                ':field_type' => $item[4],
+            ]);
+        }
+    }
+    echo "[OK] Hero and homepage settings verified.\n";
+
     echo "\n====================================================\n";
     echo "WAVZ CMS — Content Migration Completed Successfully!\n";
     echo "====================================================\n";

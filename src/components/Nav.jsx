@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Globe, Menu, X, ChevronDown } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
-import { useScrolled } from '../hooks/index.js';
+import { useScrolled, useNavigation } from '../hooks/index.js';
 import { WavzWordmark } from './WavzLogo.jsx';
 
 /* ── Dropdown menu component ── */
@@ -113,6 +113,35 @@ export const Nav = () => {
     { href: '#/data-ai',            label: isAr ? 'حلول البيانات والذكاء الاصطناعي' : 'Data & AI Solutions' },
   ];
 
+  const { data: dbNav } = useNavigation();
+
+  let dynamicAboutItems = aboutItems;
+  let dynamicSolutionsItems = solutionsItems;
+  let dynamicMediaItems = mediaItems;
+
+  if (Array.isArray(dbNav) && dbNav.length > 0) {
+    const aboutParent = dbNav.find(n => (n.label_en || '').toLowerCase().includes('about'));
+    if (aboutParent && aboutParent.children && aboutParent.children.length > 0) {
+      dynamicAboutItems = aboutParent.children.map(c => ({
+        href: c.url,
+        label: isAr ? c.label_ar || c.label_en : c.label_en,
+      }));
+    }
+    const solutionsParent = dbNav.find(n => (n.label_en || '').toLowerCase().includes('solution') || (n.label_en || '').toLowerCase().includes('service'));
+    if (solutionsParent && solutionsParent.children && solutionsParent.children.length > 0) {
+      dynamicSolutionsItems = solutionsParent.children.map(c => ({
+        href: c.url,
+        label: isAr ? c.label_ar || c.label_en : c.label_en,
+      }));
+    }
+    const mediaParent = dbNav.find(n => (n.label_en || '').toLowerCase().includes('media') || (n.label_en || '').toLowerCase().includes('news'));
+    if (mediaParent && mediaParent.children && mediaParent.children.length > 0) {
+      dynamicMediaItems = mediaParent.children.map(c => ({
+        href: c.url,
+        label: isAr ? c.label_ar || c.label_en : c.label_en,
+      }));
+    }
+  }
 
   return (
     <header
@@ -142,7 +171,7 @@ export const Nav = () => {
           {/* About WAVZ dropdown */}
           <Dropdown
             label={isAr ? 'عن WAVZ' : 'About WAVZ'}
-            items={aboutItems}
+            items={dynamicAboutItems}
             lang={lang}
           />
 
@@ -158,14 +187,14 @@ export const Nav = () => {
           {/* Solutions & Services dropdown */}
           <Dropdown
             label={isAr ? 'الحلول والخدمات' : 'Solutions & Services'}
-            items={solutionsItems}
+            items={dynamicSolutionsItems}
             lang={lang}
           />
 
           {/* Media Center dropdown */}
           <Dropdown
             label={isAr ? 'المركز الإعلامي' : 'Media Center'}
-            items={mediaItems}
+            items={dynamicMediaItems}
             lang={lang}
           />
 
@@ -258,7 +287,7 @@ export const Nav = () => {
             </button>
             {mobileAboutOpen && (
               <div className="ps-4 pb-1 space-y-0.5">
-                {aboutItems.map((item, i) => (
+                {dynamicAboutItems.map((item, i) => (
                   <a
                     key={i}
                     href={item.href}
@@ -295,7 +324,7 @@ export const Nav = () => {
             </button>
             {mobileSolutionsOpen && (
               <div className="ps-4 pb-1 space-y-0.5">
-                {solutionsItems.map((item, i) => (
+                {dynamicSolutionsItems.map((item, i) => (
                   <a
                     key={i}
                     href={item.href}
@@ -323,7 +352,7 @@ export const Nav = () => {
             </button>
             {mobileMediaOpen && (
               <div className="ps-4 pb-1 space-y-0.5">
-                {mediaItems.map((item, i) => (
+                {dynamicMediaItems.map((item, i) => (
                   <a
                     key={i}
                     href={item.href}

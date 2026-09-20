@@ -14,7 +14,7 @@ export default function Dashboard() {
       const res = await api.get('/dashboard/stats');
       setData(res.data || res);
     } catch (err) {
-      toast.error('Failed to load dashboard metrics: ' . err.message);
+      toast.error('Failed to load dashboard metrics: ' + err.message);
     } finally {
       setLoading(false);
     }

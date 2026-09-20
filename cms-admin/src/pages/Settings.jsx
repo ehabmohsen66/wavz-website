@@ -64,7 +64,18 @@ export default function Settings() {
     }
   };
 
-  const groups = ['general', 'contact', 'social', 'seo', 'hero'];
+  const groups = ['general', 'contact', 'social', 'seo', 'hero', 'smtp', 'system'];
+
+  const groupLabels = {
+    general: 'General',
+    contact: 'Contact Info',
+    social: 'Social Links',
+    seo: 'SEO & Meta',
+    hero: 'Hero Section',
+    smtp: 'Email (SMTP)',
+    system: 'System & Maintenance'
+  };
+
   const filteredSettings = settings.filter(s => s.group === activeGroup);
 
   if (loading) {
@@ -82,7 +93,7 @@ export default function Settings() {
         <div className="page-header" style={{ marginBottom: 24 }}>
           <div>
             <h1 className="page-title">Global Configuration</h1>
-            <p className="page-subtitle">Manage branding parameters, SEO tags, hero banners, and contact information.</p>
+            <p className="page-subtitle">Manage branding parameters, SEO tags, hero banners, contact information, SMTP, and system settings.</p>
           </div>
           <div className="page-actions">
             <button type="submit" className="btn btn-primary" disabled={saving}>
@@ -101,9 +112,9 @@ export default function Settings() {
                     type="button"
                     className={`tab-button btn-full ${activeGroup === group ? 'active' : ''}`}
                     onClick={() => setActiveGroup(group)}
-                    style={{ justifyContent: 'flex-start', padding: '10px 16px', textTransform: 'capitalize' }}
+                    style={{ justifyContent: 'flex-start', padding: '10px 16px' }}
                   >
-                    {group === 'seo' ? 'SEO Tags' : group === 'social' ? 'Social Links' : group}
+                    {groupLabels[group] || group}
                   </button>
                 </li>
               ))}
@@ -113,16 +124,42 @@ export default function Settings() {
           {/* Form Pane */}
           <div className="col-span-3 card" style={{ padding: 24 }}>
             <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: 12, marginBottom: 20 }}>
-              <h3 style={{ textTransform: 'capitalize', fontSize: 16, fontWeight: 700, color: 'var(--navy)' }}>
-                {activeGroup === 'seo' ? 'Search Engine Optimization (SEO)' : `${activeGroup} parameters`}
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--navy)' }}>
+                {groupLabels[activeGroup] || activeGroup} Parameters
               </h3>
             </div>
+
+            {/* Hero section notice when fields are sparse */}
+            {activeGroup === 'hero' && filteredSettings.length < 5 && (
+              <div style={{
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                padding: '12px 16px',
+                marginBottom: 20,
+                fontSize: 13,
+                color: 'var(--text-secondary)'
+              }}>
+                ℹ️ <strong>Some hero fields may not be in the database yet.</strong> They'll appear here after the database migration is run.
+              </div>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {filteredSettings.map(setting => {
                 const isImage = setting.field_type === 'image';
                 const isTextarea = setting.field_type === 'textarea';
-                const isBilingual = setting.value_ar !== undefined || setting.key.endsWith('_en') || setting.key.endsWith('_ar') || setting.key.includes('title') || setting.key.includes('desc') || setting.key.includes('address') || setting.key.includes('slogan') || setting.key.includes('company');
+                const isPassword = setting.key === 'smtp_pass';
+                const isBool = setting.key === 'maintenance_mode' || setting.key === 'cookie_consent_enabled';
+                const isBilingual = !isPassword && !isBool && (
+                  setting.value_ar !== undefined ||
+                  setting.key.endsWith('_en') ||
+                  setting.key.endsWith('_ar') ||
+                  setting.key.includes('title') ||
+                  setting.key.includes('desc') ||
+                  setting.key.includes('address') ||
+                  setting.key.includes('slogan') ||
+                  setting.key.includes('company')
+                );
 
                 const humanLabel = setting.key
                   .replace(/_/g, ' ')
@@ -136,6 +173,23 @@ export default function Settings() {
                         onChange={url => handleValueChange(setting.id, 'en', url)}
                         label={humanLabel}
                       />
+                    </div>
+                  );
+                }
+
+                if (isBool) {
+                  const checked = setting.value_en === '1' || setting.value_en === 1 || setting.value_en === true;
+                  return (
+                    <div key={setting.id} className="form-group" style={{ borderBottom: '1px solid var(--bg)', paddingBottom: 20 }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={e => handleValueChange(setting.id, 'en', e.target.checked ? '1' : '0')}
+                          style={{ width: 18, height: 18, cursor: 'pointer' }}
+                        />
+                        <span className="form-label" style={{ margin: 0 }}>{humanLabel}</span>
+                      </label>
                     </div>
                   );
                 }
@@ -159,7 +213,7 @@ export default function Settings() {
                   );
                 }
 
-                // Default monolingual field (URL, phone, email, text)
+                // Default monolingual field (URL, phone, email, text, password)
                 return (
                   <div key={setting.id} className="form-group" style={{ borderBottom: '1px solid var(--bg)', paddingBottom: 20 }}>
                     <label className="form-label" htmlFor={`set-${setting.key}`}>{humanLabel}</label>
@@ -174,10 +228,16 @@ export default function Settings() {
                     ) : (
                       <input
                         id={`set-${setting.key}`}
-                        type={setting.field_type === 'email' ? 'email' : setting.field_type === 'tel' ? 'tel' : 'text'}
+                        type={
+                          isPassword ? 'password' :
+                          setting.field_type === 'email' ? 'email' :
+                          setting.field_type === 'tel' ? 'tel' :
+                          'text'
+                        }
                         className="form-input"
                         value={setting.value_en || ''}
                         onChange={e => handleValueChange(setting.id, 'en', e.target.value)}
+                        autoComplete={isPassword ? 'new-password' : undefined}
                       />
                     )}
                   </div>

@@ -20,7 +20,7 @@ import {
 import { MeshGradient, Warp } from '@paper-design/shaders-react';
 import { motion } from 'framer-motion';
 import { useLang } from '../i18n/LangContext.jsx';
-import { useReveal } from '../hooks/index.js';
+import { useReveal, usePages } from '../hooks/index.js';
 import { SolutionsPortfolio } from './SolutionsPortfolio.jsx';
 
 
@@ -28,12 +28,19 @@ import { SolutionsPortfolio } from './SolutionsPortfolio.jsx';
 export const About = () => {
   const { t, lang, dir } = useLang();
   const [revealRef, visible] = useReveal();
+  const { data: pageCms } = usePages('about');
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const data = t.about;
+  const data = {
+    ...t.about,
+    ...(pageCms && (pageCms.title_en || pageCms.title_ar) && {
+      tagline: (lang === 'ar' ? pageCms.title_ar : pageCms.title_en) || t.about?.tagline,
+      lede: (lang === 'ar' ? pageCms.subtitle_ar : pageCms.subtitle_en) || t.about?.lede,
+    })
+  };
 
   // Map strategy pillars to Lucide icons
   const strategyIcons = [

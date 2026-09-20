@@ -1,13 +1,27 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
-import { useReveal } from '../hooks/index.js';
+import { useReveal, useTestimonials } from '../hooks/index.js';
 import { Counter } from './Counter.jsx';
 import { CircularTestimonials } from './CircularTestimonials.jsx';
 
 export const Results = () => {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const isAr = lang === 'ar';
   const [revealRef, visible] = useReveal();
+
+  const fallbackQuotes = (t.results?.quotes || []).map(q => ({
+    quote_en: q.text,
+    quote_ar: q.text,
+    author_en: q.author,
+    author_ar: q.author,
+    title_en: q.role,
+    title_ar: q.role,
+    photo: q.image || `https://i.pravatar.cc/150?u=${encodeURIComponent(q.author)}`
+  }));
+
+  const { data: dbTestimonials } = useTestimonials(fallbackQuotes);
+  const testimonialsList = (dbTestimonials && dbTestimonials.length > 0) ? dbTestimonials : fallbackQuotes;
 
 
   return (
@@ -57,15 +71,27 @@ export const Results = () => {
         {/* Quote carousel */}
         <div className="mt-20">
           <div className="text-center mb-16 relative z-10">
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#082D4A]">Some of Our Client Testimonials</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#082D4A]">
+              {isAr ? 'بعض من آراء عملائنا' : 'Some of Our Client Testimonials'}
+            </h2>
           </div>
           <CircularTestimonials
-            testimonials={t.results.quotes.map((q, i) => ({
-              quote: q.text,
-              name: q.author,
-              designation: q.role,
-              src: q.image || `https://i.pravatar.cc/150?u=${encodeURIComponent(q.author)}`
-            }))}
+            testimonials={testimonialsList.map((item) => {
+              const author = isAr ? item.author_ar || item.author_en : item.author_en;
+              const quote = isAr ? item.quote_ar || item.quote_en : item.quote_en;
+              const role = isAr ? item.title_ar || item.title_en : item.title_en;
+              let photo = item.photo;
+              if (photo && !photo.startsWith('http') && !photo.startsWith('data:')) {
+                const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
+                photo = `${backendBase}${photo}`;
+              }
+              return {
+                quote: quote || '',
+                name: author || '',
+                designation: role || '',
+                src: photo || `https://i.pravatar.cc/150?u=${encodeURIComponent(author || 'client')}`
+              };
+            })}
             colors={{
               name: "#082D4A",
               designation: "#1173BD",

@@ -99,11 +99,13 @@ const mapDbTestimonial = (dbTest, ar) => {
     photoUrl = `${backendBase}${photoUrl}`;
   }
 
-  let logoUrl = '';
-  const comp = (dbTest.company || '').toLowerCase();
-  if (comp.includes('tietoevry')) logoUrl = '/8b56ffb305d960f5_org.png';
-  else if (comp.includes('nevis')) logoUrl = '/nevis_logo.png';
-  else if (comp.includes('teradata')) logoUrl = '/Teradata_logo_(2024).svg.png';
+  let logoUrl = dbTest.logo_url || '';
+  if (!logoUrl) {
+    const comp = (dbTest.company || '').toLowerCase();
+    if (comp.includes('tietoevry')) logoUrl = '/8b56ffb305d960f5_org.png';
+    else if (comp.includes('nevis')) logoUrl = '/nevis_logo.png';
+    else if (comp.includes('teradata')) logoUrl = '/Teradata_logo_(2024).svg.png';
+  }
 
   const author = ar ? dbTest.author_ar : dbTest.author_en;
   const quote = ar ? dbTest.quote_ar : dbTest.quote_en;
