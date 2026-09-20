@@ -337,14 +337,14 @@ try {
     echo "\n--- Migrating Blog Posts with Notion-style Blocks ---\n";
     $db->exec("DELETE FROM blog_posts");
 
-    $blogJsonPath = '/Users/ihabmohamed/wavz-website/src/components/blog_contents_multilang.json';
+    $blogJsonPath = __DIR__ . '/blog_contents_multilang.json';
     if (!file_exists($blogJsonPath)) {
-        throw new RuntimeException("Missing blog contents JSON file at $blogJsonPath.");
+        $blogJsonPath = dirname(__DIR__) . '/src/components/blog_contents_multilang.json';
     }
 
-    $blogBlocks = json_decode(file_get_contents($blogJsonPath), true);
-    if ($blogBlocks === null) {
-        throw new RuntimeException("Invalid blog_contents_multilang.json syntax.");
+    $blogBlocks = [];
+    if (file_exists($blogJsonPath)) {
+        $blogBlocks = json_decode(file_get_contents($blogJsonPath), true) ?: [];
     }
 
     // Static metadata for the 12 blog posts
