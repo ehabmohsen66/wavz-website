@@ -58,6 +58,7 @@ const mapDbPostToPost = (dbPost) => {
     image: imageUrl,
     accent: dbPost.accent_color || '#FFB814',
     tag: dbPost.tags || 'News',
+    status: dbPost.status,
     blocks_en,
     blocks_ar
   };
@@ -743,7 +744,7 @@ export const BlogPage = ({ route }) => {
   const dir  = ar ? 'rtl' : 'ltr';
   const font = ar ? FONT_AR : FONT;
 
-  const { data: dbPosts } = useBlog(null, POSTS);
+  const { data: dbPosts, loading: blogLoading } = useBlog(null, POSTS);
   const { data: dbCategories } = useBlogCategories([]);
 
   const rawList = (Array.isArray(dbPosts) && dbPosts.length > 0) ? dbPosts : POSTS;
@@ -773,11 +774,57 @@ export const BlogPage = ({ route }) => {
   }, [route]);
 
   const isBlogDetailRoute = route && route.startsWith('#/blog/');
-  const activeSlug = isBlogDetailRoute ? route.replace('#/blog/', '') : null;
-  const currentPost = isBlogDetailRoute ? publishedList.find(p => p.slug === activeSlug) : null;
+  const activeSlug = isBlogDetailRoute
+    ? route.replace('#/blog/', '').replace(/\/+$/, '').split('?')[0].toLowerCase()
+    : null;
+  const currentPost = isBlogDetailRoute
+    ? publishedList.find(p => (p.slug || '').toLowerCase() === activeSlug)
+    : null;
 
-  if (isBlogDetailRoute && currentPost) {
-    return <BlogDetailView post={currentPost} ar={ar} font={font} allPosts={publishedList} />;
+  if (isBlogDetailRoute) {
+    if (currentPost) {
+      return <BlogDetailView post={currentPost} ar={ar} font={font} allPosts={publishedList} />;
+    }
+    if (blogLoading) {
+      return (
+        <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#061E31', color: '#fff' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ width: 44, height: 44, border: '4px solid rgba(255,184,20,0.2)', borderTopColor: '#FFB814', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
+            <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+            <p style={{ color: '#91c4f5', fontSize: 14 }}>{ar ? 'جاري تحميل المقال...' : 'Loading article...'}</p>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#061E31', color: '#fff', padding: '120px 20px 60px' }}>
+        <div style={{ textAlign: 'center', maxWidth: 480, margin: '0 auto', background: '#082D4A', padding: '40px 32px', borderRadius: 16, border: '1px solid rgba(17,115,189,0.2)' }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>📰</div>
+          <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 12, color: '#FFB814' }}>
+            {ar ? 'المقال غير موجود' : 'Article Not Found'}
+          </h2>
+          <p style={{ color: '#91c4f5', marginBottom: 24, fontSize: 14, lineHeight: 1.6 }}>
+            {ar
+              ? 'لم يتم العثور على المقال المطلوب. قد يكون تم نقله أو حذفه.'
+              : 'The requested article could not be found. It may have been moved or unpublished.'}
+          </p>
+          <a
+            href="#/blog"
+            style={{
+              display: 'inline-block',
+              background: '#FFB814',
+              color: '#061E31',
+              fontWeight: 700,
+              padding: '10px 24px',
+              borderRadius: 100,
+              textDecoration: 'none'
+            }}
+          >
+            {ar ? 'العودة إلى المدونة' : 'Back to Blog'}
+          </a>
+        </div>
+      </div>
+    );
   }
 
   const baseCats = ar ? ALL_CATS_AR : ALL_CATS_EN;
