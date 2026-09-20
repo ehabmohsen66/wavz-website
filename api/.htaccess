@@ -1,12 +1,20 @@
 # ============================================================
-# WAVZ CMS API — Apache Configuration
+# WAVZ CMS API — Apache / LiteSpeed Configuration
 # ============================================================
 
-# Enable rewrite engine
-RewriteEngine On
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /api/
 
-# Set base path
-RewriteBase /api/
+    # Handle preflight OPTIONS requests
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^ index.php [QSA,L]
+
+    # Route all non-existing files/directories to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
 
 # ---- CORS Headers ----
 <IfModule mod_headers.c>
@@ -16,17 +24,16 @@ RewriteBase /api/
     Header always set Access-Control-Max-Age "3600"
 </IfModule>
 
-# Handle preflight OPTIONS requests
-RewriteRule ^(.*)$ $1 [R=200,L] 
-RewriteCond %{REQUEST_METHOD} OPTIONS
-RewriteRule ^(.*)$ index.php [QSA,L]
-
 # ---- Deny access to sensitive files ----
-<FilesMatch "\.(sql|env|log|md)$">
+<FilesMatch "\.(sql|env|log|md|json)$">
     Require all denied
 </FilesMatch>
 
 <Files "config.php">
+    Require all denied
+</Files>
+
+<Files "config.local.php">
     Require all denied
 </Files>
 
@@ -36,8 +43,3 @@ RewriteRule ^(.*)$ index.php [QSA,L]
 
 # ---- Block directory listing ----
 Options -Indexes
-
-# ---- Route all requests to index.php ----
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]

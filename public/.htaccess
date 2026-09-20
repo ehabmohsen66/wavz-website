@@ -7,6 +7,10 @@
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
+  # Exclude /api and /admin paths from root SPA rewrite
+  RewriteCond %{REQUEST_URI} ^/(api|admin) [NC]
+  RewriteRule ^ - [L]
+
   # Route all other paths to index.html
   RewriteRule ^ index.html [L]
 </IfModule>

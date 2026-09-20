@@ -77,6 +77,11 @@ if (str_starts_with($requestUri, $basePath)) {
     $requestUri = substr($requestUri, strlen($basePath));
 }
 
+// Remove /index.php if present
+if (str_starts_with($requestUri, '/index.php')) {
+    $requestUri = substr($requestUri, strlen('/index.php'));
+}
+
 // Ensure leading slash
 if ($requestUri === '' || $requestUri === false) {
     $requestUri = '/';
@@ -96,6 +101,12 @@ if (in_array($method, ['POST', 'PUT'])) {
 
 // ---- Router ----
 try {
+    // Health check (public)
+    if (($requestUri === '/' || $requestUri === '/health') && $method === 'GET') {
+        Response::success(['status' => 'ok', 'message' => 'WAVZ CMS API is running']);
+        exit;
+    }
+
     // Initialize DB in models
     $db = getDB();
 
