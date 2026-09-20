@@ -58,8 +58,8 @@ class ApiClient {
       }
 
       if (!response.ok) {
-        const message = (data && typeof data === 'object' && data.error)
-          ? data.error
+        const message = (data && typeof data === 'object' && (data.error || data.message))
+          ? (data.error || data.message)
           : `Request failed with status ${response.status}`;
         throw new Error(message);
       }

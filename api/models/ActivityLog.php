@@ -89,32 +89,58 @@ class ActivityLog
 
     /**
      * Log an activity.
+     * Supports both calling conventions:
+     *   log(int $userId, string $action, string $entityType, ?int $entityId = null, ?array $details = null)
+     *   log(string $action, string $entityType, ?int $entityId = null, ?array $details = null, ?int $userId = null)
      */
     public static function log(
-        string $action,
-        string $entityType,
-        ?int $entityId = null,
-        ?array $details = null,
-        ?int $userId = null
+        mixed $arg1,
+        string $arg2 = '',
+        mixed $arg3 = null,
+        mixed $arg4 = null,
+        mixed $arg5 = null
     ): void {
-        // Get current user if not provided
-        if ($userId === null) {
-            $user = Auth::user();
-            $userId = $user ? (int)$user['id'] : null;
-        }
+        try {
+            if (is_int($arg1) || (is_string($arg1) && ctype_digit($arg1))) {
+                // Conventional controller call: ($userId, $action, $entityType, $entityId, $details)
+                $userId = (int)$arg1;
+                $action = $arg2;
+                $entityType = is_string($arg3) ? $arg3 : '';
+                $entityId = is_numeric($arg4) ? (int)$arg4 : null;
+                $details = is_array($arg5) ? $arg5 : (is_array($arg4) ? $arg4 : null);
+            } else {
+                // Model call: ($action, $entityType, $entityId, $details, $userId)
+                $action = (string)$arg1;
+                $entityType = $arg2;
+                $entityId = is_numeric($arg3) ? (int)$arg3 : null;
+                $details = is_array($arg4) ? $arg4 : null;
+                $userId = is_numeric($arg5) ? (int)$arg5 : null;
 
-        $stmt = self::db()->prepare(
-            'INSERT INTO activity_log (user_id, action, entity_type, entity_id, details, ip_address)
-             VALUES (:user_id, :action, :entity_type, :entity_id, :details, :ip_address)'
-        );
-        $stmt->execute([
-            ':user_id'     => $userId,
-            ':action'      => $action,
-            ':entity_type' => $entityType,
-            ':entity_id'   => $entityId,
-            ':details'     => $details ? json_encode($details) : null,
-            ':ip_address'  => Auth::getClientIp(),
-        ]);
+                if ($userId === null) {
+                    $user = class_exists('Auth') && method_exists('Auth', 'user') ? Auth::user() : null;
+                    $userId = $user ? (int)$user['id'] : null;
+                }
+            }
+
+            $ip = class_exists('Auth') && method_exists('Auth', 'getClientIp')
+                ? Auth::getClientIp()
+                : ($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
+
+            $stmt = self::db()->prepare(
+                'INSERT INTO activity_log (user_id, action, entity_type, entity_id, details, ip_address)
+                 VALUES (:user_id, :action, :entity_type, :entity_id, :details, :ip_address)'
+            );
+            $stmt->execute([
+                ':user_id'     => $userId,
+                ':action'      => $action,
+                ':entity_type' => $entityType,
+                ':entity_id'   => $entityId,
+                ':details'     => $details ? json_encode($details, JSON_UNESCAPED_UNICODE) : null,
+                ':ip_address'  => $ip,
+            ]);
+        } catch (Throwable $e) {
+            error_log('Failed to write activity log: ' . $e->getMessage());
+        }
     }
 
     public static function create(array $data): array

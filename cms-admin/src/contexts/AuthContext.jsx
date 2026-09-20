@@ -14,7 +14,8 @@ export function AuthProvider({ children }) {
       return;
     }
     try {
-      const data = await api.get('/auth/me');
+      const res = await api.get('/auth/me');
+      const data = (res && res.data) ? res.data : res;
       setUser(data.user || data);
     } catch {
       api.removeToken();
@@ -29,7 +30,8 @@ export function AuthProvider({ children }) {
   }, [checkAuth]);
 
   const login = async (email, password) => {
-    const data = await api.post('/auth/login', { email, password });
+    const res = await api.post('/auth/login', { email, password });
+    const data = (res && res.data) ? res.data : res;
     if (data.token) {
       api.setToken(data.token);
     }
