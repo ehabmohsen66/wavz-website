@@ -110,33 +110,60 @@ class BlogPost
         return $stmt->fetchAll();
     }
 
+    public static function ensureSeoColumns(): void
+    {
+        try {
+            $cols = [
+                'meta_title_en'       => 'VARCHAR(255) DEFAULT NULL',
+                'meta_title_ar'       => 'VARCHAR(255) DEFAULT NULL',
+                'meta_description_en' => 'TEXT DEFAULT NULL',
+                'meta_description_ar' => 'TEXT DEFAULT NULL',
+                'meta_keywords'       => 'VARCHAR(500) DEFAULT NULL',
+            ];
+            foreach ($cols as $col => $def) {
+                try {
+                    self::db()->exec("ALTER TABLE blog_posts ADD COLUMN $col $def");
+                } catch (Throwable $e) {
+                    // Column already exists or error
+                }
+            }
+        } catch (Throwable $e) {}
+    }
+
     public static function create(array $data): array
     {
+        self::ensureSeoColumns();
+
         // Generate slug from title
         $slug = Validator::generateSlug($data['title_en']);
         $slug = Validator::uniqueSlug($slug, 'blog_posts');
 
         $stmt = self::db()->prepare(
-            'INSERT INTO blog_posts (slug, title_en, title_ar, excerpt_en, excerpt_ar, blocks_en, blocks_ar, image, category_en, category_ar, tags, read_time, accent_color, published_at, status, author_id)
-             VALUES (:slug, :title_en, :title_ar, :excerpt_en, :excerpt_ar, :blocks_en, :blocks_ar, :image, :category_en, :category_ar, :tags, :read_time, :accent_color, :published_at, :status, :author_id)'
+            'INSERT INTO blog_posts (slug, title_en, title_ar, excerpt_en, excerpt_ar, blocks_en, blocks_ar, image, category_en, category_ar, tags, read_time, accent_color, published_at, status, author_id, meta_title_en, meta_title_ar, meta_description_en, meta_description_ar, meta_keywords)
+             VALUES (:slug, :title_en, :title_ar, :excerpt_en, :excerpt_ar, :blocks_en, :blocks_ar, :image, :category_en, :category_ar, :tags, :read_time, :accent_color, :published_at, :status, :author_id, :meta_title_en, :meta_title_ar, :meta_description_en, :meta_description_ar, :meta_keywords)'
         );
         $stmt->execute([
-            ':slug'         => $data['slug'] ?? $slug,
-            ':title_en'     => $data['title_en'],
-            ':title_ar'     => $data['title_ar'] ?? null,
-            ':excerpt_en'   => $data['excerpt_en'] ?? null,
-            ':excerpt_ar'   => $data['excerpt_ar'] ?? null,
-            ':blocks_en'    => is_array($data['blocks_en'] ?? null) ? json_encode($data['blocks_en']) : ($data['blocks_en'] ?? null),
-            ':blocks_ar'    => is_array($data['blocks_ar'] ?? null) ? json_encode($data['blocks_ar']) : ($data['blocks_ar'] ?? null),
-            ':image'        => $data['image'] ?? null,
-            ':category_en'  => $data['category_en'] ?? null,
-            ':category_ar'  => $data['category_ar'] ?? null,
-            ':tags'         => $data['tags'] ?? null,
-            ':read_time'    => $data['read_time'] ?? 5,
-            ':accent_color' => $data['accent_color'] ?? '#1173BD',
-            ':published_at' => $data['published_at'] ?? null,
-            ':status'       => $data['status'] ?? 'draft',
-            ':author_id'    => $data['author_id'] ?? null,
+            ':slug'                => $data['slug'] ?? $slug,
+            ':title_en'            => $data['title_en'],
+            ':title_ar'            => $data['title_ar'] ?? null,
+            ':excerpt_en'          => $data['excerpt_en'] ?? null,
+            ':excerpt_ar'          => $data['excerpt_ar'] ?? null,
+            ':blocks_en'           => is_array($data['blocks_en'] ?? null) ? json_encode($data['blocks_en']) : ($data['blocks_en'] ?? null),
+            ':blocks_ar'           => is_array($data['blocks_ar'] ?? null) ? json_encode($data['blocks_ar']) : ($data['blocks_ar'] ?? null),
+            ':image'               => $data['image'] ?? null,
+            ':category_en'         => $data['category_en'] ?? null,
+            ':category_ar'         => $data['category_ar'] ?? null,
+            ':tags'                => $data['tags'] ?? null,
+            ':read_time'           => $data['read_time'] ?? 5,
+            ':accent_color'        => $data['accent_color'] ?? '#1173BD',
+            ':published_at'        => $data['published_at'] ?? null,
+            ':status'              => $data['status'] ?? 'draft',
+            ':author_id'           => $data['author_id'] ?? null,
+            ':meta_title_en'       => $data['meta_title_en'] ?? ($data['title_en'] ?? null),
+            ':meta_title_ar'       => $data['meta_title_ar'] ?? ($data['title_ar'] ?? null),
+            ':meta_description_en' => $data['meta_description_en'] ?? ($data['excerpt_en'] ?? null),
+            ':meta_description_ar' => $data['meta_description_ar'] ?? ($data['excerpt_ar'] ?? null),
+            ':meta_keywords'       => $data['meta_keywords'] ?? ($data['tags'] ?? null),
         ]);
 
         $id = (int)self::db()->lastInsertId();
@@ -145,6 +172,7 @@ class BlogPost
 
     public static function update(int $id, array $data): ?array
     {
+        self::ensureSeoColumns();
         $fields = [];
         $params = [':id' => $id];
 
@@ -152,6 +180,7 @@ class BlogPost
             'slug', 'title_en', 'title_ar', 'excerpt_en', 'excerpt_ar',
             'blocks_en', 'blocks_ar', 'image', 'category_en', 'category_ar',
             'tags', 'read_time', 'accent_color', 'published_at', 'status',
+            'meta_title_en', 'meta_title_ar', 'meta_description_en', 'meta_description_ar', 'meta_keywords',
         ];
 
         foreach ($allowed as $field) {
