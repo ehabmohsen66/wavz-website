@@ -1084,30 +1084,44 @@ export const ManagedServices = () => {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: 18 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {SECTORS.map((sec) => {
             const Icon = sec.icon;
             return (
-              <div key={sec.code} style={{
-                background: T.navy2,
-                border: `1px solid ${T.border}`,
-                borderRadius: 14,
-                padding: '24px 20px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                  <div style={{ width: 38, height: 38, borderRadius: 8, background: 'rgba(255,184,20,0.1)', color: T.gold, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon size={18} />
+              <div
+                key={sec.code}
+                className="flex flex-col justify-between transition-all duration-200"
+                style={{
+                  background: T.navy2,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: 14,
+                  padding: '24px 20px',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = T.gold;
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = T.border;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                    <div style={{ width: 38, height: 38, borderRadius: 8, background: 'rgba(255,184,20,0.1)', color: T.gold, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon size={18} />
+                    </div>
+                    <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', padding: '2px 8px', borderRadius: 4, background: 'rgba(255,255,255,0.06)', color: T.muted }}>
+                      {sec.code}
+                    </span>
                   </div>
-                  <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', padding: '2px 8px', borderRadius: 4, background: 'rgba(255,255,255,0.06)', color: T.muted }}>
-                    {sec.code}
-                  </span>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
+                    {ar ? sec.ar.title : sec.en.title}
+                  </h3>
+                  <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, margin: 0 }}>
+                    {ar ? sec.ar.desc : sec.en.desc}
+                  </p>
                 </div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
-                  {ar ? sec.ar.title : sec.en.title}
-                </h3>
-                <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, margin: 0 }}>
-                  {ar ? sec.ar.desc : sec.en.desc}
-                </p>
               </div>
             );
           })}
