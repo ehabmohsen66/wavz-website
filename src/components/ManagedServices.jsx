@@ -614,7 +614,7 @@ export const ManagedServices = () => {
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 26px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: `1px solid ${T.border}`, color: T.white, fontWeight: 600, fontSize: 15, textDecoration: 'none', transition: 'all 0.2s' }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}>
-              {ar ? 'استكشف أبراج الخدمات' : 'Explore Service Towers'}
+              {ar ? 'استكشف ركائز الخدمات' : 'Explore Service Pillars'}
             </a>
           </motion.div>
         </div>
@@ -700,7 +700,7 @@ export const ManagedServices = () => {
         </div>
       </section>
 
-      {/* ── 3. Eight Service Towers (+ Systems & Infra) ── */}
+      {/* ── 3. Eight Service Pillars (+ Systems & Infra) ── */}
       <section id="towers" style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: 'clamp(70px,8vw,100px) clamp(24px,6vw,80px)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           
@@ -708,17 +708,17 @@ export const ManagedServices = () => {
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <div style={{ width: 20, height: 2, background: T.blueL }} />
               <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: T.blueL, fontFamily: font }}>
-                {ar ? 'أبراج الخدمات الثمانية' : 'EIGHT SERVICE TOWERS'}
+                {ar ? 'ركائز الخدمات الثماني' : 'EIGHT SERVICE PILLARS'}
               </span>
               <div style={{ width: 20, height: 2, background: T.blueL }} />
             </div>
             <h2 style={{ fontSize: 'clamp(2rem,3.2vw,2.8rem)', fontWeight: 800, color: T.white, margin: '0 0 16px', letterSpacing: '-0.02em', fontFamily: font }}>
-              {ar ? 'ثمانية أبراج خدمية، تحت إطار حوكمة موحد' : 'Eight Service Towers, One Unified Governance Framework'}
+              {ar ? 'ثماني ركائز خدمية، تحت إطار حوكمة موحد' : 'Eight Service Pillars, One Unified Governance Framework'}
             </h2>
             <p style={{ fontSize: 16, color: T.muted, lineHeight: 1.75, margin: 0 }}>
               {ar
-                ? 'تمتد محفظة خدماتنا المُدارة لتغطي كامل المنظومة التشغيلية — كل برج خدمي يقوده متخصصون معتمدون، وجميعها تخضع لإطار موحد لاتفاقيات مستوى الخدمة.'
-                : 'Our managed services portfolio spans the full operational stack — each tower staffed by specialists, all governed under a single, unified SLA framework.'}
+                ? 'تمتد محفظة خدماتنا المُدارة لتغطي كامل المنظومة التشغيلية — كل ركيزة خدمية يقودها متخصصون معتمدون، وجميعها تخضع لإطار موحد لاتفاقيات مستوى الخدمة.'
+                : 'Our managed services portfolio spans the full operational stack — each pillar staffed by specialists, all governed under a single, unified SLA framework.'}
             </p>
           </div>
 
