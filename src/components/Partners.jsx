@@ -167,8 +167,8 @@ export const Partners = () => {
 
       {/* ══ PARTNERS WORLD MAP HERO ══════════════════ */}
       <section className="relative w-full bg-[#061E31] text-white overflow-hidden flex flex-col justify-start pt-16 pb-16 lg:pt-24 lg:pb-20">
-        {/* World Map floating absolute in the background - shifted right on larger screens to clear left-aligned text */}
-        <div className="absolute inset-y-0 right-0 w-full lg:w-[55%] xl:w-[50%] z-0 pointer-events-none flex items-center justify-center opacity-40 lg:opacity-80 lg:translate-x-[20%] lg:translate-y-[15%] transition-all duration-700">
+        {/* World Map floating absolute in the background - positioned on right for LTR, left for RTL to clear text */}
+        <div className={`absolute inset-y-0 ${isAr ? 'left-0 lg:-translate-x-[15%]' : 'right-0 lg:translate-x-[20%]'} w-full lg:w-[55%] xl:w-[50%] z-0 pointer-events-none flex items-center justify-center opacity-40 lg:opacity-80 lg:translate-y-[15%] transition-all duration-700`}>
           <WorldMap />
         </div>
 
