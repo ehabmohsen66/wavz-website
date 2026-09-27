@@ -791,15 +791,35 @@ export const ManagedServices = () => {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 14 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           {MONITORING_ITEMS.map((item, idx) => (
-            <div key={idx} style={{
-              display: 'flex', alignItems: 'center', gap: 12,
-              padding: '16px 18px', borderRadius: 12,
-              background: T.navy2, border: `1px solid ${T.border}`
-            }}>
+            <div
+              key={idx}
+              className="flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 min-h-[68px]"
+              style={{
+                background: T.navy2,
+                border: `1px solid ${T.border}`,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = T.green;
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = T.border;
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
               <CheckCircle2 size={18} color={T.green} style={{ flexShrink: 0 }} />
-              <span style={{ fontSize: 14, fontWeight: 700, color: T.white }}>
+              <span
+                style={{
+                  fontSize: 13.5,
+                  fontWeight: 700,
+                  color: T.white,
+                  lineHeight: 1.35,
+                  fontFamily: font,
+                }}
+              >
                 {ar ? item.ar : item.en}
               </span>
             </div>
