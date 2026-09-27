@@ -394,7 +394,7 @@ const BOARD_DATA = {
     },
     /* ── CEO ── */
     {
-      name: 'Amany Zaki',
+      name: 'Eng. Amany Zaki',
       role: 'CEO & Managing Director',
       photo: '/board-photos/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
       shortBio: 'Seasoned IT executive with over 30 years of experience in information technology, data warehouse, and analytics.',
@@ -460,7 +460,7 @@ const BOARD_DATA = {
       isChair: true,
     },
     {
-      name: 'أماني زكي',
+      name: 'المهندسة أماني زكي',
       role: 'الرئيس التنفيذي والمدير العام',
       photo: '/board-photos/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
       shortBio: 'مديرة تنفيذية متمرسة في قطاع تكنولوجيا المعلومات بخبرة تتجاوز 30 عامًا.',
@@ -546,7 +546,7 @@ const MemberCard = ({ member, idx, lang, dir }) => {
   const isAr = lang === 'ar';
 
   const initials = member.name
-    .replace(/^(Mr\.|Dr\.|Mrs\.|السيد|الدكتورة|الدكتور)\s+/i, '')
+    .replace(/^(Mr\.|Dr\.|Mrs\.|Eng\.|السيد|الدكتورة|الدكتور|المهندسة)\s+/i, '')
     .split(' ')
     .filter(Boolean)
     .slice(0, 2)

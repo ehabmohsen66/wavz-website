@@ -68,7 +68,7 @@ const TEAM_EN = [
   // 1. Amany Zaki
   {
     photo: '/team/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
-    name: 'Amany Zaki',
+    name: 'Eng. Amany Zaki',
     role: 'CEO & Managing Director',
     department: 'Executive',
     years: '30+',
@@ -181,7 +181,7 @@ const TEAM_AR = [
   // 1. Amany Zaki
   {
     photo: '/team/WhatsApp-Image-2025-11-23-at-4.05.57-PM.jpeg',
-    name: 'أماني زكي',
+    name: 'المهندسة أماني زكي',
     role: 'الرئيس التنفيذي والمدير العام',
     department: 'التنفيذية',
     years: '+30',
@@ -325,7 +325,7 @@ const DEPT_COLOR = {
 /* ── Initials helper ── */
 const getInitials = (name) =>
   name
-    .replace(/^(Mr\.|Dr\.|Mrs\.|أماني|محمد|مصطفى|عمرو|منة|هشام|يوسف|داليا|أحمد|دعاء|وائل|ريم)\s*/i, '')
+    .replace(/^(Mr\.|Dr\.|Mrs\.|Eng\.|أماني|محمد|مصطفى|عمرو|منة|هشام|يوسف|داليا|أحمد|دعاء|وائل|ريم|المهندسة)\s*/i, '')
     .split(' ')
     .filter(Boolean)
     .slice(0, 2)
