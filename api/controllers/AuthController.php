@@ -12,6 +12,11 @@ class AuthController
      */
     public static function login(array $input): void
     {
+        // Protect login endpoint from brute-force attempts
+        if (class_exists('RateLimiter')) {
+            RateLimiter::check('login_' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 15);
+        }
+
         $errors = Validator::required($input, ['email', 'password']);
         if (!empty($errors)) {
             Response::validationError('Missing email or password', $errors);
@@ -40,6 +45,11 @@ class AuthController
 
         $token = JWT::encode($payload);
         $refreshToken = JWT::encodeRefresh(['sub' => $user['id']]);
+
+        // Record session
+        if (class_exists('AuthSession')) {
+            AuthSession::create((int)$user['id'], $refreshToken, JWT_REFRESH_TTL);
+        }
 
         // Update last login
         User::updateLastLogin((int)$user['id']);
@@ -72,6 +82,10 @@ class AuthController
         $refreshToken = $input['refresh_token'] ?? null;
         if (!$refreshToken) {
             Response::validationError('Missing refresh token');
+        }
+
+        if (class_exists('AuthSession') && !AuthSession::valid($refreshToken)) {
+            Response::unauthorized('Refresh token revoked or expired');
         }
 
         try {
@@ -119,5 +133,20 @@ class AuthController
     {
         $currentUser = Auth::authenticate();
         Response::success(['user' => $currentUser]);
+    }
+
+    /**
+     * POST /api/auth/logout
+     */
+    public static function logout(): void
+    {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            $token = trim($matches[1]);
+            if (class_exists('AuthSession')) {
+                AuthSession::revoke($token);
+            }
+        }
+        Response::success(null, 'Logged out successfully');
     }
 }

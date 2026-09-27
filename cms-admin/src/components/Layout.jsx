@@ -34,7 +34,7 @@ const adminOnlyItems = [
   { label: 'Users', path: '/users', icon: 'user-plus' },
 ];
 
-function SvgIcon({ name }) {
+function SvgIcon({ name, size = 18, style }) {
   const icons = {
     grid: <><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></>,
     edit: <><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></>,
@@ -58,7 +58,17 @@ function SvgIcon({ name }) {
     'log-out': <><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>,
   };
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ width: size, height: size, flexShrink: 0, ...style }}
+    >
       {icons[name] || icons.grid}
     </svg>
   );
@@ -70,8 +80,8 @@ export default function Layout({ children, title }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
@@ -148,16 +158,46 @@ export default function Layout({ children, title }) {
         </nav>
 
         <div className="sidebar-footer">
-          <div className="sidebar-user">
+          <div className="sidebar-user" onClick={() => navigate('/profile')} style={{ cursor: 'pointer' }} title="View Profile">
             <div className="sidebar-user-avatar">{userInitials}</div>
             <div className="sidebar-user-info">
               <div className="sidebar-user-name">{user?.name || 'Admin'}</div>
               <div className="sidebar-user-role">{user?.role || 'admin'}</div>
             </div>
-            <button className="sidebar-logout-btn" onClick={handleLogout} title="Logout">
-              <SvgIcon name="log-out" />
-            </button>
           </div>
+          <button
+            className="sidebar-logout-btn-block"
+            onClick={handleLogout}
+            title="Log Out of CMS"
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              marginTop: 10,
+              padding: '8px 12px',
+              borderRadius: 'var(--radius)',
+              background: 'rgba(239, 68, 68, 0.12)',
+              border: '1px solid rgba(239, 68, 68, 0.25)',
+              color: '#F87171',
+              fontSize: 12.5,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = '#EF4444';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.12)';
+              e.currentTarget.style.color = '#F87171';
+            }}
+          >
+            <SvgIcon name="log-out" size={15} style={{ width: 15, height: 15, flexShrink: 0 }} />
+            <span>Log Out</span>
+          </button>
         </div>
       </aside>
 
@@ -171,14 +211,68 @@ export default function Layout({ children, title }) {
             </button>
             <h1 className="admin-header-title">{getHeaderTitle()}</h1>
           </div>
-          <div className="admin-header-right">
+          <div className="admin-header-right" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <div
-              className="header-avatar"
+              className="header-user-badge"
               onClick={() => navigate('/profile')}
-              title="Profile"
+              title="My Account Settings"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                cursor: 'pointer',
+                padding: '4px 10px 4px 4px',
+                borderRadius: 8,
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
-              {userInitials}
+              <div className="header-avatar" style={{ cursor: 'pointer' }}>
+                {userInitials}
+              </div>
+              <div className="header-user-meta" style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', lineHeight: 1.2 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{user?.name || 'Admin'}</span>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'capitalize' }}>{user?.role || 'admin'}</span>
+              </div>
             </div>
+
+            <button
+              className="header-logout-btn"
+              onClick={handleLogout}
+              title="Log Out of CMS"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 7,
+                padding: '7px 14px',
+                borderRadius: 8,
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                background: 'rgba(239, 68, 68, 0.06)',
+                color: '#DC2626',
+                fontWeight: 600,
+                fontSize: 13,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#DC2626';
+                e.currentTarget.style.color = '#fff';
+                e.currentTarget.style.borderColor = '#DC2626';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(239, 68, 68, 0.06)';
+                e.currentTarget.style.color = '#DC2626';
+                e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              <span>Log Out</span>
+            </button>
           </div>
         </header>
 

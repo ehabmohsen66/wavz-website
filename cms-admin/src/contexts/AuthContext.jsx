@@ -39,9 +39,15 @@ export function AuthProvider({ children }) {
     return data;
   };
 
-  const logout = useCallback(() => {
-    api.removeToken();
-    setUser(null);
+  const logout = useCallback(async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (e) {
+      // Ignore network errors when logging out
+    } finally {
+      api.removeToken();
+      setUser(null);
+    }
   }, []);
 
   const value = {

@@ -4,6 +4,7 @@ import { useLang } from '../i18n/LangContext.jsx';
 import { useReveal, useTestimonials } from '../hooks/index.js';
 import { Counter } from './Counter.jsx';
 import { CircularTestimonials } from './CircularTestimonials.jsx';
+import { getMediaUrl } from '../utils/media.js';
 
 export const Results = () => {
   const { t, lang } = useLang();
@@ -80,16 +81,12 @@ export const Results = () => {
               const author = isAr ? item.author_ar || item.author_en : item.author_en;
               const quote = isAr ? item.quote_ar || item.quote_en : item.quote_en;
               const role = isAr ? item.title_ar || item.title_en : item.title_en;
-              let photo = item.photo;
-              if (photo && !photo.startsWith('http') && !photo.startsWith('data:')) {
-                const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-                photo = `${backendBase}${photo}`;
-              }
+              const photo = getMediaUrl(item.photo, `https://i.pravatar.cc/150?u=${encodeURIComponent(author || 'client')}`);
               return {
                 quote: quote || '',
                 name: author || '',
                 designation: role || '',
-                src: photo || `https://i.pravatar.cc/150?u=${encodeURIComponent(author || 'client')}`
+                src: photo
               };
             })}
             colors={{

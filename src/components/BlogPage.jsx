@@ -6,6 +6,7 @@ import blogData from './blog_contents_multilang.json';
 import { MeshGradient } from '@paper-design/shaders-react';
 import { SearchBar } from './SearchBar.jsx';
 import { useBlog, useBlogCategories } from '../hooks/index.js';
+import { getMediaUrl } from '../utils/media.js';
 
 const mapDbPostToPost = (dbPost) => {
   const dateObj = new Date(dbPost.published_at || dbPost.created_at || Date.now());
@@ -13,13 +14,7 @@ const mapDbPostToPost = (dbPost) => {
   const arMonths = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
   const dateArStr = `${dateObj.getDate()} ${arMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
 
-  let imageUrl = dbPost.image || '';
-  if (!imageUrl) {
-    imageUrl = '/blog-images/Ai1-400x250.png';
-  } else if (!imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
-    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-    imageUrl = `${backendBase}${imageUrl}`;
-  }
+  const imageUrl = getMediaUrl(dbPost.image, '/blog-images/Ai1-400x250.png');
 
   let blocks_en = dbPost.blocks_en || [];
   if (typeof blocks_en === 'string') {

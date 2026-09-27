@@ -9,6 +9,7 @@ import { useLang } from '../i18n/LangContext.jsx';
 import { WorldMap } from './WorldMap.jsx';
 import { TextRotate } from './TextRotate.jsx';
 import { Terminal } from './ui/Terminal.jsx';
+import { getMediaUrl } from '../utils/media.js';
 
 /* ── Partner data ── */
 const PARTNERS = [
@@ -140,14 +141,10 @@ export const Partners = () => {
   const { data: dbPartners } = usePartners([]);
 
   const mappedPartners = (dbPartners && dbPartners.length > 0)
-    ? dbPartners.map(p => {
-        let logoUrl = p.logo || '';
-        if (logoUrl && !logoUrl.startsWith('http') && !logoUrl.startsWith('data:')) {
-          const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-          logoUrl = `${backendBase}${logoUrl}`;
-        }
-        return { name: p.name, logo: logoUrl };
-      })
+    ? dbPartners.map(p => ({
+        name: p.name,
+        logo: getMediaUrl(p.logo, '')
+      }))
     : PARTNERS;
 
   const logos = mappedPartners.map(p => ({ src: p.logo, name: p.name }));

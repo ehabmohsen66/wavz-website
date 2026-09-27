@@ -2,6 +2,9 @@
   RewriteEngine On
   RewriteBase /
 
+  # Rewrite legacy WordPress image URLs directly to /blog-images/
+  RewriteRule ^wp-content/uploads/.*/([^/]+)$ blog-images/$1 [L,NC]
+
   # Serve existing files and directories directly
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

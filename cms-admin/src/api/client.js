@@ -1,4 +1,12 @@
-const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const rawUrl = import.meta.env.VITE_API_URL || '/api';
+const isLocalBrowser = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname === ''
+);
+const BASE_URL = (!isLocalBrowser && rawUrl.includes('localhost'))
+  ? '/api'
+  : rawUrl;
 
 class ApiClient {
   constructor() {

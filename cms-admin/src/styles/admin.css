@@ -232,6 +232,13 @@ h1, h2, h3, h4, h5, h6 { font-weight: 600; line-height: 1.25; }
   color: var(--danger);
   background: rgba(255,255,255,.05);
 }
+.sidebar-logout-btn-block svg {
+  width: 15px !important;
+  height: 15px !important;
+  max-width: 15px !important;
+  max-height: 15px !important;
+  flex-shrink: 0;
+}
 
 /* ----- Header ----- */
 .admin-header {

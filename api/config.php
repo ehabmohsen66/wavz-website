@@ -31,18 +31,27 @@ if (!defined('DB_PASS')) define('DB_PASS', getenv('DB_PASS') !== false ? getenv(
 if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
 
 // ---- JWT ----
-define('JWT_SECRET', 'CHANGE_THIS_TO_A_RANDOM_64_CHAR_STRING');
-define('JWT_ALGO', 'HS256');
-define('JWT_ACCESS_TTL', 86400);       // 24 hours
-define('JWT_REFRESH_TTL', 604800);     // 7 days
-define('JWT_ISSUER', 'wavz-cms-api');
+if (!defined('JWT_SECRET')) {
+    $secret = getenv('JWT_SECRET');
+    if (!$secret && file_exists(__DIR__ . '/.jwt_secret')) {
+        $secret = trim((string)file_get_contents(__DIR__ . '/.jwt_secret'));
+    }
+    if (!$secret) {
+        $secret = 'wavz_production_secure_secret_key_2026_default_fallback';
+    }
+    define('JWT_SECRET', $secret);
+}
+if (!defined('JWT_ALGO')) define('JWT_ALGO', 'HS256');
+if (!defined('JWT_ACCESS_TTL')) define('JWT_ACCESS_TTL', 86400);       // 24 hours
+if (!defined('JWT_REFRESH_TTL')) define('JWT_REFRESH_TTL', 604800);     // 7 days
+if (!defined('JWT_ISSUER')) define('JWT_ISSUER', 'wavz-cms-api');
 
 // ---- Uploads ----
-define('UPLOAD_DIR', __DIR__ . '/uploads/');
-define('UPLOAD_URL', '/api/uploads/');
-define('THUMBNAIL_DIR', __DIR__ . '/uploads/thumbnails/');
-define('MAX_UPLOAD_SIZE', 5 * 1024 * 1024); // 5 MB
-define('ALLOWED_MIME_TYPES', [
+if (!defined('UPLOAD_DIR')) define('UPLOAD_DIR', __DIR__ . '/uploads/');
+if (!defined('UPLOAD_URL')) define('UPLOAD_URL', '/api/uploads/');
+if (!defined('THUMBNAIL_DIR')) define('THUMBNAIL_DIR', __DIR__ . '/uploads/thumbnails/');
+if (!defined('MAX_UPLOAD_SIZE')) define('MAX_UPLOAD_SIZE', 10 * 1024 * 1024); // 10 MB
+if (!defined('ALLOWED_MIME_TYPES')) define('ALLOWED_MIME_TYPES', [
     'image/jpeg',
     'image/jpg',
     'image/png',
@@ -52,9 +61,9 @@ define('ALLOWED_MIME_TYPES', [
 ]);
 
 // ---- CORS ----
-define('CORS_ALLOWED_ORIGINS', ['*']);
-define('CORS_ALLOWED_METHODS', 'GET, POST, PUT, DELETE, OPTIONS');
-define('CORS_ALLOWED_HEADERS', 'Content-Type, Authorization, X-Requested-With');
+if (!defined('CORS_ALLOWED_ORIGINS')) define('CORS_ALLOWED_ORIGINS', ['*']);
+if (!defined('CORS_ALLOWED_METHODS')) define('CORS_ALLOWED_METHODS', 'GET, POST, PUT, DELETE, OPTIONS');
+if (!defined('CORS_ALLOWED_HEADERS')) define('CORS_ALLOWED_HEADERS', 'Content-Type, Authorization, X-Requested-With');
 
 // ---- PDO Connection ----
 function getDB(): PDO

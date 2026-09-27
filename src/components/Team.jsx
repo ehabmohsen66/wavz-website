@@ -4,13 +4,10 @@ import { ArrowLeft, ArrowRight, Users, ChevronDown, ChevronUp, Briefcase } from 
 import { MeshGradient } from '@paper-design/shaders-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useTeam } from '../hooks/index.js';
+import { getMediaUrl } from '../utils/media.js';
 
 const mapDbMemberToMember = (dbMem, ar) => {
-  let photoUrl = dbMem.photo || '';
-  if (photoUrl && !photoUrl.startsWith('http') && !photoUrl.startsWith('data:')) {
-    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-    photoUrl = `${backendBase}${photoUrl}`;
-  }
+  const photoUrl = getMediaUrl(dbMem.photo, '');
 
   let department = ar ? 'التكنولوجيا' : 'Technology';
   const role = ar ? dbMem.title_ar : dbMem.title_en;

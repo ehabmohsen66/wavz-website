@@ -1,4 +1,5 @@
 import React from 'react';
+import { getMediaUrl } from '../utils/media.js';
 
 // Light-weight replacements for shadcn components
 const Card = ({ className, children }) => (
@@ -93,11 +94,7 @@ const STATIC_TESTIMONIALS_AR = [
 ];
 
 const mapDbTestimonial = (dbTest, ar) => {
-  let photoUrl = dbTest.photo || '';
-  if (photoUrl && !photoUrl.startsWith('http') && !photoUrl.startsWith('data:')) {
-    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-    photoUrl = `${backendBase}${photoUrl}`;
-  }
+  const photoUrl = getMediaUrl(dbTest.photo, '');
 
   let logoUrl = dbTest.logo_url || '';
   if (!logoUrl) {

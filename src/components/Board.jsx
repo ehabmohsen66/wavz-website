@@ -8,13 +8,10 @@ import {
 } from 'lucide-react';
 import { useLang } from '../i18n/LangContext.jsx';
 import { useTeam } from '../hooks/index.js';
+import { getMediaUrl } from '../utils/media.js';
 
 const mapDbMemberToBoardMember = (dbMem, ar) => {
-  let photoUrl = dbMem.photo || '';
-  if (photoUrl && !photoUrl.startsWith('http') && !photoUrl.startsWith('data:')) {
-    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-    photoUrl = `${backendBase}${photoUrl}`;
-  }
+  const photoUrl = getMediaUrl(dbMem.photo, '');
 
   let years = '30+';
   const match = (dbMem.bio_en || '').match(/(\d+)\+?\s*years/i);
@@ -835,14 +832,14 @@ export const Board = () => {
             </div>
             {/* Centered Chair card matching grid dimensions */}
             <div className="flex justify-center">
-              <div className="w-full max-w-[280px]">
+              <div className="w-full max-w-[310px]">
                 <MemberCard member={chair} idx={0} lang={lang} dir={dir} />
               </div>
             </div>
           </section>
 
           {/* ── Board members ── */}
-          <section>
+          <section className="max-w-[1020px] mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 rounded-lg bg-[#1173BD]/10 flex items-center justify-center">
               <Briefcase className="w-4 h-4 text-[#1173BD]" />
@@ -851,8 +848,8 @@ export const Board = () => {
               {isAr ? 'أعضاء مجلس الإدارة' : 'Board Members'}
             </h2>
           </div>
-          {/* Responsive grid: 2-col sm, 3-col lg, 4-col xl */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {/* Responsive grid: 1-col mobile, 2-col tablet, 3-col desktop (3 and 3 layout) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {rest.map((member, idx) => (
               <MemberCard key={idx} member={member} idx={idx + 1} lang={lang} dir={dir} />
             ))}

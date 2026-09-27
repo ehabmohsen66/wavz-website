@@ -8,18 +8,15 @@ import { MeshGradient } from '@paper-design/shaders-react';
 import { MediaHub } from './MediaHub.jsx';
 import { ClientStories } from './ClientStories.jsx';
 import { MediaHero } from './MediaHero.jsx';
+import { getMediaUrl } from '../utils/media.js';
 
 const mapDbArticleToArticle = (dbArt, ar) => {
-  const dateObj = new Date(dbArt.date || dbArt.published_at || dbArt.created_at);
+  const dateObj = new Date(dbArt.date || dbArt.published_at || dbArt.created_at || Date.now());
   const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   const arMonths = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
   const dateArStr = `${dateObj.getDate()} ${arMonths[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
 
-  let imageUrl = dbArt.image || '';
-  if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
-    const backendBase = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-    imageUrl = `${backendBase}${imageUrl}`;
-  }
+  const imageUrl = getMediaUrl(dbArt.image, '');
 
   const readTimeStr = ar 
     ? `${dbArt.read_time || '5'} دقائق القراءة` 

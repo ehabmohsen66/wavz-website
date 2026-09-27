@@ -11,11 +11,15 @@ require_once __DIR__ . '/helpers/Response.php';
 require_once __DIR__ . '/helpers/JWT.php';
 require_once __DIR__ . '/helpers/ImageProcessor.php';
 require_once __DIR__ . '/helpers/Mailer.php';
+require_once __DIR__ . '/helpers/Security.php';
 require_once __DIR__ . '/middleware/Auth.php';
 require_once __DIR__ . '/middleware/Validator.php';
+require_once __DIR__ . '/middleware/RateLimiter.php';
 
 // Models
 require_once __DIR__ . '/models/User.php';
+require_once __DIR__ . '/models/AuthSession.php';
+require_once __DIR__ . '/models/PostRevision.php';
 require_once __DIR__ . '/models/Setting.php';
 require_once __DIR__ . '/models/Media.php';
 require_once __DIR__ . '/models/Page.php';
@@ -57,9 +61,22 @@ require_once __DIR__ . '/controllers/ContactsController.php';
 require_once __DIR__ . '/controllers/BackupController.php';
 require_once __DIR__ . '/controllers/SitemapController.php';
 
-// ---- CORS ----
+// ---- CORS & Security Headers ----
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigins = is_array(CORS_ALLOWED_ORIGINS) ? CORS_ALLOWED_ORIGINS : array_filter(array_map('trim', explode(',', (string)CORS_ALLOWED_ORIGINS)));
+if (in_array('*', $allowedOrigins, true)) {
+    header('Access-Control-Allow-Origin: *');
+} elseif ($origin && ($allowedOrigins === [] || in_array($origin, $allowedOrigins, true))) {
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Vary: Origin');
+} else {
+    header('Access-Control-Allow-Origin: *');
+}
 header('Access-Control-Allow-Methods: ' . CORS_ALLOWED_METHODS);
 header('Access-Control-Allow-Headers: ' . CORS_ALLOWED_HEADERS);
 header('Access-Control-Max-Age: 3600');
@@ -127,6 +144,11 @@ try {
 
     if ($requestUri === '/auth/me' && $method === 'GET') {
         AuthController::me();
+        exit;
+    }
+
+    if ($requestUri === '/auth/logout' && $method === 'POST') {
+        AuthController::logout();
         exit;
     }
 

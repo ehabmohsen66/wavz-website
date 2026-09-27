@@ -181,6 +181,7 @@ class BlogPost
             'blocks_en', 'blocks_ar', 'image', 'category_en', 'category_ar',
             'tags', 'read_time', 'accent_color', 'published_at', 'status',
             'meta_title_en', 'meta_title_ar', 'meta_description_en', 'meta_description_ar', 'meta_keywords',
+            'review_status', 'scheduled_at',
         ];
 
         foreach ($allowed as $field) {
@@ -204,6 +205,16 @@ class BlogPost
         if (empty($fields)) {
             return self::getById($id);
         }
+
+        // Save revision before changing content
+        try {
+            if (class_exists('PostRevision')) {
+                $old = self::getById($id);
+                if ($old) {
+                    PostRevision::create($id, $old, $data['author_id'] ?? null);
+                }
+            }
+        } catch (Throwable $e) {}
 
         $sql = 'UPDATE blog_posts SET ' . implode(', ', $fields) . ' WHERE id = :id';
         $stmt = self::db()->prepare($sql);

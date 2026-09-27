@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import ImageUpload from '../components/ImageUpload';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 
 export default function Profile() {
-  const { user, checkAuth } = useAuth();
+  const { user, checkAuth, logout } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState(user?.name || '');
   const [avatar, setAvatar] = useState(user?.avatar || '');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -58,6 +60,11 @@ export default function Profile() {
     } finally {
       setUpdatingPass(false);
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
   };
 
   return (
@@ -161,6 +168,45 @@ export default function Profile() {
               </button>
             </div>
           </form>
+        </div>
+
+        {/* Session Management & Logout Card */}
+        <div className="card" style={{ padding: 24, gridColumn: '1 / -1', border: '1px solid rgba(239, 68, 68, 0.25)', background: '#FEF2F2', borderRadius: 'var(--radius)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+            <div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#991B1B', margin: '0 0 4px' }}>Session Management</h3>
+              <p style={{ fontSize: 13, color: '#B91C1C', margin: 0 }}>
+                End your active administrative session on this computer.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '9px 18px',
+                borderRadius: 8,
+                background: '#DC2626',
+                color: '#fff',
+                border: 'none',
+                fontWeight: 600,
+                fontSize: 13.5,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#B91C1C'}
+              onMouseLeave={e => e.currentTarget.style.background = '#DC2626'}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              <span>Log Out of CMS</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
