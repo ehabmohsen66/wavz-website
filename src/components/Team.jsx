@@ -921,7 +921,7 @@ export const Team = () => {
         <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-12 relative z-10">
 
           {/* Team grid */}
-          <section className="pt-8">
+          <section className="pt-8 max-w-[1020px] mx-auto">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-8 rounded-lg bg-[#1173BD]/10 flex items-center justify-center">
                 <Briefcase className="w-4 h-4 text-[#1173BD]" />
@@ -931,41 +931,25 @@ export const Team = () => {
               </h2>
             </div>
 
-            {/* Featured CEO Card (Top Row as in Diagram) */}
+            {/* Featured CEO Card (Top Row) */}
             {members[0] && (
-              <div className="mb-8 flex justify-center">
-                <div className="w-full max-w-[340px]">
+              <div className="mb-10 flex justify-center">
+                <div className="w-full max-w-[310px]">
                   <TeamCard member={members[0]} idx={0} lang={lang} />
                 </div>
               </div>
             )}
 
-            {/* Row 2: Hossini, Reem, Mubarak (3 per row) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-              {members.slice(1, 4).map((member, idx) => (
-                <TeamCard key={idx + 1} member={member} idx={idx + 1} lang={lang} />
-              ))}
-            </div>
-
-            {/* Row 3: Hesham, Youssef, Mostafa Younes (3 per row) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-              {members.slice(4, 7).map((member, idx) => (
-                <TeamCard key={idx + 4} member={member} idx={idx + 4} lang={lang} />
-              ))}
-            </div>
-
-            {/* Row 4: Amr Sadek, Mostafa Riad (2 per row) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5 max-w-[780px]">
-              {members.slice(7, 9).map((member, idx) => (
-                <TeamCard key={idx + 7} member={member} idx={idx + 7} lang={lang} />
-              ))}
-            </div>
-
-            {/* Row 5: Wael Saleh, Doaa Sayed (2 per row) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[780px]">
-              {members.slice(9, 11).map((member, idx) => (
-                <TeamCard key={idx + 9} member={member} idx={idx + 9} lang={lang} />
-              ))}
+            {/* Unified 3-column Grid for Executive Team */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {members.slice(1).map((member, idx, arr) => {
+                const isSingleLast = (arr.length % 3 === 1) && (idx === arr.length - 1);
+                return (
+                  <div key={idx + 1} className={isSingleLast ? 'lg:col-start-2' : ''}>
+                    <TeamCard member={member} idx={idx + 1} lang={lang} />
+                  </div>
+                );
+              })}
             </div>
           </section>
 
