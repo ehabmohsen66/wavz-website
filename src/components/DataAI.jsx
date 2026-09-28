@@ -613,25 +613,39 @@ export const DataAI = () => {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: 20 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {METHODOLOGY.map((step, i) => (
-            <div key={step.num} style={{
-              background: T.navy2,
-              border: `1px solid ${T.border}`,
-              borderRadius: 16,
-              padding: '28px 24px',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              <div style={{ fontSize: 32, fontWeight: 900, color: T.gold, opacity: 0.85, letterSpacing: '-0.03em', marginBottom: 16 }}>
-                {step.num}
+            <div
+              key={step.num}
+              className="flex flex-col justify-between transition-all duration-200"
+              style={{
+                background: T.navy2,
+                border: `1px solid ${T.border}`,
+                borderRadius: 16,
+                padding: '28px 24px',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = T.gold;
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = T.border;
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 32, fontWeight: 900, color: T.gold, opacity: 0.85, letterSpacing: '-0.03em', marginBottom: 16 }}>
+                  {step.num}
+                </div>
+                <h3 style={{ fontSize: 19, fontWeight: 800, color: T.white, margin: '0 0 12px', fontFamily: font }}>
+                  {ar ? step.ar.title : step.en.title}
+                </h3>
+                <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, margin: 0 }}>
+                  {ar ? step.ar.desc : step.en.desc}
+                </p>
               </div>
-              <h3 style={{ fontSize: 19, fontWeight: 800, color: T.white, margin: '0 0 12px', fontFamily: font }}>
-                {ar ? step.ar.title : step.en.title}
-              </h3>
-              <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.7, margin: 0 }}>
-                {ar ? step.ar.desc : step.en.desc}
-              </p>
             </div>
           ))}
         </div>
