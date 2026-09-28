@@ -5,7 +5,7 @@ import { useLang } from '../i18n/LangContext.jsx';
 import { 
   Server, Database, Cloud, Layers, ShieldCheck, Activity, 
   Settings, CheckCircle2, ChevronRight, ArrowRight, ArrowLeft,
-  Building2, Landmark, Radio, Briefcase
+  Building2, Landmark, Radio, Briefcase, HardDrive
 } from 'lucide-react';
 
 const T = {
@@ -205,6 +205,20 @@ const COVERAGE_ITEMS = [
       name: 'منصة Oracle APEX',
       desc: 'تطوير سريع للتطبيقات منخفضة الكود مبني بشكل أصيل على منصة وقواعد بيانات Oracle.',
       tags: ['كود منخفض', 'تطوير سريع', 'تكامل أصيل', 'واجهات تفاعلية']
+    }
+  },
+  {
+    code: 'DB',
+    icon: HardDrive,
+    en: {
+      name: 'Database & Data Management',
+      desc: 'Enterprise database administration, high-availability RAC architectures, security, and migration services.',
+      tags: ['RAC & Data Guard', 'Database 23ai', 'Security & Vault', 'Migration']
+    },
+    ar: {
+      name: 'قواعد البيانات وإدارة البيانات',
+      desc: 'إدارة قواعد البيانات المؤسسية، وبنيات RAC عالية التوافر، وحلول الأمان والترحيل المتقدمة.',
+      tags: ['RAC و Data Guard', 'قاعدة بيانات 23ai', 'الأمان والتشفير', 'ترحيل البيانات']
     }
   },
 ];
@@ -468,8 +482,8 @@ export const OracleSolutions = () => {
           </p>
         </motion.div>
 
-        {/* Coverage Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+        {/* Coverage Cards Grid (Equal 4x2 Layout) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {COVERAGE_ITEMS.map((item, idx) => {
             const Icon = item.icon;
             const isSelected = activeCoverage === idx;
@@ -481,16 +495,26 @@ export const OracleSolutions = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.05 }}
                 onClick={() => setActiveCoverage(idx)}
+                className="flex flex-col justify-between transition-all duration-200"
                 style={{
                   background: isSelected ? 'rgba(199,70,52,0.12)' : T.navy2,
                   border: `1.5px solid ${isSelected ? '#C74634' : T.border}`,
                   borderRadius: 16, padding: '24px 22px',
-                  cursor: 'pointer', transition: 'all 0.25s ease',
+                  cursor: 'pointer',
                   position: 'relative', overflow: 'hidden',
-                  display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
                 }}
-                onMouseEnter={e => { if (!isSelected) e.currentTarget.style.borderColor = 'rgba(199,70,52,0.4)'; }}
-                onMouseLeave={e => { if (!isSelected) e.currentTarget.style.borderColor = T.border; }}
+                onMouseEnter={e => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = 'rgba(199,70,52,0.6)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = T.border;
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
               >
                 {isSelected && (
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: '#C74634' }} />
