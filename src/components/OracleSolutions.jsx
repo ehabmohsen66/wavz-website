@@ -280,6 +280,12 @@ const SLA_INCLUSIONS = [
     descEn: 'Named specialists or service teams aligned to your environment.',
     descAr: 'خبراء متخصصون بالاسم أو فرق خدمة مخصصة ومطلعة بالكامل على بيئة عملك.',
   },
+  {
+    titleEn: 'Continuous Optimization',
+    titleAr: 'التحسين والتطوير المستمر',
+    descEn: 'Proactive health checks, capacity forecasting, and ongoing performance tuning.',
+    descAr: 'فحوصات استباقية لسلامة النظام، وتنبؤ بالسعة، وتطوير مستمر للأداء التشغيلي.',
+  },
 ];
 
 /* ── WAVZ Difference ── */
@@ -615,9 +621,9 @@ export const OracleSolutions = () => {
               ? 'تتحدد كل اتفاقية مستوى خدمة وفق الحزمة التقنية، ونطاق التغطية، ومستويات الخدمة الأكثر أهمية لأعمالك، وتشمل عادةً:'
               : 'Each SLA is scoped to the technology stack, coverage window, and service levels that matter most to your business, and typically includes:'}
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {SLA_INCLUSIONS.map((inc, i) => (
-              <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <div key={i} className="flex gap-3 items-start p-3 rounded-xl transition-all duration-200" style={{ background: 'rgba(255,255,255,0.015)' }}>
                 <CheckCircle2 size={18} style={{ color: '#FF7B68', flexShrink: 0, marginTop: 3 }} />
                 <div>
                   <h4 style={{ fontSize: 14.5, fontWeight: 700, color: T.white, marginBottom: 4, fontFamily: font }}>
