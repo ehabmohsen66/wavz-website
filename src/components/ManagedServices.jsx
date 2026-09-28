@@ -622,7 +622,7 @@ export const ManagedServices = () => {
 
       {/* ── Metric Badges Strip ── */}
       <div style={{ background: T.navy2, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: '20px clamp(24px,6vw,80px)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+        <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           {HERO_BADGES.map((badge, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 10px' }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: T.gold, flexShrink: 0 }} />
@@ -722,7 +722,7 @@ export const ManagedServices = () => {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 270px), 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {TOWERS.map((tower, idx) => {
               const Icon = tower.icon;
               const isSelected = selectedTower === idx;
@@ -730,6 +730,7 @@ export const ManagedServices = () => {
                 <div
                   key={tower.code}
                   onClick={() => setSelectedTower(idx)}
+                  className="transition-all duration-200"
                   style={{
                     background: isSelected ? 'rgba(17,115,189,0.12)' : 'rgba(255,255,255,0.02)',
                     border: `1.5px solid ${isSelected ? tower.color : T.border}`,
@@ -739,7 +740,6 @@ export const ManagedServices = () => {
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     cursor: 'pointer',
-                    transition: 'all 0.25s ease',
                     boxShadow: isSelected ? `0 8px 26px ${tower.color}25` : 'none'
                   }}>
                   <div>
@@ -850,7 +850,7 @@ export const ManagedServices = () => {
           </div>
 
           {/* Big Stat Numbers */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             {STATS.map((st, i) => (
               <div key={i} style={{
                 background: 'rgba(255,255,255,0.03)',
@@ -909,9 +909,9 @@ export const ManagedServices = () => {
             <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: T.blueL, marginBottom: 18 }}>
               {ar ? 'نماذج من المخرجات والتقارير الدورية' : 'DELIVERABLES SAMPLE'}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 12 }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {DELIVERABLES.map((del, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 8, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div key={i} className="flex items-center gap-2.5 p-3 rounded-xl transition-all duration-200" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                   <FileText size={16} color={T.gold} style={{ flexShrink: 0 }} />
                   <span style={{ fontSize: 13, fontWeight: 600, color: T.white }}>
                     {ar ? del.ar : del.en}
@@ -945,17 +945,29 @@ export const ManagedServices = () => {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: 16 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {CONSULTING.map((c, i) => (
-              <div key={i} style={{
-                background: 'rgba(255,255,255,0.02)',
-                border: `1px solid ${T.border}`,
-                borderRadius: 14,
-                padding: '22px 20px',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 12
-              }}>
+              <div
+                key={i}
+                className="transition-all duration-200"
+                style={{
+                  background: 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${T.border}`,
+                  borderRadius: 14,
+                  padding: '22px 20px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 12
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = T.tealL;
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = T.border;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
                 <CheckCircle2 size={18} color={T.tealL} style={{ flexShrink: 0, marginTop: 2 }} />
                 <span style={{ fontSize: 14, fontWeight: 600, color: T.white, lineHeight: 1.5 }}>
                   {ar ? c.ar : c.en}
@@ -987,24 +999,38 @@ export const ManagedServices = () => {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 330px), 1fr))', gap: 20 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {STAGES.map((st) => (
-            <div key={st.num} style={{
-              background: T.navy2,
-              border: `1px solid ${T.border}`,
-              borderRadius: 16,
-              padding: '28px 24px',
-              position: 'relative'
-            }}>
-              <div style={{ fontSize: 28, fontWeight: 900, color: T.gold, opacity: 0.9, letterSpacing: '-0.02em', marginBottom: 12 }}>
-                {st.num}
+            <div
+              key={st.num}
+              className="flex flex-col justify-between transition-all duration-200"
+              style={{
+                background: T.navy2,
+                border: `1px solid ${T.border}`,
+                borderRadius: 16,
+                padding: '28px 24px',
+                position: 'relative'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = T.gold;
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = T.border;
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 28, fontWeight: 900, color: T.gold, opacity: 0.9, letterSpacing: '-0.02em', marginBottom: 12 }}>
+                  {st.num}
+                </div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: T.white, margin: '0 0 10px', fontFamily: font }}>
+                  {ar ? st.ar.title : st.en.title}
+                </h3>
+                <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.65, margin: 0 }}>
+                  {ar ? st.ar.desc : st.en.desc}
+                </p>
               </div>
-              <h3 style={{ fontSize: 18, fontWeight: 800, color: T.white, margin: '0 0 10px', fontFamily: font }}>
-                {ar ? st.ar.title : st.en.title}
-              </h3>
-              <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.65, margin: 0 }}>
-                {ar ? st.ar.desc : st.en.desc}
-              </p>
             </div>
           ))}
         </div>
@@ -1161,24 +1187,38 @@ export const ManagedServices = () => {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: 16 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {ENGAGEMENT_STEPS.map((step) => (
-              <div key={step.num} style={{
-                background: 'rgba(255,255,255,0.02)',
-                border: `1px solid ${T.border}`,
-                borderRadius: 14,
-                padding: '24px 20px',
-                position: 'relative'
-              }}>
-                <div style={{ fontSize: 24, fontWeight: 900, color: T.blueL, marginBottom: 10 }}>
-                  {step.num}
+              <div
+                key={step.num}
+                className="flex flex-col justify-between transition-all duration-200"
+                style={{
+                  background: 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${T.border}`,
+                  borderRadius: 14,
+                  padding: '24px 20px',
+                  position: 'relative'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = T.blueL;
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = T.border;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: T.blueL, marginBottom: 10 }}>
+                    {step.num}
+                  </div>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
+                    {ar ? step.ar.title : step.en.title}
+                  </h3>
+                  <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, margin: 0 }}>
+                    {ar ? step.ar.desc : step.en.desc}
+                  </p>
                 </div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
-                  {ar ? step.ar.title : step.en.title}
-                </h3>
-                <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.6, margin: 0 }}>
-                  {ar ? step.ar.desc : step.en.desc}
-                </p>
               </div>
             ))}
           </div>

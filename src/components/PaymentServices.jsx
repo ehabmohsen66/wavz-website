@@ -552,10 +552,7 @@ export const PaymentServices = () => {
 
       {/* ── STATS ROW ─────────────────────────────── */}
       <section style={{  background: T.navy2 }}>
-        <div style={{
-          maxWidth: 1200, margin: '0 auto',
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-        }}>
+        <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4">
           {stats.map((s, i) => (
             <div key={i} className={i === 0 ? 'ps-stat-gold' : ''} style={{
               padding: 'clamp(20px,4vw,36px) clamp(16px,3vw,32px)',

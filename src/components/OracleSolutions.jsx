@@ -598,7 +598,7 @@ export const OracleSolutions = () => {
         </motion.div>
 
         {/* 3 Pillars: SYS, TECH, APPS */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 48 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
           {SLA_PILLARS.map((p) => (
             <div key={p.code} style={{ background: T.navy2, border: `1px solid ${T.border}`, borderRadius: 16, padding: '26px 24px' }}>
               <div style={{ display: 'inline-block', fontSize: 12, fontWeight: 800, letterSpacing: '0.14em', padding: '4px 10px', borderRadius: 6, background: 'rgba(199,70,52,0.18)', color: '#FF7B68', marginBottom: 14 }}>

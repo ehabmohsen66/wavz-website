@@ -389,7 +389,7 @@ export const SapServices = () => {
           </p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: 24 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {DEPLOYMENT_MODELS.map((model, idx) => (
             <motion.div
               key={model.step}
@@ -447,7 +447,7 @@ export const SapServices = () => {
             </p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {LIFECYCLE_SERVICES.map((srv, idx) => {
               const Icon = srv.icon;
               return (

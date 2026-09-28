@@ -635,7 +635,7 @@ export const DigitalTransformation = () => {
 
       {/* ── STATS ROW ── */}
       <section style={{  background: T.navy2 }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
+        <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4">
           {stats.map((s, i) => (
             <div key={i} className={i === 0 ? 'dt-stat-gold' : ''} style={{
               padding: 'clamp(20px,4vw,36px) clamp(16px,3vw,32px)',
@@ -1088,7 +1088,7 @@ export const DigitalTransformation = () => {
         <h2 style={{ fontSize: 'clamp(22px,2.8vw,34px)', fontWeight: 800, letterSpacing: '-0.025em', color: T.white, margin: '0 0 40px', fontFamily: font }}>
           {ar ? 'أطر عمل معتمدة دولياً لكل مشروع' : 'Internationally accredited frameworks for every project'}
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 16 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             {
               label: ar ? 'PMI® — معهد إدارة المشاريع' : 'PMI® Project Management Institute',

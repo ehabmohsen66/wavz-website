@@ -529,7 +529,7 @@ export const DataAI = () => {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: 24 }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {DOMAINS.map((domain, i) => {
               const Icon = domain.icon;
               const isSelected = activeDomainIdx === i;

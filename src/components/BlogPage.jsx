@@ -708,11 +708,7 @@ const BlogDetailView = ({ post, ar, font, allPosts = [] }) => {
             </span>
           </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 24,
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {related.map((p, idx) => (
               <PostCard key={p.id} post={p} ar={ar} font={font} index={idx} />
             ))}
