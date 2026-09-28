@@ -205,6 +205,12 @@ const WAVZ_DIFFERENCE = [
     descEn: 'Delivery rooted in Cairo, regional market experience, and governance practices aligned with the needs of Middle East and Africa organizations.',
     descAr: 'فريق عمل متمركز في القاهرة والرياض يتمتع بفهم عميق للسياق الإقليمي، مع تطبيق أعلى معايير الحوكمة الدولية المعتمدة.',
   },
+  {
+    titleEn: 'Continuous Optimization & Governance',
+    titleAr: 'تحسين مستمر وحوكمة منضبطة',
+    descEn: 'Ongoing value realization through structured KPI monitoring, SLA governance, regular health checks, and lifecycle advisory.',
+    descAr: 'تحقيق مستمر للقيمة عبر مراقبة مؤشرات الأداء، وحوكمة اتفاقيات مستوى الخدمة، والفحوصات الدورية لسلامة النظام.',
+  },
 ];
 
 /* ── Target Sectors ── */
@@ -481,16 +487,35 @@ export const SapServices = () => {
           </h2>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {WAVZ_DIFFERENCE.map((diff, i) => (
-            <div key={i} style={{ background: T.navy2, border: `1px solid ${T.border}`, borderRadius: 16, padding: '26px 22px' }}>
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#00b1eb', marginBottom: 14 }} />
-              <h3 style={{ fontSize: 16.5, fontWeight: 700, color: T.white, marginBottom: 8, fontFamily: font }}>
-                {ar ? diff.titleAr : diff.titleEn}
-              </h3>
-              <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.7, margin: 0 }}>
-                {ar ? diff.descAr : diff.descEn}
-              </p>
+            <div
+              key={i}
+              className="flex flex-col justify-between transition-all duration-200"
+              style={{
+                background: T.navy2,
+                border: `1px solid ${T.border}`,
+                borderRadius: 16,
+                padding: '26px 22px',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = '#00b1eb';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = T.border;
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <div>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#00b1eb', marginBottom: 14 }} />
+                <h3 style={{ fontSize: 16.5, fontWeight: 700, color: T.white, marginBottom: 8, fontFamily: font }}>
+                  {ar ? diff.titleAr : diff.titleEn}
+                </h3>
+                <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.7, margin: 0 }}>
+                  {ar ? diff.descAr : diff.descEn}
+                </p>
+              </div>
             </div>
           ))}
         </div>

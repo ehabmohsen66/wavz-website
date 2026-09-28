@@ -300,6 +300,12 @@ const WAVZ_DIFFERENCE = [
     descEn: 'On-the-ground teams in Cairo and Riyadh, delivering with international governance and local market knowledge.',
     descAr: 'فرق عمل متواجدة في القاهرة والرياض، تجمع بين الحوكمة العالمية والفهم العميق لمتطلبات السوق المحلي.',
   },
+  {
+    titleEn: 'Continuous Optimization & Governance',
+    titleAr: 'تحسين مستمر وحوكمة منضبطة',
+    descEn: 'Ongoing value realization through structured SLA governance, proactive health checks, and lifecycle optimization.',
+    descAr: 'تحقيق مستمر للقيمة عبر حوكمة اتفاقيات مستوى الخدمة، والفحوصات الاستباقية، والتحسين المستمر لدورة حياة الأنظمة.',
+  },
 ];
 
 /* ── Sectors ── */
@@ -616,16 +622,35 @@ export const OracleSolutions = () => {
             </h2>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {WAVZ_DIFFERENCE.map((diff, i) => (
-              <div key={i} style={{ background: T.navy, border: `1px solid ${T.border}`, borderRadius: 16, padding: '26px 22px' }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF7B68', marginBottom: 14 }} />
-                <h3 style={{ fontSize: 16.5, fontWeight: 700, color: T.white, marginBottom: 8, fontFamily: font }}>
-                  {ar ? diff.titleAr : diff.titleEn}
-                </h3>
-                <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.7, margin: 0 }}>
-                  {ar ? diff.descAr : diff.descEn}
-                </p>
+              <div
+                key={i}
+                className="flex flex-col justify-between transition-all duration-200"
+                style={{
+                  background: T.navy,
+                  border: `1px solid ${T.border}`,
+                  borderRadius: 16,
+                  padding: '26px 22px',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = '#FF7B68';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = T.border;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF7B68', marginBottom: 14 }} />
+                  <h3 style={{ fontSize: 16.5, fontWeight: 700, color: T.white, marginBottom: 8, fontFamily: font }}>
+                    {ar ? diff.titleAr : diff.titleEn}
+                  </h3>
+                  <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.7, margin: 0 }}>
+                    {ar ? diff.descAr : diff.descEn}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

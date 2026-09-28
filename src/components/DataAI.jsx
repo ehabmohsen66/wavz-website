@@ -304,6 +304,17 @@ const DIFFERENTIATORS = [
       title: 'عمق إقليمي بمعايير عالمية',
       desc: 'فرق عمل متواجدة على الأرض في القاهرة والرياض، تجمع بين الحوكمة العالمية الدقيقة والدراية العميقة بمتطلبات السوق الإقليمي.'
     }
+  },
+  {
+    icon: Repeat,
+    en: {
+      title: 'Continuous Optimization & Governance',
+      desc: 'Sustained ROI and model accuracy through structured SLA governance, automated monitoring, and continuous MLOps.'
+    },
+    ar: {
+      title: 'تحسين مستمر وحوكمة دقيقة',
+      desc: 'استدامة العائد ودقة النماذج عبر حوكمة اتفاقيات الخدمة، والمراقبة الآلية، وعمليات MLOps المستمرة.'
+    }
   }
 ];
 
@@ -648,29 +659,40 @@ export const DataAI = () => {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {DIFFERENTIATORS.map((diff, i) => {
               const Icon = diff.icon;
               return (
-                <div key={i} style={{
-                  background: 'rgba(255,255,255,0.02)',
-                  border: `1px solid ${T.border}`,
-                  borderRadius: 16,
-                  padding: '28px 24px',
-                  display: 'flex',
-                  gap: 16,
-                  alignItems: 'flex-start'
-                }}>
-                  <div style={{ width: 42, height: 42, borderRadius: 10, background: T.dim, color: T.purpleL, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon size={20} />
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: 17, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
-                      {ar ? diff.ar.title : diff.en.title}
-                    </h3>
-                    <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, margin: 0 }}>
-                      {ar ? diff.ar.desc : diff.en.desc}
-                    </p>
+                <div
+                  key={i}
+                  className="flex flex-col justify-between transition-all duration-200"
+                  style={{
+                    background: 'rgba(255,255,255,0.02)',
+                    border: `1px solid ${T.border}`,
+                    borderRadius: 16,
+                    padding: '28px 24px',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = T.purpleL;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = T.border;
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                    <div style={{ width: 42, height: 42, borderRadius: 10, background: T.dim, color: T.purpleL, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Icon size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: 17, fontWeight: 700, color: T.white, margin: '0 0 8px', fontFamily: font }}>
+                        {ar ? diff.ar.title : diff.en.title}
+                      </h3>
+                      <p style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65, margin: 0 }}>
+                        {ar ? diff.ar.desc : diff.en.desc}
+                      </p>
+                    </div>
                   </div>
                 </div>
               );
