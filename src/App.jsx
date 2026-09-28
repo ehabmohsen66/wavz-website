@@ -86,7 +86,7 @@ export default function App() {
     '#/managed-services', '#/financial-services', '#/payment-services',
     '#/sap-services', '#/digital-transformation', '#/contact', '#/blog', '#/savings-calculator',
     '#/oracle-solutions', '#/data-ai',
-    '#/news/press-releases', '#/news/client-stories', '#/news/insights', '#/news/events', '#/news/social'
+    '#/news/press-releases', '#/news/use-cases', '#/news/client-stories', '#/news/insights', '#/news/events', '#/news/social'
   ].some(r =>
     currentRoute === r ||
     currentRoute.startsWith('#/news/') ||

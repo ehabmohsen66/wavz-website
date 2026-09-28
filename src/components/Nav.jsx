@@ -93,12 +93,12 @@ export const Nav = () => {
     { href: '#/team',    label: isAr ? 'فريقنا التنفيذي'  : 'Our Executive Team' },
   ];
 
-  const ENABLE_CUSTOMER_STORIES = false;
+  const ENABLE_CUSTOMER_STORIES = true;
 
   const mediaItems = [
     { href: '#/news',                  label: isAr ? 'المركز الإعلامي' : 'Media Center' },
     { href: '#/news/press-releases',   label: isAr ? 'البيانات الصحفية' : 'Press Releases' },
-    ...(ENABLE_CUSTOMER_STORIES ? [{ href: '#/news/client-stories', label: isAr ? 'قصص النجاح' : 'Success Stories' }] : []),
+    ...(ENABLE_CUSTOMER_STORIES ? [{ href: '#/news/use-cases', label: isAr ? 'حالات الاستخدام' : 'Use Cases' }] : []),
     { href: '#/news/insights',         label: isAr ? 'رؤى وقيادة فكرية' : 'Insights' },
     { href: '#/news/events',           label: isAr ? 'الفعاليات' : 'Events' },
     { href: '#/news/social',           label: isAr ? 'وسائل التواصل' : 'Social Media' },

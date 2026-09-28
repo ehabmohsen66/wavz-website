@@ -7,7 +7,7 @@ import {
 import { useLang } from '../i18n/LangContext.jsx';
 import { MediaHero } from './MediaHero.jsx';
 
-const ENABLE_CUSTOMER_STORIES = false;
+const ENABLE_CUSTOMER_STORIES = true;
 
 const ALL_HUB_SECTIONS = [
   {
@@ -22,15 +22,15 @@ const ALL_HUB_SECTIONS = [
     descAr: 'الإعلانات الرسمية والشراكات الاستراتيجية وأبرز إنجازات الشركة.',
   },
   ...(ENABLE_CUSTOMER_STORIES ? [{
-    id: 'client-stories',
-    href: '#/news/client-stories',
+    id: 'use-cases',
+    href: '#/news/use-cases',
     icon: BookOpen,
     color: '#059669',
     bgColor: 'rgba(5,150,105,0.10)',
-    label: 'Success Stories',
-    labelAr: 'قصص النجاح',
-    desc: 'Real-world success stories and use cases structured by client and industry.',
-    descAr: 'قصص نجاح حقيقية ودراسات حالة مُصنَّفة حسب العميل والقطاع.',
+    label: 'Use Cases',
+    labelAr: 'حالات الاستخدام',
+    desc: 'Real-world use cases, transformations, and client success stories structured by industry.',
+    descAr: 'حالات استخدام واقعية وتحولات رقمية وقصص نجاح مصنفة حسب القطاع.',
     badge: 'New',
     badgeAr: 'جديد',
   }] : []),

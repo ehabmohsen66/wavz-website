@@ -30,7 +30,7 @@ const getLinkHref = (name) => {
   if (n.includes('blog') || n.includes('مدونة') || n.includes('المدونة')) return '#/blog';
   if (n.includes('contact') || n.includes('تواصل') || n.includes('اتصال') || n.includes('اتصل')) return '#/contact';
   if (n.includes('career') || n.includes('وظائف') || n.includes('الوظائف')) return '#/contact';
-  if (n.includes('case') || n.includes('دراسات')) return '#/blog';
+  if (n.includes('case') || n.includes('دراسات') || n.includes('استخدام') || n.includes('قصص')) return '#/news/use-cases';
   
   // Industries / القطاعات (mapping logically to their respective modernization routes)
   if (n.includes('banking') || n.includes('بنوك')) return '#/financial-services';

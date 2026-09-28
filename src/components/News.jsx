@@ -259,7 +259,8 @@ export const News = ({ route }) => {
   // Router resolution
   const isNewsroomRoute      = route === '#/news';
   const isPressReleasesRoute = route === '#/news/press-releases';
-  const isClientStoriesRoute = route === '#/news/client-stories' || route.startsWith('#/news/client-stories/');
+  const isClientStoriesRoute = route === '#/news/use-cases' || route.startsWith('#/news/use-cases/') ||
+                               route === '#/news/client-stories' || route.startsWith('#/news/client-stories/');
   const isInsightsRoute      = route === '#/news/insights';
   const isEventsRoute        = route === '#/news/events';
   const isSocialRoute        = route === '#/news/social';
@@ -518,8 +519,8 @@ export const News = ({ route }) => {
     return <MediaHub />;
   }
 
-  // ── Client Stories (hidden until ready) ──
-  const ENABLE_CUSTOMER_STORIES = false;
+  // ── Use Cases & Client Stories ──
+  const ENABLE_CUSTOMER_STORIES = true;
   if (isClientStoriesRoute) {
     if (!ENABLE_CUSTOMER_STORIES) {
       return <MediaHub />;
