@@ -909,11 +909,13 @@ export const ManagedServices = () => {
             <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: T.blueL, marginBottom: 18 }}>
               {ar ? 'نماذج من المخرجات والتقارير الدورية' : 'DELIVERABLES SAMPLE'}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-3.5">
               {DELIVERABLES.map((del, i) => (
-                <div key={i} className="flex items-center gap-2.5 p-3 rounded-xl transition-all duration-200" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <FileText size={16} color={T.gold} style={{ flexShrink: 0 }} />
-                  <span style={{ fontSize: 13, fontWeight: 600, color: T.white }}>
+                <div key={i} className="flex items-start gap-3 p-3.5 rounded-xl transition-all duration-200" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 6, background: 'rgba(255,184,20,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                    <FileText size={15} color={T.gold} />
+                  </div>
+                  <span style={{ fontSize: 13.5, fontWeight: 600, color: T.white, lineHeight: 1.45, fontFamily: font }}>
                     {ar ? del.ar : del.en}
                   </span>
                 </div>
