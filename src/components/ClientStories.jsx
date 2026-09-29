@@ -369,128 +369,138 @@ const CASE_STUDIES = [
     beforeAfterIntroAr: "\u062a\u062d\u0648\u0651\u0644 \u0639\u0628\u0631 \u0643\u0644 \u0628\u064f\u0639\u062f \u062a\u0634\u063a\u064a\u0644\u064a \u2014 \u0645\u0646 \u0646\u0634\u0627\u0637 \u0645\u062c\u0632\u0651\u0623 \u0625\u0644\u0649 \u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0637\u0646\u064a\u0629 \u0645\u0648\u062d\u0651\u062f\u0629 \u0648\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0645\u0633\u0627\u0621\u0644\u0629:",
     beforeAfter: [
       {
-            "metric": "Branch Visibility",
-            "metricAr": "\u0627\u0644\u0631\u0624\u064a\u0629 \u0639\u0644\u0649 \u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0641\u0631\u0648\u0639",
-            "before": "Fragmented",
-            "beforeAr": "\u0645\u062c\u0632\u0651\u0623\u0629",
-            "after": "3,300+ branches",
-            "afterAr": "\u0623\u0643\u062b\u0631 \u0645\u0646 3,300 \u0641\u0631\u0639",
-            "impact": "Unified national view",
-            "impactAr": "\u0631\u0624\u064a\u0629 \u0645\u0648\u062d\u0651\u062f\u0629 \u0639\u0644\u0649 \u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u062c\u0645\u0647\u0648\u0631\u064a\u0629"
+        metric: "Branch Visibility",
+        metricAr: "الرؤية على مستوى الفروع",
+        before: "Fragmented",
+        beforeAr: "مجزّأة",
+        after: "3,300+ branches",
+        afterAr: "أكثر من 3,300 فرع",
+        impact: "Unified national view",
+        impactAr: "رؤية موحّدة على مستوى الجمهورية"
       },
       {
-            "metric": "Operations Coverage",
-            "metricAr": "\u062a\u063a\u0637\u064a\u0629 \u0627\u0644\u0639\u0645\u0644\u064a\u0627\u062a",
-            "before": "Business hours",
-            "beforeAr": "\u0633\u0627\u0639\u0627\u062a \u0627\u0644\u0639\u0645\u0644 \u0627\u0644\u0631\u0633\u0645\u064a\u0629 \u0641\u0642\u0637",
-            "after": "24/7",
-            "afterAr": "24/7 \u0639\u0644\u0649 \u0645\u062f\u0627\u0631 \u0627\u0644\u0633\u0627\u0639\u0629",
-            "impact": "Always-on protection",
-            "impactAr": "\u062d\u0645\u0627\u064a\u0629 \u0645\u0633\u062a\u0645\u0631\u0629 \u0644\u0627 \u062a\u062a\u0648\u0642\u0641"
+        metric: "Connected Devices Monitored",
+        metricAr: "الأجهزة المتصلة تحت المراقبة",
+        before: "Branch-level only",
+        beforeAr: "على مستوى الفرع فقط",
+        after: "30,000+",
+        afterAr: "+30,000",
+        impact: "Full estate oversight",
+        impactAr: "إشراف كامل على البنية الأمنية"
       },
       {
-            "metric": "Theft Incidents (annual)",
-            "metricAr": "\u062d\u0648\u0627\u062f\u062b \u0627\u0644\u0633\u0631\u0642\u0629 (\u0633\u0646\u0648\u064a\u0627\u064b)",
-            "before": "Frequent",
-            "beforeAr": "\u0645\u062a\u0643\u0631\u0631\u0629",
-            "after": "1\u20132 cases",
-            "afterAr": "\u062d\u0627\u0644\u0629 \u0648\u0627\u062d\u062f\u0629 \u0623\u0648 \u062d\u0627\u0644\u062a\u0627\u0646",
-            "impact": "Incident collapse",
-            "impactAr": "\u0627\u0646\u062d\u0633\u0627\u0631 \u0634\u0628\u0647 \u0643\u0627\u0645\u0644 \u0644\u0644\u062d\u0648\u0627\u062f\u062b"
+        metric: "Operations Coverage",
+        metricAr: "تغطية العمليات",
+        before: "Business hours",
+        beforeAr: "ساعات العمل الرسمية فقط",
+        after: "24/7",
+        afterAr: "24/7 على مدار الساعة",
+        impact: "Always-on protection",
+        impactAr: "حماية مستمرة لا تتوقف"
       },
       {
-            "metric": "Emergency Coordination",
-            "metricAr": "\u0627\u0644\u062a\u0646\u0633\u064a\u0642 \u0645\u0639 \u0627\u0644\u0637\u0648\u0627\u0631\u0626",
-            "before": "Ad hoc, branch-level",
-            "beforeAr": "\u0641\u0631\u062f\u064a \u0648\u063a\u064a\u0631 \u0645\u0646\u062a\u0638\u0645 \u0639\u0644\u0649 \u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0641\u0631\u0639",
-            "after": "Direct with Najda",
-            "afterAr": "\u0645\u0628\u0627\u0634\u0631 \u0645\u0639 \u0634\u0631\u0637\u0629 \u0627\u0644\u0646\u062c\u062f\u0629",
-            "impact": "Rapid police dispatch",
-            "impactAr": "\u0627\u0633\u062a\u062c\u0627\u0628\u0629 \u0648\u062a\u062f\u062e\u0644 \u0623\u0645\u0646\u064a \u0641\u0648\u0631\u064a"
+        metric: "Theft Incidents (annual)",
+        metricAr: "حوادث السرقة (سنوياً)",
+        before: "Frequent",
+        beforeAr: "متكرّرة",
+        after: "1–2 cases",
+        afterAr: "حالة واحدة أو حالتان",
+        impact: "Incident collapse",
+        impactAr: "انحسار شبه كامل للحوادث"
       },
       {
-            "metric": "Governance",
-            "metricAr": "\u0627\u0644\u062d\u0648\u0643\u0645\u0629 \u0627\u0644\u062a\u0634\u063a\u064a\u0644\u064a\u0629",
-            "before": "Inconsistent",
-            "beforeAr": "\u063a\u064a\u0631 \u0645\u0648\u062d\u0651\u062f\u0629",
-            "after": "15+ SOPs, audit-ready",
-            "afterAr": "\u0623\u0643\u062b\u0631 \u0645\u0646 15 \u0625\u062c\u0631\u0627\u0621 \u0642\u064a\u0627\u0633\u064a\u0627\u064b \u0645\u0648\u062b\u0651\u0642\u0627\u064b",
-            "impact": "Operational compliance",
-            "impactAr": "\u0627\u0646\u0636\u0628\u0627\u0637 \u062a\u0634\u063a\u064a\u0644\u064a \u062e\u0627\u0636\u0639 \u0644\u0644\u062a\u062f\u0642\u064a\u0642"
+        metric: "Emergency Coordination",
+        metricAr: "التنسيق مع الطوارئ",
+        before: "Ad hoc, branch-level",
+        beforeAr: "فردي وغير منتظم على مستوى الفرع",
+        after: "Direct with Najda",
+        afterAr: "مباشر مع شرطة النجدة",
+        impact: "Rapid police dispatch",
+        impactAr: "استجابة وتدخل أمني فوري"
       },
       {
-            "metric": "Reporting",
-            "metricAr": "\u0627\u0644\u062a\u0642\u0627\u0631\u064a\u0631 \u0627\u0644\u062a\u0634\u063a\u064a\u0644\u064a\u0629",
-            "before": "Manual, delayed",
-            "beforeAr": "\u064a\u062f\u0648\u064a\u0629 \u0648\u0628\u0637\u064a\u0626\u0629",
-            "after": "Automated dashboards",
-            "afterAr": "\u0644\u0648\u062d\u0627\u062a \u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0622\u0644\u064a\u0629",
-            "impact": "Executive visibility",
-            "impactAr": "\u0631\u0624\u064a\u0629 \u062a\u0646\u0641\u064a\u0630\u064a\u0629 \u0641\u0648\u0631\u064a\u0629 \u0644\u0644\u0625\u062f\u0627\u0631\u0629"
+        metric: "Governance",
+        metricAr: "الحوكمة التشغيلية",
+        before: "Inconsistent",
+        beforeAr: "غير موحّدة",
+        after: "15+ SOPs, audit-ready",
+        afterAr: "أكثر من 15 إجراء قياسياً موثّقاً",
+        impact: "Operational compliance",
+        impactAr: "انضباط تشغيلي خاضع للتدقيق"
+      },
+      {
+        metric: "Reporting",
+        metricAr: "التقارير التشغيلية",
+        before: "Manual, delayed",
+        beforeAr: "يدوية وبطيئة",
+        after: "Automated dashboards",
+        afterAr: "لوحات معلومات آلية",
+        impact: "Executive visibility",
+        impactAr: "رؤية تنفيذية فورية للإدارة"
       }
-],
-    quote: "\u201cTheft incidents reduced to just 1\u20132 cases per year across the entire monitored network \u2014 proving that mission-grade security at national scale is achievable when people, process, and platform operate as one.\u201d",
-    quoteAr: "\u201d\u062a\u0631\u0627\u062c\u0639\u062a \u062d\u0648\u0627\u062f\u062b \u0627\u0644\u0633\u0631\u0642\u0629 \u0625\u0644\u0649 \u062d\u0627\u0644\u0629 \u0648\u0627\u062d\u062f\u0629 \u0623\u0648 \u062d\u0627\u0644\u062a\u064a\u0646 \u0641\u0642\u0637 \u0633\u0646\u0648\u064a\u0627\u064b \u0639\u0644\u0649 \u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0634\u0628\u0643\u0629 \u0628\u0623\u0643\u0645\u0644\u0647\u0627 \u2014 \u062f\u0644\u064a\u0644 \u0639\u0645\u0644\u064a \u0639\u0644\u0649 \u0623\u0646 \u0627\u0644\u0623\u0645\u0646 \u0627\u0644\u062a\u0634\u063a\u064a\u0644\u064a \u0628\u0645\u0633\u062a\u0648\u0649 \u0648\u0637\u0646\u064a \u0642\u0627\u0628\u0644 \u0644\u0644\u062a\u062d\u0642\u0642 \u0639\u0646\u062f\u0645\u0627 \u064a\u0639\u0645\u0644 \u0627\u0644\u0625\u0646\u0633\u0627\u0646 \u0648\u0627\u0644\u0625\u062c\u0631\u0627\u0621 \u0648\u0627\u0644\u0645\u0646\u0635\u0629 \u0643\u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0627\u062d\u062f\u0629.\u201c",
+    ],
+    quote: "“Theft incidents reduced to just 1–2 cases per year across the entire monitored network — proving that mission-grade security at national scale is achievable when people, process, and platform operate as one.”",
+    quoteAr: "”تراجعت حوادث السرقة إلى حالة واحدة أو حالتين فقط سنوياً على مستوى الشبكة بأكملها — دليل عملي على أن الأمن التشغيلي بمستوى وطني قابل للتحقق عندما يعمل الإنسان والإجراء والمنصة كمنظومة واحدة.“",
     keyDiffs: [
       {
-            "icon": "\u25c6",
-            "title": "Mission-Grade Service",
-            "titleAr": "\u062e\u062f\u0645\u0629 \u0628\u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0645\u0647\u0627\u0645 \u0627\u0644\u062d\u064a\u0648\u064a\u0629",
-            "desc": "Managed end-to-end \u2014 people, process, and platform owned by WAVZ.",
-            "descAr": "\u0625\u062f\u0627\u0631\u0629 \u0634\u0627\u0645\u0644\u0629 \u0644\u0644\u0646\u0627\u0633 \u0648\u0627\u0644\u0625\u062c\u0631\u0627\u0621 \u0648\u0627\u0644\u0645\u0646\u0635\u0629 \u062a\u062d\u062a \u0645\u0633\u0624\u0648\u0644\u064a\u0629 WAVZ."
+        icon: "◆",
+        title: "Mission-Grade Service",
+        titleAr: "خدمة بمستوى المهام الحيوية",
+        desc: "Managed end-to-end — people, process, and platform owned by WAVZ.",
+        descAr: "إدارة شاملة للناس والإجراء والمنصة تحت مسؤولية WAVZ."
       },
       {
-            "icon": "\u25c9",
-            "title": "Najda Integrated",
-            "titleAr": "\u062a\u0643\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u0646\u062c\u062f\u0629",
-            "desc": "Direct coordination with Ministry of Interior emergency services.",
-            "descAr": "\u0642\u0646\u0627\u0629 \u062a\u0646\u0633\u064a\u0642 \u0645\u0628\u0627\u0634\u0631\u0629 \u0645\u0639 \u0645\u0631\u0627\u0643\u0632 \u0637\u0648\u0627\u0631\u0626 \u0648\u0632\u0627\u0631\u0629 \u0627\u0644\u062f\u0627\u062e\u0644\u064a\u0629."
+        icon: "◉",
+        title: "Najda Integrated",
+        titleAr: "تكامل مع النجدة",
+        desc: "Direct coordination with Ministry of Interior emergency services.",
+        descAr: "قناة تنسيق مباشرة مع مراكز طوارئ وزارة الداخلية."
       },
       {
-            "icon": "\u2191",
-            "title": "Proactive by Design",
-            "titleAr": "\u0627\u0633\u062a\u0628\u0627\u0642\u064a\u0629 \u0628\u0627\u0644\u062a\u0635\u0645\u064a\u0645",
-            "desc": "Scheduled surveillance sweeps prevent incidents, not just react.",
-            "descAr": "\u062f\u0648\u0631\u064a\u0627\u062a \u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u062c\u062f\u0648\u0644\u0629 \u062a\u0645\u0646\u0639 \u0627\u0644\u062d\u0648\u0627\u062f\u062b \u0642\u0628\u0644 \u0648\u0642\u0648\u0639\u0647\u0627."
+        icon: "↑",
+        title: "Proactive by Design",
+        titleAr: "استباقية بالتصميم",
+        desc: "Scheduled surveillance sweeps prevent incidents, not just react.",
+        descAr: "دوريات مراقبة مجدولة تمنع الحوادث قبل وقوعها."
       },
       {
-            "icon": "\u2726",
-            "title": "National Scale",
-            "titleAr": "\u062c\u0627\u0647\u0632\u064a\u0629 \u0644\u0644\u0646\u0645\u0648 \u0627\u0644\u0648\u0637\u0646\u064a",
-            "desc": "Operating across every governorate, ready to extend to 4,500 branches.",
-            "descAr": "\u062d\u0636\u0648\u0631 \u0641\u064a \u0643\u0644 \u0645\u062d\u0627\u0641\u0638\u0629\u060c \u0648\u062c\u0627\u0647\u0632\u064a\u0629 \u0644\u0644\u062a\u0648\u0633\u0639 \u0646\u062d\u0648 4,500 \u0641\u0631\u0639."
+        icon: "✦",
+        title: "National Scale",
+        titleAr: "جاهزية للنمو الوطني",
+        desc: "Operating across every governorate, ready to extend to 4,500 branches.",
+        descAr: "حضور في كل محافظة، وجاهزية للتوسع نحو 4,500 فرع."
       }
-],
-    roadmapTitle: "WHAT'S NEXT \u2014 OPERATIONAL ENHANCEMENTS",
-    roadmapTitleAr: "\u0627\u0644\u0645\u0631\u062d\u0644\u0629 \u0627\u0644\u062a\u0627\u0644\u064a\u0629 \u2014 \u0627\u0644\u062a\u062d\u0633\u064a\u0646\u0627\u062a \u0627\u0644\u062a\u0634\u063a\u064a\u0644\u064a\u0629",
+    ],
+    roadmapTitle: "WHAT'S NEXT — ROADMAP TO 4,500 BRANCHES",
+    roadmapTitleAr: "ما هو التالي — خارطة الطريق للوصول إلى 4,500 فرع",
     roadmap: [
       {
-            "tag": "ASSET MGMT",
-            "tagAr": "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0623\u0635\u0648\u0644",
-            "desc": "Security Asset Management Platform for full device lifecycle.",
-            "descAr": "\u0645\u0646\u0635\u0629 \u0625\u062f\u0627\u0631\u0629 \u0623\u0635\u0648\u0644 \u0627\u0644\u0623\u0645\u0646 \u0639\u0628\u0631 \u062f\u0648\u0631\u0629 \u0627\u0644\u062d\u064a\u0627\u0629 \u0627\u0644\u0643\u0627\u0645\u0644\u0629."
+        tag: "ASSET MGMT",
+        tagAr: "إدارة الأصول",
+        desc: "Security Asset Management Platform for full device lifecycle.",
+        descAr: "منصة إدارة أصول الأمن عبر دورة الحياة الكاملة."
       },
       {
-            "tag": "HEALTH MON.",
-            "tagAr": "\u0633\u0644\u0627\u0645\u0629 \u0627\u0644\u0623\u062c\u0647\u0632\u0629",
-            "desc": "Network Monitoring Tool for proactive device health.",
-            "descAr": "\u0623\u062f\u0627\u0629 \u0631\u0635\u062f \u0635\u062d\u0629 \u0627\u0644\u0623\u062c\u0647\u0632\u0629 \u0639\u0644\u0649 \u0627\u0644\u0634\u0628\u0643\u0629 \u0628\u0634\u0643\u0644 \u0627\u0633\u062a\u0628\u0627\u0642\u064a."
+        tag: "HEALTH MON.",
+        tagAr: "سلامة الأجهزة",
+        desc: "Network Monitoring Tool for proactive device health.",
+        descAr: "أداة رصد صحة الأجهزة على الشبكة بشكل استباقي."
       },
       {
-            "tag": "TICKETING",
-            "tagAr": "\u0646\u0638\u0627\u0645 \u0627\u0644\u062a\u0630\u0627\u0643\u0631",
-            "desc": "Integrated incident & maintenance ticketing system.",
-            "descAr": "\u0646\u0638\u0627\u0645 \u062a\u0630\u0627\u0643\u0631 \u0645\u062a\u0643\u0627\u0645\u0644 \u0644\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u062d\u0648\u0627\u062f\u062b \u0648\u0627\u0644\u0635\u064a\u0627\u0646\u0629."
+        tag: "TICKETING",
+        tagAr: "نظام التذاكر",
+        desc: "Integrated incident & maintenance ticketing system.",
+        descAr: "نظام تذاكر متكامل لإدارة الحوادث والصيانة."
       },
       {
-            "tag": "DASHBOARDS",
-            "tagAr": "\u0644\u0648\u062d\u0627\u062a \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a",
-            "desc": "Real-time operational performance intelligence.",
-            "descAr": "\u0644\u0648\u062d\u0627\u062a \u0645\u0639\u0644\u0648\u0645\u0627\u062a \u062a\u0634\u063a\u064a\u0644\u064a\u0629 \u0644\u062d\u0638\u064a\u0629 \u0644\u062f\u0639\u0645 \u0627\u0644\u0642\u0631\u0627\u0631."
+        tag: "DASHBOARDS",
+        tagAr: "لوحات المعلومات",
+        desc: "Real-time operational performance intelligence.",
+        descAr: "لوحات معلومات تشغيلية لحظية لدعم القرار."
       }
-],
-    closingText: "",
-    closingTextAr: "",
+    ],
+    closingText: "Engineered for national scale. WAVZ is a major national government entity's long-term partner for mission-critical security operations — proven, codified, and ready to grow.",
+    closingTextAr: "مبنيّ للتوسّع على مستوى الجمهورية. WAVZ الشريك طويل الأمد لجهة حكومية وطنية كبرى في تشغيل الأمن الحيوي — بنموذج مثبت وموثّق وقابل للنمو.",
   },
   {
     id: "economic-zone-authority",
